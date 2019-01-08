@@ -1,0 +1,27 @@
+{
+  "name": "gravity-pdf/bulk-generator",
+  "type": "project",
+  "license": "GPLv2",
+  "require": {
+    "php": ">=5.6"
+  },
+  "config": {
+    "preferred-install": "dist",
+    "autoloader-suffix": "GravityPDFBulkGeneratorAddon"
+  },
+  "require-dev": {
+    "phpunit/phpunit": ">4.0 <7"
+  },
+  "autoload": {
+    "psr-4": {
+      "GFPDF\\Plugins\\BulkGenerator\\": "src/"
+    }
+  },
+  "scripts": {
+    "post-update-cmd": [
+      "yarn global add gulp-cli",
+      "yarn && gulp",
+      "yarn run build"
+    ]
+  }
+}
