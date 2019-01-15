@@ -1,10 +1,29 @@
 #gfpdf-bulk-generator-container {
-  position: fixed;
-  top: 0;
-  left: 50%;
-  background: #FFF;
-  width: 50%;
-  margin-left: -25%;
-  z-index: 100000;
-  padding: 3em;
+
+  #gfpdf-bulk-generator-overlay {
+    background: #000;
+    opacity: 0.7;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100050;
+  }
+
+  #gfpdf-bulk-generator-popup {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    background: #FFF;
+    width: 50%;
+    margin-left: -25%;
+    z-index: 100100;
+    padding: 3em;
+  }
+
+  #gfpdf-bulk-generator-close {
+    float: right;
+  }
+
 }

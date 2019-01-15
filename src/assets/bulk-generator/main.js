@@ -34,10 +34,12 @@ document.addEventListener('click', event => {
     })
   }
 
+  /* @TODO - push entry IDs to redux */
+
   /* Mount our React component */
   const container = document.createElement('div')
   container.id = 'gfpdf-bulk-generator-container'
   entryList.appendChild(container)
 
-  ReactDOM.render(<PopUp />, container)
+  ReactDOM.render(<PopUp container={container} />, container)
 })
