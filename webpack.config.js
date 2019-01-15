@@ -1,4 +1,5 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const PROD = process.env.NODE_ENV === 'production'
 
 module.exports = {
   entry: {
@@ -8,6 +9,7 @@ module.exports = {
     path: __dirname + '/dist',
     filename: '[name].js'
   },
+  devtool: PROD ? 'source-map' : 'eval-source-map',
   module: {
     rules: [
       {

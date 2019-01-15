@@ -4,9 +4,14 @@ import './PopUp.scss'
 class PopUp extends React.Component {
   render () {
     return (
-      <div className="App">
-        <h1> Hello, World! </h1>
-      </div>
+      <>
+        Close
+
+        <div className="accordion-title">1. Select</div>
+        <div className="accordion-title">2. Create</div>
+        <div className="accordion-title">3. Compress</div>
+        <div className="accordion-title">4. Download</div>
+      </>
     )
   }
 }

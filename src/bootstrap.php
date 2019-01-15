@@ -70,8 +70,35 @@ class Bootstrap extends Helper_Abstract_Addon {
 
 		] );
 
+		$this->move_to_class();
+
 		/* Run the setup */
 		parent::init( $classes );
+	}
+
+	public function move_to_class() {
+		add_filter( 'gform_entry_list_bulk_actions', function( $actions ) {
+			$actions['download_pdf'] = esc_html__( 'Download PDF', 'gravity-pdf-bulk-generator' );
+
+			return $actions;
+		} );
+
+		add_action( 'admin_enqueue_scripts', function() {
+			wp_enqueue_script(
+				'gfpdf_bulk_generator',
+				plugin_dir_url( GFPDF_PDF_BULK_GENERATOR_FILE ) . 'dist/bulk-generator.js',
+				[],
+				time(),
+				true
+			);
+
+//			wp_enqueue_style(
+//				'gfpdf_bulk_generator',
+//				plugin_dir_url( GFPDF_PDF_BULK_GENERATOR_FILE ) . 'dist/bulk-generator.css',
+//				[],
+//				time()
+//			);
+		});
 	}
 
 	/**
