@@ -11,4 +11,4 @@ gulp.task('language', function () {
     .pipe(gulp.dest('languages/gravity-pdf-bulk-generator.pot'))
 })
 
-gulp.task('default', ['language'])
+gulp.task('default', gulp.series(['language']))
