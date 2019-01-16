@@ -1,5 +1,4 @@
-$primary-color: #0074A2;
-$secondary-color: #cccccc;
+@import '../variables.scss';
 
 #gfpdf-bulk-generator-container {
 
@@ -31,21 +30,11 @@ $secondary-color: #cccccc;
   /*
    * Close Button
    */
-  #gfpdf-bulk-generator-close {
-    float: right;
-    margin: -20px 10px 30px 0;
+  header {
+    margin-bottom: 20px;
 
-    a {
-      text-decoration: none;
-      color: $secondary-color;
-
-      &:hover {
-        color: $primary-color;
-      }
-    }
-
-    .dashicons {
-      font-size: 35px;
+    h2 {
+      font-size: 25px;
     }
   }
 
@@ -55,7 +44,6 @@ $secondary-color: #cccccc;
   .gfpdf-progress-steps {
     width: 100%;
     overflow: hidden;
-    display: -webkit-inline-box;
     display: inline-flex;
 
     margin: 0;
@@ -102,6 +90,71 @@ $secondary-color: #cccccc;
           border-color: $primary-color;
         }
       }
+    }
+  }
+
+  /*
+   * Step
+   */
+  .gfpdf-step {
+    overflow: auto;
+    height: 50vh;
+    padding-right: 20px;
+
+    .gfpdf-settings-group {
+      margin-bottom: 30px;
+    }
+  }
+
+  /*
+   * Toggle List
+   */
+  .gfpdf-toggle-list {
+    margin: 0;
+
+    li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      margin: 0;
+      padding: 12px 5px;
+      font-size: 15px;
+      border-bottom: 1px solid $secondary-color;
+
+      &:last-of-type {
+        border-bottom: none;
+      }
+
+      span {
+        font-size: 11px;
+        color: darken($secondary-color, 15%);
+        font-weight: normal;
+      }
+    }
+  }
+
+  /*
+   * Tags
+   */
+  .gfpdf-tags {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+
+    button {
+      margin: 3px;
+    }
+  }
+
+  /*
+   * Footer
+   */
+  footer {
+    margin: 20px 0 0 0;
+
+    :first-child {
+      margin-right: 6px;
     }
   }
 }

@@ -3,7 +3,8 @@
   "private": true,
   "dependencies": {
     "react": "^16.7.0",
-    "react-dom": "^16.7.0"
+    "react-dom": "^16.7.0",
+    "react-switch": "^3.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",

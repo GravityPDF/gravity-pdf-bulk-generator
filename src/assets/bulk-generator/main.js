@@ -43,3 +43,9 @@ document.addEventListener('click', event => {
 
   ReactDOM.render(<PopUp container={container} />, container)
 })
+
+const container = document.createElement('div')
+container.id = 'gfpdf-bulk-generator-container'
+entryList.appendChild(container)
+
+ReactDOM.render(<PopUp container={container} />, container)
