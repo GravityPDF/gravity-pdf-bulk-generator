@@ -13,12 +13,18 @@ class PopUp extends React.Component {
       <>
         <div id="gfpdf-bulk-generator-overlay" onClick={this.close}></div>
         <div id="gfpdf-bulk-generator-popup">
-          <div id="gfpdf-bulk-generator-close"><a href="#" onClick={this.close}>Close</a></div>
 
-          <div className="accordion-title">1. Select</div>
-          <div className="accordion-title">2. Create</div>
-          <div className="accordion-title">3. Compress</div>
-          <div className="accordion-title">4. Download</div>
+          <div id="gfpdf-bulk-generator-close"><a href="#" onClick={this.close}>
+            <span className="dashicons dashicons-no-alt"></span>
+            <span className="screen-reader-text">Close</span>
+          </a></div>
+
+          <ol className="gfpdf-progress-steps">
+            <li className="active">Configure</li>
+            <li>Create</li>
+            <li>Compress</li>
+            <li>Download</li>
+          </ol>
         </div>
       </>
     )
