@@ -1,6 +1,7 @@
 import React from 'react'
 import './PopUp.scss'
 import { MemoryRouter as Router, Route, Switch } from 'react-router-dom'
+import ProgressBar from './ProgressBar'
 import Step1 from './Step1'
 
 class Index extends React.Component {
@@ -16,12 +17,7 @@ class Index extends React.Component {
               <h2>PDF Bulk Download</h2>
             </header>
 
-            <ol className="gfpdf-progress-steps">
-              <li className="active">Configure</li>
-              <li>Create</li>
-              <li>Compress</li>
-              <li>Download</li>
-            </ol>
+            <ProgressBar />
 
             <Switch>
               <Route path="/" component={Step1} />
