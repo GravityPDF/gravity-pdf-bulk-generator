@@ -1,6 +1,8 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
-import PopUp from './PopUp/PopUp.js'
+import { render } from 'react-dom'
+import { Provider } from 'react-redux'
+import { getStore } from './store'
+import PopUp from './components/PopUp'
 
 const entryList = document.querySelector('#entry_list_form')
 const bulkSelectorButton = document.querySelectorAll('#entry_list_form .bulkactions .button')
@@ -37,15 +39,30 @@ document.addEventListener('click', event => {
   /* @TODO - push entry IDs to redux */
 
   /* Mount our React component */
+  const store = getStore()
+
   const container = document.createElement('div')
   container.id = 'gfpdf-bulk-generator-container'
   entryList.appendChild(container)
 
-  ReactDOM.render(<PopUp container={container} />, container)
+  render(
+    <Provider store={store}>
+      <PopUp container={container} />
+    </Provider>,
+    container
+  )
 })
+
+/* @TODO - THIS IS TMP SO WE DON"T HAVE TO CLICK BULK ACTIONS DURING TESTING */
+const store = getStore()
 
 const container = document.createElement('div')
 container.id = 'gfpdf-bulk-generator-container'
 entryList.appendChild(container)
 
-ReactDOM.render(<PopUp container={container} />, container)
+render(
+  <Provider store={store}>
+    <PopUp container={container} />
+  </Provider>,
+  container
+)
