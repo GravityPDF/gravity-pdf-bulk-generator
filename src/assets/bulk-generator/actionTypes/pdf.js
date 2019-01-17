@@ -1,0 +1,1 @@
+export const TOGGLE_PDF_STATUS = 'TOGGLE_PDF_STATUS'

@@ -2,6 +2,7 @@ import React from 'react'
 
 import { createStore, combineReducers } from 'redux'
 import tagPickerReducer from '../reducers/tagPickerReducer'
+import pdfReducer from '../reducers/pdfReducer'
 
 /* Combine our Redux Reducers */
 const reducers = setupReducers()
@@ -16,5 +17,6 @@ export function getStore () {
 export function setupReducers () {
   return combineReducers({
     tagPicker: tagPickerReducer,
+    pdf: pdfReducer,
   })
 }

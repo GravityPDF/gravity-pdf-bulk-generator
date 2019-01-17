@@ -2,7 +2,8 @@ import React from 'react'
 import { unmountComponentAtNode } from 'react-dom'
 import { connect } from 'react-redux'
 import { updateDirectoryStructure } from '../../actions/tagPicker'
-import Switch from '../Switch/Switch'
+import { togglePdfStatus } from '../../actions/pdf'
+import ListToggle from '../ListToggle'
 import TagPicker from '../TagPicker/TagPicker'
 import TagInput from '../TagPicker/TagInput'
 
@@ -29,19 +30,7 @@ class Step1 extends React.Component {
 
             <p>Specify which PDFs you would like to generate for the selected entries.</p>
 
-            <ol className="gfpdf-toggle-list">
-              <li>
-                <label>Certificate of Completion <span>(ID: 1234567)</span></label>
-
-                <Switch screenReaderLabel="Label" />
-              </li>
-
-              <li>
-                <label>Certificate of Completion <span>ID: 1234567</span></label>
-
-                <Switch screenReaderLabel="Label" />
-              </li>
-            </ol>
+            <ListToggle items={this.props.pdfs} onChange={this.props.updateActivePdfs} />
           </div>
 
           <div className="gfpdf-settings-group">
@@ -76,12 +65,17 @@ const mapDispatchToProps = (dispatch) => {
   return {
     updateDirectoryStructure: (value) => {
       dispatch(updateDirectoryStructure(value))
+    },
+
+    updateActivePdfs: (index) => {
+      dispatch(togglePdfStatus(index))
     }
   }
 }
 
 const MapStateToProps = (state) => {
   return {
+    pdfs: state.pdf.list,
     tags: state.tagPicker.tags,
     directoryStructure: state.tagPicker.directoryStructure,
   }
