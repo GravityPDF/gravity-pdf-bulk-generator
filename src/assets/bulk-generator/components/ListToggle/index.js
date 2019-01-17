@@ -9,7 +9,7 @@ const ListToggle = ({items, onChange}) => {
         items.map((pdf, index) => {
           return (
             <li key={index}>
-              <label>{pdf.label} <span>(ID: {pdf.id})</span></label>
+              <label onClick={() => onChange(index)}>{pdf.label} <span>(ID: {pdf.id})</span></label>
 
               <Switch screenReaderLabel="Label" active={pdf.active} onChange={onChange} id={index} />
             </li>
