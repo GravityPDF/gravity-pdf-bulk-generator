@@ -98,7 +98,7 @@
    */
   .gfpdf-step {
     overflow: auto;
-    height: 50vh;
+    max-height: 50vh;
     padding-right: 20px;
 
     h3 {
