@@ -10,7 +10,8 @@ import ProgressBar from './ProgressBar'
 
 class Step1 extends React.Component {
   cancel = event => {
-    unmountComponentAtNode(this.props.container)
+    this.props.history.push('/')
+    //unmountComponentAtNode(this.props.container)
     event.stopPropagation()
   }
 
