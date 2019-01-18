@@ -1,10 +1,9 @@
 import React from 'react'
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
+import { HashRouter as Router, withRouter } from 'react-router-dom'
 import { getStore } from './store'
 import PopUp from './components/PopUp'
-import { MemoryRouter as Router, Route } from 'react-router-dom'
-import Step1 from './components/PopUp/Step1'
 
 const entryList = document.querySelector('#entry_list_form')
 const bulkSelectorButton = document.querySelectorAll('#entry_list_form .bulkactions .button')
@@ -47,16 +46,6 @@ document.addEventListener('click', event => {
   container.id = 'gfpdf-bulk-generator-container'
   entryList.appendChild(container)
 
-  render(
-    <Provider store={store}>
-      <div id="gfpdf-bulk-generator-overlay"></div>
-
-      <Router>
-        <Route path="*" render={props => (<PopUp {...props} container={container} />)} />
-      </Router>
-    </Provider>,
-    container
-  )
 })
 
 /* @TODO - THIS IS TMP SO WE DON"T HAVE TO CLICK BULK ACTIONS DURING TESTING */
@@ -66,12 +55,24 @@ const container = document.createElement('div')
 container.id = 'gfpdf-bulk-generator-container'
 entryList.appendChild(container)
 
+class Entry extends React.Component {
+  componentWillMount() {
+    this.props.history.push('/step/1')
+  }
+
+  render () {
+    return (
+      <PopUp {...this.props}/>
+    )
+  }
+}
+
+const LoadApp = withRouter(Entry)
+
 render(
   <Provider store={store}>
-    <div id="gfpdf-bulk-generator-overlay"></div>
-
     <Router>
-      <Route path="*" render={props => (<PopUp {...props} container={container} />)} />
+      <LoadApp />
     </Router>
   </Provider>,
   container
