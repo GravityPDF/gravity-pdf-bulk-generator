@@ -3,6 +3,8 @@ import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 import { getStore } from './store'
 import PopUp from './components/PopUp'
+import { MemoryRouter as Router, Route } from 'react-router-dom'
+import Step1 from './components/PopUp/Step1'
 
 const entryList = document.querySelector('#entry_list_form')
 const bulkSelectorButton = document.querySelectorAll('#entry_list_form .bulkactions .button')
@@ -47,7 +49,9 @@ document.addEventListener('click', event => {
 
   render(
     <Provider store={store}>
-      <PopUp container={container} />
+      <Router>
+        <PopUp container={container} />
+      </Router>
     </Provider>,
     container
   )
@@ -62,7 +66,11 @@ entryList.appendChild(container)
 
 render(
   <Provider store={store}>
-    <PopUp container={container} />
+    <div id="gfpdf-bulk-generator-overlay"></div>
+
+    <Router>
+      <Route path="*" render={props => (<PopUp {...props} container={container} />)} />
+    </Router>
   </Provider>,
   container
 )

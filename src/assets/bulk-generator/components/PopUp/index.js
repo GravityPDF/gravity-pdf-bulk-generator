@@ -1,29 +1,26 @@
 import React from 'react'
 import './PopUp.scss'
-import { MemoryRouter as Router, Route, Switch } from 'react-router-dom'
-import ProgressBar from './ProgressBar'
-import Step1 from './Step1'
+import { Route, Switch } from 'react-router-dom'
+import { CSSTransition, TransitionGroup } from 'react-transition-group'
+import Steps from './Steps'
 
 class PopUp extends React.Component {
+
+  constructor (props) {
+    super(props)
+    props.history.push('/step/1')
+  }
+
   render () {
     return (
       <>
-        <div id="gfpdf-bulk-generator-overlay"></div>
+        <Route exact path="/" component={null} />
 
-        <Router>
-          <div id="gfpdf-bulk-generator-popup">
-
-            <header>
-              <h2>PDF Bulk Download</h2>
-            </header>
-
-            <ProgressBar />
-
-            <Switch>
-              <Route path="/" component={Step1} />
-            </Switch>
-          </div>
-        </Router>
+        <TransitionGroup component={null}>
+          <CSSTransition key={this.props.location.pathname} timeout={1000} classNames="slide-down">
+            <Route path="/step/:stepId" render={props => (<Steps {...props} container={this.props.container} />)} />
+          </CSSTransition>
+        </TransitionGroup>
       </>
     )
   }

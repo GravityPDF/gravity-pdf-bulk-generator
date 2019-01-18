@@ -6,6 +6,7 @@ import { togglePdfStatus } from '../../actions/pdf'
 import ListToggle from '../ListToggle'
 import TagPicker from '../TagPicker/TagPicker'
 import TagInput from '../TagPicker/TagInput'
+import ProgressBar from './ProgressBar'
 
 class Step1 extends React.Component {
   cancel = event => {
@@ -24,6 +25,8 @@ class Step1 extends React.Component {
   render () {
     return (
       <>
+        <ProgressBar step={1} />
+
         <section className="gfpdf-step">
           <div className="gfpdf-settings-group">
             <h3>Select PDFs</h3>
@@ -49,6 +52,7 @@ class Step1 extends React.Component {
               inputValue={this.props.directoryStructure}
             />
           </div>
+
         </section>
 
         <footer>

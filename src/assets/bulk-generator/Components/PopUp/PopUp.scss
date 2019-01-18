@@ -25,6 +25,21 @@
     margin-left: -25%;
     z-index: 100100;
     padding: 3em;
+
+    &.slide-down-enter,
+    &.slide-down-exit,
+    &.slide-down-exit-active {
+      top: -100%;
+    }
+
+    &.slide-down-enter-active {
+      top: 0;
+    }
+
+    &.slide-down-enter-active,
+    &.slide-down-exit-active {
+      transition: top 1000ms cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
   }
 
   /*

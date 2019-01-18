@@ -1,19 +1,23 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const ProgressBar = ({}) => {
+const steps = [
+  'Configure',
+  'Create',
+  'Compress',
+  'Download'
+]
+
+const ProgressBar = ({step}) => {
   return (
     <ol className="gfpdf-progress-steps">
-      <li className="active">Configure</li>
-      <li>Create</li>
-      <li>Compress</li>
-      <li>Download</li>
+      {steps.map((name, index) => (
+        <li key={index} className={(step - 1) === index ? 'active' : ''}>{name}</li>
+      ))}
     </ol>
   )
 }
 
-ProgressBar.propTypes = {
-
-}
+ProgressBar.propTypes = {}
 
 export default ProgressBar
