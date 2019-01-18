@@ -4,7 +4,7 @@ import { MemoryRouter as Router, Route, Switch } from 'react-router-dom'
 import ProgressBar from './ProgressBar'
 import Step1 from './Step1'
 
-class Index extends React.Component {
+class PopUp extends React.Component {
   render () {
     return (
       <>
@@ -29,4 +29,4 @@ class Index extends React.Component {
   }
 }
 
-export default Index
+export default PopUp
