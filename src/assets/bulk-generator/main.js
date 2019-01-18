@@ -49,8 +49,10 @@ document.addEventListener('click', event => {
 
   render(
     <Provider store={store}>
+      <div id="gfpdf-bulk-generator-overlay"></div>
+
       <Router>
-        <PopUp container={container} />
+        <Route path="*" render={props => (<PopUp {...props} container={container} />)} />
       </Router>
     </Provider>,
     container

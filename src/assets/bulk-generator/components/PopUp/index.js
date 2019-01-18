@@ -1,6 +1,6 @@
 import React from 'react'
 import './PopUp.scss'
-import { Route, Switch } from 'react-router-dom'
+import { Route } from 'react-router-dom'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import Steps from './Steps'
 
