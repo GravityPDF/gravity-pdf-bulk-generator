@@ -31,6 +31,8 @@ const SlideDown = posed.div({
   }
 })
 
+const Overlay = () => <div id="gfpdf-bulk-generator-overlay" />
+
 class PopUp extends React.Component {
 
   constructor (props) {
@@ -64,12 +66,11 @@ class PopUp extends React.Component {
       <PoseGroup flipMove={false}>
         {this.state.isVisible && [
           <Fade key={'overlay-' + location}>
-            <Route key="overlay" path="/step" render={() => <div id="gfpdf-bulk-generator-overlay" />} />
+            <Route key="overlay" path="/step" component={Overlay} />
           </Fade>,
 
           <SlideDown key={'steps-' + location} id="gfpdf-bulk-generator-popup">
-            <Route key="steps" path="/step/:stepId"
-                   render={props => <Steps {...props} container={this.props.container} />} />
+            <Route key="steps" path="/step/:stepId" component={Steps} />
           </SlideDown>
         ]}
       </PoseGroup>
