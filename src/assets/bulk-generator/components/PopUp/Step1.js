@@ -1,5 +1,4 @@
 import React from 'react'
-import { unmountComponentAtNode } from 'react-dom'
 import { connect } from 'react-redux'
 import { updateDirectoryStructure } from '../../actions/tagPicker'
 import { togglePdfStatus } from '../../actions/pdf'
@@ -10,9 +9,8 @@ import ProgressBar from './ProgressBar'
 
 class Step1 extends React.Component {
   cancel = event => {
-    this.props.history.push('/')
-    //unmountComponentAtNode(this.props.container)
     event.stopPropagation()
+    this.props.history.push('/')
   }
 
   tagSelect = (tag) => {

@@ -1,12 +1,12 @@
 import React from 'react'
-import { render } from 'react-dom'
-import { Provider } from 'react-redux'
-import { HashRouter as Router, withRouter } from 'react-router-dom'
-import { getStore } from './store'
-import PopUp from './components/PopUp'
+import {initilize} from './app'
 
 const entryList = document.querySelector('#entry_list_form')
 const bulkSelectorButton = document.querySelectorAll('#entry_list_form .bulkactions .button')
+
+const container = document.createElement('div')
+container.id = 'gfpdf-bulk-generator-container'
+entryList.appendChild(container)
 
 /* Handle the bulk selector click event */
 document.addEventListener('click', event => {
@@ -38,42 +38,8 @@ document.addEventListener('click', event => {
   }
 
   /* @TODO - push entry IDs to redux */
-
-  /* Mount our React component */
-  const store = getStore()
-
-  const container = document.createElement('div')
-  container.id = 'gfpdf-bulk-generator-container'
-  entryList.appendChild(container)
-
+  initilize(container)
 })
 
 /* @TODO - THIS IS TMP SO WE DON"T HAVE TO CLICK BULK ACTIONS DURING TESTING */
-const store = getStore()
-
-const container = document.createElement('div')
-container.id = 'gfpdf-bulk-generator-container'
-entryList.appendChild(container)
-
-class Entry extends React.Component {
-  componentWillMount() {
-    this.props.history.push('/step/1')
-  }
-
-  render () {
-    return (
-      <PopUp {...this.props}/>
-    )
-  }
-}
-
-const LoadApp = withRouter(Entry)
-
-render(
-  <Provider store={store}>
-    <Router>
-      <LoadApp />
-    </Router>
-  </Provider>,
-  container
-)
+initilize(container)

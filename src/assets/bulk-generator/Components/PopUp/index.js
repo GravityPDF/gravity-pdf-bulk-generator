@@ -8,7 +8,7 @@ const Fade = posed.div({
   enter: {
     opacity: 1,
     transition: {
-      duration: 200
+      duration: 150
     }
   },
   exit: {opacity: 0}
@@ -18,14 +18,14 @@ const SlideDown = posed.div({
   enter: {
     y: 0,
     transition: {
-      duration: 5000,
+      duration: 750,
       ease: [0.215, 0.61, 0.355, 1],
     }
   },
   exit: {
     y: '-100%',
     transition: {
-      duration: 5000,
+      duration: 350,
       ease: [0.215, 0.61, 0.355, 1],
     }
   }
@@ -37,33 +37,41 @@ class PopUp extends React.Component {
     super(props)
 
     this.state = {
-      initial: true
+      isVisible: false
     }
   }
 
   componentWillReceiveProps (nextProps) {
-    if (this.props.location !== nextProps.location) {
-      this.setState({initial: false})
+    if (this.props.location !== nextProps.location && this.getCurrentLocation(nextProps.location) === 'step') {
+      this.setState({isVisible: true})
+    } else {
+      this.setState({isVisible: false})
+    }
+  }
+
+  getCurrentLocation (newLocation = null) {
+    if (newLocation === null) {
+      return this.props.location.pathname.split('/')[1]
+    } else {
+      return newLocation.pathname.split('/')[1]
     }
   }
 
   render () {
-    const currentLocation = this.props.location.pathname.split('/')[1]
-
-    if (this.state.initial) {
-      return null
-    }
+    const location = this.getCurrentLocation()
 
     return (
       <PoseGroup flipMove={false}>
-        <Fade key={'overlay-' + currentLocation}>
-          <Route key="overlay" path="/step" render={() => <div id="gfpdf-bulk-generator-overlay" />} />
-        </Fade>
+        {this.state.isVisible && [
+          <Fade key={'overlay-' + location}>
+            <Route key="overlay" path="/step" render={() => <div id="gfpdf-bulk-generator-overlay" />} />
+          </Fade>,
 
-        <SlideDown key={'steps-' + currentLocation} id="gfpdf-bulk-generator-popup">
-          <Route key="steps" path="/step/:stepId"
-                 render={props => <Steps {...props} container={this.props.container} />} />
-        </SlideDown>
+          <SlideDown key={'steps-' + location} id="gfpdf-bulk-generator-popup">
+            <Route key="steps" path="/step/:stepId"
+                   render={props => <Steps {...props} container={this.props.container} />} />
+          </SlideDown>
+        ]}
       </PoseGroup>
     )
   }
