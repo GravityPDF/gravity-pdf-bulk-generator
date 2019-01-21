@@ -13,6 +13,11 @@ class Step1 extends React.Component {
     this.props.history.push('/')
   }
 
+  build = event => {
+    event.stopPropagation()
+    this.props.history.push('/step/2')
+  }
+
   tagSelect = (tag) => {
     this.props.updateDirectoryStructure(this.props.directoryStructure + tag + '/')
   }
@@ -57,7 +62,7 @@ class Step1 extends React.Component {
         <footer>
           <button className="button button-large" onClick={this.cancel}>Cancel</button>
 
-          <button className="button button-primary button-large">Build</button>
+          <button className="button button-primary button-large" onClick={this.build}>Build</button>
         </footer>
       </>
     )
