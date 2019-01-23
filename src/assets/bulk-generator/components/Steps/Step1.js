@@ -2,10 +2,10 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { updateDirectoryStructure } from '../../actions/tagPicker'
 import { togglePdfStatus } from '../../actions/pdf'
-import ListToggle from '../ListToggle'
+import ListToggle from '../ListToggle/index'
 import TagPicker from '../TagPicker/TagPicker'
 import TagInput from '../TagPicker/TagInput'
-import ProgressBar from '../ProgressBar'
+import ProgressBar from '../ProgressBar/index'
 
 class Step1 extends React.Component {
   cancel = event => {

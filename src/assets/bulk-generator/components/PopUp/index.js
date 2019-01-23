@@ -1,6 +1,6 @@
 import React from 'react'
 import { Route } from 'react-router-dom'
-import Steps from './Steps'
+import Steps from '../Steps/Steps'
 import { Overlay } from './Overlay'
 import { Fade, SlideDown } from './animations'
 import { PoseGroup } from 'react-pose'
