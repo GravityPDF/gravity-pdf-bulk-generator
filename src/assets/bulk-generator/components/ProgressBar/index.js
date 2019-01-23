@@ -4,8 +4,7 @@ import './ProgressBar.scss'
 
 const steps = [
   'Configure',
-  'Create',
-  'Compress',
+  'Build',
   'Download'
 ]
 
