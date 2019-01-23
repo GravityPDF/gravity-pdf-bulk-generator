@@ -1,6 +1,7 @@
 import React from 'react'
 import Switch from '../Switch/Switch'
 import PropTypes from 'prop-types'
+import './ListToggle.scss'
 
 const ListToggle = ({items, onChange}) => {
   return (
