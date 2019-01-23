@@ -5,16 +5,18 @@ import { togglePdfStatus } from '../../actions/pdf'
 import ListToggle from '../ListToggle'
 import TagPicker from '../TagPicker/TagPicker'
 import TagInput from '../TagPicker/TagInput'
-import ProgressBar from './ProgressBar'
+import ProgressBar from '../ProgressBar'
 
 class Step1 extends React.Component {
   cancel = event => {
     event.stopPropagation()
+    event.preventDefault()
     this.props.history.push('/')
   }
 
   build = event => {
     event.stopPropagation()
+    event.preventDefault()
     this.props.history.push('/step/2')
   }
 

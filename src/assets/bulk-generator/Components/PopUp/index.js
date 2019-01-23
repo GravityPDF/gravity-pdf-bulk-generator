@@ -1,37 +1,10 @@
 import React from 'react'
 import { Route } from 'react-router-dom'
 import Steps from './Steps'
-import posed, { PoseGroup } from 'react-pose'
+import { Overlay } from './Overlay'
+import { Fade, SlideDown } from './animations'
+import { PoseGroup } from 'react-pose'
 import './PopUp.scss'
-
-const Fade = posed.div({
-  enter: {
-    opacity: 1,
-    transition: {
-      duration: 150
-    }
-  },
-  exit: {opacity: 0}
-})
-
-const SlideDown = posed.div({
-  enter: {
-    y: 0,
-    transition: {
-      duration: 750,
-      ease: [0.215, 0.61, 0.355, 1],
-    }
-  },
-  exit: {
-    y: '-100%',
-    transition: {
-      duration: 350,
-      ease: [0.215, 0.61, 0.355, 1],
-    }
-  }
-})
-
-const Overlay = () => <div id="gfpdf-bulk-generator-overlay" />
 
 class PopUp extends React.Component {
 

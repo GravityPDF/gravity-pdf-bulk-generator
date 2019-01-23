@@ -3,7 +3,7 @@ const PROD = process.env.NODE_ENV === 'production'
 
 module.exports = {
   entry: {
-    'bulk-generator': './src/assets/bulk-generator/main.js',
+    'bulk-generator': './src/assets/bulk-generator/index.js',
   },
   output: {
     path: __dirname + '/dist',

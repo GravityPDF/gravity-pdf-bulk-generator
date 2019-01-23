@@ -1,15 +1,17 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import ProgressBar from './ProgressBar'
+import ProgressBar from '../ProgressBar'
 
 class Step2 extends React.Component {
   cancel = event => {
     event.stopPropagation()
+    event.preventDefault()
     this.props.history.push('/step/1')
   }
 
   next = event => {
     event.stopPropagation()
+    event.preventDefault()
     this.props.history.push('/step/3')
   }
 
@@ -19,12 +21,11 @@ class Step2 extends React.Component {
         <ProgressBar step={2} />
 
         <section className="gfpdf-step">
-            <h3>Step 2</h3>
+          <h3>Step 2</h3>
         </section>
 
         <footer>
           <button className="button button-large" onClick={this.cancel}>Cancel</button>
-
           <button className="button button-large" onClick={this.next}>Next</button>
         </footer>
       </>
@@ -33,15 +34,11 @@ class Step2 extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-
-  }
+  return {}
 }
 
 const MapStateToProps = (state) => {
-  return {
-
-  }
+  return {}
 }
 
 export default connect(MapStateToProps, mapDispatchToProps)(Step2)

@@ -1,35 +1,10 @@
 import React from 'react'
 import { Route } from 'react-router-dom'
 import Steps from './Steps'
-import posed, { PoseGroup } from 'react-pose'
+import { Overlay } from './Overlay'
+import { Fade, SlideDown } from './animations'
+import { PoseGroup } from 'react-pose'
 import './PopUp.scss'
-
-const Fade = posed.div({
-  enter: {
-    opacity: 1,
-    transition: {
-      duration: 150
-    }
-  },
-  exit: {opacity: 0}
-})
-
-const SlideDown = posed.div({
-  enter: {
-    y: 0,
-    transition: {
-      duration: 750,
-      ease: [0.215, 0.61, 0.355, 1],
-    }
-  },
-  exit: {
-    y: '-100%',
-    transition: {
-      duration: 350,
-      ease: [0.215, 0.61, 0.355, 1],
-    }
-  }
-})
 
 class PopUp extends React.Component {
 
@@ -64,12 +39,11 @@ class PopUp extends React.Component {
       <PoseGroup flipMove={false}>
         {this.state.isVisible && [
           <Fade key={'overlay-' + location}>
-            <Route key="overlay" path="/step" render={() => <div id="gfpdf-bulk-generator-overlay" />} />
+            <Route key="overlay" path="/step" component={Overlay} />
           </Fade>,
 
           <SlideDown key={'steps-' + location} id="gfpdf-bulk-generator-popup">
-            <Route key="steps" path="/step/:stepId"
-                   render={props => <Steps {...props} container={this.props.container} />} />
+            <Route key="steps" path="/step/:stepId" component={Steps} />
           </SlideDown>
         ]}
       </PoseGroup>
