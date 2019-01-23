@@ -5,7 +5,8 @@ import { togglePdfStatus } from '../../actions/pdf'
 import ListToggle from '../ListToggle/index'
 import TagPicker from '../TagPicker/TagPicker'
 import TagInput from '../TagPicker/TagInput'
-import ProgressBar from '../ProgressBar/index'
+import ProgressBar from '../ProgressBar'
+import './Step1.scss'
 
 class Step1 extends React.Component {
   cancel = event => {
@@ -33,7 +34,7 @@ class Step1 extends React.Component {
       <>
         <ProgressBar step={1} />
 
-        <section className="gfpdf-step">
+        <section id="gfpdf-step1" className="gfpdf-step">
           <div className="gfpdf-settings-group">
             <h3>Select PDFs</h3>
 
@@ -45,7 +46,8 @@ class Step1 extends React.Component {
           <div className="gfpdf-settings-group">
             <h3>Directory Structure</h3>
 
-            <p>Specify the directory structure to use for the PDFs of the selected entries. Merge tags are supported.</p>
+            <p>Specify the directory structure to use for the PDFs of the selected entries. Merge tags are
+              supported.</p>
 
             <TagInput value={this.props.directoryStructure} onChange={this.props.updateDirectoryStructure} />
 

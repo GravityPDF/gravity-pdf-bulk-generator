@@ -20,6 +20,12 @@ class Step2 extends React.Component {
     }
   }
 
+  componentDidUpdate () {
+    if(this.state.percentage >= 100) {
+      this.props.history.push('/step/3')
+    }
+  }
+
   render () {
     const {percentage} = this.state
 
