@@ -92,12 +92,12 @@ class Bootstrap extends Helper_Abstract_Addon {
 				true
 			);
 
-//			wp_enqueue_style(
-//				'gfpdf_bulk_generator',
-//				plugin_dir_url( GFPDF_PDF_BULK_GENERATOR_FILE ) . 'dist/bulk-generator.css',
-//				[],
-//				time()
-//			);
+			wp_enqueue_style(
+				'gfpdf_bulk_generator',
+				plugin_dir_url( GFPDF_PDF_BULK_GENERATOR_FILE ) . 'dist/bulk-generator.css',
+				[],
+				time()
+			);
 		});
 	}
 
