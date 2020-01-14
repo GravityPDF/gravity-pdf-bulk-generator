@@ -3,16 +3,23 @@ import Switch from '../Switch/Switch'
 import PropTypes from 'prop-types'
 import './ListToggle.scss'
 
-const ListToggle = ({items, onChange}) => {
+const ListToggle = ({ items, onChange }) => {
   return (
-    <ol className="gfpdf-toggle-list">
+    <ol className='gfpdf-toggle-list'>
       {
         items.map((pdf, index) => {
           return (
             <li key={index}>
-              <label onClick={() => onChange(index)}>{pdf.label} <span>(ID: {pdf.id})</span></label>
+              <label
+                onClick={() => onChange(index)}>
+                {pdf.label} <span>(ID: {pdf.id})</span>
+              </label>
 
-              <Switch screenReaderLabel="Label" active={pdf.active} onChange={onChange} id={index} />
+              <Switch
+                screenReaderLabel='Label'
+                active={pdf.active}
+                onChange={onChange}
+                id={index} />
             </li>
           )
         })

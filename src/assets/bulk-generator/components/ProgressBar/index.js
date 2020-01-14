@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import './ProgressBar.scss'
 
 const steps = [
@@ -8,16 +7,18 @@ const steps = [
   'Download'
 ]
 
-const ProgressBar = ({step}) => {
+const ProgressBar = ({ step }) => {
   return (
-    <ol className="gfpdf-progress-steps">
+    <ol className='gfpdf-progress-steps'>
       {steps.map((name, index) => (
-        <li key={index} className={(step - 1) === index ? 'active' : ''}>{name}</li>
+        <li
+          key={index}
+          className={(step - 1) === index ? 'active' : ''}>
+          {name}
+        </li>
       ))}
     </ol>
   )
 }
-
-ProgressBar.propTypes = {}
 
 export default ProgressBar

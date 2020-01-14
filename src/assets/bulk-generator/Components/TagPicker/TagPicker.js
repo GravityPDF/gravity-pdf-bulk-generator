@@ -1,5 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { getActiveTags } from '../../actions/tagPicker'
 
 class TagPicker extends React.Component {
 
@@ -15,34 +17,14 @@ class TagPicker extends React.Component {
     inputValue: PropTypes.string.isRequired
   }
 
-  constructor (props) {
-    super(props)
+  componentDidMount () {
+    this.props.getActiveTags(this.props.inputValue)
+  }
 
-    this.state = {
-      selectedTags: this.getActiveTags(props.inputValue)
+  componentDidUpdate (prevProps, prevState) {
+    if (prevProps.inputValue !== this.props.inputValue) {
+      this.props.getActiveTags(this.props.inputValue)
     }
-  }
-
-  componentWillReceiveProps (nextProps) {
-    if (nextProps.inputValue !== this.props.inputValue) {
-      this.setState({selectedTags: this.getActiveTags(nextProps.inputValue)})
-    }
-  }
-
-  getActiveTags = (value) => {
-    const selectedTags = []
-    this.props.tags.map((tag) => {
-      if (value.match('/' + this.escapeRegexString(tag.id) + '/') !== null) {
-        selectedTags.push(tag.id)
-      }
-    })
-
-    return selectedTags
-  }
-
-  escapeRegexString = (string) => {
-    /* See https://stackoverflow.com/a/6969486/1614565 */
-    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
   }
 
   tagClicked = (tag, e) => {
@@ -54,15 +36,23 @@ class TagPicker extends React.Component {
   }
 
   render () {
-
     return (
-      <div className="gfpdf-tags">
+      <div className='gfpdf-tags'>
         {
           this.props.tags.map((tag, index) => {
-            const isActive = this.state.selectedTags.indexOf(tag.id) !== -1 ? ' active' : ''
+            const isActive = this.props.selectedTags.indexOf(tag.id) !== -1 ? ' active' : ''
             const classes = 'button button-secondary' + isActive
 
-            return <button key={index} type="button" className={classes} onClick={(e) => this.tagClicked(this.props.tags[index], e)}>{tag.label}</button>
+            return (
+              <button
+                key={index}
+                type='button'
+                className={classes}
+                onClick={(e) =>
+                  this.tagClicked(this.props.tags[index], e)}>
+                {tag.label}
+              </button>
+            )
           })
         }
       </div>
@@ -70,4 +60,8 @@ class TagPicker extends React.Component {
   }
 }
 
-export default TagPicker
+const MapStateToProps = state => ({
+  selectedTags: state.tagPicker.selectedTags
+})
+
+export default connect(MapStateToProps, { getActiveTags })(TagPicker)

@@ -1,63 +1,60 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import ProgressBar from '../ProgressBar'
-import CircularProgressbar from 'react-circular-progressbar'
+import { CircularProgressbar } from 'react-circular-progressbar'
 import LoadingDots from '../LoadingDots'
+import { disableModal } from '../../actions/pdf'
+import { incrementPercentage } from '../../actions/tagPicker'
 import './Step2.scss'
 
 class Step2 extends React.Component {
-  cancel = event => {
-    event.stopPropagation()
-    event.preventDefault()
-    this.props.history.push('/')
-  }
-
-  constructor (props) {
-    super(props)
-
-    this.state = {
-      percentage: 0
-    }
-  }
 
   componentDidUpdate () {
-    if(this.state.percentage >= 100) {
+    if (this.props.percentage >= 100) {
       this.props.history.push('/step/3')
     }
   }
 
-  render () {
-    const {percentage} = this.state
+  cancel = event => {
+    event.stopPropagation()
+    event.preventDefault()
+    this.props.history.push('/')
+    this.props.disableModal()
+  }
 
-    setTimeout(() => this.setState({percentage: percentage + 1}), 200)
+  render () {
+    const { percentage } = this.props
+
+    if (percentage <= 100) {
+      setTimeout(() => this.props.incrementPercentage(), 200)
+    }
 
     return (
-      <>
+      <Fragment>
         <ProgressBar step={2} />
 
-        <section id="gfpdf-step-2" className="gfpdf-step">
+        <section id='gfpdf-step-2' className='gfpdf-step'>
           <CircularProgressbar
-            percentage={percentage}
-            text={`${percentage}%`}
-          />
+            value={percentage}
+            text={`${percentage}%`} />
 
           <h2>Building your PDFs<LoadingDots /></h2>
         </section>
 
         <footer>
-          <button className="button button-large" onClick={this.cancel}>Cancel</button>
+          <button
+            className='button button-large'
+            onClick={this.cancel}>
+            Cancel
+          </button>
         </footer>
-      </>
+      </Fragment>
     )
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {}
-}
+const MapStateToProps = state => ({
+  percentage: state.tagPicker.percentage
+})
 
-const MapStateToProps = (state) => {
-  return {}
-}
-
-export default connect(MapStateToProps, mapDispatchToProps)(Step2)
+export default connect(MapStateToProps, { disableModal, incrementPercentage })(Step2)

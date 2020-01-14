@@ -1,22 +1,41 @@
-import React from 'react'
-
-import { createStore, combineReducers } from 'redux'
+import { composeWithDevTools } from 'redux-devtools-extension'
+import { createStore, combineReducers, applyMiddleware } from 'redux'
+import createSagaMiddleware from 'redux-saga'
+import rootSaga from '../sagas'
 import tagPickerReducer from '../reducers/tagPickerReducer'
 import pdfReducer from '../reducers/pdfReducer'
 
 /* Combine our Redux Reducers */
 const reducers = setupReducers()
+/* Initialize Saga Middleware */
+const sagaMiddleware = createSagaMiddleware()
+const middlewares = [sagaMiddleware]
+const middlewareEnhancer = applyMiddleware(...middlewares)
+const enhancers = [middlewareEnhancer]
+/* Initialize Redux dev tools */
+const composedEnhancers = composeWithDevTools(...enhancers)
+/* Create our store and enable composedEnhancers */
+const store = createStore(
+  reducers,
+  composedEnhancers
+)
 
-/* Create our store and enable the Redux dev tools, if they exist */
-const store = createStore(reducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+/* Run Saga Middleware */
+sagaMiddleware.run(rootSaga)
 
 export function getStore () {
   return store
 }
 
+/**
+ * Combine our Redux reducers for use in a single store
+ * If you want to add new top-level keys to our store, this is the place
+ *
+ * @returns {Function}
+ */
 export function setupReducers () {
   return combineReducers({
     tagPicker: tagPickerReducer,
-    pdf: pdfReducer,
+    pdf: pdfReducer
   })
 }
