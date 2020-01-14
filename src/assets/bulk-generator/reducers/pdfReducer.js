@@ -43,11 +43,18 @@ export default function (state = initialState, action) {
         downloadPDFSelected: true
       }
 
-    case HANDLE_MODAL:
-      return {
-        ...state,
-        modal: true
+    case HANDLE_MODAL: {
+      if (state.forms.entriesID.length > 0) {
+        return {
+          ...state,
+          modal: true
+        }
       }
+
+      return {
+        ...state
+      }
+    }
 
     case DISABLE_MODAL:
       return {

@@ -21,10 +21,6 @@ class BulkGenerator extends React.Component {
     this.checkboxSelectAllListener()
   }
 
-  componentDidUpdate (prevProps, prevState, snapshot) {
-    console.log('componentDidUpdate - ')
-  }
-
   bulkDropdownSelect = e => {
     [
       document.querySelector('#bulk-action-selector-top'),
