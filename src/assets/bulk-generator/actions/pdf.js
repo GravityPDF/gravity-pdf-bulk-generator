@@ -4,7 +4,8 @@ import {
   HANDLE_MODAL,
   DISABLE_MODAL,
   SINGLE_CHECKBOX_ENTRY,
-  ALL_CHECKBOX_ENTRY
+  ALL_CHECKBOX_ENTRY,
+  REQUEST_FORM_PDF_ID
 } from '../actionTypes/pdf'
 
 export const togglePdfStatus = index => {
@@ -29,6 +30,13 @@ export const handleModal = () => {
 export const disableModal = () => {
   return {
     type: DISABLE_MODAL
+  }
+}
+
+export const requestFormPdfId = id => {
+  return {
+    type: REQUEST_FORM_PDF_ID,
+    payload: id
   }
 }
 

@@ -4,7 +4,8 @@ import {
   HANDLE_MODAL,
   DISABLE_MODAL,
   SINGLE_CHECKBOX_ENTRY,
-  ALL_CHECKBOX_ENTRY
+  ALL_CHECKBOX_ENTRY,
+  REQUEST_FORM_PDF_ID
 } from '../actionTypes/pdf'
 
 export const initialState = {
@@ -16,7 +17,8 @@ export const initialState = {
     { id: '123412425', label: 'User Invoice', active: false },
     { id: '123412425', label: 'Summary', active: false },
   ],
-  forms: {
+  form: {
+    pdfID: null,
     selectedAllIDs: false,
     entriesID: []
   }
@@ -44,7 +46,7 @@ export default function (state = initialState, action) {
       }
 
     case HANDLE_MODAL: {
-      if (state.forms.entriesID.length > 0) {
+      if (state.form.entriesID.length > 0) {
         return {
           ...state,
           modal: true
@@ -62,8 +64,17 @@ export default function (state = initialState, action) {
         modal: false
       }
 
+    case REQUEST_FORM_PDF_ID:
+      return {
+        ...state,
+        form: {
+          ...state.form,
+          pdfID: action.payload
+        }
+      }
+
     case SINGLE_CHECKBOX_ENTRY: {
-      let entries = state.forms.entriesID
+      let entries = state.form.entriesID
 
       const entry = action.id
       const totalEntries = action.totalEntries
@@ -73,8 +84,8 @@ export default function (state = initialState, action) {
 
         return {
           ...state,
-          forms: {
-            ...state.forms,
+          form: {
+            ...state.form,
             selectedAllIDs: false,
             entriesID: list
           }
@@ -84,8 +95,8 @@ export default function (state = initialState, action) {
 
         return {
           ...state,
-          forms: {
-            ...state.forms,
+          form: {
+            ...state.form,
             selectedAllIDs: true,
             entriesID: entries
           }
@@ -95,8 +106,8 @@ export default function (state = initialState, action) {
 
         return {
           ...state,
-          forms: {
-            ...state.forms,
+          form: {
+            ...state.form,
             selectedAllIDs: false,
             entriesID: entries
           }
@@ -105,15 +116,15 @@ export default function (state = initialState, action) {
     }
 
     case ALL_CHECKBOX_ENTRY: {
-      let ids = state.forms.entriesID
+      let ids = state.form.entriesID
 
-      if (ids.length > 0 && state.forms.selectedAllIDs) {
+      if (ids.length > 0 && state.form.selectedAllIDs) {
         ids = []
 
         return {
           ...state,
-          forms: {
-            ...state.forms,
+          form: {
+            ...state.form,
             selectedAllIDs: false,
             entriesID: ids
           }
@@ -123,8 +134,8 @@ export default function (state = initialState, action) {
 
         return {
           ...state,
-          forms: {
-            ...state.forms,
+          form: {
+            ...state.form,
             selectedAllIDs: true,
             entriesID: ids
           }

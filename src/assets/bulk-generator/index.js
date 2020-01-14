@@ -24,12 +24,18 @@ export default function loadBulkGenerator () {
 
 // Initialize to load Bulk Generator
 if (entryList !== null) {
+  // Top Bulk Action SelectBox & Apply Button
   const topBulkDropdownSelect = document.querySelector('#bulk-action-selector-top')
   const topBulkApplyButton = document.querySelector('#doaction')
+
+  // Bottom Bulk Action SelectBox & Apply Button
   const bottomBulkDropdownSelect = document.querySelector('#bulk-action-selector-bottom')
   const bottomBulkApplyButton = document.querySelector('#doaction2')
 
-  if (topBulkDropdownSelect !== null && topBulkApplyButton !== null && bottomBulkDropdownSelect !== null && bottomBulkApplyButton !== null) {
+  if (
+    topBulkDropdownSelect !== null && topBulkApplyButton !== null ||
+    bottomBulkDropdownSelect !== null && bottomBulkApplyButton !== null
+  ) {
     entryList.appendChild(container)
     loadBulkGenerator()
   }
