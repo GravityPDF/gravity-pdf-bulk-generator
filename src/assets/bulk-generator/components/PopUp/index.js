@@ -8,24 +8,42 @@ import './PopUp.scss'
 
 class PopUp extends React.Component {
 
+  constructor (props) {
+    super(props)
+
+    this.state = {
+      isVisible: false
+    }
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if (this.props.location !== nextProps.location && this.getCurrentLocation(nextProps.location) === 'step') {
+      this.setState({isVisible: true})
+    } else {
+      this.setState({isVisible: false})
+    }
+  }
+
+  getCurrentLocation (newLocation = null) {
+    if (newLocation === null) {
+      return this.props.location.pathname.split('/')[1]
+    } else {
+      return newLocation.pathname.split('/')[1]
+    }
+  }
+
   render () {
+    const location = this.getCurrentLocation()
+
     return (
       <PoseGroup flipMove={false}>
-        {this.props.modal && [
-          <Fade key='fade'>
-            <Route
-              key='overlay'
-              path='/step'
-              component={Overlay} />
+        {this.state.isVisible && [
+          <Fade key={'overlay-' + location}>
+            <Route key="overlay" path="/step" component={Overlay} />
           </Fade>,
 
-          <SlideDown
-            key='slidedown'
-            id='gfpdf-bulk-generator-popup'>
-            <Route
-              key='steps'
-              path='/step/:stepId'
-              component={Steps} />
+          <SlideDown key={'steps-' + location} id="gfpdf-bulk-generator-popup">
+            <Route key="steps" path="/step/:stepId" component={Steps} />
           </SlideDown>
         ]}
       </PoseGroup>
@@ -34,3 +52,4 @@ class PopUp extends React.Component {
 }
 
 export default PopUp
+
