@@ -117,7 +117,7 @@ class Bootstrap extends Helper_Abstract_Addon {
 			add_action( 'admin_enqueue_scripts', function() use ( $form_id, $pdfs ) {
 				wp_enqueue_script(
 					'gfpdf_bulk_generator',
-					plugin_dir_url( GFPDF_PDF_BULK_GENERATOR_FILE ) . 'dist/bulk-generator.js',
+					plugin_dir_url( GFPDF_PDF_BULK_GENERATOR_FILE ) . 'dist/bulk-generator.min.js',
 					[],
 					time(),
 					true
@@ -131,7 +131,7 @@ class Bootstrap extends Helper_Abstract_Addon {
 
 				wp_enqueue_style(
 					'gfpdf_bulk_generator',
-					plugin_dir_url( GFPDF_PDF_BULK_GENERATOR_FILE ) . 'dist/bulk-generator.css',
+					plugin_dir_url( GFPDF_PDF_BULK_GENERATOR_FILE ) . 'dist/bulk-generator.min.css',
 					[],
 					time()
 				);

@@ -1,23 +1,24 @@
+const webpackMerge = require('webpack-merge')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin")
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const production = require('./webpack-configs/production')
+const development = require('./webpack-configs/development')
 const PROD = process.env.NODE_ENV === 'production'
+const modeConfig = PROD ? production : development
 
-module.exports = {
-  entry: {
-    'bulk-generator': './src/assets/bulk-generator/index.js',
-  },
-  output: {
-    path: __dirname + '/dist',
-    filename: '[name].js'
-  },
-  devtool: PROD ? 'source-map' : 'eval-source-map',
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        exclude: /(node_modules|bower_components)/,
-        use: {
+module.exports = webpackMerge(
+  {
+    entry: {
+      'bulk-generator': './src/assets/react/index.js',
+    },
+    output: {
+      path: __dirname + '/dist',
+      filename: '[name].min.js'
+    },
+    module: {
+      rules: [
+        {
+          test: /\.js$/,
+          exclude: /(node_modules|bower_components)/,
           loader: 'babel-loader',
           options: {
             presets: [
@@ -25,43 +26,17 @@ module.exports = {
               '@babel/preset-react'
             ]
           }
+        },
+        {
+          test: /\.scss$/,
+          use: [
+            MiniCssExtractPlugin.loader,
+            'css-loader',
+            'sass-loader'
+          ]
         }
-      },
-
-      {
-        test: /\.scss$/,
-        use: [
-          process.env.NODE_ENV !== 'production' ? 'style-loader' : MiniCssExtractPlugin.loader,
-          'css-loader',
-          'sass-loader'
-        ]
-      }
-    ]
-  },
-  plugins: [
-    new MiniCssExtractPlugin({
-      filename: '[name].css',
-    })
-  ],
-  optimization: {
-    minimizer: [
-      new UglifyJsPlugin({
-        cache: true,
-        parallel: true,
-        sourceMap: true // set to true if you want JS source maps
-      }),
-      new OptimizeCSSAssetsPlugin({})
-    ],
-
-    splitChunks: {
-      cacheGroups: {
-        styles: {
-          name: 'styles',
-          test: /\.css$/,
-          chunks: 'all',
-          enforce: true
-        }
-      }
+      ]
     }
   },
-}
+  modeConfig
+)

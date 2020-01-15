@@ -1,37 +1,37 @@
 {
-  "presets": [
-    [
-      "@babel/preset-env",
-      {
-        "targets": {
-          "browsers": [
-            "last 2 versions"
-          ]
-        },
-        "modules": false,
-        "forceAllTransforms": true,
-        "useBuiltIns": "usage"
-      }
-    ]
-
-  ],
-  "plugins": [
-    "@babel/plugin-proposal-object-rest-spread",
-    "@babel/plugin-proposal-class-properties"
-  ],
-  "env": {
-    "test": {
-      "plugins": [
-        "./tests/mocha/arrow-function-coverage-fix.js",
-        [
-          "istanbul",
-          {
-            "exclude": [
-              "tests/**"
-            ]
-          }
-        ]
-      ]
-    }
-  }
+	"presets": [
+		[
+			"@babel/preset-env",
+			{
+				"targets": {
+					"browsers": [
+						"last 2 versions"
+					]
+				},
+				"modules": false,
+				"forceAllTransforms": true,
+				"useBuiltIns": "usage"
+			}
+		]
+	],
+	"plugins": [
+		"@babel/plugin-syntax-dynamic-import",
+		"@babel/plugin-proposal-object-rest-spread",
+		"@babel/plugin-proposal-class-properties"
+	],
+	"env": {
+		"test": {
+			"plugins": [
+				"./tests/mocha/arrow-function-coverage-fix.js",
+				[
+					"istanbul",
+					{
+						"exclude": [
+							"tests/**"
+						]
+					}
+				]
+			]
+		}
+	}
 }
