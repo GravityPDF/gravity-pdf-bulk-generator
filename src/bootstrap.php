@@ -8,9 +8,10 @@ use GFPDF\Helper\Helper_Notices;
 use GFPDF\Helper\Helper_Singleton;
 use GFPDF\Helper\Licensing\EDD_SL_Plugin_Updater;
 use GFPDF\Plugins\BulkGenerator\Api\ApiEndpointRegistration;
+use GFPDF\Plugins\BulkGenerator\Api\ApiNamespace;
 use GFPDF\Plugins\BulkGenerator\Api\Generator\Create;
-use GFPDF\Plugins\BulkGenerator\Api\Generator\Register;
 use GFPDF\Plugins\BulkGenerator\Api\Generator\Download;
+use GFPDF\Plugins\BulkGenerator\Api\Generator\Register;
 use GFPDF\Plugins\BulkGenerator\Api\Search\Entries;
 use GPDFAPI;
 
@@ -106,8 +107,9 @@ class Bootstrap extends Helper_Abstract_Addon {
 				);
 
 				wp_localize_script( 'gfpdf_bulk_generator', 'GPDF_BULK_GENERATOR', [
-					'form_id' => $form_id,
-					'pdfs'    => $pdfs,
+					'rest_url' => rest_url( ApiNamespace::V1 ),
+					'form_id'  => $form_id,
+					'pdfs'     => $pdfs,
 				] );
 
 				wp_enqueue_style(
