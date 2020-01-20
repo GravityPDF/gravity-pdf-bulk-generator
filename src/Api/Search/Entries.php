@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Entries implements ApiEndpointRegistration {
 
 	public function endpoint() {
-		register_rest_route( ApiNamespace::V1, '/search/entries', [
+		register_rest_route( ApiNamespace::V1, '/search/(?P<form_id>[0-9]+)/entries', [
 			'methods'  => \WP_REST_Server::READABLE,
 			'callback' => [ $this, 'response' ],
 
