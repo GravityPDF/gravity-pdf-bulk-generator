@@ -7,39 +7,23 @@ use GFPDF\Helper\Helper_Logger;
 use GFPDF\Helper\Helper_Notices;
 use GFPDF\Helper\Helper_Singleton;
 use GFPDF\Helper\Licensing\EDD_SL_Plugin_Updater;
+use GFPDF\Plugins\BulkGenerator\Api\ApiEndpointRegistration;
+use GFPDF\Plugins\BulkGenerator\Api\Generator\Create;
+use GFPDF\Plugins\BulkGenerator\Api\Generator\Register;
+use GFPDF\Plugins\BulkGenerator\Api\Generator\Download;
+use GFPDF\Plugins\BulkGenerator\Api\Search\Entries;
 use GPDFAPI;
 
 /**
  * @package     Gravity PDF Bulk Generator
- * @copyright   Copyright (c) 2019, Blue Liquid Designs
+ * @copyright   Copyright (c) 2020, Blue Liquid Designs
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       1.0
  */
 
 /* Exit if accessed directly */
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-
-/*
-    This file is part of Gravity PDFBulk Generator.
-
-    Copyright (C) 2019, Blue Liquid Designs
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
 
 /* Load Composer */
 require_once( __DIR__ . '/../vendor/autoload.php' );
@@ -65,14 +49,35 @@ class Bootstrap extends Helper_Abstract_Addon {
 		$pdf_save_path = $data->template_tmp_location . 'bulk-generator/';
 
 		/* Register our classes and pass back up to the parent initialiser */
-		$classes = array_merge( $classes, [
-
+		$api_classes = $this->register_api_endpoints( [
+			new Register( $pdf_save_path ),
+			new Create( $pdf_save_path ),
+			new Download( $pdf_save_path ),
+			new Entries()
 		] );
+
+		$classes = array_merge(
+			$classes,
+			$api_classes,
+			[
+
+			]
+		);
 
 		$this->move_to_class();
 
 		/* Run the setup */
 		parent::init( $classes );
+	}
+
+	protected function register_api_endpoints( $classes ) {
+		foreach ( $classes as $class ) {
+			if ( $class instanceof ApiEndpointRegistration ) {
+				add_action( 'rest_api_init', [ $class, 'endpoint' ] );
+			}
+		}
+
+		return $classes;
 	}
 
 	public function move_to_class() {
