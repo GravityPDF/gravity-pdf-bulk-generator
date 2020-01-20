@@ -2,12 +2,11 @@
 
 namespace GFPDF\Plugins\BulkGenerator;
 
-use GFPDF\Helper\Licensing\EDD_SL_Plugin_Updater;
 use GFPDF\Helper\Helper_Abstract_Addon;
-use GFPDF\Helper\Helper_Singleton;
 use GFPDF\Helper\Helper_Logger;
 use GFPDF\Helper\Helper_Notices;
-
+use GFPDF\Helper\Helper_Singleton;
+use GFPDF\Helper\Licensing\EDD_SL_Plugin_Updater;
 use GPDFAPI;
 
 /**
@@ -77,28 +76,43 @@ class Bootstrap extends Helper_Abstract_Addon {
 	}
 
 	public function move_to_class() {
-		add_filter( 'gform_entry_list_bulk_actions', function( $actions ) {
-			$actions['download_pdf'] = esc_html__( 'Download PDF', 'gravity-pdf-bulk-generator' );
+		if( \GFForms::get_page() === 'entry_list' ) {
 
-			return $actions;
-		} );
+			$form_id = (int) rgget( 'id' );
+			$pdfs = \GPDFAPI::get_form_pdfs( $form_id );
 
-		add_action( 'admin_enqueue_scripts', function() {
-			wp_enqueue_script(
-				'gfpdf_bulk_generator',
-				plugin_dir_url( GFPDF_PDF_BULK_GENERATOR_FILE ) . 'dist/bulk-generator.js',
-				[],
-				time(),
-				true
-			);
+			if( is_wp_error($pdfs) || count( $pdfs ) === 0 ) {
+				return;
+			}
 
-			wp_enqueue_style(
-				'gfpdf_bulk_generator',
-				plugin_dir_url( GFPDF_PDF_BULK_GENERATOR_FILE ) . 'dist/bulk-generator.css',
-				[],
-				time()
-			);
-		});
+			add_filter( 'gform_entry_list_bulk_actions', function( $actions ) {
+				$actions['download_pdf'] = esc_html__( 'Download PDF', 'gravity-pdf-bulk-generator' );
+
+				return $actions;
+			} );
+
+			add_action( 'admin_enqueue_scripts', function() use( $form_id, $pdfs ) {
+				wp_enqueue_script(
+					'gfpdf_bulk_generator',
+					plugin_dir_url( GFPDF_PDF_BULK_GENERATOR_FILE ) . 'dist/bulk-generator.js',
+					[],
+					time(),
+					true
+				);
+
+				wp_localize_script( 'gfpdf_bulk_generator', 'GPDF_BULK_GENERATOR', [
+					'form_id' => $form_id,
+					'pdfs'    => $pdfs,
+				] );
+
+				wp_enqueue_style(
+					'gfpdf_bulk_generator',
+					plugin_dir_url( GFPDF_PDF_BULK_GENERATOR_FILE ) . 'dist/bulk-generator.css',
+					[],
+					time()
+				);
+			} );
+		}
 	}
 
 	/**
