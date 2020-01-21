@@ -4,8 +4,14 @@ namespace GFPDF\Plugins\BulkGenerator\Api\Generator;
 
 use GFPDF\Plugins\BulkGenerator\Api\ApiEndpointRegistration;
 use GFPDF\Plugins\BulkGenerator\Api\ApiNamespace;
-use GFPDF\Plugins\BulkGenerator\Validation\SessionId;
+use GFPDF\Plugins\BulkGenerator\Exceptions\InvalidPdfId;
+use GFPDF\Plugins\BulkGenerator\Exceptions\InvalidPdfSettingKey;
+use GFPDF\Plugins\BulkGenerator\Exceptions\PdfConditionalLogicFailed;
+use GFPDF\Plugins\BulkGenerator\Exceptions\PdfGenerationError;
+use GFPDF\Plugins\BulkGenerator\Exceptions\PdfNotActive;
 use GFPDF\Plugins\BulkGenerator\Exceptions\SessionConfigNotLoaded;
+use GFPDF\Plugins\BulkGenerator\Model\Pdf;
+use GFPDF\Plugins\BulkGenerator\Validation\SessionId;
 use League\Flysystem\Filesystem;
 use League\Flysystem\ZipArchive\ZipArchiveAdapter;
 
@@ -70,11 +76,9 @@ class Create implements ApiEndpointRegistration {
 		$gform = \GPDFAPI::get_form_class();
 		$misc  = \GPDFAPI::get_misc_class();
 
-		$this->save_pdf_path = trailingslashit( $this->save_pdf_path . $request->get_param( 'sessionId' ) ); /* @TODO Abstract */
+		$this->save_pdf_path = trailingslashit( $this->save_pdf_path . $request->get_param( 'sessionId' ) );
+		/* @TODO Abstract */
 
-		/*
-		 * Get required data
-		 */
 		$entry = $gform->get_entry( $request->get_param( 'entryId' ) );
 		if ( is_wp_error( $entry ) ) {
 			$entry->add_data( [ 'status' => 403 ] );
@@ -82,48 +86,40 @@ class Create implements ApiEndpointRegistration {
 			return $entry;
 		}
 
-		$pdf = \GPDFAPI::get_pdf( $entry['form_id'], $request->get_param( 'pdfId' ) );
-		if ( is_wp_error( $pdf ) ) {
-			$pdf->add_data( [ 'status' => 403 ] );
-
-			return $pdf;
-		}
-
-		/*
-		 * @TODO refractor
-		 * Validate PDF
-		 */
-		if ( $pdf['active'] !== true ) {
-			return new \WP_Error( 'pdf_not_active', [ 'status' => 400 ] );
-		}
-
-		if ( isset( $pdf['conditionalLogic'] ) && ! $misc->evaluate_conditional_logic( $pdf['conditionalLogic'], $entry ) ) {
-			return new \WP_Error( 'pdf_conditional_logic_failed', [ 'status' => 412 ] );
-		}
-
 		try {
 			$config = $this->get_session_config( $this->save_pdf_path );
+
+			$pdf = new Pdf( $entry['form_id'], $request->get_param( 'pdfId' ) );
+			$pdf->fetch()
+			    ->evaluate_active()
+			    ->evaluate_conditional_logic( $entry )
+			    ->generate( $entry['id'] );
+
+			/* @TODO Abstract */
+			$zip_internal_path = $this->get_full_save_path( $config['path'], $entry ) . wp_basename( $pdf->get_path() );
+
+			/* @TODO - allow archive to be renamed? */
+			$zip_path = $this->save_pdf_path . 'archive.zip';
+
+			$zip = new Filesystem( new ZipArchiveAdapter( $zip_path ) );
+			$pdf->put( $zip, $zip_internal_path );
+			$zip = null;
+
+			$misc->rmdir( dirname( $pdf->get_path() ) );
+
 		} catch ( SessionConfigNotLoaded $e ) {
-			return new \WP_Error( 'session_config_not_loaded', [ 'status' => 500 ] );
+			return new \WP_Error( 'session_config_not_loaded', '', [ 'status' => 500 ] );
+		} catch ( InvalidPdfId $e ) {
+			return new \WP_Error( $e->getMessage(), '', [ 'status' => 403 ] );
+		} catch ( PdfNotActive $e ) {
+			return new \WP_Error( 'pdf_not_active', '', [ 'status' => 400 ] );
+		} catch ( PdfConditionalLogicFailed $e ) {
+			return new \WP_Error( 'pdf_conditional_logic_failed', '', [ 'status' => 412 ] );
+		} catch ( PdfGenerationError $e ) {
+			return new \WP_Error( $e->getMessage(), '', [ 'status' => 500 ] );
+		} catch ( \Exception $e ) {
+			return new \WP_Error( 'unknown_error', '', [ 'status' => 500 ] );
 		}
-
-		/* Create the PDF */
-		$tmp_pdf_path = \GPDFAPI::create_pdf( $entry['id'], $pdf['id'] );
-		if ( is_wp_error( $tmp_pdf_path ) ) {
-			$tmp_pdf_path->add_data( [ 'status' => 500 ] );
-
-			return $pdf;
-		}
-
-		/* Move to appropriate location */
-		/* @TODO - how to handle PDFs with the same name - override, or rename? */
-		$zip_pdf_path = $this->get_full_save_path( $config['path'], $entry ) . wp_basename( $tmp_pdf_path );
-		if ( ! $this->copy_to_zip( $zip_pdf_path, file_get_contents( $tmp_pdf_path ) ) ) {
-			return new \WP_Error( 'error_creating_pdf', [ 'status' => 500 ] );
-		}
-
-		/* Cleanup */
-		$misc->rmdir( dirname( $tmp_pdf_path ) );
 	}
 
 	/* @TODO move to independant class */
@@ -133,7 +129,7 @@ class Create implements ApiEndpointRegistration {
 		$gform = \GPDFAPI::get_form_class();
 		$form  = $gform->get_form( $entry['form_id'] );
 
-		$user_path = explode( '/', $user_path );
+		$user_path = array_filter( explode( '/', $user_path ) );
 		foreach ( $user_path as &$segment ) {
 			$segment = trim( $gform->process_tags( $segment, $form, $entry ) );
 			$segment = $misc->strip_invalid_characters( $segment );
@@ -142,19 +138,6 @@ class Create implements ApiEndpointRegistration {
 		$user_path = implode( '/', array_filter( $user_path ) );
 
 		return trailingslashit( $user_path );
-	}
-
-	/* @TODO - allow zip name to be modified by the user? */
-	public function copy_to_zip( $zip_path, $content ) {
-		$zip = new Filesystem( new ZipArchiveAdapter( $this->save_pdf_path . 'archive.zip' ) );
-		if ( ! $zip->put( $zip_path, $content ) ) {
-			return false; /* @TODO Exception? */
-		}
-
-		/* Force the zip archive to close */
-		$zip = null;
-
-		return true;
 	}
 
 	/* @TODO move to dedicated class */
