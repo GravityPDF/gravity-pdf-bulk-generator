@@ -21,9 +21,8 @@ class SessionId {
 	}
 
 	public function __invoke( $session_id ) {
-		/* @TODO - ensure only contains alpha numeric characters [a-zA-Z0-9] */
 
-		if ( strlen( $session_id ) !== 13 ) {
+		if( preg_match( '/^[a-zA-Z0-9]{32}$/', $session_id ) !== 1 ) {
 			return false;
 		}
 
