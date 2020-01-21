@@ -13,6 +13,10 @@ use GFPDF\Plugins\BulkGenerator\Api\Generator\Create;
 use GFPDF\Plugins\BulkGenerator\Api\Generator\Download;
 use GFPDF\Plugins\BulkGenerator\Api\Generator\Register;
 use GFPDF\Plugins\BulkGenerator\Api\Search\Entries;
+use GFPDF\Plugins\BulkGenerator\MergeTags\CreatedBy;
+use GFPDF\Plugins\BulkGenerator\MergeTags\DateCreated;
+use GFPDF\Plugins\BulkGenerator\MergeTags\DateUpdated;
+use GFPDF\Plugins\BulkGenerator\MergeTags\PaymentDate;
 use GPDFAPI;
 
 /**
@@ -54,12 +58,23 @@ class Bootstrap extends Helper_Abstract_Addon {
 			new Register( $pdf_save_path ),
 			new Create( $pdf_save_path ),
 			new Download( $pdf_save_path ),
-			new Entries()
+			new Entries(),
 		] );
+
+		$mergetag_classes = [];
+		if ( ! defined( 'GV_PLUGIN_VERSION' ) ) {
+			$mergetag_classes = [
+				new DateCreated(),
+				new DateUpdated(),
+				new PaymentDate(),
+				new CreatedBy(),
+			];
+		}
 
 		$classes = array_merge(
 			$classes,
 			$api_classes,
+			$mergetag_classes,
 			[
 
 			]
@@ -82,12 +97,12 @@ class Bootstrap extends Helper_Abstract_Addon {
 	}
 
 	public function move_to_class() {
-		if( \GFForms::get_page() === 'entry_list' ) {
+		if ( \GFForms::get_page() === 'entry_list' ) {
 
 			$form_id = (int) rgget( 'id' );
-			$pdfs = \GPDFAPI::get_form_pdfs( $form_id );
+			$pdfs    = \GPDFAPI::get_form_pdfs( $form_id );
 
-			if( is_wp_error($pdfs) || count( $pdfs ) === 0 ) {
+			if ( is_wp_error( $pdfs ) || count( $pdfs ) === 0 ) {
 				return;
 			}
 
@@ -97,7 +112,7 @@ class Bootstrap extends Helper_Abstract_Addon {
 				return $actions;
 			} );
 
-			add_action( 'admin_enqueue_scripts', function() use( $form_id, $pdfs ) {
+			add_action( 'admin_enqueue_scripts', function() use ( $form_id, $pdfs ) {
 				wp_enqueue_script(
 					'gfpdf_bulk_generator',
 					plugin_dir_url( GFPDF_PDF_BULK_GENERATOR_FILE ) . 'dist/bulk-generator.js',
