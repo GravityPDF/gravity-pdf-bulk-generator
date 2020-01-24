@@ -12,6 +12,7 @@ use GFPDF\Plugins\BulkGenerator\Api\ApiNamespace;
 use GFPDF\Plugins\BulkGenerator\Api\Generator\Create;
 use GFPDF\Plugins\BulkGenerator\Api\Generator\Download;
 use GFPDF\Plugins\BulkGenerator\Api\Generator\Register;
+use GFPDF\Plugins\BulkGenerator\Api\Generator\Zip;
 use GFPDF\Plugins\BulkGenerator\Api\Search\Entries;
 use GFPDF\Plugins\BulkGenerator\MergeTags\CreatedBy;
 use GFPDF\Plugins\BulkGenerator\MergeTags\DateCreated;
@@ -59,6 +60,7 @@ class Bootstrap extends Helper_Abstract_Addon {
 			new Create( $pdf_save_path ),
 			new Download( $pdf_save_path ),
 			new Entries(),
+			new Zip( $pdf_save_path ),
 		] );
 
 		$mergetag_classes = [];

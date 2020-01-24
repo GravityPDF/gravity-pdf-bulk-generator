@@ -46,6 +46,12 @@ class Register implements ApiEndpointRegistration {
 					'description'       => 'The path each generated PDF should be saved into in the zip file. Merge tags are supported.',
 					'validate_callback' => new ZipPath(),
 				],
+
+				'concurrency' => [
+					'required'    => true,
+					'type'        => 'integer',
+					'description' => 'The number of concurrent PDFs that should be generated simultaneously.',
+				],
 			],
 		] );
 	}
@@ -65,7 +71,8 @@ class Register implements ApiEndpointRegistration {
 
 		/* Save session config file */
 		$config_saved = $this->save_session_config( $session_path, [
-			'path' => $request->get_param( 'path' ),
+			'path'        => $request->get_param( 'path' ),
+			'concurrency' => $request->get_param( 'concurrency' ),
 		] );
 
 		if ( $config_saved === false ) {
