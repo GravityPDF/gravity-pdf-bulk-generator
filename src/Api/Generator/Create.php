@@ -95,17 +95,24 @@ class Create implements ApiEndpointRegistration {
 			    ->evaluate_conditional_logic( $entry )
 			    ->generate( $entry['id'] );
 
-			/* @TODO Abstract */
-			$zip_internal_path = $this->get_full_save_path( $config['path'], $entry ) . wp_basename( $pdf->get_path() );
+			/* If generating PDFs one at a time, to save time we'll handle the zip automatically */
+			if ( $config['concurrency'] === 1 ) {
+				/* @TODO Abstract */
+				$zip_internal_path = $this->get_full_save_path( $config['path'], $entry ) . wp_basename( $pdf->get_path() );
 
-			/* @TODO - allow archive to be renamed? */
-			$zip_path = $this->save_pdf_path . 'archive.zip';
+				/* @TODO - allow archive to be renamed? */
+				$zip_path = $this->save_pdf_path . 'archive.zip';
 
-			$zip = new Filesystem( new ZipArchiveAdapter( $zip_path ) );
-			$pdf->put( $zip, $zip_internal_path );
-			$zip = null;
+				$zip = new Filesystem( new ZipArchiveAdapter( $zip_path ) );
+				$pdf->put( $zip, $zip_internal_path );
+				$zip = null;
 
-			$misc->rmdir( dirname( $pdf->get_path() ) );
+				$misc->rmdir( dirname( $pdf->get_path() ) );
+			} else {
+				$tmp_path = $this->save_pdf_path . 'tmp/' . $this->get_full_save_path( $config['path'], $entry );
+				wp_mkdir_p( $tmp_path );
+				rename( $pdf->get_path(), $tmp_path . wp_basename( $pdf->get_path() ) );
+			}
 
 		} catch ( SessionConfigNotLoaded $e ) {
 			return new \WP_Error( 'session_config_not_loaded', '', [ 'status' => 500 ] );
