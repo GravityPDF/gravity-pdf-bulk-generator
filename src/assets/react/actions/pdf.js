@@ -18,6 +18,7 @@ import {
   SELECT_DOWNLOAD_PDF,
   DESELECT_DOWNLOAD_PDF,
   TOGGLE_MODAL,
+  RESET_PDF_STATE
 } from '../actionTypes/pdf'
 
 export const togglePdfStatus = index => {
@@ -155,5 +156,11 @@ export const generatePdfZip = sessionId => {
   return {
     type: GENERATE_PDF_ZIP,
     payload: sessionId
+  }
+}
+
+export const resetPdfState = () => {
+  return {
+    type: RESET_PDF_STATE
   }
 }

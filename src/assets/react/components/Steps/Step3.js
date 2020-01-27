@@ -1,6 +1,11 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
-import { getDownloadZip, toggleModal } from '../../actions/pdf'
+import {
+  getDownloadZip,
+  toggleModal,
+  resetPdfState
+} from '../../actions/pdf'
+import { resetTagPickerState } from '../../actions/tagPicker'
 import ProgressBar from '../ProgressBar'
 import { cancelButton } from '../../helpers/cancelButton'
 
@@ -10,7 +15,7 @@ class Step3 extends React.Component {
     const { downloadPercentage, sessionID } = this.props.pdf
 
     if (downloadPercentage === 100) {
-      // this.props.getDownloadZip(sessionID)
+      this.props.getDownloadZip(sessionID)
     }
   }
 
@@ -23,7 +28,7 @@ class Step3 extends React.Component {
   }
 
   render () {
-    const { history, toggleModal } = this.props
+    const { history, toggleModal, resetTagPickerState, resetPdfState } = this.props
     const { downloadZipUrl } = this.props.pdf
 
     return (
@@ -42,7 +47,7 @@ class Step3 extends React.Component {
         <footer>
           <button
             className='button button-large'
-            onClick={e => cancelButton(e, { history, toggleModal })}>
+            onClick={e => cancelButton(e, { history, toggleModal, resetTagPickerState, resetPdfState })}>
             Close
           </button>
         </footer>
@@ -57,5 +62,7 @@ const mapStateToProps = state => ({
 
 export default connect(mapStateToProps, {
   getDownloadZip,
-  toggleModal
+  toggleModal,
+  resetTagPickerState,
+  resetPdfState
 })(Step3)

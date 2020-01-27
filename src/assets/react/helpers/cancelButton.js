@@ -1,9 +1,11 @@
 import React from 'react'
 
-export const cancelButton = (e, { history, toggleModal }) => {
+export const cancelButton = (e, { history, toggleModal, resetTagPickerState, resetPdfState }) => {
   return (
     e.preventDefault(),
     history.push('/'),
-    toggleModal()
+    toggleModal(),
+    resetTagPickerState && resetTagPickerState(),
+    resetPdfState && resetPdfState()
   )
 }

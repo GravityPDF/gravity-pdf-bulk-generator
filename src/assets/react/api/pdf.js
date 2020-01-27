@@ -67,7 +67,7 @@ export const apiRequestGeneratePdfZip = async sessionId => {
   const response = await fetch(url, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/zip'
+      'Content-Type': 'application/json'
     }
   })
 

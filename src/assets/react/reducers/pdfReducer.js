@@ -17,7 +17,8 @@ import {
   GENERATE_PDF_ZIP, GET_FORM_DATA,
   SELECT_DOWNLOAD_PDF,
   DESELECT_DOWNLOAD_PDF,
-  TOGGLE_MODAL
+  TOGGLE_MODAL,
+  RESET_PDF_STATE
 } from '../actionTypes/pdf'
 
 export const initialState = {
@@ -313,6 +314,25 @@ export default function (state = initialState, action) {
       return {
         ...state
       }
+
+    case RESET_PDF_STATE: {
+      const list = []
+      state.list.map(item => {
+        item.active = false
+        list.push(item)
+      })
+
+      return {
+        ...state,
+        sessionID: null,
+        list,
+        activePDFlist: [],
+        requestDownloadList: [],
+        generatePdfCounter: 0,
+        downloadPercentage: 0,
+        downloadZipUrl: null
+      }
+    }
   }
 
   return state

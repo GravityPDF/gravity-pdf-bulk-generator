@@ -70,6 +70,7 @@ export function* getGeneratePdf({ chan, list }) {
     } catch (error) {
       console.log('Saga requestGeneratePDF error 3 - ', error)
     } finally {
+      console.log('finally - ', payload)
       yield put(generatePdfCounter())
 
       if (requestGeneratePDFlist.length === list.length) {
@@ -85,7 +86,7 @@ export function* getGeneratePdf({ chan, list }) {
 
 export function* watchGetGeneratePDF() {
   const chan = yield call(channel)
-  const list = []
+  let list = []
   const merged = { chan, list }
 
   for (let i = 0; i < 5; i++) {
@@ -105,6 +106,8 @@ export function* watchGetGeneratePDF() {
     for (let x = 0; x < list.length; x++) {
       yield put(chan, list[x])
     }
+
+    list = []
   }
 }
 

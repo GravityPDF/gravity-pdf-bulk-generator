@@ -1,6 +1,7 @@
 import {
   UPDATE_DIRECTORY_STRUCTURE,
-  GET_ACTIVE_TAGS
+  GET_ACTIVE_TAGS,
+  RESET_TAGPICKER_STATE
 } from '../actionTypes/tagPicker'
 
 export const initialState = {
@@ -50,6 +51,13 @@ export default function (state = initialState, action) {
       }
     }
 
+    case RESET_TAGPICKER_STATE: {
+      return {
+        ...state,
+        directoryStructure: '/{entry_id}/',
+        selectedTags: []
+      }
+    }
   }
 
   return state
