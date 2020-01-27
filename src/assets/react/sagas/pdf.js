@@ -24,6 +24,7 @@ import {
 } from '../api/pdf'
 
 let requestGeneratePDFlist = []
+let generatePdfList = []
 
 export function* getSessionId(action) {
   try {
@@ -49,13 +50,12 @@ export function chunkArray(myArray, chunk_size) {
   return results
 }
 
-export function* getGeneratePdf({ chan, list }) {
+export function* getGeneratePdf(chan) {
   while (true) {
     const payload = yield take(chan)
 
     try {
       const result = yield call(apiRequestGeneratePDF, payload)
-
       // if (result.status === 200) {
       //   yield put(generatePdfSuccess(payload))
       // } else {
@@ -64,33 +64,41 @@ export function* getGeneratePdf({ chan, list }) {
 
       if (result.status === 200) {
         requestGeneratePDFlist.push(payload)
+
+        if (requestGeneratePDFlist.length === generatePdfList.length) {
+          const perBatch = chunkArray(requestGeneratePDFlist, 5)
+
+          for (let i = 0; i < perBatch.length; i++) {
+            yield put(generatePdfZip(payload.sessionId))
+          }
+
+          requestGeneratePDFlist = []
+          generatePdfList = []
+        }
       } else {
         console.log('Saga requestGeneratePDF retry - ', result.status)
       }
     } catch (error) {
       console.log('Saga requestGeneratePDF error 3 - ', error)
     } finally {
-      console.log('finally - ', payload)
       yield put(generatePdfCounter())
 
-      if (requestGeneratePDFlist.length === list.length) {
-        const perBatch = chunkArray(requestGeneratePDFlist, 5)
-
-        for (let i = 0; i < perBatch.length; i++) {
-          yield put(generatePdfZip(payload.sessionId))
-        }
-      }
+      // if (requestGeneratePDFlist.length === list.length) {
+      //   const perBatch = chunkArray(requestGeneratePDFlist, 5)
+      //
+      //   for (let i = 0; i < perBatch.length; i++) {
+      //     yield put(generatePdfZip(payload.sessionId))
+      //   }
+      // }
     }
   }
 }
 
 export function* watchGetGeneratePDF() {
   const chan = yield call(channel)
-  let list = []
-  const merged = { chan, list }
 
   for (let i = 0; i < 5; i++) {
-    yield fork(getGeneratePdf, merged)
+    yield fork(getGeneratePdf, chan)
   }
 
   while (true) {
@@ -99,15 +107,13 @@ export function* watchGetGeneratePDF() {
 
     selectedEntryIDs.map(id => {
       activePDFlist.map(item => {
-        list.push({ sessionId: sessionID, entryId: id, pdfId: item })
+        generatePdfList.push({ sessionId: sessionID, entryId: id, pdfId: item })
       })
     })
 
-    for (let x = 0; x < list.length; x++) {
-      yield put(chan, list[x])
+    for (let x = 0; x < generatePdfList.length; x++) {
+      yield put(chan, generatePdfList[x])
     }
-
-    list = []
   }
 }
 

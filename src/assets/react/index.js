@@ -7,6 +7,7 @@ import BulkGenerator from './BulkGenerator'
 import '../scss/main.scss'
 
 const entryList = document.querySelector('#entry_list_form')
+const bulkActionOptions = document.querySelectorAll('.alignleft.actions.bulkactions')
 const container = document.createElement('div')
 container.id = 'gfpdf-bulk-generator-container'
 
@@ -24,7 +25,7 @@ export default function loadBulkGenerator () {
 }
 
 // Initialize to load Bulk Generator
-if (entryList !== null) {
+if (entryList !== null && bulkActionOptions.length !== 0) {
   entryList.appendChild(container)
   loadBulkGenerator()
 }
