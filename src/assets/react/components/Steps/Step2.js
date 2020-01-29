@@ -4,7 +4,8 @@ import { CircularProgressbar } from 'react-circular-progressbar'
 import {
   getGeneratePdf,
   generateDownloadPercentage,
-  toggleModal
+  toggleModal,
+  generateRetryPdf
 } from '../../actions/pdf'
 import LoadingDots from '../LoadingDots'
 import ProgressBar from '../ProgressBar'
@@ -17,15 +18,28 @@ class Step2 extends React.Component {
   }
 
   componentDidUpdate (prevProps) {
-    const { generatePdfCounter, downloadPercentage } = this.props.pdf
+    const {
+      requestDownloadList,
+      generatePdfCounter,
+      generatePdfRetryList,
+      generatePdfRetryAttempt,
+      downloadPercentage
+    } = this.props.pdf
 
-    if (prevProps.pdf.generatePdfCounter !== generatePdfCounter) {
-      this.props.generateDownloadPercentage(generatePdfCounter)
+    // if (prevProps.pdf.generatePdfCounter !== generatePdfCounter) {
+    //   this.props.generateDownloadPercentage(generatePdfCounter)
+    // }
+
+    if (
+      generatePdfCounter === requestDownloadList.length &&
+      generatePdfRetryList.length > 0 && generatePdfRetryAttempt !== 0
+    ) {
+      this.props.generateRetryPdf(generatePdfRetryList)
     }
 
-    if (downloadPercentage === 100) {
-      setTimeout(() => this.props.history.push('/step/3'), 100)
-    }
+    // if (generatePdfRetryList.length === 0 && downloadPercentage === 100) {
+    //   setTimeout(() => this.props.history.push('/step/3'), 100)
+    // }
   }
 
   checkSessionID = () => {
@@ -77,5 +91,6 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps, {
   getGeneratePdf,
   generateDownloadPercentage,
-  toggleModal
+  toggleModal,
+  generateRetryPdf
 })(Step2)

@@ -28,22 +28,20 @@ export const apiRequestGeneratePDF = async data => {
   const result = await response
 
   return result
-}
 
-export const apiRequestDownloadZip = async sessionId => {
-  const url = `${GPDF_BULK_GENERATOR.rest_url}/generator/download/${sessionId}`
-
-  const response = await fetch(url, {
-    method: 'GET',
-    headers: {
-      'Content-Disposition': 'attachment; filename="archive.zip"',
-      'Content-Type': 'application/zip'
-    }
-  })
-
-  const result = await response
-
-  return result
+  // const url = `${GPDF_BULK_GENERATOR.rest_url}/generator/create`
+  //
+  // let data = JSON.stringify(dataa)
+  //
+  // const response = await axios.post(url, data, {
+  //   headers: {
+  //     'Content-Type': 'application/json'
+  //   }
+  // })
+  //
+  // const result = await response
+  //
+  // return result
 }
 
 export const apiRequestAllEntriesID = async formID => {
@@ -68,6 +66,30 @@ export const apiRequestGeneratePdfZip = async sessionId => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
+    }
+  })
+
+  const result = await response
+
+  return result
+
+  // const url = `${GPDF_BULK_GENERATOR.rest_url}/generator/zip/${sessionId}`
+  //
+  // const response = await axios.post(url)
+  //
+  // const result = await response
+  //
+  // return result
+}
+
+export const apiRequestDownloadZip = async sessionId => {
+  const url = `${GPDF_BULK_GENERATOR.rest_url}/generator/download/${sessionId}`
+
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Disposition': 'attachment; filename="archive.zip"',
+      'Content-Type': 'application/zip'
     }
   })
 

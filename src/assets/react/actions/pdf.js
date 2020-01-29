@@ -6,15 +6,18 @@ import {
   GET_SESSION_ID,
   GET_SESSION_ID_SUCCESS,
   GET_GENERATE_PDF,
-  GENERATE_PDF_SUCCESS,
+  GET_GENERATE_PDF_SUCCESS,
+  GET_GENERATE_PDF_RETRY_LIST,
+  GENERATE_PDF_ZIP,
+  GENERATE_PDF_ZIP_RETRY_LIST,
+  GENERATE_RETRY_PDF,
   GENERATE_PDF_COUNTER,
   GENERATE_DOWNLOAD_PERCENTAGE,
   GET_DOWNLOAD_ZIP,
   GET_DOWNLOAD_ZIP_SUCCESS,
   TOGGLE_POPUP_SELECT_ALL_ENTRIES,
   GET_ALL_FORM_ENTRIES,
-  GET_ALL_FORM_ENTRIES_SUCCESS,
-  GENERATE_PDF_ZIP, GET_FORM_DATA,
+  GET_ALL_FORM_ENTRIES_SUCCESS, GET_FORM_DATA,
   SELECT_DOWNLOAD_PDF,
   DESELECT_DOWNLOAD_PDF,
   TOGGLE_MODAL,
@@ -98,10 +101,24 @@ export const getGeneratePdf = data => {
   }
 }
 
-export const generatePdfSuccess = data => {
+export const getGeneratePdfSuccess = data => {
   return {
-    type: GENERATE_PDF_SUCCESS,
+    type: GET_GENERATE_PDF_SUCCESS,
     payload: data
+  }
+}
+
+export const getGeneratePdfRetryList = data => {
+  return {
+    type: GET_GENERATE_PDF_RETRY_LIST,
+    payload: data
+  }
+}
+
+export const generateRetryPdf = pdfRetryList => {
+  return {
+    type: GENERATE_RETRY_PDF,
+    payload: pdfRetryList
   }
 }
 
@@ -155,6 +172,13 @@ export const getAllFormEntriesSuccess = ids => {
 export const generatePdfZip = sessionId => {
   return {
     type: GENERATE_PDF_ZIP,
+    payload: sessionId
+  }
+}
+
+export const generatePdfZipRetryList = sessionId => {
+  return {
+    type: GENERATE_PDF_ZIP_RETRY_LIST,
     payload: sessionId
   }
 }

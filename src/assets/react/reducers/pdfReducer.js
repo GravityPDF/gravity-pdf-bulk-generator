@@ -6,7 +6,9 @@ import {
   GET_SESSION_ID,
   GET_SESSION_ID_SUCCESS,
   GET_GENERATE_PDF,
-  GENERATE_PDF_SUCCESS,
+  GET_GENERATE_PDF_SUCCESS,
+  GET_GENERATE_PDF_RETRY_LIST,
+  GENERATE_RETRY_PDF,
   GENERATE_PDF_COUNTER,
   GENERATE_DOWNLOAD_PERCENTAGE,
   GET_DOWNLOAD_ZIP,
@@ -14,7 +16,8 @@ import {
   TOGGLE_POPUP_SELECT_ALL_ENTRIES,
   GET_ALL_FORM_ENTRIES,
   GET_ALL_FORM_ENTRIES_SUCCESS,
-  GENERATE_PDF_ZIP, GET_FORM_DATA,
+  GENERATE_PDF_ZIP,
+  GENERATE_PDF_ZIP_RETRY_LIST, GET_FORM_DATA,
   SELECT_DOWNLOAD_PDF,
   DESELECT_DOWNLOAD_PDF,
   TOGGLE_MODAL,
@@ -38,6 +41,9 @@ export const initialState = {
   },
   requestDownloadList: [],
   generatePdfSuccess: [],
+  generatePdfRetryList: [],
+  generatePdfRetryAttempt: 1,
+  generatePdfZipRetryList: [],
   generatePdfCounter: 0,
   downloadPercentage: 0,
   downloadZipUrl: null
@@ -236,7 +242,7 @@ export default function (state = initialState, action) {
       }
     }
 
-    case GENERATE_PDF_SUCCESS: {
+    case GET_GENERATE_PDF_SUCCESS: {
       const list = state.generatePdfSuccess
 
       list.push(action.payload)
@@ -244,6 +250,26 @@ export default function (state = initialState, action) {
       return {
         ...state,
         generatePdfSuccess: list
+      }
+    }
+
+    case GET_GENERATE_PDF_RETRY_LIST: {
+      const list = state.generatePdfRetryList
+      list.push(action.payload)
+
+      return {
+        ...state,
+        generatePdfRetryList: list
+      }
+    }
+
+    case GENERATE_RETRY_PDF: {
+      console.log('reducer GENERATE_RETRY_PDF')
+      return {
+        ...state,
+        generatePdfRetryList: [],
+        generatePdfRetryAttempt: state.generatePdfRetryAttempt - 1,
+        generatePdfCounter: 0
       }
     }
 
@@ -314,6 +340,16 @@ export default function (state = initialState, action) {
       return {
         ...state
       }
+
+    case GENERATE_PDF_ZIP_RETRY_LIST: {
+      const list = state.generatePdfZipRetryList
+      list.push(action.payload)
+
+      return {
+        ...state,
+        generatePdfZipRetryList: list
+      }
+    }
 
     case RESET_PDF_STATE: {
       const list = []
