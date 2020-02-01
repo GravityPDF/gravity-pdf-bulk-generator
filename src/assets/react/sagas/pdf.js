@@ -1,5 +1,5 @@
-import { channel  } from 'redux-saga'
-import { call, fork, take, takeEvery, takeLatest, put } from 'redux-saga/effects'
+import { channel } from 'redux-saga'
+import { call, fork, take, takeEvery, takeLatest, put, retry, delay } from 'redux-saga/effects'
 import {
   GET_SESSION_ID,
   GET_GENERATE_PDF,
@@ -9,13 +9,11 @@ import {
 } from '../actionTypes/pdf'
 import {
   getSessionIdSuccess,
-  getGeneratePdfSuccess,
-  getGeneratePdfRetryList,
   generatePdfCounter,
   getDownloadZipSuccess,
   getAllFormEntriesSuccess,
   generatePdfZip,
-  generatePdfZipRetryList
+  generatePdfZipRetryList, getGeneratePdfSuccess
 } from '../actions/pdf'
 import {
   apiRequestSessionID,
@@ -92,13 +90,8 @@ export function* getGeneratePdf(chan) {
   }
 }
 
+
 export function* watchGetGeneratePDF() {
-  const chan = yield call(channel)
-
-  for (let i = 0; i < 5; i++) {
-    yield fork(getGeneratePdf, chan)
-  }
-
   while (true) {
     const { payload } = yield take(GET_GENERATE_PDF)
     const { sessionID, selectedEntryIDs, activePDFlist } = payload
@@ -109,22 +102,35 @@ export function* watchGetGeneratePDF() {
       })
     })
 
-    for (let x = 0; x < generatePdfList.length; x++) {
-      yield put(chan, generatePdfList[x])
+    while(generatePdfList.length > 0) {
+      yield call(generatePdf, { payload: generatePdfList.splice(0, 5), sessionID})
     }
   }
 }
 
-export function* getGeneratePdfZip(action) {
+export function* generatePdf(data) {
+  for (let i = 0; i < data.payload.length; i++) {
+    yield fork(getGeneratePdf, data.payload[i])
+  }
+
+  delay(1000)
+
   try {
-    yield call(apiRequestGeneratePdfZip, action.payload)
+    yield call(apiRequestGeneratePdfZip, data.sessionID)
   } catch(error) {
-    yield put(generatePdfZipRetryList(action.payload))
+    //log error
   }
 }
 
-export function* watchGetGeneratePdfZip() {
-  yield takeEvery(GENERATE_PDF_ZIP, getGeneratePdfZip)
+export function* getGeneratePdf(payload) {
+    try {
+      yield retry(3, 3000, apiRequestGeneratePDF, payload)
+      yield put( getGeneratePdfSuccess(payload))
+    } catch (error) {
+      // log the payload problem
+    } finally {
+      yield put(generatePdfCounter())
+    }
 }
 
 export function* getDownloadZip(action) {

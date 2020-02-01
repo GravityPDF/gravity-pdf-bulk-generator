@@ -14,7 +14,7 @@ import { cancelButton } from '../../helpers/cancelButton'
 class Step2 extends React.Component {
 
   componentDidMount () {
-    setTimeout(() => this.checkSessionID(), 400)
+    setTimeout(() => this.checkSessionID(), 1000)
   }
 
   componentDidUpdate (prevProps) {
