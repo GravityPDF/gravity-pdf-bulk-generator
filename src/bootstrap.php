@@ -13,6 +13,7 @@ use GFPDF\Plugins\BulkGenerator\Api\Generator\Create;
 use GFPDF\Plugins\BulkGenerator\Api\Generator\Download;
 use GFPDF\Plugins\BulkGenerator\Api\Generator\Register;
 use GFPDF\Plugins\BulkGenerator\Api\Generator\Zip;
+use GFPDF\Plugins\BulkGenerator\Model\Config;
 use GFPDF\Plugins\BulkGenerator\Api\Search\Entries;
 use GFPDF\Plugins\BulkGenerator\MergeTags\CreatedBy;
 use GFPDF\Plugins\BulkGenerator\MergeTags\DateCreated;
@@ -54,10 +55,12 @@ class Bootstrap extends Helper_Abstract_Addon {
 		$data          = GPDFAPI::get_data_class();
 		$pdf_save_path = $data->template_tmp_location . 'bulk-generator/';
 
+		$config = new Config( $pdf_save_path );
+
 		/* Register our classes and pass back up to the parent initialiser */
 		$api_classes = $this->register_api_endpoints( [
-			new Register( $pdf_save_path ),
-			new Create( $pdf_save_path ),
+			new Register( $config, $pdf_save_path),
+			new Create( $config, $pdf_save_path ),
 			new Download( $pdf_save_path ),
 			new Entries(),
 			new Zip( $pdf_save_path ),

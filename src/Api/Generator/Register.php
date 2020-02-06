@@ -4,6 +4,8 @@ namespace GFPDF\Plugins\BulkGenerator\Api\Generator;
 
 use GFPDF\Plugins\BulkGenerator\Api\ApiEndpointRegistration;
 use GFPDF\Plugins\BulkGenerator\Api\ApiNamespace;
+use GFPDF\Plugins\BulkGenerator\Exceptions\BulkPdfGenerator;
+use GFPDF\Plugins\BulkGenerator\Model\Config;
 use GFPDF\Plugins\BulkGenerator\Validation\ZipPath;
 
 /**
@@ -19,10 +21,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Register implements ApiEndpointRegistration {
 
-	protected $save_pdf_path;
+	protected $config;
 
-	public function __construct( $save_pdf_path ) {
-		$this->save_pdf_path = $save_pdf_path;
+	protected $pdf_save_path;
+
+	public function __construct( Config $config, $pdf_save_path ) {
+		$this->config        = $config;
+		$this->pdf_save_path = $pdf_save_path;
 	}
 
 	public function endpoint() {
@@ -62,7 +67,7 @@ class Register implements ApiEndpointRegistration {
 		/* Get a unique Session ID not currently in use */
 		do {
 			$session_id   = $this->generate_unique_id();
-			$session_path = $this->save_pdf_path . $session_id;
+			$session_path = $this->pdf_save_path . $session_id;
 		} while ( is_dir( $session_path ) );
 
 		if ( ! wp_mkdir_p( $session_path ) ) {
@@ -70,23 +75,20 @@ class Register implements ApiEndpointRegistration {
 		}
 
 		/* Save session config file */
-		$config_saved = $this->save_session_config( $session_path, [
-			'path'        => $request->get_param( 'path' ),
-			'concurrency' => $request->get_param( 'concurrency' ),
-		] );
-
-		if ( $config_saved === false ) {
+		try {
+			$this->config->set_session_id( $session_id )
+			             ->set_all_settings( [
+				             'path'        => $request->get_param( 'path' ),
+				             'concurrency' => $request->get_param( 'concurrency' ),
+			             ] )
+			             ->save();
+		} catch ( BulkPdfGenerator $e ) {
 			return new \WP_Error( 'error_creating_config', [ 'status' => 500 ] );
 		}
 
 		return [
 			'sessionId' => $session_id,
 		];
-	}
-
-	/* @TODO - move to dedicated class */
-	public function save_session_config( $session_path, $args ) {
-		return file_put_contents( $session_path . '/config.json', json_encode( $args ) );
 	}
 
 	protected function generate_unique_id( $length = 16 ) {

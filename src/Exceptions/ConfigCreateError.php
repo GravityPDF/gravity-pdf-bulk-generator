@@ -2,6 +2,6 @@
 
 namespace GFPDF\Plugins\BulkGenerator\Exceptions;
 
-class SessionConfigNotLoaded extends BulkPdfGenerator {
+class ConfigCreateError extends BulkPdfGenerator {
 
 }

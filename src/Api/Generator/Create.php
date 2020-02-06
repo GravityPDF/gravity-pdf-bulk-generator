@@ -4,12 +4,13 @@ namespace GFPDF\Plugins\BulkGenerator\Api\Generator;
 
 use GFPDF\Plugins\BulkGenerator\Api\ApiEndpointRegistration;
 use GFPDF\Plugins\BulkGenerator\Api\ApiNamespace;
+use GFPDF\Plugins\BulkGenerator\Exceptions\ConfigNotLoaded;
 use GFPDF\Plugins\BulkGenerator\Exceptions\InvalidPdfId;
 use GFPDF\Plugins\BulkGenerator\Exceptions\InvalidPdfSettingKey;
 use GFPDF\Plugins\BulkGenerator\Exceptions\PdfConditionalLogicFailed;
 use GFPDF\Plugins\BulkGenerator\Exceptions\PdfGenerationError;
 use GFPDF\Plugins\BulkGenerator\Exceptions\PdfNotActive;
-use GFPDF\Plugins\BulkGenerator\Exceptions\SessionConfigNotLoaded;
+use GFPDF\Plugins\BulkGenerator\Model\Config;
 use GFPDF\Plugins\BulkGenerator\Model\Pdf;
 use GFPDF\Plugins\BulkGenerator\Validation\SessionId;
 use League\Flysystem\Filesystem;
@@ -28,9 +29,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Create implements ApiEndpointRegistration {
 
+	protected $config;
+
 	protected $save_pdf_path;
 
-	public function __construct( $save_pdf_path ) {
+	public function __construct( Config $config, $save_pdf_path ) {
+		$this->config        = $config;
 		$this->save_pdf_path = $save_pdf_path;
 	}
 
@@ -73,10 +77,11 @@ class Create implements ApiEndpointRegistration {
 
 	/* @TODO add logging */
 	public function response( \WP_REST_Request $request ) {
-		$gform = \GPDFAPI::get_form_class();
-		$misc  = \GPDFAPI::get_misc_class();
+		$gform      = \GPDFAPI::get_form_class();
+		$misc       = \GPDFAPI::get_misc_class();
+		$session_id = $request->get_param( 'sessionId' );
 
-		$this->save_pdf_path = trailingslashit( $this->save_pdf_path . $request->get_param( 'sessionId' ) );
+		$this->save_pdf_path = trailingslashit( $this->save_pdf_path . $session_id );
 		/* @TODO Abstract */
 
 		$entry = $gform->get_entry( $request->get_param( 'entryId' ) );
@@ -87,7 +92,9 @@ class Create implements ApiEndpointRegistration {
 		}
 
 		try {
-			$config = $this->get_session_config( $this->save_pdf_path );
+			$settings = $this->config->set_session_id( $session_id )
+			                         ->fetch()
+			                         ->get_all_settings();
 
 			$pdf = new Pdf( $entry['form_id'], $request->get_param( 'pdfId' ) );
 			$pdf->fetch()
@@ -96,9 +103,9 @@ class Create implements ApiEndpointRegistration {
 			    ->generate( $entry['id'] );
 
 			/* If generating PDFs one at a time, to save time we'll handle the zip automatically */
-			if ( $config['concurrency'] === 1 ) {
+			if ( $settings['concurrency'] === 1 ) {
 				/* @TODO Abstract */
-				$zip_internal_path = $this->get_full_save_path( $config['path'], $entry ) . wp_basename( $pdf->get_path() );
+				$zip_internal_path = $this->get_full_save_path( $settings['path'], $entry ) . wp_basename( $pdf->get_path() );
 
 				/* @TODO - allow archive to be renamed? */
 				$zip_path = $this->save_pdf_path . 'archive.zip';
@@ -109,12 +116,12 @@ class Create implements ApiEndpointRegistration {
 
 				$misc->rmdir( dirname( $pdf->get_path() ) );
 			} else {
-				$tmp_path = $this->save_pdf_path . 'tmp/' . $this->get_full_save_path( $config['path'], $entry );
+				$tmp_path = $this->save_pdf_path . 'tmp/' . $this->get_full_save_path( $settings['path'], $entry );
 				wp_mkdir_p( $tmp_path );
 				rename( $pdf->get_path(), $tmp_path . wp_basename( $pdf->get_path() ) );
 			}
 
-		} catch ( SessionConfigNotLoaded $e ) {
+		} catch ( ConfigNotLoaded $e ) {
 			return new \WP_Error( 'session_config_not_loaded', '', [ 'status' => 500 ] );
 		} catch ( InvalidPdfId $e ) {
 			return new \WP_Error( $e->getMessage(), '', [ 'status' => 403 ] );
@@ -129,7 +136,6 @@ class Create implements ApiEndpointRegistration {
 		}
 	}
 
-	/* @TODO move to independant class */
 	/* @TODO add logging */
 	protected function get_full_save_path( $user_path, $entry ) {
 		$misc  = \GPDFAPI::get_misc_class();
@@ -146,22 +152,4 @@ class Create implements ApiEndpointRegistration {
 
 		return trailingslashit( $user_path );
 	}
-
-	/* @TODO move to dedicated class */
-	protected function get_session_config( $path ) {
-		$config_path = $path . 'config.json';
-
-		if ( ! is_file( $config_path ) ) {
-			throw new SessionConfigNotLoaded();
-		}
-
-		$config = json_decode( file_get_contents( $config_path ), true );
-
-		if ( ! is_array( $config ) || count( $config ) === 0 ) {
-			throw new SessionConfigNotLoaded();
-		}
-
-		return $config;
-	}
-
 }
