@@ -13,13 +13,16 @@ use GFPDF\Plugins\BulkGenerator\Api\Generator\Create;
 use GFPDF\Plugins\BulkGenerator\Api\Generator\Download;
 use GFPDF\Plugins\BulkGenerator\Api\Generator\Register;
 use GFPDF\Plugins\BulkGenerator\Api\Generator\Zip;
-use GFPDF\Plugins\BulkGenerator\Model\Config;
 use GFPDF\Plugins\BulkGenerator\Api\Search\Entries;
 use GFPDF\Plugins\BulkGenerator\MergeTags\CreatedBy;
 use GFPDF\Plugins\BulkGenerator\MergeTags\DateCreated;
 use GFPDF\Plugins\BulkGenerator\MergeTags\DateUpdated;
 use GFPDF\Plugins\BulkGenerator\MergeTags\PaymentDate;
+use GFPDF\Plugins\BulkGenerator\Model\Config;
+use GFPDF\Plugins\BulkGenerator\Utility\FilesystemHelper;
 use GPDFAPI;
+use League\Flysystem\Adapter\Local;
+use League\Flysystem\Filesystem;
 
 /**
  * @package     Gravity PDF Bulk Generator
@@ -52,18 +55,23 @@ class Bootstrap extends Helper_Abstract_Addon {
 	 */
 	public function init( $classes = [] ) {
 
-		$data          = GPDFAPI::get_data_class();
-		$pdf_save_path = $data->template_tmp_location . 'bulk-generator/';
+		$data     = GPDFAPI::get_data_class();
+		$basepath = $data->template_tmp_location . 'bulk-generator/';
 
-		$config = new Config( $pdf_save_path );
+		/* @TODO probably include default permissions https://flysystem.thephpleague.com/v1/docs/adapter/local/ */
+		$filesystem = new FilesystemHelper(
+			new Filesystem( new Local( $basepath ) )
+		);
+
+		$config = new Config( $filesystem );
 
 		/* Register our classes and pass back up to the parent initialiser */
 		$api_classes = $this->register_api_endpoints( [
-			new Register( $config, $pdf_save_path),
-			new Create( $config, $pdf_save_path ),
-			new Download( $pdf_save_path ),
+			new Register( $config, $filesystem ),
+			new Create( $config, $filesystem ),
+			new Download( $config, $filesystem ),
 			new Entries(),
-			new Zip( $pdf_save_path ),
+			new Zip( $config, $filesystem ),
 		] );
 
 		$mergetag_classes = [];

@@ -4,6 +4,8 @@ namespace GFPDF\Plugins\BulkGenerator\Api\Generator;
 
 use GFPDF\Plugins\BulkGenerator\Api\ApiEndpointRegistration;
 use GFPDF\Plugins\BulkGenerator\Api\ApiNamespace;
+use GFPDF\Plugins\BulkGenerator\Model\Config;
+use GFPDF\Plugins\BulkGenerator\Utility\FilesystemHelper;
 use GFPDF\Plugins\BulkGenerator\Validation\SessionId;
 
 /**
@@ -19,10 +21,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Download implements ApiEndpointRegistration {
 
-	protected $save_pdf_path;
+	/**
+	 * @var Config
+	 *
+	 * @since 1.0
+	 */
+	protected $config;
 
-	public function __construct( $save_pdf_path ) {
-		$this->save_pdf_path = $save_pdf_path;
+	/**
+	 * @var FilesystemHelper
+	 *
+	 * @since 1.0
+	 */
+	protected $filesystem;
+
+	public function __construct( Config $config, FilesystemHelper $filesystem ) {
+		$this->config     = $config;
+		$this->filesystem = $filesystem;
 	}
 
 	public function endpoint() {
@@ -45,7 +60,7 @@ class Download implements ApiEndpointRegistration {
 					'required'          => true,
 					'type'              => 'string',
 					'description'       => 'An alphanumeric active session ID returned via the ' . ApiNamespace::V1 . '/generator/register/ endpoint.',
-					'validate_callback' => new SessionId( $this->save_pdf_path ),
+					'validate_callback' => new SessionId( $this->filesystem ),
 				],
 			],
 		] );
@@ -53,17 +68,17 @@ class Download implements ApiEndpointRegistration {
 
 	/* @TODO add logging */
 	public function response( \WP_REST_Request $request ) {
-		$this->save_pdf_path = trailingslashit($this->save_pdf_path . $request->get_param( 'sessionId' ));
-		$zip_path = $this->save_pdf_path . 'archive.zip';
+		$this->config->set_session_id( $request->get_param( 'sessionId' ) );
 
-		if ( ! is_file( $zip_path ) ) {
+		$zip_path = $this->filesystem->get_zip_path();
+		if ( ! $this->filesystem->has( $zip_path ) ) {
 			return new \WP_Error( 'zip_not_found', [ 'status' => 404 ] );
 		}
 
 		header( 'Content-Type: application/zip' );
-		header( 'Content-Length: ' . filesize( $zip_path ) );
-		header( 'Content-Disposition: attachment; filename="'. wp_basename( $zip_path ) .'"' );
-		readfile( $zip_path );
+		header( 'Content-Length: ' . $this->filesystem->getSize( $zip_path ) );
+		header( 'Content-Disposition: attachment; filename="' . wp_basename( $zip_path ) . '"' );
+		readfile( $this->filesystem->get_zip_path( FilesystemHelper::ADD_PREFIX ) );
 
 		$this->end();
 	}

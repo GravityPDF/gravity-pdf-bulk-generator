@@ -4,8 +4,9 @@ namespace GFPDF\Plugins\BulkGenerator\Api\Generator;
 
 use GFPDF\Plugins\BulkGenerator\Api\ApiEndpointRegistration;
 use GFPDF\Plugins\BulkGenerator\Api\ApiNamespace;
+use GFPDF\Plugins\BulkGenerator\Model\Config;
+use GFPDF\Plugins\BulkGenerator\Utility\FilesystemHelper;
 use GFPDF\Plugins\BulkGenerator\Validation\SessionId;
-use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
 use League\Flysystem\ZipArchive\ZipArchiveAdapter;
 
@@ -22,10 +23,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Zip implements ApiEndpointRegistration {
 
-	protected $save_pdf_path;
+	/**
+	 * @var Config
+	 *
+	 * @since 1.0
+	 */
+	protected $config;
 
-	public function __construct( $save_pdf_path ) {
-		$this->save_pdf_path = $save_pdf_path;
+	/**
+	 * @var FilesystemHelper
+	 *
+	 * @since 1.0
+	 */
+	protected $filesystem;
+
+	public function __construct( Config $config, FilesystemHelper $filesystem ) {
+		$this->config     = $config;
+		$this->filesystem = $filesystem;
 	}
 
 	public function endpoint() {
@@ -48,7 +62,7 @@ class Zip implements ApiEndpointRegistration {
 					'required'          => true,
 					'type'              => 'string',
 					'description'       => 'An alphanumeric active session ID returned via the ' . ApiNamespace::V1 . '/generator/register/ endpoint.',
-					'validate_callback' => new SessionId( $this->save_pdf_path ),
+					'validate_callback' => new SessionId( $this->filesystem ),
 				],
 			],
 		] );
@@ -56,30 +70,30 @@ class Zip implements ApiEndpointRegistration {
 
 	/* @TODO add logging */
 	public function response( \WP_REST_Request $request ) {
-		$this->save_pdf_path = trailingslashit( $this->save_pdf_path . $request->get_param( 'sessionId' ) );
-		$tmp_path            = $this->save_pdf_path . 'tmp';
-		$zip_path            = $this->save_pdf_path . 'archive.zip';
+		$this->config->set_session_id( $request->get_param( 'sessionId' ) );
+
+		$tmp_basepath = $this->filesystem->get_tmp_basepath();
 
 		try {
-			$local = new Filesystem( new Local( $tmp_path ) );
-			$zip   = new Filesystem( new ZipArchiveAdapter( $zip_path ) );
+			$zip = new Filesystem(
+				new ZipArchiveAdapter( $this->filesystem->get_zip_path( FilesystemHelper::ADD_PREFIX ) )
+			);
 
-			$contents = $local->listContents( '', true );
-
+			$contents = $this->filesystem->listContents( $tmp_basepath, true );
 			foreach ( $contents as $info ) {
 				if ( $info['extension'] !== 'pdf' ) {
 					continue;
 				}
 
-				$zip->put( $info['path'], $local->read( $info['path'] ) );
+				$zip_file_path = preg_replace( '/^' . preg_quote( $tmp_basepath, '/' ) . '/', '', $info['path'] ); /* remove tmp basedir */
+				$zip->put( $zip_file_path, $this->filesystem->read( $info['path'] ) );
 			}
 
 			$zip = null;
 
-			$misc = \GPDFAPI::get_misc_class();
-			$misc->rmdir( $tmp_path );
+			$this->filesystem->deleteDir( $tmp_basepath );
 		} catch ( \Exception $e ) {
-			return new WP_Error( $e->getCode(), $e->getMessage(), [ 'status' => 500 ] );
+			return new \WP_Error( $e->getCode(), $e->getMessage(), [ 'status' => 500 ] );
 		}
 	}
 }

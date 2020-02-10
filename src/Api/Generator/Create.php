@@ -6,15 +6,13 @@ use GFPDF\Plugins\BulkGenerator\Api\ApiEndpointRegistration;
 use GFPDF\Plugins\BulkGenerator\Api\ApiNamespace;
 use GFPDF\Plugins\BulkGenerator\Exceptions\ConfigNotLoaded;
 use GFPDF\Plugins\BulkGenerator\Exceptions\InvalidPdfId;
-use GFPDF\Plugins\BulkGenerator\Exceptions\InvalidPdfSettingKey;
 use GFPDF\Plugins\BulkGenerator\Exceptions\PdfConditionalLogicFailed;
 use GFPDF\Plugins\BulkGenerator\Exceptions\PdfGenerationError;
 use GFPDF\Plugins\BulkGenerator\Exceptions\PdfNotActive;
 use GFPDF\Plugins\BulkGenerator\Model\Config;
 use GFPDF\Plugins\BulkGenerator\Model\Pdf;
+use GFPDF\Plugins\BulkGenerator\Utility\FilesystemHelper;
 use GFPDF\Plugins\BulkGenerator\Validation\SessionId;
-use League\Flysystem\Filesystem;
-use League\Flysystem\ZipArchive\ZipArchiveAdapter;
 
 /**
  * @package     Gravity PDF Bulk Generator
@@ -29,13 +27,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Create implements ApiEndpointRegistration {
 
+	/**
+	 * @var Config
+	 *
+	 * @since 1.0
+	 */
 	protected $config;
 
-	protected $save_pdf_path;
+	/**
+	 * @var FilesystemHelper
+	 *
+	 * @since 1.0
+	 */
+	protected $filesystem;
 
-	public function __construct( Config $config, $save_pdf_path ) {
-		$this->config        = $config;
-		$this->save_pdf_path = $save_pdf_path;
+	public function __construct( Config $config, FilesystemHelper $filesystem ) {
+		$this->config     = $config;
+		$this->filesystem = $filesystem;
 	}
 
 	public function endpoint() {
@@ -57,7 +65,7 @@ class Create implements ApiEndpointRegistration {
 					'required'          => true,
 					'type'              => 'string',
 					'description'       => 'An alphanumeric active session ID returned via the ' . ApiNamespace::V1 . '/generator/register/ endpoint.',
-					'validate_callback' => new SessionId( $this->save_pdf_path ),
+					'validate_callback' => new SessionId( $this->filesystem ),
 				],
 
 				'entryId' => [
@@ -78,11 +86,7 @@ class Create implements ApiEndpointRegistration {
 	/* @TODO add logging */
 	public function response( \WP_REST_Request $request ) {
 		$gform      = \GPDFAPI::get_form_class();
-		$misc       = \GPDFAPI::get_misc_class();
 		$session_id = $request->get_param( 'sessionId' );
-
-		$this->save_pdf_path = trailingslashit( $this->save_pdf_path . $session_id );
-		/* @TODO Abstract */
 
 		$entry = $gform->get_entry( $request->get_param( 'entryId' ) );
 		if ( is_wp_error( $entry ) ) {
@@ -102,23 +106,14 @@ class Create implements ApiEndpointRegistration {
 			    ->evaluate_conditional_logic( $entry )
 			    ->generate( $entry['id'] );
 
-			/* If generating PDFs one at a time, to save time we'll handle the zip automatically */
-			if ( $settings['concurrency'] === 1 ) {
-				/* @TODO Abstract */
-				$zip_internal_path = $this->get_full_save_path( $settings['path'], $entry ) . wp_basename( $pdf->get_path() );
+			$tmp_pdf_path = $this->filesystem->get_tmp_pdf_path( $settings['path'], $entry );
+			if ( ! $this->filesystem->createDir( $tmp_pdf_path ) ) {
+				/* @todo throw exception */
+			}
 
-				/* @TODO - allow archive to be renamed? */
-				$zip_path = $this->save_pdf_path . 'archive.zip';
-
-				$zip = new Filesystem( new ZipArchiveAdapter( $zip_path ) );
-				$pdf->put( $zip, $zip_internal_path );
-				$zip = null;
-
-				$misc->rmdir( dirname( $pdf->get_path() ) );
-			} else {
-				$tmp_path = $this->save_pdf_path . 'tmp/' . $this->get_full_save_path( $settings['path'], $entry );
-				wp_mkdir_p( $tmp_path );
-				rename( $pdf->get_path(), $tmp_path . wp_basename( $pdf->get_path() ) );
+			$tmp_pdf_full_path = $tmp_pdf_path . wp_basename( $pdf->get_path() );
+			if ( ! $this->filesystem->writeStream( $tmp_pdf_full_path, fopen( $pdf->get_path(), 'r' ) ) ) {
+				/* @todo throw exception */
 			}
 
 		} catch ( ConfigNotLoaded $e ) {
@@ -134,22 +129,5 @@ class Create implements ApiEndpointRegistration {
 		} catch ( \Exception $e ) {
 			return new \WP_Error( 'unknown_error', '', [ 'status' => 500 ] );
 		}
-	}
-
-	/* @TODO add logging */
-	protected function get_full_save_path( $user_path, $entry ) {
-		$misc  = \GPDFAPI::get_misc_class();
-		$gform = \GPDFAPI::get_form_class();
-		$form  = $gform->get_form( $entry['form_id'] );
-
-		$user_path = array_filter( explode( '/', $user_path ) );
-		foreach ( $user_path as &$segment ) {
-			$segment = trim( $gform->process_tags( $segment, $form, $entry ) );
-			$segment = $misc->strip_invalid_characters( $segment );
-		}
-
-		$user_path = implode( '/', array_filter( $user_path ) );
-
-		return trailingslashit( $user_path );
 	}
 }
