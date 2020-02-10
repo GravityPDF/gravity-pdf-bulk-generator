@@ -10,6 +10,7 @@ import {
 } from '../../actions/pdf'
 import Step1Body from './Step1Body'
 import ProgressBar from '../ProgressBar'
+import { stripForwardSlashes } from '../../helpers/stripForwardSlashes'
 import { cancelButton } from '../../helpers/cancelButton'
 
 class Step1 extends React.Component {
@@ -34,6 +35,8 @@ class Step1 extends React.Component {
     const activePdfList = []
     // Set register API concurrency
     const concurrency = 5
+    // Strip out forward slashes before passing to path
+    const path = stripForwardSlashes(directoryStructure)
 
     pdfList.map(item => {
       item.active && activePdfList.push(item.id)
@@ -46,7 +49,7 @@ class Step1 extends React.Component {
       this.props.generateActivePdfList(activePdfList)
 
       // Generate session ID and PDF
-      this.props.getSessionId(directoryStructure, concurrency)
+      this.props.getSessionId(path, concurrency)
 
       // Push history
       this.props.history.push('/step/2')
