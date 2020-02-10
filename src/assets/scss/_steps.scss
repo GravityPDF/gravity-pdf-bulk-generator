@@ -1,0 +1,70 @@
+@import 'config';
+
+// Step
+.gfpdf-step {
+	overflow: auto;
+	max-height: 50vh;
+	padding-right: 20px;
+
+	h3 {
+		font-size: 18px;
+		margin-top: 0;
+	}
+
+	.gfpdf-settings-group {
+		margin-bottom: 25px;
+
+		input {
+			padding: 7px 8px;
+			font-size: 13px;
+		}
+	}
+}
+
+// Step 1
+.gfpdf-tags {
+	display: flex;
+	justify-content: flex-start;
+	flex-wrap: wrap;
+
+	button {
+		margin: 3px !important;
+	}
+}
+
+// Step 2
+#gfpdf-step-2 {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding-top: 10px;
+
+	h2 {
+		font-weight: normal;
+		margin: 10px 0 5px;
+		padding: 0;
+		font-size: 16pt;
+	}
+}
+
+// react-circular-progressbar styles
+.CircularProgressbar {
+	height: 250px;
+
+	.CircularProgressbar-path {
+		stroke: $primary-color;
+		stroke-linecap: round;
+		transition: stroke-dashoffset 0.5s ease 0s;
+	}
+
+	.CircularProgressbar-trail {
+		stroke: $secondary-color;
+	}
+
+	.CircularProgressbar-text {
+		fill: $primary-color;
+		font-size: 20px;
+		dominant-baseline: middle;
+		text-anchor: middle;
+	}
+}

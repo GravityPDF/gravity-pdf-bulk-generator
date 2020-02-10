@@ -20,7 +20,7 @@ class Entries implements ApiEndpointRegistration {
 
 	public function endpoint() {
 		register_rest_route( ApiNamespace::V1, '/search/(?P<form_id>[0-9]+)/entries', [
-			'methods'  => \WP_REST_Server::READABLE,
+			'methods'  => \WP_REST_Server::CREATABLE,
 			'callback' => [ $this, 'response' ],
 
 			'permission_callback' => function() {

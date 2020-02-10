@@ -33,7 +33,6 @@ FILES=(
 "${PACKAGE_DIR}/gulpfile.js"
 "${PACKAGE_DIR}/.babelrc"
 "${PACKAGE_DIR}/.eslintrc"
-"${PACKAGE_DIR}/karma.conf.js"
 "${PACKAGE_DIR}/webpack.config.js"
 )
 
