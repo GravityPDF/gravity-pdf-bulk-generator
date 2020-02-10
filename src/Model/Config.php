@@ -4,6 +4,8 @@ namespace GFPDF\Plugins\BulkGenerator\Model;
 
 use GFPDF\Plugins\BulkGenerator\Exceptions\ConfigCreateError;
 use GFPDF\Plugins\BulkGenerator\Exceptions\ConfigNotLoaded;
+use GFPDF\Plugins\BulkGenerator\Utility\FilesystemHelper;
+use League\Flysystem\FileNotFoundException;
 
 /**
  * @package     Gravity PDF Bulk Generator
@@ -25,31 +27,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Config {
 
 	/**
-	 * The root path of the Bulk PDF Generator tmp directory
-	 *
-	 * @var string
+	 * @var FilesystemHelper
 	 *
 	 * @since 1.0
 	 */
-	protected $basepath;
-
-	/**
-	 * Holds our generated session id
-	 *
-	 * @var string
-	 *
-	 * @since 1.0
-	 */
-	protected $session_id;
-
-	/**
-	 * Pre-define config file
-	 *
-	 * @var string
-	 *
-	 * @since 1.0
-	 */
-	protected $filename = 'config.json';
+	protected $filesystem;
 
 	/**
 	 * Holds our array data settings
@@ -61,34 +43,26 @@ class Config {
 	protected $settings = [];
 
 	/**
-	 * @param string $path
+	 * Config constructor.
 	 *
-	 * @since 1.0
+	 * @param FilesystemHelper $filesystem
 	 */
-	public function __construct( $path ) {
-		$this->basepath = $path;
+	public function __construct( FilesystemHelper $filesystem ) {
+		$this->filesystem = $filesystem;
 	}
 
 	/**
-	 * Get the completed file path for the config.json file
+	 * @param string $session_id
 	 *
-	 * @return string
+	 * @return Config
 	 *
 	 * @since 1.0
 	 */
-	protected function get_config_file_path() {
-		return $this->basepath . $this->session_id . '/' . $this->filename;
-	}
+	public function set_session_id( $session_id ) {
+		$adapter = $this->filesystem->getAdapter();
+		$adapter->setPathPrefix( $adapter->getPathPrefix() . $session_id );
 
-	/**
-	 * Check if the config file exists on disk
-	 *
-	 * @return bool
-	 *
-	 * @since 1.0
-	 */
-	protected function does_config_exist() {
-		return is_file( $this->get_config_file_path() );
+		return $this;
 	}
 
 	/**
@@ -101,12 +75,12 @@ class Config {
 	 * @since 1.0
 	 */
 	public function fetch() {
-		if ( ! $this->does_config_exist() ) {
-			throw new ConfigNotLoaded();
-		}
-
-		$config = json_decode( file_get_contents( $this->get_config_file_path() ), true );
-		if ( ! is_array( $config ) || count( $config ) === 0 ) {
+		try {
+			$config = json_decode( $this->filesystem->read( $this->filesystem->get_config_path() ), true );
+			if ( ! is_array( $config ) || count( $config ) === 0 ) {
+				throw new ConfigNotLoaded();
+			}
+		} catch ( FileNotFoundException $e ) {
 			throw new ConfigNotLoaded();
 		}
 
@@ -158,21 +132,6 @@ class Config {
 	}
 
 	/**
-	 * Save sesson ID in this model
-	 *
-	 * @param string $session_id The session ID generated in register process
-	 *
-	 * @return $this
-	 *
-	 * @since 1.0
-	 */
-	public function set_session_id( $session_id ) {
-		$this->session_id = $session_id;
-
-		return $this;
-	}
-
-	/**
 	 * Stores an individual config property into settings property
 	 *
 	 * @param string $key   The settings config key
@@ -213,10 +172,25 @@ class Config {
 	 * @since 1.0
 	 */
 	public function save() {
-		if ( ! file_put_contents( $this->get_config_file_path(), json_encode( $this->settings ) ) ) {
+		if ( ! $this->filesystem->put( $this->filesystem->get_config_path(), json_encode( $this->settings ) ) ) {
 			throw new ConfigCreateError();
 		}
 
 		return $this;
+	}
+
+	/**
+	 * @param int $length
+	 *
+	 * @return string
+	 */
+	public function generate_session_id( $length = 16 ) {
+		try {
+			$id = bin2hex( random_bytes( $length ) );
+		} catch ( \Exception $e ) {
+			$id = bin2hex( wp_generate_password( $length, false, false ) );
+		}
+
+		return $id;
 	}
 }

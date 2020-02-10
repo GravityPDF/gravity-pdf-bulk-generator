@@ -2,6 +2,8 @@
 
 namespace GFPDF\Plugins\BulkGenerator\Validation;
 
+use GFPDF\Plugins\BulkGenerator\Utility\FilesystemHelper;
+
 /**
  * @package     Gravity PDF Bulk Generator
  * @copyright   Copyright (c) 2020, Blue Liquid Designs
@@ -13,20 +15,43 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Class SessionId
+ *
+ * @package GFPDF\Plugins\BulkGenerator\Validation
+ */
 class SessionId {
-	protected $save_pdf_path;
 
-	public function __construct( $save_pdf_path ) {
-		$this->save_pdf_path = $save_pdf_path;
+	/**
+	 * @var FilesystemHelper
+	 */
+	protected $filesystem;
+
+	/**
+	 * SessionId constructor.
+	 *
+	 * @param FilesystemHelper $filesystem
+	 */
+	public function __construct( FilesystemHelper $filesystem ) {
+		$this->filesystem = $filesystem;
 	}
 
+	/**
+	 * Check if the user-supplied ID matches the pattern we expect and the matching folder exists
+	 *
+	 * @param string $session_id
+	 *
+	 * @return bool
+	 *
+	 * @since 1.0
+	 */
 	public function __invoke( $session_id ) {
 
-		if( preg_match( '/^[a-zA-Z0-9]{32}$/', $session_id ) !== 1 ) {
+		if ( preg_match( '/^[a-zA-Z0-9]{32}$/', $session_id ) !== 1 ) {
 			return false;
 		}
 
-		if ( ! is_dir( $this->save_pdf_path . $session_id ) ) {
+		if ( ! $this->filesystem->has( $session_id ) ) {
 			return false;
 		}
 

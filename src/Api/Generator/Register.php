@@ -6,6 +6,7 @@ use GFPDF\Plugins\BulkGenerator\Api\ApiEndpointRegistration;
 use GFPDF\Plugins\BulkGenerator\Api\ApiNamespace;
 use GFPDF\Plugins\BulkGenerator\Exceptions\BulkPdfGenerator;
 use GFPDF\Plugins\BulkGenerator\Model\Config;
+use GFPDF\Plugins\BulkGenerator\Utility\FilesystemHelper;
 use GFPDF\Plugins\BulkGenerator\Validation\ZipPath;
 
 /**
@@ -21,13 +22,28 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Register implements ApiEndpointRegistration {
 
+	/**
+	 * @var Config
+	 *
+	 * @since 1.0
+	 */
 	protected $config;
 
-	protected $pdf_save_path;
+	/**
+	 * @var FilesystemHelper
+	 *
+	 * @since 1.0
+	 */
+	protected $filesystem;
 
-	public function __construct( Config $config, $pdf_save_path ) {
-		$this->config        = $config;
-		$this->pdf_save_path = $pdf_save_path;
+	/**
+	 * Register constructor.
+	 *
+	 * @param Config $config
+	 */
+	public function __construct( Config $config, FilesystemHelper $filesystem ) {
+		$this->config     = $config;
+		$this->filesystem = $filesystem;
 	}
 
 	public function endpoint() {
@@ -63,11 +79,11 @@ class Register implements ApiEndpointRegistration {
 
 		/* Get a unique Session ID not currently in use */
 		do {
-			$session_id   = $this->generate_unique_id();
-			$session_path = $this->pdf_save_path . $session_id;
-		} while ( is_dir( $session_path ) );
+			$session_id = $this->config->generate_session_id();
+		} while ( $this->filesystem->has( $session_id ) );
 
-		if ( ! wp_mkdir_p( $session_path ) ) {
+		/* @TODO - check folder permissions */
+		if ( ! $this->filesystem->createDir( $session_id ) ) {
 			return new \WP_Error( 'error_creating_path', [ 'status' => 500 ] );
 		}
 
@@ -86,15 +102,5 @@ class Register implements ApiEndpointRegistration {
 		return [
 			'sessionId' => $session_id,
 		];
-	}
-
-	protected function generate_unique_id( $length = 16 ) {
-		try {
-			$id = bin2hex( random_bytes( $length ) );
-		} catch ( \Exception $e ) {
-			$id = bin2hex( wp_generate_password( $length, false, false ) );
-		}
-
-		return $id;
 	}
 }
