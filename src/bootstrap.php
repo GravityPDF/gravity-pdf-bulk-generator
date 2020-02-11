@@ -13,12 +13,12 @@ use GFPDF\Plugins\BulkGenerator\Api\Generator\Create;
 use GFPDF\Plugins\BulkGenerator\Api\Generator\Download;
 use GFPDF\Plugins\BulkGenerator\Api\Generator\Register;
 use GFPDF\Plugins\BulkGenerator\Api\Generator\Zip;
-use GFPDF\Plugins\BulkGenerator\Model\Config;
 use GFPDF\Plugins\BulkGenerator\Api\Search\Entries;
 use GFPDF\Plugins\BulkGenerator\MergeTags\CreatedBy;
 use GFPDF\Plugins\BulkGenerator\MergeTags\DateCreated;
 use GFPDF\Plugins\BulkGenerator\MergeTags\DateUpdated;
 use GFPDF\Plugins\BulkGenerator\MergeTags\PaymentDate;
+use GFPDF\Plugins\BulkGenerator\Model\Config;
 use GPDFAPI;
 
 /**
@@ -59,7 +59,7 @@ class Bootstrap extends Helper_Abstract_Addon {
 
 		/* Register our classes and pass back up to the parent initialiser */
 		$api_classes = $this->register_api_endpoints( [
-			new Register( $config, $pdf_save_path),
+			new Register( $config, $pdf_save_path ),
 			new Create( $config, $pdf_save_path ),
 			new Download( $pdf_save_path ),
 			new Entries(),
@@ -107,7 +107,15 @@ class Bootstrap extends Helper_Abstract_Addon {
 			$form_id = (int) rgget( 'id' );
 			$pdfs    = \GPDFAPI::get_form_pdfs( $form_id );
 
-			if ( is_wp_error( $pdfs ) || count( $pdfs ) === 0 ) {
+			if ( is_wp_error( $pdfs ) ) {
+				return;
+			}
+
+			$pdfs = array_filter( $pdfs, function( $pdf ) {
+				return $pdf['active'] === true;
+			} );
+
+			if ( count( $pdfs ) === 0 ) {
 				return;
 			}
 
