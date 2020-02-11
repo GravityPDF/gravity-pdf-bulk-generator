@@ -38,9 +38,6 @@ class Register implements ApiEndpointRegistration {
 			'permission_callback' => function() {
 				$gform = \GPDFAPI::get_form_class();
 
-				/* @TODO - remove */
-				return true;
-
 				return $gform->has_capability( 'gravityforms_view_entries' );
 			},
 
