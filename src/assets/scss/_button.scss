@@ -1,0 +1,45 @@
+@import 'config';
+
+// Modal/PopUp close button
+.close-button {
+	position: absolute;
+	right: 22px;
+	top: 5px;
+	cursor: pointer;
+	height: 48px;
+	width: 50px;
+	border: 0;
+	background-color: transparent;
+
+	&:focus {
+
+		&:before, &:after {
+			background-color: $primary-color;
+		}
+	}
+
+	&:hover {
+
+		&:before, &:after {
+			background-color: $secondary-close-button;
+		}
+	}
+
+	&:before, &:after {
+		position: absolute;
+		top: 8px;
+		left: 24px;
+		content: ' ';
+		height: 33px;
+		width: 2px;
+		background-color: $primary-close-button;
+	}
+
+	&:before {
+		transform: rotate(45deg);
+	}
+
+	&:after {
+		transform: rotate(-45deg);
+	}
+}

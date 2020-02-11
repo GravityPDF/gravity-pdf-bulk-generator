@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { CircularProgressbar } from 'react-circular-progressbar'
@@ -17,8 +17,22 @@ class Step2 extends React.Component {
     history: PropTypes.object.isRequired
   }
 
+  componentDidMount () {
+    document.addEventListener('focus', this.handleFocus, true)
+  }
+
   componentDidUpdate () {
     this.checkDownloadPercentage()
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('focus', this.handleFocus, true)
+  }
+
+  handleFocus = e => {
+    if (!this.container.contains(e.target)) {
+      this.container.focus()
+    }
   }
 
   checkDownloadPercentage = () => {
@@ -38,7 +52,7 @@ class Step2 extends React.Component {
     } = this.props
 
     return (
-      <Fragment>
+      <div ref={node => this.container = node} tabIndex='-1'>
         <ProgressBar step={2} />
 
         <section id='gfpdf-step-2' className='gfpdf-step'>
@@ -52,11 +66,11 @@ class Step2 extends React.Component {
         <footer>
           <button
             className='button button-large'
-            onClick={e => cancelButton({ e, step: 2, toggleModal, generatePdfCancel, history })}>
+            onClick={e => cancelButton({ e, toggleModal, generatePdfCancel, history })}>
             Cancel
           </button>
         </footer>
-      </Fragment>
+      </div>
     )
   }
 }
@@ -64,7 +78,6 @@ class Step2 extends React.Component {
 const mapStateToProps = state => ({
   generatePdFailed: state.pdf.generatePdFailed,
   downloadPercentage: state.pdf.downloadPercentage
-
 })
 
 export default connect(mapStateToProps, { toggleModal, generatePdfCancel })(Step2)

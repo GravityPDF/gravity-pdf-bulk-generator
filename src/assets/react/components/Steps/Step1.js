@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { updateDirectoryStructure } from '../../actions/tagPicker'
@@ -26,6 +26,20 @@ class Step1 extends React.Component {
     togglePdfStatus: PropTypes.func.isRequired,
     toggleModal: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired
+  }
+
+  componentDidMount () {
+    document.addEventListener('focus', this.handleFocus, true)
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('focus', this.handleFocus, true)
+  }
+
+  handleFocus = e => {
+    if (!this.container.contains(e.target)) {
+      this.container.focus()
+    }
   }
 
   build = e => {
@@ -80,7 +94,13 @@ class Step1 extends React.Component {
     } = this.props
 
     return (
-      <Fragment>
+      <div ref={node => this.container = node} tabIndex='-1'>
+        <button
+          className='close-button'
+          onClick={e => cancelButton({ e, toggleModal, history })}>
+          <span className='screen-reader-text'>Close dialog</span>
+        </button>
+
         <ProgressBar step={1} />
 
         <Step1Body
@@ -94,18 +114,12 @@ class Step1 extends React.Component {
 
         <footer>
           <button
-            className='button button-large'
-            onClick={e => cancelButton({ e, step: 1, toggleModal, history })}>
-            Cancel
-          </button>
-
-          <button
             className='button button-primary button-large'
             onClick={this.build}>
             Build
           </button>
         </footer>
-      </Fragment>
+      </div>
     )
   }
 }

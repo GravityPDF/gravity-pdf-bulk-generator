@@ -1,35 +1,40 @@
 export function cancelButton (
   {
     e,
-    step,
     history,
     toggleModal,
+    escapeCloseModal,
     generatePdfCancel,
     resetTagPickerState,
     resetPdfState
   }
 ) {
-  if (step === 1) {
+  const { pathname } = history.location
+
+  if (pathname === '/step/1') {
     return (
-      e.preventDefault(),
-      toggleModal(),
+      e && e.preventDefault(),
+      toggleModal && toggleModal(),
+      escapeCloseModal && escapeCloseModal(),
       history.push('/')
     )
   }
 
-  if (step === 2) {
+  if (pathname === '/step/2') {
     return (
-      e.preventDefault(),
-      toggleModal(),
+      e && e.preventDefault(),
+      toggleModal && toggleModal(),
+      escapeCloseModal && escapeCloseModal(),
       generatePdfCancel(),
       history.push('/step/1')
     )
   }
 
-  if (step === 3) {
+  if (pathname === '/step/3') {
     return (
-      e.preventDefault(),
-      toggleModal(),
+      e && e.preventDefault(),
+      toggleModal && toggleModal(),
+      escapeCloseModal && escapeCloseModal(),
       resetTagPickerState(),
       resetPdfState(),
       history.push('/')
