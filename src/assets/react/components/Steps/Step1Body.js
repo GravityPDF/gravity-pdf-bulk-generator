@@ -16,7 +16,7 @@ const Step1Body = (
   }
 ) => {
   return (
-    <section id='gfpdf-step1' className='gfpdf-step' tabIndex='disabke'>
+    <section id='gfpdf-step1' className='gfpdf-step'>
       <div className='gfpdf-settings-group'>
         <h3>Select PDFs</h3>
 

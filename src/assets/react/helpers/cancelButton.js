@@ -21,13 +21,17 @@ export function cancelButton (
   }
 
   if (pathname === '/step/2') {
-    return (
-      e && e.preventDefault(),
-      toggleModal && toggleModal(),
-      escapeCloseModal && escapeCloseModal(),
-      generatePdfCancel(),
-      history.push('/step/1')
-    )
+    if (confirm('Are you sure you want to cancel download?')) {
+      return (
+        e && e.preventDefault(),
+        toggleModal && toggleModal(),
+        escapeCloseModal && escapeCloseModal(),
+        generatePdfCancel(),
+        history.push('/step/1')
+      )
+    }
+
+    e && e.preventDefault()
   }
 
   if (pathname === '/step/3') {
