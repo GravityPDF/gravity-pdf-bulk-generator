@@ -128,6 +128,7 @@ class Bootstrap extends Helper_Abstract_Addon {
 
 				wp_localize_script( 'gfpdf_bulk_generator', 'GPDF_BULK_GENERATOR', [
 					'rest_url' => rest_url( ApiNamespace::V1 ),
+					'nonce'    => wp_create_nonce( 'wp_rest' ),
 					'form_id'  => $form_id,
 					'pdfs'     => $pdfs,
 				] );
