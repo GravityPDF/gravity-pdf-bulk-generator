@@ -5,6 +5,7 @@ import {
   ALL_CHECKBOX_ENTRY,
   TOGGLE_POPUP_SELECT_ALL_ENTRIES,
   GET_ALL_FORM_ENTRIES,
+  ESCAPE_CLOSE_MODAL,
   TOGGLE_PDF_STATUS,
   GENERATE_ACTIVE_PDF_LIST,
   GET_SESSION_ID,
@@ -52,6 +53,12 @@ export const getAllFormEntries = (formId, filterData) => {
     type: GET_ALL_FORM_ENTRIES,
     formId,
     filterData
+  }
+}
+
+export const escapeCloseModal = () => {
+  return {
+    type: ESCAPE_CLOSE_MODAL
   }
 }
 

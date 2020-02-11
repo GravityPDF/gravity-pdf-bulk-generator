@@ -189,10 +189,10 @@ class BulkGenerator extends React.Component {
   }
 
   render () {
-    const { modal } = this.props
+    const { modal, history } = this.props
 
     return (
-      <PopUp modal={modal} />
+      <PopUp modal={modal} history={history} />
     )
   }
 }

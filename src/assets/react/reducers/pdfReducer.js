@@ -6,6 +6,7 @@ import {
   TOGGLE_POPUP_SELECT_ALL_ENTRIES,
   GET_ALL_FORM_ENTRIES_SUCCESS,
   GET_ALL_FORM_ENTRIES_FAILED,
+  ESCAPE_CLOSE_MODAL,
   TOGGLE_PDF_STATUS,
   GENERATE_ACTIVE_PDF_LIST,
   GET_SESSION_ID_SUCCESS,
@@ -169,6 +170,13 @@ export default function (state = initialState, action) {
           selectedEntryIds: [{ error: action.payload }]
         }
       }
+
+    case ESCAPE_CLOSE_MODAL: {
+      return {
+        ...state,
+        modal: false
+      }
+    }
 
     case TOGGLE_PDF_STATUS: {
       const newState = { ...state, pdfList: [...state.pdfList] }

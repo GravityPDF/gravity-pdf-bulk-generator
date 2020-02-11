@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import {
@@ -24,10 +24,22 @@ class Step3 extends React.Component {
 
   componentDidMount () {
     this.requestDownloadZipUrl()
+
+    document.addEventListener('focus', this.handleFocus, true)
   }
 
   componentDidUpdate (prevProps) {
     this.requestAutoZipDownload(prevProps)
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('focus', this.handleFocus, true)
+  }
+
+  handleFocus = e => {
+    if (!this.container.contains(e.target)) {
+      this.container.focus()
+    }
   }
 
   requestDownloadZipUrl = () => {
@@ -56,7 +68,13 @@ class Step3 extends React.Component {
     } = this.props
 
     return (
-      <Fragment>
+      <div ref={node => this.container = node} tabIndex='-1'>
+        <button
+          className='close-button'
+          onClick={e => cancelButton({ e, toggleModal, resetTagPickerState, resetPdfState, history })}>
+          <span className='screen-reader-text'>Close dialog</span>
+        </button>
+
         <ProgressBar step={3} />
 
         <section id='gfpdf-step-3' className='gfpdf-step'>
@@ -68,15 +86,7 @@ class Step3 extends React.Component {
             start automatically</a>.
           </p>
         </section>
-
-        <footer>
-          <button
-            className='button button-large'
-            onClick={e => cancelButton({ e, step: 3, toggleModal, resetTagPickerState, resetPdfState, history })}>
-            Close
-          </button>
-        </footer>
-      </Fragment>
+      </div>
     )
   }
 }
