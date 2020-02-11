@@ -17,6 +17,11 @@ import Steps from '../Steps/Steps'
 class PopUp extends React.Component {
 
   static propTypes = {
+    escapeCloseModal: PropTypes.func.isRequired,
+    generatePdfCancel: PropTypes.func.isRequired,
+    resetTagPickerState: PropTypes.func.isRequired,
+    resetPdfState: PropTypes.func.isRequired,
+    history: PropTypes.object.isRequired,
     modal: PropTypes.bool.isRequired
   }
 
@@ -33,16 +38,18 @@ class PopUp extends React.Component {
       history
     } = this.props
     const { pathname } = history.location
+    const { keyCode } = e
+    const escapeKey = 27
 
-    if (e.keyCode === 27 && pathname === '/step/1') {
+    if (keyCode === escapeKey && pathname === '/step/1') {
       cancelButton({ escapeCloseModal, history })
     }
 
-    if (e.keyCode === 27 && pathname === '/step/2') {
+    if (keyCode === escapeKey && pathname === '/step/2') {
       cancelButton({ escapeCloseModal, generatePdfCancel, history })
     }
 
-    if (e.keyCode === 27 && pathname === '/step/3') {
+    if (keyCode === escapeKey && pathname === '/step/3') {
       cancelButton({ escapeCloseModal, resetTagPickerState, resetPdfState, history })
     }
   }
