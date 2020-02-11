@@ -26,9 +26,9 @@ class Step3 extends React.Component {
     this.requestDownloadZipUrl()
   }
 
-  componentDidUpdate (prevProps) {
-    this.requestAutoZipDownload(prevProps)
-  }
+  // componentDidUpdate (prevProps) {
+  //   this.requestAutoZipDownload(prevProps)
+  // }
 
   requestDownloadZipUrl = () => {
     const { downloadPercentage } = this.props
@@ -38,13 +38,13 @@ class Step3 extends React.Component {
     }
   }
 
-  requestAutoZipDownload = (prevProps) => {
-    const { downloadZipUrl } = this.props
-
-    if (prevProps.downloadZipUrl !== downloadZipUrl) {
-      window.location.assign(downloadZipUrl)
-    }
-  }
+  // requestAutoZipDownload = (prevProps) => {
+  //   const { downloadZipUrl } = this.props
+  //
+  //   if (prevProps.downloadZipUrl !== downloadZipUrl) {
+  //     window.location.assign(downloadZipUrl)
+  //   }
+  // }
 
   render () {
     const {

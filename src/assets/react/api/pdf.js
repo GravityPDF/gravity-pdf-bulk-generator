@@ -1,10 +1,14 @@
+// Cookie Authentication
+const nonce = GPDF_BULK_GENERATOR.nonce
+
 export const apiRequestAllEntriesId = async ({ formId, filterData }) => {
   const url = `${GPDF_BULK_GENERATOR.rest_url}/search/${formId}/entries`
 
   const response = await fetch(url, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'X-WP-Nonce': nonce
     },
     body: JSON.stringify(filterData)
   })
@@ -20,7 +24,8 @@ export const apiRequestSessionId = async ({ path, concurrency }) => {
   const response  = await fetch(url, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'X-WP-Nonce': nonce
     },
     body: JSON.stringify({ 'path': path, 'concurrency': concurrency })
   })
@@ -37,7 +42,8 @@ export const apiRequestGeneratePdf = async ({ payload, signal }) => {
     method: 'POST',
     signal,
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'X-WP-Nonce': nonce
     },
     body: JSON.stringify(payload)
   })
@@ -53,7 +59,8 @@ export const apiRequestGeneratePdfZip = async sessionId => {
   const response = await fetch(url, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'X-WP-Nonce': nonce
     }
   })
 
@@ -68,8 +75,8 @@ export const apiRequestDownloadZip = async sessionId => {
   const response = await fetch(url, {
     method: 'GET',
     headers: {
-      'Content-Disposition': 'attachment; filename="archive.zip"',
-      'Content-Type': 'application/zip'
+      'Content-Type': 'application/zip',
+      'X-WP-Nonce': nonce
     }
   })
 
