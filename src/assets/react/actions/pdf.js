@@ -1,22 +1,17 @@
 import {
-  GET_FORM_DATA,
+  GENERATE_PDF_LIST_SUCCESS,
   TOGGLE_MODAL,
-  SINGLE_CHECKBOX_ENTRY,
-  ALL_CHECKBOX_ENTRY,
-  TOGGLE_POPUP_SELECT_ALL_ENTRIES,
-  GET_ALL_FORM_ENTRIES,
   ESCAPE_CLOSE_MODAL,
   TOGGLE_PDF_STATUS,
-  GENERATE_ACTIVE_PDF_LIST,
-  GET_SESSION_ID,
+  GENERATE_SESSION_ID,
   GENERATE_PDF_CANCEL,
   DOWNLOAD_ZIP,
   RESET_PDF_STATE
 } from '../actionTypes/pdf'
 
-export const getFormData = data => {
+export const generatePdfListSuccess = data => {
   return {
-    type: GET_FORM_DATA,
+    type: GENERATE_PDF_LIST_SUCCESS,
     payload: data
   }
 }
@@ -24,35 +19,6 @@ export const getFormData = data => {
 export const toggleModal = () => {
   return {
     type: TOGGLE_MODAL
-  }
-}
-
-export const singleCheckboxEntry = (id, totalEntries) => {
-  return {
-    type: SINGLE_CHECKBOX_ENTRY,
-    id,
-    totalEntries
-  }
-}
-
-export const allCheckboxEntry = ids => {
-  return {
-    type: ALL_CHECKBOX_ENTRY,
-    payload: ids
-  }
-}
-
-export const togglePopupSelectAllEntries = () => {
-  return {
-    type: TOGGLE_POPUP_SELECT_ALL_ENTRIES
-  }
-}
-
-export const getAllFormEntries = (formId, filterData) => {
-  return {
-    type: GET_ALL_FORM_ENTRIES,
-    formId,
-    filterData
   }
 }
 
@@ -69,18 +35,13 @@ export const togglePdfStatus = index => {
   }
 }
 
-export const generateActivePdfList = list => {
+export const generateSessionId = (path, concurrency, retryInterval, delayInterval) => {
   return {
-    type: GENERATE_ACTIVE_PDF_LIST,
-    payload: list
-  }
-}
-
-export const getSessionId = (path, concurrency) => {
-  return {
-    type: GET_SESSION_ID,
+    type: GENERATE_SESSION_ID,
     path,
-    concurrency
+    concurrency,
+    retryInterval,
+    delayInterval
   }
 }
 
@@ -90,9 +51,10 @@ export const generatePdfCancel = () => {
   }
 }
 
-export const getDownloadZip = () => {
+export const getDownloadZip = sessionId => {
   return {
-    type: DOWNLOAD_ZIP
+    type: DOWNLOAD_ZIP,
+    payload: sessionId
   }
 }
 

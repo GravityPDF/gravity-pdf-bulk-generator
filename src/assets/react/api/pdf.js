@@ -1,18 +1,5 @@
-export const apiRequestAllEntriesId = async ({ formId, filterData }) => {
-  const url = `${GPDF_BULK_GENERATOR.rest_url}/search/${formId}/entries`
-
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(filterData)
-  })
-
-  const result = await response.json()
-
-  return result
-}
+// Cookie Authentication
+const nonce = GPDF_BULK_GENERATOR.nonce
 
 export const apiRequestSessionId = async ({ path, concurrency }) => {
   const url = `${GPDF_BULK_GENERATOR.rest_url}/generator/register`
@@ -20,7 +7,8 @@ export const apiRequestSessionId = async ({ path, concurrency }) => {
   const response  = await fetch(url, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'X-WP-Nonce': nonce
     },
     body: JSON.stringify({ 'path': path, 'concurrency': concurrency })
   })
@@ -30,16 +18,18 @@ export const apiRequestSessionId = async ({ path, concurrency }) => {
   return result
 }
 
-export const apiRequestGeneratePdf = async ({ payload, signal }) => {
+export const apiRequestGeneratePdf = async ({ listItem, signal }) => {
+
   const url = `${GPDF_BULK_GENERATOR.rest_url}/generator/create`
 
   const response = await fetch(url, {
     method: 'POST',
     signal,
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'X-WP-Nonce': nonce
     },
-    body: JSON.stringify(payload)
+    body: JSON.stringify(listItem)
   })
 
   const result = await response
@@ -53,7 +43,8 @@ export const apiRequestGeneratePdfZip = async sessionId => {
   const response = await fetch(url, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'X-WP-Nonce': nonce
     }
   })
 
@@ -68,8 +59,8 @@ export const apiRequestDownloadZip = async sessionId => {
   const response = await fetch(url, {
     method: 'GET',
     headers: {
-      'Content-Disposition': 'attachment; filename="archive.zip"',
-      'Content-Type': 'application/zip'
+      'Content-Type': 'application/zip',
+      'X-WP-Nonce': nonce
     }
   })
 

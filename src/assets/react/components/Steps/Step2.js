@@ -10,7 +10,7 @@ import { cancelButton } from '../../helpers/cancelButton'
 class Step2 extends React.Component {
 
   static propTypes = {
-    generatePdFailed: PropTypes.string.isRequired,
+    generatePdFailed: PropTypes.array.isRequired,
     downloadPercentage: PropTypes.number.isRequired,
     toggleModal: PropTypes.func.isRequired,
     generatePdfCancel: PropTypes.func.isRequired,
@@ -38,7 +38,7 @@ class Step2 extends React.Component {
   checkDownloadPercentage = () => {
     const { generatePdFailed, downloadPercentage, history } = this.props
 
-    if (generatePdFailed === '' && downloadPercentage === 100) {
+    if (generatePdFailed.length === 0 && downloadPercentage === 100) {
       setTimeout(() => history.push('/step/3'), 1000)
     }
   }
