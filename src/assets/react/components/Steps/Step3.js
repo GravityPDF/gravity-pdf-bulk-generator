@@ -1,11 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import {
-  getDownloadZip,
-  toggleModal,
-  resetPdfState
-} from '../../actions/pdf'
+import { toggleModal, resetPdfState } from '../../actions/pdf'
 import { resetTagPickerState } from '../../actions/tagPicker'
 import ProgressBar from '../ProgressBar'
 import { cancelButton } from '../../helpers/cancelButton'
@@ -15,7 +11,6 @@ class Step3 extends React.Component {
   static propTypes = {
     downloadPercentage: PropTypes.number.isRequired,
     sessionId: PropTypes.string.isRequired,
-    getDownloadZip: PropTypes.func.isRequired,
     downloadZipUrl: PropTypes.string.isRequired,
     toggleModal: PropTypes.func.isRequired,
     resetPdfState: PropTypes.func.isRequired,
@@ -29,10 +24,6 @@ class Step3 extends React.Component {
     document.addEventListener('focus', this.handleFocus, true)
   }
 
-  componentDidUpdate (prevProps) {
-    this.requestAutoZipDownload(prevProps)
-  }
-
   componentWillUnmount() {
     document.removeEventListener('focus', this.handleFocus, true)
   }
@@ -44,19 +35,9 @@ class Step3 extends React.Component {
   }
 
   requestDownloadZipUrl = () => {
-    const { downloadPercentage, sessionId } = this.props
-
-    if (downloadPercentage === 100) {
-      this.props.getDownloadZip(sessionId)
-    }
-  }
-
-  requestAutoZipDownload = (prevProps) => {
     const { downloadZipUrl } = this.props
 
-    if (prevProps.downloadZipUrl !== downloadZipUrl) {
-      window.location.assign(downloadZipUrl)
-    }
+    window.location.assign(downloadZipUrl)
   }
 
   render () {
@@ -99,7 +80,6 @@ const mapStateToProps = state => ({
 })
 
 export default connect(mapStateToProps, {
-  getDownloadZip,
   toggleModal,
   resetTagPickerState,
   resetPdfState

@@ -2,6 +2,7 @@
 
 namespace GFPDF\Plugins\BulkGenerator\Api\Generator;
 
+use GFPDF\Helper\Helper_Url_Signer;
 use GFPDF\Plugins\BulkGenerator\Api\ApiEndpointRegistration;
 use GFPDF\Plugins\BulkGenerator\Api\ApiNamespace;
 use GFPDF\Plugins\BulkGenerator\Model\Config;
@@ -46,10 +47,11 @@ class Download implements ApiEndpointRegistration {
 			'methods'  => \WP_REST_Server::READABLE,
 			'callback' => [ $this, 'response' ],
 
-			'permission_callback' => function() {
-				$gform = \GPDFAPI::get_form_class();
+			'permission_callback' => function( $request ) {
+				$signer   = new Helper_Url_Signer();
+				$home_url = untrailingslashit( strtok( home_url(), '?' ) );
 
-				return $gform->has_capability( 'gravityforms_view_entries' );
+				return $signer->verify( $home_url . $_SERVER['REQUEST_URI'] );
 			},
 
 			'args' => [

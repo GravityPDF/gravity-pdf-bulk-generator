@@ -10,8 +10,7 @@ import {
   GENERATE_PDF_CANCEL,
   GENERATE_PDF_TOGGLE_CANCEL,
   GENERATE_PDF_COUNTER,
-  DOWNLOAD_ZIP_SUCCESS,
-  DOWNLOAD_ZIP_FAILED,
+  GENERATE_DOWNLOAD_ZIP_URL,
   RESET_PDF_STATE
 } from '../actionTypes/pdf'
 import { generateActivePdfList } from '../helpers/generateActivePdfList'
@@ -121,17 +120,12 @@ export default function (state = initialState, action) {
       }
     }
 
-    case DOWNLOAD_ZIP_SUCCESS:
+    case GENERATE_DOWNLOAD_ZIP_URL: {
       return {
         ...state,
         downloadZipUrl: action.payload
       }
-
-    case DOWNLOAD_ZIP_FAILED:
-      return {
-        ...state,
-        downloadZipUrl: action.payload
-      }
+    }
 
     case RESET_PDF_STATE: {
       const list = []

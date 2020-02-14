@@ -48,23 +48,7 @@ export const apiRequestGeneratePdfZip = async sessionId => {
     }
   })
 
-  const result = await response
-
-  return result
-}
-
-export const apiRequestDownloadZip = async sessionId => {
-  const url = `${GPDF_BULK_GENERATOR.rest_url}/generator/download/${sessionId}`
-
-  const response = await fetch(url, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/zip',
-      'X-WP-Nonce': nonce
-    }
-  })
-
-  const result = await response
+  const result = await response.json()
 
   return result
 }

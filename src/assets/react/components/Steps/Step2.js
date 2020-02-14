@@ -12,6 +12,7 @@ class Step2 extends React.Component {
   static propTypes = {
     generatePdFailed: PropTypes.array.isRequired,
     downloadPercentage: PropTypes.number.isRequired,
+    downloadZipUrl: PropTypes.string.isRequired,
     toggleModal: PropTypes.func.isRequired,
     generatePdfCancel: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired
@@ -36,9 +37,9 @@ class Step2 extends React.Component {
   }
 
   checkDownloadPercentage = () => {
-    const { generatePdFailed, downloadPercentage, history } = this.props
+    const { downloadPercentage, downloadZipUrl, history } = this.props
 
-    if (generatePdFailed.length === 0 && downloadPercentage === 100) {
+    if (downloadPercentage === 100 && downloadZipUrl !== '') {
       setTimeout(() => history.push('/step/3'), 1000)
     }
   }
@@ -77,7 +78,8 @@ class Step2 extends React.Component {
 
 const mapStateToProps = state => ({
   generatePdFailed: state.pdf.generatePdFailed,
-  downloadPercentage: state.pdf.downloadPercentage
+  downloadPercentage: state.pdf.downloadPercentage,
+  downloadZipUrl: state.pdf.downloadZipUrl
 })
 
 export default connect(mapStateToProps, { toggleModal, generatePdfCancel })(Step2)
