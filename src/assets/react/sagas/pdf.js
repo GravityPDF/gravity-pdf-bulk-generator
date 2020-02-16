@@ -11,12 +11,9 @@ import {
   select
 } from 'redux-saga/effects'
 import {
-  GET_SESSION_ID,
-  GET_SESSION_ID_SUCCESS,
-  GET_SESSION_ID_FAILED,
-  GET_ALL_FORM_ENTRIES,
-  GET_ALL_FORM_ENTRIES_SUCCESS,
-  GET_ALL_FORM_ENTRIES_FAILED,
+  GENERATE_SESSION_ID,
+  GENERATE_SESSION_ID_SUCCESS,
+  GENERATE_SESSION_ID_FAILED,
   GENERATE_PDF,
   GENERATE_PDF_SUCCESS,
   GENERATE_PDF_TOGGLE_CANCEL,
@@ -30,79 +27,77 @@ import {
   apiRequestSessionId,
   apiRequestGeneratePdf,
   apiRequestDownloadZip,
-  apiRequestAllEntriesId,
   apiRequestGeneratePdfZip
 } from '../api/pdf'
+import { generateActivePdfList } from '../helpers/generateActivePdfList'
 
 // Selectors
-export const getStateRequestGeneratePdf = state => state.pdf.requestGeneratePdf
+export const getStateSelectedEntryIds = state => state.form.selectedEntryIds
+export const getStatePdfList = state => state.pdf.pdfList
 export const getStateGeneratePdfcancel = state => state.pdf.generatePdfCancel
-export const getStateSessionId = state => state.pdf.sessionId
 
-export function* getSessionId(payload) {
+export function * generateSessionId (payload) {
   try {
     const result = yield call(apiRequestSessionId, payload)
 
-    yield put({ type: GET_SESSION_ID_SUCCESS, payload: result.sessionId })
+    yield put({ type: GENERATE_SESSION_ID_SUCCESS, payload: result.sessionId })
 
-    const requestGeneratePdf = yield select(getStateRequestGeneratePdf)
+    const selectedEntryIds = yield select(getStateSelectedEntryIds)
+    const pdfList = yield select(getStatePdfList)
 
-    yield put({ type: GENERATE_PDF, payload: requestGeneratePdf })
+    yield put({
+      type: GENERATE_PDF,
+      payload: {
+        sessionId: result.sessionId,
+        concurrency: payload.concurrency,
+        retryInterval: payload.retryInterval,
+        delayInterval: payload.delayInterval,
+        selectedEntryIds,
+        pdfList
+      }
+    })
   } catch (error) {
-    console.log('Saga getSessionId error - ', error)
-    yield put({ type: GET_SESSION_ID_FAILED, payload: '' })
+    yield put({ type: GENERATE_SESSION_ID_FAILED, payload: 'Error occured. Something went wrong..' })
   }
 }
 
-export function* watchGetSessionId() {
-  yield takeLatest(GET_SESSION_ID, getSessionId)
+export function * watchGenerateSessionId () {
+  yield takeLatest(GENERATE_SESSION_ID, generateSessionId)
 }
 
-export function * getAllFormEntries(payload) {
-  try {
-    const result = yield call(apiRequestAllEntriesId, payload)
-
-    yield put({ type: GET_ALL_FORM_ENTRIES_SUCCESS, payload: result })
-  } catch (error) {
-    console.log('Saga getAllFormEntries - ', error)
-    yield put({ type: GET_ALL_FORM_ENTRIES_FAILED, payload: 'Error occured. Something went wrong..' })
-  }
-}
-
-export function* watchGetAllFormEntries() {
-  yield takeLatest(GET_ALL_FORM_ENTRIES, getAllFormEntries)
-}
-
-export function* requestGeneratePdf(payload) {
+export function * requestGeneratePdf (listItem, retryInterval, delayInterval) {
   // Cancelling a fetch request with AbortController
   const abortController = new AbortController()
   const data = {
-    payload,
+    listItem,
     signal: abortController.signal
   }
 
   try {
-    yield retry(3, 3000, apiRequestGeneratePdf, data)
+    yield retry(retryInterval, delayInterval, apiRequestGeneratePdf, data)
 
-    yield put({ type: GENERATE_PDF_SUCCESS, payload })
+    yield put({ type: GENERATE_PDF_SUCCESS, listItem })
   } catch (error) {
-    yield put({ type: GENERATE_PDF_FAILED, payload: 'Error occured. Something went wrong..' })
+    yield put({ type: GENERATE_PDF_FAILED, listItem })
   } finally {
     if (yield(cancelled())) {
       abortController.abort()
 
       yield put({ type: GENERATE_PDF_TOGGLE_CANCEL })
     } else {
-      yield put({ type: GENERATE_PDF_COUNTER })
+      const selectedEntryIds = yield select(getStateSelectedEntryIds)
+
+      yield put({ type: GENERATE_PDF_COUNTER, payload: selectedEntryIds })
     }
   }
 }
 
-export function* generatePdf(data) {
+export function * generatePdf ({ payload }) {
+  const { list, sessionId, retryInterval, delayInterval } = payload
   const generatePdfCancel = yield select(getStateGeneratePdfcancel)
 
-  for (let i = 0; i < data.payload.length; i++) {
-    const task = yield fork(requestGeneratePdf, data.payload[i])
+  for (let i = 0; i < list.length; i++) {
+    const task = yield fork(requestGeneratePdf, list[i], retryInterval, delayInterval)
 
     // Triggered by StepTwo cancel button
     if (generatePdfCancel) {
@@ -112,41 +107,53 @@ export function* generatePdf(data) {
 
   yield delay(1000)
 
-  yield retry(3, 3000, apiRequestGeneratePdfZip, data.sessionId)
+  yield retry(3, 3000, apiRequestGeneratePdfZip, sessionId)
 }
 
-export function* watchGeneratePDF() {
+export function * watchGeneratePDF () {
   let generatePdfList = []
 
   while (true) {
     const { payload } = yield take(GENERATE_PDF)
-    const { sessionId, selectedEntryIds, activePdflist } = payload
+    const {
+      sessionId,
+      concurrency,
+      retryInterval,
+      delayInterval,
+      selectedEntryIds,
+      pdfList
+    } = payload
+    const activePdfList = generateActivePdfList(pdfList)
 
     selectedEntryIds.map(id => {
-      activePdflist.map(item => {
-        generatePdfList.push({ sessionId: sessionId, entryId: id, pdfId: item })
+      activePdfList.map(item => {
+        generatePdfList.push({ sessionId, entryId: id, pdfId: item })
       })
     })
 
-    while(generatePdfList.length > 0) {
-      yield generatePdf({ payload: generatePdfList.splice(0, 5), sessionId })
+    while (generatePdfList.length > 0) {
+      yield generatePdf({
+        payload: {
+          list: generatePdfList.splice(0, concurrency),
+          sessionId,
+          retryInterval,
+          delayInterval
+        }
+      })
     }
   }
 }
 
-export function* downloadZip() {
-  const sessionId = yield select(getStateSessionId)
-
+export function * downloadZip ({ payload }) {
   try {
-    const result = yield call(apiRequestDownloadZip, sessionId)
+    const result = yield call(apiRequestDownloadZip, payload)
 
     yield put({ type: DOWNLOAD_ZIP_SUCCESS, payload: result.url })
-  } catch(error) {
-    console.log('Saga downloadZip error - ', error)
+  } catch (error) {
     yield put({ type: DOWNLOAD_ZIP_FAILED, payload: 'Error occured. Something went wrong..' })
   }
 }
 
-export function* watchDownloadZip() {
+export function * watchDownloadZip () {
   yield takeLatest(DOWNLOAD_ZIP, downloadZip)
 }

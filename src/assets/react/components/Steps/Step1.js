@@ -3,8 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { updateDirectoryStructure } from '../../actions/tagPicker'
 import {
-  generateActivePdfList,
-  getSessionId,
+  generateSessionId,
   togglePdfStatus,
   toggleModal,
 } from '../../actions/pdf'
@@ -16,16 +15,27 @@ import { cancelButton } from '../../helpers/cancelButton'
 class Step1 extends React.Component {
 
   static propTypes = {
-    tags: PropTypes.arrayOf(PropTypes.object).isRequired,
     directoryStructure: PropTypes.string.isRequired,
-    pdfList: PropTypes.array.isRequired,
-    generatePdfCancel: PropTypes.bool.isRequired,
+    pdfList: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+        templateSelected: PropTypes.string.isRequired,
+        active: PropTypes.bool.isRequired
+      })
+    ).isRequired,
+    generateSessionId: PropTypes.func.isRequired,
+    history: PropTypes.object.isRequired,
     updateDirectoryStructure: PropTypes.func.isRequired,
-    generateActivePdfList: PropTypes.func.isRequired,
-    getSessionId: PropTypes.func.isRequired,
+    tags: PropTypes.arrayOf(PropTypes.object).isRequired,
     togglePdfStatus: PropTypes.func.isRequired,
-    toggleModal: PropTypes.func.isRequired,
-    history: PropTypes.object.isRequired
+    toggleModal: PropTypes.func.isRequired
+  }
+
+  state = {
+    concurrency: 5,
+    retryInterval: 3,
+    delayInterval: 3000
   }
 
   componentDidMount () {
@@ -45,27 +55,24 @@ class Step1 extends React.Component {
   build = e => {
     e.preventDefault()
 
+    const { concurrency, retryInterval, delayInterval } = this.state
     const { directoryStructure, pdfList } = this.props
-    const activePdfList = []
-    // Set register API concurrency
-    const concurrency = 5
-    // Strip out forward slashes before passing to path
-    const path = stripForwardSlashes(directoryStructure)
 
+    // Generate active PDF list
+    const activePdfList = []
     pdfList.map(item => {
       item.active && activePdfList.push(item.id)
     })
 
+    // Check if there's an active PDF selected
     if (activePdfList.length === 0) {
-      alert('Please specify at least one PDF you would like to generate for the selected entries.')
+      alert('Please select at least one PDF you would like to generate for this entries.')
     } else {
-      // Generate active PDF list
-      this.props.generateActivePdfList(activePdfList)
+      // Strip out forward slashes before passing to path
+      const path = stripForwardSlashes(directoryStructure)
 
       // Generate session ID and PDF
-      this.props.getSessionId(path, concurrency)
-
-      // Push history
+      this.props.generateSessionId(path, concurrency, retryInterval, delayInterval)
       this.props.history.push('/step/2')
     }
   }
@@ -133,8 +140,7 @@ const mapStateToProps = state => ({
 
 export default connect(mapStateToProps, {
   updateDirectoryStructure,
-  generateActivePdfList,
-  getSessionId,
+  generateSessionId,
   togglePdfStatus,
   toggleModal
 })(Step1)

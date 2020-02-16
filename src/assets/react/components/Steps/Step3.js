@@ -14,8 +14,9 @@ class Step3 extends React.Component {
 
   static propTypes = {
     downloadPercentage: PropTypes.number.isRequired,
-    downloadZipUrl: PropTypes.string.isRequired,
+    sessionId: PropTypes.string.isRequired,
     getDownloadZip: PropTypes.func.isRequired,
+    downloadZipUrl: PropTypes.string.isRequired,
     toggleModal: PropTypes.func.isRequired,
     resetPdfState: PropTypes.func.isRequired,
     resetTagPickerState: PropTypes.func.isRequired,
@@ -43,10 +44,10 @@ class Step3 extends React.Component {
   }
 
   requestDownloadZipUrl = () => {
-    const { downloadPercentage } = this.props
+    const { downloadPercentage, sessionId } = this.props
 
     if (downloadPercentage === 100) {
-      this.props.getDownloadZip()
+      this.props.getDownloadZip(sessionId)
     }
   }
 
@@ -92,6 +93,7 @@ class Step3 extends React.Component {
 }
 
 const mapStateToProps = state => ({
+  sessionId: state.pdf.sessionId,
   downloadPercentage: state.pdf.downloadPercentage,
   downloadZipUrl: state.pdf.downloadZipUrl
 })

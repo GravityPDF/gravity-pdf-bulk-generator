@@ -1,7 +1,9 @@
 import { all } from 'redux-saga/effects'
 import {
-  watchGetAllFormEntries,
-  watchGetSessionId,
+  watchGetSelectedEntryIds
+} from './form'
+import {
+  watchGenerateSessionId,
   watchGeneratePDF,
   watchDownloadZip
 } from './pdf'
@@ -11,8 +13,8 @@ import {
  */
 export default function * rootSaga () {
   yield all([
-    watchGetAllFormEntries(),
-    watchGetSessionId(),
+    watchGetSelectedEntryIds(),
+    watchGenerateSessionId(),
     watchGeneratePDF(),
     watchDownloadZip()
   ])

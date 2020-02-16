@@ -1,6 +1,7 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import createSagaMiddleware from 'redux-saga'
+import formReducer from '../reducers/formReducer'
 import tagPickerReducer from '../reducers/tagPickerReducer'
 import pdfReducer from '../reducers/pdfReducer'
 import rootSaga from '../sagas'
@@ -35,6 +36,7 @@ export function getStore () {
  */
 export function setupReducers () {
   return combineReducers({
+    form: formReducer,
     tagPicker: tagPickerReducer,
     pdf: pdfReducer
   })

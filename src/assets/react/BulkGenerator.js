@@ -3,142 +3,56 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import PopUp from './components/PopUp'
-import {
-  getFormData,
-  toggleModal,
-  singleCheckboxEntry,
-  allCheckboxEntry,
-  getAllFormEntries,
-  togglePopupSelectAllEntries
-} from './actions/pdf'
-import { processFormEntriesAndFilters } from './helpers/processFormEntriesAndFilters'
+import { processCheckbox, getSelectedEntryIds } from './actions/form'
+import { generatePdfListSuccess, toggleModal } from './actions/pdf'
+import { parseUrlForSearchParameters } from './helpers/parseUrlForSearchParameters'
 
 class BulkGenerator extends React.Component {
 
   static propTypes = {
-    modal: PropTypes.bool.isRequired,
-    formEntries: PropTypes.shape({
-      formId: PropTypes.string.isRequired,
-      selectedAllIds: PropTypes.bool.isRequired,
-      popupSelectAllEntries: PropTypes.bool.isRequired,
-      selectedEntryIds: PropTypes.array.isRequired
-    }).isRequired,
-    getFormData: PropTypes.func.isRequired,
+    generatePdfListSuccess: PropTypes.func.isRequired,
+    selectedEntryIds: PropTypes.array.isRequired,
+    processCheckbox: PropTypes.func.isRequired,
+    getSelectedEntryIds: PropTypes.func.isRequired,
     toggleModal: PropTypes.func.isRequired,
-    singleCheckboxEntry: PropTypes.func.isRequired,
-    allCheckboxEntry: PropTypes.func.isRequired,
-    getAllFormEntries: PropTypes.func.isRequired,
-    togglePopupSelectAllEntries: PropTypes.func.isRequired,
-    history: PropTypes.object.isRequired
+    history: PropTypes.object.isRequired,
+    modal: PropTypes.bool.isRequired
   }
 
   state = {
-    formActions: {
-      topBulkDownloadPdfSelected: false,
-      bottomBulkDownloadPdfSelected: false
-    }
+    formId: ''
   }
 
   componentDidMount () {
     // Request form data
-    this.getFormData()
+    this.setGlobalState()
 
-    // Event listener for bulk action options
-    this.bulkActionDropdownListener()
-
-    // Event listener for apply button
-    this.bulkApplyButtonListener()
-
-    // Event listener for individual checkbox entries
-    this.individualCheckboxListener()
-
-    // Event listener for select all page checkbox entries
-    this.selectAllPageCheckboxListener()
+    // Form action event listener
+    this.setEventListeners()
   }
 
-  componentDidUpdate (prevProps) {
-    // Event listener for popup toggle select all entries
-    this.toggleSelectAllEntriesListener(prevProps)
-  }
-
-  toggleSelectAllEntriesListener = (prevProps) => {
-    const { selectedAllIds, popupSelectAllEntries, formId } = this.props.formEntries
-    const popupSelectAllEntriesOption = document.querySelector('#gform-select-all-message a')
-
-    if (popupSelectAllEntriesOption) {
-      popupSelectAllEntriesOption.addEventListener('click', () => {
-        if (popupSelectAllEntriesOption.innerText.includes('Select all')) {
-          const filterData = processFormEntriesAndFilters()
-
-          if (prevProps.formEntries.selectedAllIds !== selectedAllIds) {
-            this.props.getAllFormEntries(formId, filterData)
-          }
-        } else {
-          if (prevProps.formEntries.popupSelectAllEntries !== popupSelectAllEntries) {
-            this.props.togglePopupSelectAllEntries()
-          }
-        }
-      })
-    }
-  }
-
-  getFormData = () => {
+  setGlobalState = () => {
     // Global variable to get Form Data
-    const formData = GPDF_BULK_GENERATOR
+    const { form_id, pdfs } = GPDF_BULK_GENERATOR
 
-    this.props.getFormData(formData)
+    this.setState({ formId: form_id })
+
+    this.setPdfListState(pdfs)
   }
 
-  bulkActionDropdownListener = () => {
-    [
-      document.querySelector('#bulk-action-selector-top'),
-      document.querySelector('#bulk-action-selector-bottom')
-    ].forEach(e => {
-      e.addEventListener('change', e => {
-        const id = e.target.id
+  setPdfListState = (pdfs) => {
+    const list = []
 
-        e.target.value === 'download_pdf' ? this.selectDownloadPdf(id) : this.deSelectDownloadPdf(id)
-      })
+    Object.entries(pdfs).map(item => {
+      list.push({ id: item[0], name: item[1].name, templateSelected: item[1].template, active: false })
     })
+
+    // Generate PDF list and assign it into its own reducer
+    this.props.generatePdfListSuccess(list)
   }
 
-  selectDownloadPdf = id => {
-    if (id === 'bulk-action-selector-top') {
-      this.setState({
-        formActions: {
-          ...this.state.formActions,
-          topBulkDownloadPdfSelected: true
-        }
-      })
-    } else {
-      this.setState({
-        formActions: {
-          ...this.state.formActions,
-          bottomBulkDownloadPdfSelected: true
-        }
-      })
-    }
-  }
-
-  deSelectDownloadPdf = id => {
-    if (id === 'bulk-action-selector-top') {
-      this.setState({
-        formActions: {
-          ...this.state.formActions,
-          topBulkDownloadPdfSelected: false
-        }
-      })
-    } else {
-      this.setState({
-        formActions: {
-          ...this.state.formActions,
-          bottomBulkDownloadPdfSelected: false
-        }
-      })
-    }
-  }
-
-  bulkApplyButtonListener = () => {
+  setEventListeners = () => {
+    // Bulk apply button listener
     [
       document.querySelector('#doaction'),
       document.querySelector('#doaction2')
@@ -146,46 +60,42 @@ class BulkGenerator extends React.Component {
       e.addEventListener('click', e => {
         e.preventDefault()
 
-        const id = e.target.id
-        const { topBulkDownloadPdfSelected, bottomBulkDownloadPdfSelected } = this.state.formActions
-        const { selectedEntryIds } = this.props.formEntries
+        const ids = document.querySelectorAll('input[name="entry[]"]:checked')
 
-        // Check if 'Download PDF' is selected at top Bulk Actions Select box
-        if (id === 'doaction' && topBulkDownloadPdfSelected && selectedEntryIds.length !== 0) {
-          this.props.toggleModal()
-          this.props.history.push('/step/1')
+        // dropdown is previous element to both selectors
+        if( ids.length === 0 || e.target.previousElementSibling.value !== 'download_pdf' ) {
+          return
         }
 
-        // Check if 'Download PDF' is selected at bottom Bulk Actions Select box
-        if (id === 'doaction2' && bottomBulkDownloadPdfSelected && selectedEntryIds.length !== 0) {
-          this.props.toggleModal()
-          this.props.history.push('/step/1')
-        }
+        this.props.processCheckbox(ids)
+        this.processEntryIds(ids)
       })
     })
   }
 
-  individualCheckboxListener = () => {
-    const totalEntries = document.querySelectorAll('.gform_list_checkbox').length
+  processEntryIds = (selectedEntryIds) => {
+    const popupSelectAllEntries = document.getElementById('all_entries').value
 
-    document.querySelectorAll('[data-wp-lists="list:gf_entry"]')[0].addEventListener('change', e => {
-      this.props.singleCheckboxEntry(e.target.value, totalEntries)
-    })
+    // Check if popup select all entries is selected
+    if (popupSelectAllEntries) {
+      this.checkPopupSelectAllEntries()
+    }
+
+    this.processRequestData()
   }
 
-  selectAllPageCheckboxListener = () => {
-    [
-      document.querySelector('#cb-select-all-1'),
-      document.querySelector('#cb-select-all-2')
-    ].forEach(e => {
-      e.addEventListener('change', () => {
-        const ids = []
-        const checkboxes = document.querySelectorAll('.gform_list_checkbox')
-        checkboxes.forEach(e => ids.push(e.getAttribute('value')))
+  checkPopupSelectAllEntries = () => {
+      const { formId } = this.state
+      const filterData = parseUrlForSearchParameters(window.location.search)
 
-        this.props.allCheckboxEntry(ids)
-      })
-    })
+      this.props.getSelectedEntryIds(formId, filterData)
+  }
+
+  processRequestData = () => {
+    const { toggleModal, history } = this.props
+
+    toggleModal()
+    history.push('/step/1')
   }
 
   render () {
@@ -198,16 +108,17 @@ class BulkGenerator extends React.Component {
 }
 
 const mapStateToProps = state => ({
+  formId: state.form.formId,
+  generatedPdfList: state.form.generatedPdfList,
+  selectedEntryIds: state.form.selectedEntryIds,
   modal: state.pdf.modal,
   formEntries: state.pdf.formEntries
 
 })
 
 export default withRouter(connect(mapStateToProps, {
-  getFormData,
-  toggleModal,
-  singleCheckboxEntry,
-  allCheckboxEntry,
-  getAllFormEntries,
-  togglePopupSelectAllEntries
+  processCheckbox,
+  getSelectedEntryIds,
+  generatePdfListSuccess,
+  toggleModal
 })(BulkGenerator))
