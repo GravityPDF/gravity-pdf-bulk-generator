@@ -8,9 +8,7 @@ import {
   GET_SELECTED_ENTRY_IDS_SUCCESS,
   GET_SELECTED_ENTRY_IDS_FAILED
 } from '../actionTypes/form'
-import {
-  apiRequestAllEntriesId
-} from '../api/form'
+import { apiRequestAllEntriesId} from '../api/form'
 
 export function* getSelectedEntryIds(payload) {
   try {

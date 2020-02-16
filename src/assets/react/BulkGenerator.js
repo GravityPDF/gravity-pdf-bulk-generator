@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom'
 import PopUp from './components/PopUp'
 import { processCheckbox, getSelectedEntryIds } from './actions/form'
 import { generatePdfListSuccess, toggleModal } from './actions/pdf'
-import { processFormEntriesAndFilters } from './helpers/processFormEntriesAndFilters'
+import { parseUrlForSearchParameters } from './helpers/parseUrlForSearchParameters'
 
 class BulkGenerator extends React.Component {
 
@@ -25,22 +25,22 @@ class BulkGenerator extends React.Component {
 
   componentDidMount () {
     // Request form data
-    this.getFormData()
+    this.setGlobalState()
 
     // Form action event listener
-    this.formActionsListener()
+    this.setEventListeners()
   }
 
-  getFormData = () => {
+  setGlobalState = () => {
     // Global variable to get Form Data
-    const formData = GPDF_BULK_GENERATOR
+    const { form_id, pdfs } = GPDF_BULK_GENERATOR
 
-    this.setState({ formId: formData.form_id })
+    this.setState({ formId: form_id })
 
-    this.generatePdfList(formData.pdfs)
+    this.setPdfListState(pdfs)
   }
 
-  generatePdfList = (pdfs) => {
+  setPdfListState = (pdfs) => {
     const list = []
 
     Object.entries(pdfs).map(item => {
@@ -51,7 +51,7 @@ class BulkGenerator extends React.Component {
     this.props.generatePdfListSuccess(list)
   }
 
-  formActionsListener = () => {
+  setEventListeners = () => {
     // Bulk apply button listener
     [
       document.querySelector('#doaction'),
@@ -60,65 +60,38 @@ class BulkGenerator extends React.Component {
       e.addEventListener('click', e => {
         e.preventDefault()
 
-        const ids = document.getElementsByName('entry[]')
+        const ids = document.querySelectorAll('input[name="entry[]"]:checked')
 
-        this.processCheckbox(ids)
+        // dropdown is previous element to both selectors
+        if( ids.length === 0 || e.target.previousElementSibling.value !== 'download_pdf' ) {
+          return
+        }
 
-        const id = e.target.id
-        const topDropdownOption = document.querySelector('#bulk-action-selector-top').value
-        const buttomDropdownOption = document.querySelector('#bulk-action-selector-bottom').value
-        const { selectedEntryIds } = this.props
-
-        this.processApplyButton(id, topDropdownOption, buttomDropdownOption, selectedEntryIds)
+        this.props.processCheckbox(ids)
+        this.processEntryIds(ids)
       })
     })
   }
 
-  processCheckbox = (ids) => {
-    this.props.processCheckbox(ids)
-  }
-
-  processApplyButton = (id, topDropdownOption, buttomDropdownOption, selectedEntryIds) => {
-    // Check if 'Download PDF' is selected at the top bulk action select box
-    if (id === 'doaction' && topDropdownOption === 'download_pdf' && selectedEntryIds.length !== 0) {
-      this.processEntryIds(selectedEntryIds)
-    }
-
-    // Check if 'Download PDF' is selected at the bottom bulk action select box
-    if (id === 'doaction2' && buttomDropdownOption === 'download_pdf' && selectedEntryIds.length !== 0) {
-      this.processEntryIds(selectedEntryIds)
-    }
-  }
-
   processEntryIds = (selectedEntryIds) => {
-    const popupSelectAllEntries = document.querySelector('#gform-select-all-message a')
+    const popupSelectAllEntries = document.getElementById('all_entries').value
 
     // Check if popup select all entries is selected
     if (popupSelectAllEntries) {
-      this.checkPopupSelectAllEntries(popupSelectAllEntries)
+      this.checkPopupSelectAllEntries()
     }
 
-    // If popup select all entries is not selected
-    if (selectedEntryIds.length > 0 && !popupSelectAllEntries) {
-      this.prcessRequestData()
-    }
+    this.processRequestData()
   }
 
-  checkPopupSelectAllEntries = (popupSelectAllEntries) => {
-    if (popupSelectAllEntries.text === 'Clear selection') {
+  checkPopupSelectAllEntries = () => {
       const { formId } = this.state
-      const currentUrl = window.location.search
-      const filterData = processFormEntriesAndFilters(currentUrl)
+      const filterData = parseUrlForSearchParameters(window.location.search)
 
       this.props.getSelectedEntryIds(formId, filterData)
-
-      this.prcessRequestData()
-    } else {
-      this.prcessRequestData()
-    }
   }
 
-  prcessRequestData = () => {
+  processRequestData = () => {
     const { toggleModal, history } = this.props
 
     toggleModal()

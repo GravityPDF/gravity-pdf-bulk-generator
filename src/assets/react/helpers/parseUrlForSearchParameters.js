@@ -1,4 +1,4 @@
-export function processFormEntriesAndFilters (currentUrl) {
+export function parseUrlForSearchParameters (currentUrl) {
   const filterDetails = [
     ['s', /s=(.*)/],
     ['field_id', /field_id=(.*)/],
