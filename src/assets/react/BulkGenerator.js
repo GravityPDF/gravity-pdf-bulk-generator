@@ -68,16 +68,15 @@ class BulkGenerator extends React.Component {
         }
 
         this.props.processCheckbox(ids)
-        this.processEntryIds(ids)
+        this.processEntryIds()
       })
     })
   }
 
-  processEntryIds = (selectedEntryIds) => {
+  processEntryIds = () => {
     const popupSelectAllEntries = document.getElementById('all_entries').value
-
     // Check if popup select all entries is selected
-    if (popupSelectAllEntries) {
+    if (popupSelectAllEntries === "1") {
       this.checkPopupSelectAllEntries()
     }
 
