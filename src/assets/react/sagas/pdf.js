@@ -19,14 +19,11 @@ import {
   GENERATE_PDF_TOGGLE_CANCEL,
   GENERATE_PDF_FAILED,
   GENERATE_PDF_COUNTER,
-  DOWNLOAD_ZIP,
-  DOWNLOAD_ZIP_SUCCESS,
-  DOWNLOAD_ZIP_FAILED
+  GENERATE_DOWNLOAD_ZIP_URL
 } from '../actionTypes/pdf'
 import {
   apiRequestSessionId,
   apiRequestGeneratePdf,
-  apiRequestDownloadZip,
   apiRequestGeneratePdfZip
 } from '../api/pdf'
 import { generateActivePdfList } from '../helpers/generateActivePdfList'
@@ -107,7 +104,9 @@ export function * generatePdf ({ payload }) {
 
   yield delay(1000)
 
-  yield retry(3, 3000, apiRequestGeneratePdfZip, sessionId)
+  const result = yield retry(3, 3000, apiRequestGeneratePdfZip, sessionId)
+
+  yield put({ type: GENERATE_DOWNLOAD_ZIP_URL, payload: result.downloadUrl })
 }
 
 export function * watchGeneratePDF () {
@@ -142,18 +141,4 @@ export function * watchGeneratePDF () {
       })
     }
   }
-}
-
-export function * downloadZip ({ payload }) {
-  try {
-    const result = yield call(apiRequestDownloadZip, payload)
-
-    yield put({ type: DOWNLOAD_ZIP_SUCCESS, payload: result.url })
-  } catch (error) {
-    yield put({ type: DOWNLOAD_ZIP_FAILED, payload: 'Error occured. Something went wrong..' })
-  }
-}
-
-export function * watchDownloadZip () {
-  yield takeLatest(DOWNLOAD_ZIP, downloadZip)
 }

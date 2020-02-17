@@ -4,8 +4,7 @@ import {
 } from './form'
 import {
   watchGenerateSessionId,
-  watchGeneratePDF,
-  watchDownloadZip
+  watchGeneratePDF
 } from './pdf'
 
 /**
@@ -15,7 +14,6 @@ export default function * rootSaga () {
   yield all([
     watchGetSelectedEntryIds(),
     watchGenerateSessionId(),
-    watchGeneratePDF(),
-    watchDownloadZip()
+    watchGeneratePDF()
   ])
 }
