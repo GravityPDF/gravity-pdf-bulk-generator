@@ -104,7 +104,8 @@ export default function (state = initialState, action) {
         generatePdFailed: [],
         generatePdfCancel: false,
         generatePdfCounter: 0,
-        downloadPercentage: 0
+        downloadPercentage: 0,
+        downloadZipUrl: ''
       }
 
     case GENERATE_PDF_COUNTER: {

@@ -4,7 +4,9 @@ export function cancelButton (
     history,
     toggleModal,
     escapeCloseModal,
+    downloadPercentage,
     generatePdfCancel,
+    generatePdfToggleCancel,
     resetTagPickerState,
     resetPdfState
   }
@@ -20,7 +22,7 @@ export function cancelButton (
     )
   }
 
-  if (pathname === '/step/2') {
+  if (pathname === '/step/2' && downloadPercentage < 100) {
     if (confirm('Are you sure you want to cancel download?')) {
       return (
         e && e.preventDefault(),
@@ -32,6 +34,16 @@ export function cancelButton (
     }
 
     e && e.preventDefault()
+  }
+
+  if (pathname === '/step/2' && downloadPercentage === 100) {
+    return (
+      e && e.preventDefault(),
+      toggleModal && toggleModal(),
+      escapeCloseModal && escapeCloseModal(),
+      generatePdfToggleCancel && generatePdfToggleCancel(),
+      history.push('/step/1')
+    )
   }
 
   if (pathname === '/step/3') {
