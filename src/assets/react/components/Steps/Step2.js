@@ -2,7 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { CircularProgressbar } from 'react-circular-progressbar'
-import { toggleModal, generatePdfCancel } from '../../actions/pdf'
+import {
+  toggleModal,
+  generatePdfCancel,
+  generatePdfToggleCancel
+} from '../../actions/pdf'
 import LoadingDots from '../LoadingDots'
 import ProgressBar from '../ProgressBar'
 import { cancelButton } from '../../helpers/cancelButton'
@@ -15,6 +19,7 @@ class Step2 extends React.Component {
     downloadZipUrl: PropTypes.string.isRequired,
     toggleModal: PropTypes.func.isRequired,
     generatePdfCancel: PropTypes.func.isRequired,
+    generatePdfToggleCancel: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired
   }
 
@@ -22,11 +27,11 @@ class Step2 extends React.Component {
     document.addEventListener('focus', this.handleFocus, true)
   }
 
-  componentDidUpdate () {
-    this.checkDownloadPercentage()
+  componentDidUpdate (prevProps) {
+    this.checkDownloadPercentage(prevProps)
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     document.removeEventListener('focus', this.handleFocus, true)
   }
 
@@ -36,10 +41,10 @@ class Step2 extends React.Component {
     }
   }
 
-  checkDownloadPercentage = () => {
+  checkDownloadPercentage = (prevProps) => {
     const { downloadPercentage, downloadZipUrl, history } = this.props
 
-    if (downloadPercentage === 100 && downloadZipUrl !== '') {
+    if (downloadPercentage === 100 && prevProps.downloadZipUrl !== downloadZipUrl) {
       setTimeout(() => history.push('/step/3'), 1000)
     }
   }
@@ -49,6 +54,7 @@ class Step2 extends React.Component {
       downloadPercentage,
       toggleModal,
       generatePdfCancel,
+      generatePdfToggleCancel,
       history
     } = this.props
 
@@ -67,7 +73,14 @@ class Step2 extends React.Component {
         <footer>
           <button
             className='button button-large'
-            onClick={e => cancelButton({ e, toggleModal, generatePdfCancel, history })}>
+            onClick={e => cancelButton({
+              e,
+              toggleModal,
+              downloadPercentage,
+              generatePdfCancel,
+              generatePdfToggleCancel,
+              history
+            })}>
             Cancel
           </button>
         </footer>
@@ -82,4 +95,8 @@ const mapStateToProps = state => ({
   downloadZipUrl: state.pdf.downloadZipUrl
 })
 
-export default connect(mapStateToProps, { toggleModal, generatePdfCancel })(Step2)
+export default connect(mapStateToProps, {
+  toggleModal,
+  generatePdfCancel,
+  generatePdfToggleCancel
+})(Step2)

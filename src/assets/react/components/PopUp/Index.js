@@ -6,6 +6,7 @@ import { PoseGroup } from 'react-pose'
 import {
   escapeCloseModal,
   generatePdfCancel,
+  generatePdfToggleCancel,
   resetPdfState
 } from '../../actions/pdf'
 import { resetTagPickerState } from '../../actions/tagPicker'
@@ -17,8 +18,10 @@ import Steps from '../Steps/Steps'
 class PopUp extends React.Component {
 
   static propTypes = {
+    downloadPercentage: PropTypes.number.isRequired,
     escapeCloseModal: PropTypes.func.isRequired,
     generatePdfCancel: PropTypes.func.isRequired,
+    generatePdfToggleCancel: PropTypes.func.isRequired,
     resetTagPickerState: PropTypes.func.isRequired,
     resetPdfState: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
@@ -32,7 +35,9 @@ class PopUp extends React.Component {
   escapeKeyListener = e => {
     const {
       escapeCloseModal,
+      downloadPercentage,
       generatePdfCancel,
+      generatePdfToggleCancel,
       resetTagPickerState,
       resetPdfState,
       history
@@ -46,11 +51,22 @@ class PopUp extends React.Component {
     }
 
     if (keyCode === escapeKey && pathname === '/step/2') {
-      cancelButton({ escapeCloseModal, generatePdfCancel, history })
+      cancelButton({
+        escapeCloseModal,
+        downloadPercentage,
+        generatePdfCancel,
+        generatePdfToggleCancel,
+        history
+      })
     }
 
     if (keyCode === escapeKey && pathname === '/step/3') {
-      cancelButton({ escapeCloseModal, resetTagPickerState, resetPdfState, history })
+      cancelButton({
+        escapeCloseModal,
+        resetTagPickerState,
+        resetPdfState,
+        history
+      })
     }
   }
 
@@ -65,23 +81,28 @@ class PopUp extends React.Component {
               component={Overlay} />
           </Fade>,
 
-          <SlideDown
-            key='slidedown'
-            id='gfpdf-bulk-generator-popup'>
-            <Route
-              key='steps'
-              path='/step/:stepId'
-              component={Steps} />
-          </SlideDown>
+            <SlideDown
+              key='slidedown'
+              id='gfpdf-bulk-generator-popup'>
+              <Route
+                key='steps'
+                path='/step/:stepId'
+                component={Steps} />
+            </SlideDown>
         )}
       </PoseGroup>
     )
   }
 }
 
-export default connect(null, {
+const mapStateToProps = state => ({
+  downloadPercentage: state.pdf.downloadPercentage
+})
+
+export default connect(mapStateToProps, {
   escapeCloseModal,
   generatePdfCancel,
+  generatePdfToggleCancel,
   resetTagPickerState,
   resetPdfState
 })(PopUp)
