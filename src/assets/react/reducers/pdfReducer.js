@@ -52,11 +52,38 @@ export default function (state = initialState, action) {
     }
 
     case TOGGLE_PDF_STATUS: {
-      const newState = { ...state, pdfList: [...state.pdfList] }
+      const list = [...state.pdfList]
 
-      newState.pdfList[action.payload]['active'] = !newState.pdfList[action.payload]['active']
+      // If toggle all pdf switch is clicked
+      if (action.payload === 0) {
+        if (list[0]['active'] === false && generateActivePdfList(list).length > 0) {
+          for (let x = 0; x < list.length; x++) {
+            list[x]['active'] = true
+          }
+        } else {
+          for (let x = 0; x < list.length; x++) {
+            list[x]['active'] = !list[x]['active']
+          }
+        }
+      }
 
-      return newState
+      // If individual toggle pdf switch is clicked
+      if (action.payload !== 0) {
+        list[action.payload]['active'] = !list[action.payload]['active']
+
+        if (generateActivePdfList(list).length <= list.length) {
+          list[0]['active'] = false
+        }
+
+        if (generateActivePdfList(list).length === list.length -1) {
+          list[0]['active'] = true
+        }
+      }
+
+      return {
+        ...state,
+        pdfList: list
+      }
     }
 
     case GENERATE_SESSION_ID_SUCCESS:

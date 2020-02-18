@@ -10,8 +10,9 @@ const ListToggle = ({ items, onChange }) => {
           return (
             <li key={index}>
               <label
+                className={pdf.id === '0' ? 'toggleAll': ''}
                 onClick={() => onChange(index)}>
-                {pdf.name} <span>(ID: {pdf.id})</span>
+                {pdf.name} <span>{pdf.id !== '0' ? ('ID: ' + pdf.id) : ''}</span>
               </label>
 
               <Switch

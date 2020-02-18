@@ -41,14 +41,37 @@ class BulkGenerator extends React.Component {
   }
 
   setPdfListState = (pdfs) => {
-    const list = []
+    const pdfsArray = Object.entries(pdfs)
+    let list
 
-    Object.entries(pdfs).map(item => {
-      list.push({ id: item[0], name: item[1].name, templateSelected: item[1].template, active: false })
-    })
+    // Check if there is more than 1 pdf template
+    if (pdfsArray.length > 1) {
+      list = this.generatePdfList(pdfsArray)
+
+      // Add 'Toggle All' in the list
+      list.unshift({ id: '0', name: 'Toggle All', templateSelected: '', active: false })
+    } else {
+      // Set active true by default if there's only 1 pdf template
+      list = this.generatePdfList(pdfsArray, true)
+    }
 
     // Generate PDF list and assign it into its own reducer
     this.props.generatePdfListSuccess(list)
+  }
+
+  generatePdfList = (pdfs, active) => {
+    const list = []
+
+    pdfs.map(item => {
+      list.push({
+        id: item[0],
+        name: item[1].name,
+        templateSelected: item[1].template,
+        active: active ? true : false
+      })
+    })
+
+    return list
   }
 
   setEventListeners = () => {
