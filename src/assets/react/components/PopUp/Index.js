@@ -73,7 +73,7 @@ class PopUp extends React.Component {
   render () {
     return (
       <PoseGroup flipMove={false}>
-        {this.props.modal && (
+        {this.props.modal && [
           <Fade key='fade'>
             <Route
               key='overlay'
@@ -81,15 +81,15 @@ class PopUp extends React.Component {
               component={Overlay} />
           </Fade>,
 
-            <SlideDown
-              key='slidedown'
-              id='gfpdf-bulk-generator-popup'>
-              <Route
-                key='steps'
-                path='/step/:stepId'
-                component={Steps} />
-            </SlideDown>
-        )}
+          <SlideDown
+            key='slidedown'
+            id='gfpdf-bulk-generator-popup'>
+            <Route
+              key='steps'
+              path='/step/:stepId'
+              component={Steps} />
+          </SlideDown>
+        ]}
       </PoseGroup>
     )
   }
