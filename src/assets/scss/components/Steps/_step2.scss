@@ -1,0 +1,38 @@
+@import '../../config';
+
+// Step2
+#gfpdf-step-2 {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding-top: 10px;
+
+	// react-circular-progressbar styles
+	.CircularProgressbar {
+		height: 250px;
+
+		.CircularProgressbar-path {
+			stroke: $primary-color;
+			stroke-linecap: round;
+			transition: stroke-dashoffset 0.5s ease 0s;
+		}
+
+		.CircularProgressbar-trail {
+			stroke: $secondary-color;
+		}
+
+		.CircularProgressbar-text {
+			fill: $primary-color;
+			font-size: 20px;
+			dominant-baseline: middle;
+			text-anchor: middle;
+		}
+	}
+
+	h2 {
+		font-weight: normal;
+		margin: 10px 0 5px;
+		padding: 0;
+		font-size: 16pt;
+	}
+}

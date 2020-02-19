@@ -12,7 +12,6 @@ const ToggleSwitch = ({ id, active, screenReaderLabel, onChange }) => {
       uncheckedIcon={false}
       height={26}
       width={52}
-      className='gfpdf-switch'
       aria-label={screenReaderLabel}
     />
   )

@@ -1,6 +1,23 @@
-@import 'button';
-@import 'list-toggle';
-@import 'loading-dots';
-@import 'pop-up';
-@import 'progress-bar';
-@import 'steps';
+@import './components/Buttons/buttons';
+@import './components/ListToggle/list-toggle';
+@import './components/LoadingDots/loading-dots';
+@import './components/PopUp/pop-up';
+@import './components/ProgressBar/progress-bar';
+@import './components/Steps/steps';
+@import './components/TagPicker/tag-picker';
+@import './_media.scss';
+
+// Header
+header {
+	margin-bottom: 20px;
+
+	h2 {
+		font-size: 25px;
+		margin: 0 0 30px;
+	}
+}
+
+// Footer
+footer {
+	margin-top: 25px;
+}

@@ -52,7 +52,7 @@ class Step3 extends React.Component {
     return (
       <div ref={node => this.container = node} tabIndex='-1'>
         <button
-          className='close-button'
+          className='gfpdf-close-button'
           onClick={e => cancelButton({ e, toggleModal, resetTagPickerState, resetPdfState, history })}>
           <span className='screen-reader-text'>Close dialog</span>
         </button>

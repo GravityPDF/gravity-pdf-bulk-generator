@@ -1,0 +1,15 @@
+@import '../../config';
+
+// Tag-picker tags button
+.tag-picker {
+	background-color: $secondary-button-color;
+	color: $primary-text-color;
+
+	&:hover {
+		background-color: $secondary-button-color-hover;
+	}
+
+	&.active {
+		background-color: $tertiary-color;
+	}
+}
