@@ -42,6 +42,11 @@ export function * generateSessionId (payload) {
     const selectedEntryIds = yield select(getStateSelectedEntryIds)
     const pdfList = yield select(getStatePdfList)
 
+    // Remove 'Toggle All' in the list before processing if exists
+    if (pdfList[0]['id'] === '0') {
+      pdfList.shift()
+    }
+
     yield put({
       type: GENERATE_PDF,
       payload: {
