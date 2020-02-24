@@ -8,4 +8,8 @@
 	&:hover {
 		background-color: $secondary-button-color-hover;
 	}
+
+	&.hide {
+		display: none;
+	}
 }

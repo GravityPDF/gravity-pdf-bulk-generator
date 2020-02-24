@@ -2,11 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { CircularProgressbar } from 'react-circular-progressbar'
-import {
-  toggleModal,
-  generatePdfCancel,
-  generatePdfToggleCancel
-} from '../../actions/pdf'
+import { toggleModal, generatePdfCancel } from '../../actions/pdf'
 import LoadingDots from '../LoadingDots'
 import ProgressBar from '../ProgressBar'
 import { cancelButton } from '../../helpers/cancelButton'
@@ -14,12 +10,10 @@ import { cancelButton } from '../../helpers/cancelButton'
 class Step2 extends React.Component {
 
   static propTypes = {
-    generatePdFailed: PropTypes.array.isRequired,
     downloadPercentage: PropTypes.number.isRequired,
     downloadZipUrl: PropTypes.string.isRequired,
     toggleModal: PropTypes.func.isRequired,
     generatePdfCancel: PropTypes.func.isRequired,
-    generatePdfToggleCancel: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired
   }
 
@@ -28,7 +22,11 @@ class Step2 extends React.Component {
   }
 
   componentDidUpdate (prevProps) {
-    this.checkDownloadPercentage(prevProps)
+    const { downloadPercentage, downloadZipUrl } = this.props
+
+    if (downloadPercentage === 100 && prevProps.downloadZipUrl !== downloadZipUrl) {
+      this.checkDownloadPercentage()
+    }
   }
 
   componentWillUnmount () {
@@ -41,12 +39,8 @@ class Step2 extends React.Component {
     }
   }
 
-  checkDownloadPercentage = (prevProps) => {
-    const { downloadPercentage, downloadZipUrl, history } = this.props
-
-    if (downloadPercentage === 100 && prevProps.downloadZipUrl !== downloadZipUrl) {
-      setTimeout(() => history.push('/step/3'), 1000)
-    }
+  checkDownloadPercentage = () => {
+    setTimeout(() => this.props.history.push('/step/3'), 1000)
   }
 
   render () {
@@ -54,7 +48,6 @@ class Step2 extends React.Component {
       downloadPercentage,
       toggleModal,
       generatePdfCancel,
-      generatePdfToggleCancel,
       history
     } = this.props
 
@@ -72,13 +65,12 @@ class Step2 extends React.Component {
 
         <footer>
           <button
-            className='gfpdf-button cancel'
+            className={downloadPercentage === 100 ? 'gfpdf-button cancel hide' : 'gfpdf-button cancel'}
             onClick={e => cancelButton({
               e,
               toggleModal,
               downloadPercentage,
               generatePdfCancel,
-              generatePdfToggleCancel,
               history
             })}>
             Cancel
@@ -90,13 +82,11 @@ class Step2 extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  generatePdFailed: state.pdf.generatePdFailed,
   downloadPercentage: state.pdf.downloadPercentage,
   downloadZipUrl: state.pdf.downloadZipUrl
 })
 
 export default connect(mapStateToProps, {
   toggleModal,
-  generatePdfCancel,
-  generatePdfToggleCancel
+  generatePdfCancel
 })(Step2)

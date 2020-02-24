@@ -4,14 +4,20 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import PopUp from './components/PopUp'
 import { processCheckbox, getSelectedEntryIds } from './actions/form'
-import { generatePdfListSuccess, toggleModal } from './actions/pdf'
+import {
+  generatePdfListSuccess,
+  toggleModal,
+  generatePdfCancelled
+} from './actions/pdf'
 import { parseUrlForSearchParameters } from './helpers/parseUrlForSearchParameters'
 
 class BulkGenerator extends React.Component {
 
   static propTypes = {
+    generatePdfCancel: PropTypes.bool.isRequired,
+    downloadPercentage: PropTypes.number.isRequired,
+    location: PropTypes.object.isRequired,
     generatePdfListSuccess: PropTypes.func.isRequired,
-    selectedEntryIds: PropTypes.array.isRequired,
     processCheckbox: PropTypes.func.isRequired,
     getSelectedEntryIds: PropTypes.func.isRequired,
     toggleModal: PropTypes.func.isRequired,
@@ -29,6 +35,20 @@ class BulkGenerator extends React.Component {
 
     // Form action event listener
     this.setEventListeners()
+  }
+
+  componentDidUpdate (prevProps) {
+    const { generatePdfCancel, downloadPercentage } = this.props
+
+    // Set setGlobalState if cancelled at Step 2
+    if (prevProps.location.pathname === '/step/2'  && prevProps.generatePdfCancel !== generatePdfCancel) {
+      this.setGlobalState()
+    }
+
+    // Set setGlobalState after a successful download and modal closed at Step 3
+    if (prevProps.location.pathname === '/step/3' && downloadPercentage === 0) {
+      this.setGlobalState()
+    }
   }
 
   setGlobalState = () => {
@@ -134,13 +154,16 @@ const mapStateToProps = state => ({
   generatedPdfList: state.form.generatedPdfList,
   selectedEntryIds: state.form.selectedEntryIds,
   modal: state.pdf.modal,
-  formEntries: state.pdf.formEntries
-
+  formEntries: state.pdf.formEntries,
+  generatePdfCancel: state.pdf.generatePdfCancel,
+  downloadPercentage: state.pdf.downloadPercentage,
+  downloadZipUrl: state.pdf.downloadZipUrl
 })
 
 export default withRouter(connect(mapStateToProps, {
   processCheckbox,
   getSelectedEntryIds,
   generatePdfListSuccess,
-  toggleModal
+  toggleModal,
+  generatePdfCancelled
 })(BulkGenerator))

@@ -6,7 +6,6 @@ import { PoseGroup } from 'react-pose'
 import {
   escapeCloseModal,
   generatePdfCancel,
-  generatePdfToggleCancel,
   resetPdfState
 } from '../../actions/pdf'
 import { resetTagPickerState } from '../../actions/tagPicker'
@@ -18,10 +17,9 @@ import Steps from '../Steps/Steps'
 class PopUp extends React.Component {
 
   static propTypes = {
-    downloadPercentage: PropTypes.number.isRequired,
     escapeCloseModal: PropTypes.func.isRequired,
+    downloadPercentage: PropTypes.number.isRequired,
     generatePdfCancel: PropTypes.func.isRequired,
-    generatePdfToggleCancel: PropTypes.func.isRequired,
     resetTagPickerState: PropTypes.func.isRequired,
     resetPdfState: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
@@ -37,7 +35,6 @@ class PopUp extends React.Component {
       escapeCloseModal,
       downloadPercentage,
       generatePdfCancel,
-      generatePdfToggleCancel,
       resetTagPickerState,
       resetPdfState,
       history
@@ -55,7 +52,6 @@ class PopUp extends React.Component {
         escapeCloseModal,
         downloadPercentage,
         generatePdfCancel,
-        generatePdfToggleCancel,
         history
       })
     }
@@ -102,7 +98,6 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps, {
   escapeCloseModal,
   generatePdfCancel,
-  generatePdfToggleCancel,
   resetTagPickerState,
   resetPdfState
 })(PopUp)
