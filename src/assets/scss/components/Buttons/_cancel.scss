@@ -1,0 +1,11 @@
+@import '../../config';
+
+// Cancel button
+.cancel {
+	background-color: $secondary-button-color;
+	color: $primary-text-color;
+
+	&:hover {
+		background-color: $secondary-button-color-hover;
+	}
+}

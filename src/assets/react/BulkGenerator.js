@@ -99,7 +99,7 @@ class BulkGenerator extends React.Component {
   processEntryIds = () => {
     const popupSelectAllEntries = document.getElementById('all_entries').value
     // Check if popup select all entries is selected
-    if (popupSelectAllEntries === "1") {
+    if (popupSelectAllEntries === '1') {
       this.checkPopupSelectAllEntries()
     }
 

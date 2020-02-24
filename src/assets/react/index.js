@@ -12,6 +12,7 @@ const bulkActionOptions = document.querySelectorAll('.alignleft.actions.bulkacti
 // Initialize to load Bulk Generator
 if (entryList !== null && bulkActionOptions.length !== 0) {
   const container = document.createElement('div')
+  // Initialize popup contianer
   container.id = 'gfpdf-bulk-generator-container'
 
   entryList.appendChild(container)

@@ -103,7 +103,7 @@ class Step1 extends React.Component {
     return (
       <div ref={node => this.container = node} tabIndex='-1'>
         <button
-          className='close-button'
+          className='gfpdf-close-button'
           onClick={e => cancelButton({ e, toggleModal, history })}>
           <span className='screen-reader-text'>Close dialog</span>
         </button>
@@ -121,7 +121,7 @@ class Step1 extends React.Component {
 
         <footer>
           <button
-            className='button button-primary button-large'
+            className='gfpdf-button build'
             onClick={this.build}>
             Build
           </button>

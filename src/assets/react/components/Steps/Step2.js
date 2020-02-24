@@ -72,7 +72,7 @@ class Step2 extends React.Component {
 
         <footer>
           <button
-            className='button button-large'
+            className='gfpdf-button cancel'
             onClick={e => cancelButton({
               e,
               toggleModal,
