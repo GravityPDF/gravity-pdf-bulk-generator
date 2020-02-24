@@ -78,9 +78,9 @@ export function * requestGeneratePdf (listItem, retryInterval, delayInterval) {
   try {
     yield retry(retryInterval, delayInterval, apiRequestGeneratePdf, data)
 
-    yield put({ type: GENERATE_PDF_SUCCESS, listItem })
+    yield put({ type: GENERATE_PDF_SUCCESS, payload: listItem })
   } catch (error) {
-    yield put({ type: GENERATE_PDF_FAILED, listItem })
+    yield put({ type: GENERATE_PDF_FAILED, payload: listItem })
   } finally {
     if (yield(cancelled())) {
       abortController.abort()
