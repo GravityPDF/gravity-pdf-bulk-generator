@@ -1,4 +1,4 @@
-export function cancelButton (
+export const cancelButton = (
   {
     e,
     history,
@@ -9,7 +9,7 @@ export function cancelButton (
     resetTagPickerState,
     resetPdfState
   }
-) {
+) => {
   const { pathname } = history.location
 
   if (pathname === '/step/1') {
@@ -41,8 +41,7 @@ export function cancelButton (
       toggleModal && toggleModal(),
       escapeCloseModal && escapeCloseModal(),
       resetTagPickerState(),
-      resetPdfState(),
-      history.push('/')
+      resetPdfState()
     )
   }
 }

@@ -1,15 +1,28 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { CircularProgressbar } from 'react-circular-progressbar'
 import { toggleModal, generatePdfCancel } from '../../actions/pdf'
-import LoadingDots from '../LoadingDots'
+import {
+  toggleSuccess,
+  toggleErrors,
+  toggleWarnings
+} from '../../actions/logs'
 import ProgressBar from '../ProgressBar'
 import { cancelButton } from '../../helpers/cancelButton'
+import Step2Body from './Step2Body'
 
 class Step2 extends React.Component {
 
   static propTypes = {
+    success: PropTypes.bool.isRequired,
+    errors: PropTypes.bool.isRequired,
+    warnings: PropTypes.bool.isRequired,
+    toggleSuccess: PropTypes.func.isRequired,
+    toggleErrors: PropTypes.func.isRequired,
+    toggleWarnings: PropTypes.func.isRequired,
+    generatePdfSuccess: PropTypes.arrayOf(PropTypes.object).isRequired,
+    generatePdfFailed: PropTypes.arrayOf(PropTypes.object).isRequired,
+    generatePdfWarning: PropTypes.arrayOf(PropTypes.object).isRequired,
     downloadPercentage: PropTypes.number.isRequired,
     downloadZipUrl: PropTypes.string.isRequired,
     toggleModal: PropTypes.func.isRequired,
@@ -22,11 +35,7 @@ class Step2 extends React.Component {
   }
 
   componentDidUpdate (prevProps) {
-    const { downloadPercentage, downloadZipUrl } = this.props
-
-    if (downloadPercentage === 100 && prevProps.downloadZipUrl !== downloadZipUrl) {
-      this.checkDownloadPercentage()
-    }
+    this.checkDownloadPercentage(prevProps)
   }
 
   componentWillUnmount () {
@@ -39,12 +48,30 @@ class Step2 extends React.Component {
     }
   }
 
-  checkDownloadPercentage = () => {
-    setTimeout(() => this.props.history.push('/step/3'), 1000)
+  checkDownloadPercentage = (prevProps) => {
+    const {
+      generatePdfSuccess,
+      downloadPercentage,
+      downloadZipUrl,
+      history
+    } = this.props
+
+    if (generatePdfSuccess.length > 0 && downloadPercentage === 100 && prevProps.downloadZipUrl !== downloadZipUrl) {
+      setTimeout(() => history.push('/step/3'), 1000)
+    }
   }
 
   render () {
     const {
+      success,
+      errors,
+      warnings,
+      toggleSuccess,
+      toggleErrors,
+      toggleWarnings,
+      generatePdfSuccess,
+      generatePdfFailed,
+      generatePdfWarning,
       downloadPercentage,
       toggleModal,
       generatePdfCancel,
@@ -55,13 +82,17 @@ class Step2 extends React.Component {
       <div ref={node => this.container = node} tabIndex='-1'>
         <ProgressBar step={2} />
 
-        <section id='gfpdf-step-2' className='gfpdf-step'>
-          <CircularProgressbar
-            value={downloadPercentage}
-            text={`${downloadPercentage}%`} />
-
-          <h2>Building your PDFs<LoadingDots /></h2>
-        </section>
+        <Step2Body
+          downloadPercentage={downloadPercentage}
+          success={success}
+          errors={errors}
+          warnings={warnings}
+          toggleSuccess={toggleSuccess}
+          toggleErrors={toggleErrors}
+          toggleWarnings={toggleWarnings}
+          generatePdfSuccess={generatePdfSuccess}
+          generatePdfFailed={generatePdfFailed}
+          generatePdfWarning={generatePdfWarning} />
 
         <footer>
           <button
@@ -82,11 +113,20 @@ class Step2 extends React.Component {
 }
 
 const mapStateToProps = state => ({
+  success: state.logs.success,
+  errors: state.logs.errors,
+  warnings: state.logs.warnings,
+  generatePdfSuccess: state.pdf.generatePdfSuccess,
+  generatePdfFailed: state.pdf.generatePdfFailed,
+  generatePdfWarning: state.pdf.generatePdfWarning,
   downloadPercentage: state.pdf.downloadPercentage,
   downloadZipUrl: state.pdf.downloadZipUrl
 })
 
 export default connect(mapStateToProps, {
   toggleModal,
-  generatePdfCancel
+  generatePdfCancel,
+  toggleSuccess,
+  toggleErrors,
+  toggleWarnings
 })(Step2)
