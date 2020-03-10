@@ -5,7 +5,7 @@ import {
   TOGGLE_PDF_STATUS,
   GENERATE_SESSION_ID,
   GENERATE_PDF_CANCEL,
-  GENERATE_PDF_TOGGLE_CANCEL,
+  GENERATE_PDF_CANCELLED,
   RESET_PDF_STATE
 } from '../actionTypes/pdf'
 
@@ -51,9 +51,9 @@ export const generatePdfCancel = () => {
   }
 }
 
-export const generatePdfToggleCancel = () => {
+export const generatePdfCancelled = () => {
   return {
-    type: GENERATE_PDF_TOGGLE_CANCEL
+    type: GENERATE_PDF_CANCELLED
   }
 }
 

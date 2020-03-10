@@ -8,7 +8,7 @@ import {
   GENERATE_PDF_SUCCESS,
   GENERATE_PDF_FAILED,
   GENERATE_PDF_CANCEL,
-  GENERATE_PDF_TOGGLE_CANCEL,
+  GENERATE_PDF_CANCELLED,
   GENERATE_PDF_COUNTER,
   GENERATE_DOWNLOAD_ZIP_URL,
   RESET_PDF_STATE
@@ -124,7 +124,7 @@ export default function (state = initialState, action) {
         generatePdfCancel: true
       }
 
-    case GENERATE_PDF_TOGGLE_CANCEL:
+    case GENERATE_PDF_CANCELLED:
       return {
         ...state,
         generatePdfSuccess: [],

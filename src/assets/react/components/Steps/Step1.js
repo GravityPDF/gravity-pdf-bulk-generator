@@ -5,7 +5,7 @@ import { updateDirectoryStructure } from '../../actions/tagPicker'
 import {
   generateSessionId,
   togglePdfStatus,
-  toggleModal,
+  toggleModal
 } from '../../actions/pdf'
 import Step1Body from './Step1Body'
 import ProgressBar from '../ProgressBar'
@@ -16,19 +16,12 @@ class Step1 extends React.Component {
 
   static propTypes = {
     directoryStructure: PropTypes.string.isRequired,
-    pdfList: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
-        templateSelected: PropTypes.string.isRequired,
-        active: PropTypes.bool.isRequired
-      })
-    ).isRequired,
+    pdfList:  PropTypes.array.isRequired,
     generateSessionId: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
     updateDirectoryStructure: PropTypes.func.isRequired,
-    tags: PropTypes.arrayOf(PropTypes.object).isRequired,
     togglePdfStatus: PropTypes.func.isRequired,
+    tags: PropTypes.arrayOf(PropTypes.object).isRequired,
     toggleModal: PropTypes.func.isRequired
   }
 

@@ -16,7 +16,7 @@ import {
   GENERATE_SESSION_ID_FAILED,
   GENERATE_PDF,
   GENERATE_PDF_SUCCESS,
-  GENERATE_PDF_TOGGLE_CANCEL,
+  GENERATE_PDF_CANCELLED,
   GENERATE_PDF_FAILED,
   GENERATE_PDF_COUNTER,
   GENERATE_DOWNLOAD_ZIP_URL
@@ -85,7 +85,7 @@ export function * requestGeneratePdf (listItem, retryInterval, delayInterval) {
     if (yield(cancelled())) {
       abortController.abort()
 
-      yield put({ type: GENERATE_PDF_TOGGLE_CANCEL })
+      yield put({ type: GENERATE_PDF_CANCELLED })
     } else {
       const selectedEntryIds = yield select(getStateSelectedEntryIds)
 
