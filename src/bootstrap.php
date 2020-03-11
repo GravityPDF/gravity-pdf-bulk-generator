@@ -94,6 +94,15 @@ class Bootstrap extends Helper_Abstract_Addon {
 		parent::init( $classes );
 	}
 
+	/**
+	 * Correctly initialise our local Filesystem with folder/file permissions matching WordPress functionality
+	 *
+	 * @param string $path
+	 *
+	 * @return FilesystemHelper
+	 *
+	 * @since 1.0
+	 */
 	protected function get_local_filesystem( $path ) {
 		$stat         = @stat( $path );
 		$folder_perms = $stat ? $stat['mode'] & 0007777 : 0777;
@@ -114,6 +123,15 @@ class Bootstrap extends Helper_Abstract_Addon {
 		);
 	}
 
+	/**
+	 * Automatically register our endpoint methods on the `rest_api_init` hook
+	 *
+	 * @param array $classes
+	 *
+	 * @return array
+	 *
+	 * @since 1.0
+	 */
 	protected function register_api_endpoints( $classes ) {
 		foreach ( $classes as $class ) {
 			if ( $class instanceof ApiEndpointRegistration ) {

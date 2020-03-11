@@ -20,6 +20,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Class Download
+ *
+ * @package GFPDF\Plugins\BulkGenerator\Api\Generator
+ */
 class Download implements ApiEndpointRegistration {
 
 	/**
@@ -36,11 +41,22 @@ class Download implements ApiEndpointRegistration {
 	 */
 	protected $filesystem;
 
+	/**
+	 * Download constructor.
+	 *
+	 * @param Config           $config
+	 * @param FilesystemHelper $filesystem
+	 */
 	public function __construct( Config $config, FilesystemHelper $filesystem ) {
 		$this->config     = $config;
 		$this->filesystem = $filesystem;
 	}
 
+	/**
+	 * Register the REST API Endpoints
+	 *
+	 * @since 1.0
+	 */
 	public function endpoint() {
 		register_rest_route( ApiNamespace::V1, '/generator/download/(?P<sessionId>.+?)', [
 			'methods'  => \WP_REST_Server::READABLE,
@@ -64,21 +80,40 @@ class Download implements ApiEndpointRegistration {
 		] );
 	}
 
-	/* @TODO add logging */
+	/**
+	 * Locate the zip file on the filesystem and stream to the browser
+	 *
+	 * @param \WP_REST_Request $request
+	 *
+	 * @return void|\WP_Error
+	 *
+	 * @since 1.0
+	 */
 	public function response( \WP_REST_Request $request ) {
+		/* @TODO add logging */
 		try {
 			$this->config->set_session_id( $request->get_param( 'sessionId' ) );
-			$this->filesystem->deleteDir( $this->filesystem->get_tmp_basepath() );
 
+			/* Verify the zip file still exists, otherwise return error */
 			$zip_path = $this->filesystem->get_zip_path();
 			if ( ! $this->filesystem->has( $zip_path ) ) {
 				return new \WP_Error( 'zip_not_found', [ 'status' => 404 ] );
 			}
 
+			/* Send zip file to browser */
 			header( 'Content-Type: application/zip' );
 			header( 'Content-Length: ' . $this->filesystem->getSize( $zip_path ) );
 			header( 'Content-Disposition: attachment; filename="' . wp_basename( $zip_path ) . '"' );
 			readfile( $this->filesystem->get_zip_path( FilesystemHelper::ADD_PREFIX ) );
+
+			/*
+			 * Cleanup the session tmp directory.
+			 *
+			 * We left this directory intact until now to ensure naming conflicts could be resolved with as little
+			 * overhead as possible. Now we are finished with it, we'll clean it all up.
+			 */
+			$this->filesystem->deleteDir( $this->filesystem->get_tmp_basepath() );
+
 		} catch( \Exception $e ) {
 			return new \WP_Error( $e->getMessage(), [ 'status' => 500 ] );
 		}
@@ -86,6 +121,11 @@ class Download implements ApiEndpointRegistration {
 		$this->end();
 	}
 
+	/**
+	 * @since 1.0
+	 *
+	 * @Internal Moved to own method so we can stub during unit testing
+	 */
 	protected function end() {
 		exit;
 	}

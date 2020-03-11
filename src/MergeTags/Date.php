@@ -21,8 +21,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 abstract class Date {
 
+	/**
+	 * @var string
+	 */
 	protected $name;
 
+	/**
+	 * @since 1.0
+	 */
 	public function init() {
 		add_filter( 'gform_replace_merge_tags', [ $this, 'process' ], 10, 3 );
 	}
@@ -30,11 +36,13 @@ abstract class Date {
 	/**
 	 * Search for the matching merge tag and then replace
 	 *
-	 * @param string $text
-	 * @param array  $form
-	 * @param array  $entry
+	 * @param string $text  String to replace merge tags on
+	 * @param array  $form  Gravity Forms object
+	 * @param array  $entry Gravity Forms Entry object
 	 *
 	 * @return string
+	 *
+	 * @since 1.0
 	 */
 	public function process( $text, $form = [], $entry = [] ) {
 
@@ -47,6 +55,7 @@ abstract class Date {
 
 		$date_created = isset( $entry[ $this->name ] ) ? $entry[ $this->name ] : '';
 
+		/* Loop over all the mergetag matches and replace with appropriate date */
 		foreach ( $matches as $match ) {
 			$full_tag = $match[0];
 			$property = $match[1];
@@ -66,10 +75,12 @@ abstract class Date {
 	 * @param string $property     Any modifiers for the merge tag (`human`, `format:m/d/Y`)
 	 *
 	 * @return int|string If timestamp requested, timestamp int. Otherwise, string output.
+	 *
+	 * @since 1.0
 	 */
 	public function format_date( $date_created = '', $property = '' ) {
 
-		// Expand all modifiers, skipping escaped colons. str_replace worked better than preg_split( "/(?<!\\):/" )
+		/* Expand all modifiers, skipping escaped colons. str_replace worked better than preg_split( "/(?<!\\):/" ) */
 		$exploded = explode( ':', str_replace( '\:', '|COLON|', $property ) );
 
 		$atts = [
@@ -81,9 +92,7 @@ abstract class Date {
 			'time'      => in_array( 'time', $exploded ),  // {date_created:time}
 		];
 
-		$formatted_date = $this->get_formatted_date( $date_created, $atts );
-
-		return $formatted_date;
+		return $this->get_formatted_date( $date_created, $atts );
 	}
 
 	/**
@@ -99,6 +108,8 @@ abstract class Date {
 	 *                                  - `format` Define your own date format, or `diff` format
 	 *
 	 * @return int|string Formatted date based on the original date
+	 *
+	 * @since 1.0
 	 */
 	public function get_formatted_date( $date_string = '', $args = [] ) {
 
@@ -157,8 +168,8 @@ abstract class Date {
 	 * @param string $backup   The backup value to use, if not found
 	 *
 	 * @return string If format is found, the passed format. Otherwise, the backup.
-	 * @since 1.16
 	 *
+	 * @since 1.0
 	 */
 	protected function get_format_from_modifiers( $exploded, $backup = '' ) {
 		$format_key_index = array_search( 'format', $exploded );

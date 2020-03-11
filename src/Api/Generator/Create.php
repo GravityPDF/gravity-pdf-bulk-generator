@@ -2,6 +2,7 @@
 
 namespace GFPDF\Plugins\BulkGenerator\Api\Generator;
 
+use GFPDF\Helper\Helper_Trait_Logger;
 use GFPDF\Plugins\BulkGenerator\Api\ApiEndpointRegistration;
 use GFPDF\Plugins\BulkGenerator\Api\ApiNamespace;
 use GFPDF\Plugins\BulkGenerator\Exceptions\ConfigNotLoaded;
@@ -27,7 +28,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Class Create
+ *
+ * @package GFPDF\Plugins\BulkGenerator\Api\Generator
+ */
 class Create implements ApiEndpointRegistration {
+
+	use Helper_Trait_Logger;
 
 	/**
 	 * @var Config
@@ -93,7 +101,13 @@ class Create implements ApiEndpointRegistration {
 		] );
 	}
 
-	/* @TODO add logging */
+	/**
+	 * Generate the requested PDF and move to the appropriate Bulk Generator folder structure
+	 *
+	 * @param \WP_REST_Request $request
+	 *
+	 * @return void|\WP_Error
+	 */
 	public function response( \WP_REST_Request $request ) {
 		$gform      = \GPDFAPI::get_form_class();
 		$session_id = $request->get_param( 'sessionId' );
@@ -106,25 +120,31 @@ class Create implements ApiEndpointRegistration {
 		}
 
 		try {
+			/* Setup the current session ID and load the config file settings from filesystem */
 			$settings = $this->config->set_session_id( $session_id )
 			                         ->fetch()
 			                         ->get_all_settings();
 
+			/* Generate our PDF if we can get the settings, verify its active, and conditional logic passes */
 			$pdf = new Pdf( $entry['form_id'], $request->get_param( 'pdfId' ) );
 			$pdf->fetch()
 			    ->evaluate_active()
 			    ->evaluate_conditional_logic( $entry )
 			    ->generate( $entry['id'] );
 
+			/* Create the Bulk PDF folder structure in the filesystem */
 			$tmp_pdf_path = $this->filesystem->get_tmp_pdf_path( $settings['path'], $entry );
 			if ( ! $this->filesystem->createDir( $tmp_pdf_path ) ) {
 				throw new FilesystemError();
 			}
 
+			/* Get the PDF filename (ensuring uniqueness) and save to the Bulk Generator filesystem location */
 			$tmp_pdf_filename = $this->get_unique_filename( $this->filesystem->get_filesystem(), $tmp_pdf_path, wp_basename( $pdf->get_path() ) );
 			if ( ! $this->filesystem->writeStream( "$tmp_pdf_path/$tmp_pdf_filename", fopen( $pdf->get_path(), 'r' ) ) ) {
 				throw new FilesystemError();
 			}
+
+			/* @TODO delete initial PDF */
 		} catch ( FilesystemError $e ) {
 			return new \WP_Error( 'filesystem_error', '', [ 'status' => 500 ] );
 		} catch ( ConfigNotLoaded $e ) {
@@ -143,7 +163,7 @@ class Create implements ApiEndpointRegistration {
 	}
 
 	/**
-	 * Check if a file already exists and then suffix the name with an incrementing number until it is unique
+	 * Check if a file already exists and then suffix the PDF name with an incrementing number until it is unique
 	 *
 	 * @param Filesystem $filesystem
 	 * @param string     $basepath

@@ -17,7 +17,13 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Class DateUpdated
  *
  * @package GFPDF\Plugins\BulkGenerator\MergeTags
+ *
+ * @since 1.0
  */
 class DateUpdated extends Date {
+
+	/**
+	 * @var string
+	 */
 	protected $name = 'date_updated';
 }

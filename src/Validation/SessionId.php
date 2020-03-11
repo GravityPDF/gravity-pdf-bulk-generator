@@ -46,7 +46,6 @@ class SessionId {
 	 * @since 1.0
 	 */
 	public function __invoke( $session_id ) {
-
 		if ( preg_match( '/^[a-zA-Z0-9]{32}$/', $session_id ) !== 1 ) {
 			return false;
 		}
