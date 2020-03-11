@@ -67,17 +67,22 @@ class Download implements ApiEndpointRegistration {
 
 	/* @TODO add logging */
 	public function response( \WP_REST_Request $request ) {
-		$this->config->set_session_id( $request->get_param( 'sessionId' ) );
+		try {
+			$this->config->set_session_id( $request->get_param( 'sessionId' ) );
+			$this->filesystem->deleteDir( $this->filesystem->get_tmp_basepath() );
 
-		$zip_path = $this->filesystem->get_zip_path();
-		if ( ! $this->filesystem->has( $zip_path ) ) {
-			return new \WP_Error( 'zip_not_found', [ 'status' => 404 ] );
+			$zip_path = $this->filesystem->get_zip_path();
+			if ( ! $this->filesystem->has( $zip_path ) ) {
+				return new \WP_Error( 'zip_not_found', [ 'status' => 404 ] );
+			}
+
+			header( 'Content-Type: application/zip' );
+			header( 'Content-Length: ' . $this->filesystem->getSize( $zip_path ) );
+			header( 'Content-Disposition: attachment; filename="' . wp_basename( $zip_path ) . '"' );
+			readfile( $this->filesystem->get_zip_path( FilesystemHelper::ADD_PREFIX ) );
+		} catch( \Exception $e ) {
+			return new \WP_Error( $e->getMessage(), [ 'status' => 500 ] );
 		}
-
-		header( 'Content-Type: application/zip' );
-		header( 'Content-Length: ' . $this->filesystem->getSize( $zip_path ) );
-		header( 'Content-Disposition: attachment; filename="' . wp_basename( $zip_path ) . '"' );
-		readfile( $this->filesystem->get_zip_path( FilesystemHelper::ADD_PREFIX ) );
 
 		$this->end();
 	}

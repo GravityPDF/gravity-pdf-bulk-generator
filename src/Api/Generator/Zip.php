@@ -71,26 +71,29 @@ class Zip implements ApiEndpointRegistration {
 		$session_id = $request->get_param( 'sessionId' );
 		$this->config->set_session_id( $session_id );
 
-		$tmp_basepath = $this->filesystem->get_tmp_basepath();
-
 		try {
 			$zip = new Filesystem(
 				new ZipArchiveAdapter( $this->filesystem->get_zip_path( FilesystemHelper::ADD_PREFIX ) )
 			);
 
-			$contents = $this->filesystem->listContents( $tmp_basepath, true );
+			$tmp_basepath = $this->filesystem->get_tmp_basepath();
+			$contents     = $this->filesystem->listContents( $tmp_basepath, true );
+
 			foreach ( $contents as $info ) {
-				if ( $info['extension'] !== 'pdf' ) {
+				if ( ! isset( $info['extension'] ) || $info['extension'] !== 'pdf' ) {
 					continue;
 				}
 
-				$zip_file_path = preg_replace( '/^' . preg_quote( $tmp_basepath, '/' ) . '/', '', $info['path'] ); /* remove tmp basedir */
-				$zip->put( $zip_file_path, $this->filesystem->read( $info['path'] ) );
+				$basepath_pattern = '/^' . preg_quote( $tmp_basepath, '/' ) . '/';
+				$zip_file_path    = preg_replace( $basepath_pattern, '', $info['path'] ); /* remove tmp basedir */
+
+				/* If the zip doesn't already contain the file, include it in the archive */
+				if ( ! $zip->has( $zip_file_path ) ) {
+					$zip->put( $zip_file_path, $this->filesystem->read( $info['path'] ) );
+				}
 			}
 
 			$zip = null;
-
-			$this->filesystem->deleteDir( $tmp_basepath );
 
 			return [
 				'downloadUrl' => $this->generate_signed_download_url( $session_id ),

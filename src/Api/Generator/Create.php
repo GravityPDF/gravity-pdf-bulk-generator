@@ -13,6 +13,7 @@ use GFPDF\Plugins\BulkGenerator\Model\Config;
 use GFPDF\Plugins\BulkGenerator\Model\Pdf;
 use GFPDF\Plugins\BulkGenerator\Utility\FilesystemHelper;
 use GFPDF\Plugins\BulkGenerator\Validation\SessionId;
+use League\Flysystem\Filesystem;
 
 /**
  * @package     Gravity PDF Bulk Generator
@@ -108,11 +109,10 @@ class Create implements ApiEndpointRegistration {
 				/* @todo throw exception */
 			}
 
-			$tmp_pdf_full_path = $tmp_pdf_path . wp_basename( $pdf->get_path() );
-			if ( ! $this->filesystem->writeStream( $tmp_pdf_full_path, fopen( $pdf->get_path(), 'r' ) ) ) {
+			$tmp_pdf_filename = $this->get_unique_filename( $this->filesystem->get_filesystem(), $tmp_pdf_path, wp_basename( $pdf->get_path() ) );
+			if ( ! $this->filesystem->writeStream( "$tmp_pdf_path/$tmp_pdf_filename", fopen( $pdf->get_path(), 'r' ) ) ) {
 				/* @todo throw exception */
 			}
-
 		} catch ( ConfigNotLoaded $e ) {
 			return new \WP_Error( 'session_config_not_loaded', '', [ 'status' => 500 ] );
 		} catch ( InvalidPdfId $e ) {
@@ -126,5 +126,28 @@ class Create implements ApiEndpointRegistration {
 		} catch ( \Exception $e ) {
 			return new \WP_Error( 'unknown_error', '', [ 'status' => 500 ] );
 		}
+	}
+
+	/**
+	 * Check if a file already exists and then suffix the name with an incrementing number until it is unique
+	 *
+	 * @param Filesystem $filesystem
+	 * @param string     $basepath
+	 * @param string     $filename
+	 *
+	 * @return string The unique filename
+	 *
+	 * @since 1.0
+	 */
+	protected function get_unique_filename( Filesystem $filesystem, $basepath, $filename ) {
+		$i = 1;
+		$unique_filename = $filename;
+
+		while ( $filesystem->has( "$basepath/$unique_filename" ) ) {
+			$unique_filename = substr( $filename, 0, -4 ) . $i . '.pdf';
+			$i++;
+		}
+
+		return $unique_filename;
 	}
 }
