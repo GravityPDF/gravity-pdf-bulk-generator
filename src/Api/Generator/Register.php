@@ -61,14 +61,14 @@ class Register implements ApiEndpointRegistration {
 				'path' => [
 					'required'          => true,
 					'type'              => 'string',
-					'description'       => 'The path each generated PDF should be saved into in the zip file. Merge tags are supported.',
+					'description'       => __( 'The path each generated PDF should be saved into in the zip file. Merge tags are supported.', 'gravity-pdf-bulk-generator' ),
 					'validate_callback' => new ZipPath(),
 				],
 
 				'concurrency' => [
 					'required'    => true,
 					'type'        => 'integer',
-					'description' => 'The number of concurrent PDFs that should be generated simultaneously.',
+					'description' => __( 'The number of concurrent PDFs that should be generated simultaneously.', 'gravity-pdf-bulk-generator' ),
 				],
 			],
 		] );
@@ -82,7 +82,6 @@ class Register implements ApiEndpointRegistration {
 			$session_id = $this->config->generate_session_id();
 		} while ( $this->filesystem->has( $session_id ) );
 
-		/* @TODO - check folder permissions */
 		if ( ! $this->filesystem->createDir( $session_id ) ) {
 			return new \WP_Error( 'error_creating_path', [ 'status' => 500 ] );
 		}

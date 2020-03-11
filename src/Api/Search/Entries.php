@@ -33,43 +33,43 @@ class Entries implements ApiEndpointRegistration {
 				'form_id' => [
 					'required'    => true,
 					'type'        => 'integer',
-					'description' => 'The Gravity Forms ID to limit our search to',
+					'description' => __( 'The Gravity Forms ID to limit our search to', 'gravity-pdf-bulk-generator' ),
 				],
 
 				's' => [
 					'required'    => false,
 					'type'        => 'string',
-					'description' => 'A search parameter',
+					'description' => __( 'A search parameter', 'gravity-pdf-bulk-generator' ),
 				],
 
 				'field_id' => [
 					'required'    => false,
 					'type'        => 'string',
-					'description' => 'What the search parameter will focus on',
+					'description' => __( 'What the search parameter will focus on', 'gravity-pdf-bulk-generator' ),
 				],
 
 				'operator' => [
 					'required'    => false,
 					'type'        => 'string',
-					'description' => 'The search parameter comparison type',
+					'description' => __( 'The search parameter comparison type', 'gravity-pdf-bulk-generator' ),
 				],
 
 				'order' => [
 					'required'    => false,
 					'type'        => 'string',
-					'description' => 'Whether ASC or DESC order',
+					'description' => __( 'Whether ASC or DESC order', 'gravity-pdf-bulk-generator' ),
 				],
 
 				'orderby' => [
 					'required'    => false,
 					'type'        => 'string',
-					'description' => 'The field ID to order against',
+					'description' => __( 'The field ID to order against', 'gravity-pdf-bulk-generator' ),
 				],
 
 				'filter' => [
 					'required'    => false,
 					'type'        => 'string',
-					'description' => 'A filter paramter',
+					'description' => __( 'A filter parameter', 'gravity-pdf-bulk-generator' ),
 				],
 			],
 		] );
@@ -79,39 +79,43 @@ class Entries implements ApiEndpointRegistration {
 
 		/*
 		 * To prevent reinventing the wheel, we will tap into some required search argument prep code.
-		 * This will require overriding superglobals to mimic the Entry List page in Gravity Forms,
+		 * This will require overriding super globals to mimic the Entry List page in Gravity Forms,
 		 * and use the Reflection API to set and change a few items. Because of the complexity of the
 		 * search / filter / order code, this "raw" access method is worth it.
 		 */
 		require_once( \GFCommon::get_base_path() . '/entry_list.php' );
 
-		/* Mimick an Entry List request */
-		$_GET = $request->get_params();
+		try {
+			/* Mimics an Entry List request */
+			$_GET = $request->get_params();
 
-		/* Setup the Entry List Table object that will do the heavy lifting for us */
-		$entry_list_reflection = new \ReflectionClass( '\GF_Entry_List_Table' );
-		$entry_list            = $entry_list_reflection->newInstanceWithoutConstructor();
-		$entry_list->filter    = $_GET['filter'];
+			/* Setup the Entry List Table object that will do the heavy lifting for us */
+			$entry_list_reflection = new \ReflectionClass( '\GF_Entry_List_Table' );
+			$entry_list            = $entry_list_reflection->newInstanceWithoutConstructor();
+			$entry_list->filter    = $_GET['filter'];
 
-		$form_property_reflection = $entry_list_reflection->getProperty( '_form' );
-		$form_property_reflection->setAccessible( true );
-		$form_property_reflection->setValue( $entry_list, \GFAPI::get_form( $_GET['form_id'] ) );
+			$form_property_reflection = $entry_list_reflection->getProperty( '_form' );
+			$form_property_reflection->setAccessible( true );
+			$form_property_reflection->setValue( $entry_list, \GFAPI::get_form( $_GET['form_id'] ) );
 
-		/* Get the search query criteria */
-		$search_criteria = $entry_list->get_search_criteria();
-		$paging          = [ 'offset' => 0, 'page_size' => true ];
-		$sorting         = $this->get_sorting_query( $entry_list );
+			/* Get the search query criteria */
+			$search_criteria = $entry_list->get_search_criteria();
+			$paging          = [ 'offset' => 0, 'page_size' => true ];
+			$sorting         = $this->get_sorting_query( $entry_list );
 
-		/* Do the query and return just the Entry IDs (no data) */
-		$q = new \GF_Query( $_GET['form_id'], $search_criteria, $sorting, $paging );
+			/* Do the query and return just the Entry IDs (no data) */
+			$q = new \GF_Query( $_GET['form_id'], $search_criteria, $sorting, $paging );
 
-		$gf_query_reflection     = new \ReflectionObject( $q );
-		$query_method_reflection = $gf_query_reflection->getMethod( 'query' );
-		$query_method_reflection->setAccessible( true );
+			$gf_query_reflection     = new \ReflectionObject( $q );
+			$query_method_reflection = $gf_query_reflection->getMethod( 'query' );
+			$query_method_reflection->setAccessible( true );
 
-		$entry_ids = $query_method_reflection->invoke( $q );
+			$entry_ids = $query_method_reflection->invoke( $q );
 
-		return array_merge(...$entry_ids);
+			return array_merge( ...$entry_ids );
+		} catch( \Exception $e ) {
+			return new \WP_Error( $e->getMessage(), '', [ 'status' => 500 ] );
+		}
 	}
 
 	protected function get_sorting_query( $entry_list ) {

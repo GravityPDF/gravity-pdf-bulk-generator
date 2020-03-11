@@ -57,7 +57,7 @@ class Download implements ApiEndpointRegistration {
 				'sessionId' => [
 					'required'          => true,
 					'type'              => 'string',
-					'description'       => 'An alphanumeric active session ID returned via the ' . ApiNamespace::V1 . '/generator/register/ endpoint.',
+					'description'       => sprintf( __( 'An alphanumeric active session ID returned via the %1$s/generator/register/ endpoint.', 'gravity-pdf-bulk-generator' ), ApiNamespace::V1 ),
 					'validate_callback' => new SessionId( $this->filesystem ),
 				],
 			],

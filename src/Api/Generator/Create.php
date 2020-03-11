@@ -43,11 +43,22 @@ class Create implements ApiEndpointRegistration {
 	 */
 	protected $filesystem;
 
+	/**
+	 * Create constructor.
+	 *
+	 * @param Config           $config
+	 * @param FilesystemHelper $filesystem
+	 */
 	public function __construct( Config $config, FilesystemHelper $filesystem ) {
 		$this->config     = $config;
 		$this->filesystem = $filesystem;
 	}
 
+	/**
+	 * Register the REST API Endpoints
+	 *
+	 * @since 1.0
+	 */
 	public function endpoint() {
 		register_rest_route( ApiNamespace::V1, '/generator/create/', [
 			'methods'  => \WP_REST_Server::CREATABLE,
@@ -63,20 +74,20 @@ class Create implements ApiEndpointRegistration {
 				'sessionId' => [
 					'required'          => true,
 					'type'              => 'string',
-					'description'       => 'An alphanumeric active session ID returned via the ' . ApiNamespace::V1 . '/generator/register/ endpoint.',
+					'description'       => sprintf( __( 'An alphanumeric active session ID returned via the %1$s/generator/register/ endpoint.', 'gravity-pdf-bulk-generator' ), ApiNamespace::V1 ),
 					'validate_callback' => new SessionId( $this->filesystem ),
 				],
 
 				'entryId' => [
 					'required'    => true,
 					'type'        => 'integer',
-					'description' => 'The Gravity Forms Entry ID',
+					'description' => __( 'The Gravity Forms Entry ID', 'gravity-pdf-bulk-generator' ),
 				],
 
 				'pdfId' => [
 					'required'    => true,
 					'type'        => 'string',
-					'description' => 'An alphanumeric ID used to represent the Gravity Forms PDF Settings ID',
+					'description' => __( 'An alphanumeric ID used to represent the Gravity Forms PDF Settings ID', 'gravity-pdf-bulk-generator' ),
 				],
 			],
 		] );
@@ -114,7 +125,7 @@ class Create implements ApiEndpointRegistration {
 			if ( ! $this->filesystem->writeStream( "$tmp_pdf_path/$tmp_pdf_filename", fopen( $pdf->get_path(), 'r' ) ) ) {
 				throw new FilesystemError();
 			}
-		} catch( FilesystemError $e ) {
+		} catch ( FilesystemError $e ) {
 			return new \WP_Error( 'filesystem_error', '', [ 'status' => 500 ] );
 		} catch ( ConfigNotLoaded $e ) {
 			return new \WP_Error( 'session_config_not_loaded', '', [ 'status' => 500 ] );
@@ -143,9 +154,9 @@ class Create implements ApiEndpointRegistration {
 	 * @since 1.0
 	 */
 	protected function get_unique_filename( Filesystem $filesystem, $basepath, $filename ) {
-		$i = 1;
 		$unique_filename = $filename;
 
+		$i = 1;
 		while ( $filesystem->has( "$basepath/$unique_filename" ) ) {
 			$unique_filename = substr( $filename, 0, -4 ) . $i . '.pdf';
 			$i++;
