@@ -109,6 +109,7 @@ class Bootstrap extends Helper_Abstract_Addon {
 		return $classes;
 	}
 
+	/* @TODO */
 	public function move_to_class() {
 		if ( \GFForms::get_page() === 'entry_list' ) {
 
