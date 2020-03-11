@@ -22,6 +22,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Class Zip
+ *
+ * @package GFPDF\Plugins\BulkGenerator\Api\Generator
+ */
 class Zip implements ApiEndpointRegistration {
 
 	/**
@@ -43,6 +48,11 @@ class Zip implements ApiEndpointRegistration {
 		$this->filesystem = $filesystem;
 	}
 
+	/**
+	 * Register the REST API Endpoints
+	 *
+	 * @since 1.0
+	 */
 	public function endpoint() {
 		register_rest_route( ApiNamespace::V1, '/generator/zip/(?P<sessionId>.+?)', [
 			'methods'  => \WP_REST_Server::CREATABLE,
@@ -65,12 +75,23 @@ class Zip implements ApiEndpointRegistration {
 		] );
 	}
 
-	/* @TODO add logging */
+	/**
+	 * Move all unique PDFs to a zip file for the current session
+	 *
+	 * @param \WP_REST_Request $request
+	 *
+	 * @return array|\WP_Error
+	 *
+	 * @since 1.0
+	 */
 	public function response( \WP_REST_Request $request ) {
+		/* @TODO add logging */
+
 		$session_id = $request->get_param( 'sessionId' );
 		$this->config->set_session_id( $session_id );
 
 		try {
+			/* Create/load our Zip file */
 			$zip = new Filesystem(
 				new ZipArchiveAdapter( $this->filesystem->get_zip_path( FilesystemHelper::ADD_PREFIX ) )
 			);
@@ -78,6 +99,7 @@ class Zip implements ApiEndpointRegistration {
 			$tmp_basepath = $this->filesystem->get_tmp_basepath();
 			$contents     = $this->filesystem->listContents( $tmp_basepath, true );
 
+			/* Loop over all the files in the tmp Session directory and move the unique PDFs to the zip */
 			foreach ( $contents as $info ) {
 				if ( ! isset( $info['extension'] ) || $info['extension'] !== 'pdf' ) {
 					continue;
@@ -92,6 +114,7 @@ class Zip implements ApiEndpointRegistration {
 				}
 			}
 
+			/* Force the zip file to close (a PHP thing) */
 			$zip = null;
 
 			return [
@@ -103,12 +126,14 @@ class Zip implements ApiEndpointRegistration {
 	}
 
 	/**
-	 * Create a signed download URL
+	 * Create a signed download URL with a default timeout of 12 hours
 	 *
 	 * @param $session_id
 	 *
 	 * @return string
 	 * @throws \Spatie\UrlSigner\Exceptions\InvalidSignatureKey
+	 *
+	 * @internal The zip file is automatically deleted after it is 24 hours old
 	 *
 	 * @since 1.0
 	 */
@@ -119,9 +144,7 @@ class Zip implements ApiEndpointRegistration {
 		/**
 		 * Control the signed URL expiry period
 		 *
-		 * @param string
-		 *
-		 * @internal The zip file is automatically deleted after it is 24 hours old
+		 * @param string an English textual datetime description as described in https://www.php.net/manual/en/datetime.formats.php
 		 */
 		$expiry = apply_filters( 'gfpdf_bg_download_url_timeout', '12 hours' );
 

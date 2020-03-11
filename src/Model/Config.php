@@ -183,6 +183,8 @@ class Config {
 	 * @param int $length
 	 *
 	 * @return string
+	 *
+	 * @since 1.0
 	 */
 	public function generate_session_id( $length = 16 ) {
 		try {

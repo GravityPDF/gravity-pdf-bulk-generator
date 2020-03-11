@@ -13,11 +13,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Class ZipPath
+ *
+ * @package GFPDF\Plugins\BulkGenerator\Validation
+ */
 class ZipPath {
 
-	/* @TODO - do very thorough unit testing on this */
-	/* @TODO add logging */
+	/**
+	 * @param $zip_path
+	 *
+	 * @return bool
+	 *
+	 * @since 1.0
+	 */
 	public function __invoke( $zip_path ) {
+		/* @TODO - do very thorough unit testing on this */
+		/* @TODO add logging */
+
 		/* Check for backslashes and fail */
 		if ( strpos( $zip_path, '\\' ) !== false ) {
 			return false;

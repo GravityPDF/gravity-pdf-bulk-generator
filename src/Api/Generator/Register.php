@@ -20,6 +20,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Class Register
+ *
+ * @package GFPDF\Plugins\BulkGenerator\Api\Generator
+ */
 class Register implements ApiEndpointRegistration {
 
 	/**
@@ -46,6 +51,11 @@ class Register implements ApiEndpointRegistration {
 		$this->filesystem = $filesystem;
 	}
 
+	/**
+	 * Register the REST API Endpoints
+	 *
+	 * @since 1.0
+	 */
 	public function endpoint() {
 		register_rest_route( ApiNamespace::V1, '/generator/register', [
 			'methods'  => \WP_REST_Server::CREATABLE,
@@ -74,14 +84,25 @@ class Register implements ApiEndpointRegistration {
 		] );
 	}
 
-	/* @TODO add logging */
+	/**
+	 * Generate a new session ID and create appropriate folder structures on disk
+	 *
+	 * @param \WP_REST_Request $request
+	 *
+	 * @return array|\WP_Error
+	 *
+	 * @since 1.0
+	 */
 	public function response( \WP_REST_Request $request ) {
+
+		/* @TODO add logging */
 
 		/* Get a unique Session ID not currently in use */
 		do {
 			$session_id = $this->config->generate_session_id();
 		} while ( $this->filesystem->has( $session_id ) );
 
+		/* Create tmp Session directory */
 		if ( ! $this->filesystem->createDir( $session_id ) ) {
 			return new \WP_Error( 'error_creating_path', [ 'status' => 500 ] );
 		}

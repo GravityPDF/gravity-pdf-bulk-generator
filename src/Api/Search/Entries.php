@@ -16,8 +16,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Class Entries
+ *
+ * @package GFPDF\Plugins\BulkGenerator\Api\Search
+ */
 class Entries implements ApiEndpointRegistration {
 
+	/**
+	 * Register the REST API Endpoints
+	 *
+	 * @since 1.0
+	 */
 	public function endpoint() {
 		register_rest_route( ApiNamespace::V1, '/search/(?P<form_id>[0-9]+)/entries', [
 			'methods'  => \WP_REST_Server::CREATABLE,
@@ -75,6 +85,15 @@ class Entries implements ApiEndpointRegistration {
 		] );
 	}
 
+	/**
+	 * Get all entry IDs that match the search params included in the request
+	 *
+	 * @param \WP_REST_Request $request
+	 *
+	 * @return array|\WP_Error
+	 *
+	 * @since 1.0
+	 */
 	public function response( \WP_REST_Request $request ) {
 
 		/*
@@ -118,6 +137,15 @@ class Entries implements ApiEndpointRegistration {
 		}
 	}
 
+	/**
+	 * Get the correct sort configuration settings
+	 *
+	 * @param \GF_Entry_List_Table $entry_list
+	 *
+	 * @return array Return configuration based on $entry_list and the superglobals
+	 *
+	 * @since 1.0
+	 */
 	protected function get_sorting_query( $entry_list ) {
 		$sort_field = $entry_list->get_orderby();
 		if ( empty( $sort_field ) ) {

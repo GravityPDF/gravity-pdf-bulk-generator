@@ -48,6 +48,11 @@ class FilesystemHelper {
 	 */
 	protected $tmp_dirname = 'tmp/';
 
+	/**
+	 * FilesystemHelper constructor.
+	 *
+	 * @param Filesystem $filesystem
+	 */
 	public function __construct( Filesystem $filesystem ) {
 		$this->filesystem = $filesystem;
 	}
@@ -79,26 +84,55 @@ class FilesystemHelper {
 		return $this->filesystem;
 	}
 
-
+	/**
+	 * Return the full path to the config file
+	 *
+	 * @param int $prefix Configuration option to determine if the Filesystem path prefix should be returned
+	 *
+	 * @return string
+	 *
+	 * @since 1.0
+	 */
 	public function get_config_path( $prefix = self::NO_PREFIX ) {
 		return $this->prefix( $prefix ) . $this->config_filename;
 	}
 
-
+	/**
+	 * Return the full path to the zip file
+	 *
+	 * @param int $prefix
+	 *
+	 * @return string Configuration option to determine if the Filesystem path prefix should be returned
+	 *
+	 * @since 1.0
+	 */
 	public function get_zip_path( $prefix = self::NO_PREFIX ) {
 		return $this->prefix( $prefix ) . $this->zip_filename;
 	}
 
-
+	/**
+	 * Return the full path to the tmp directory
+	 *
+	 * @param int $prefix Configuration option to determine if the Filesystem path prefix should be returned
+	 *
+	 * @return string
+	 *
+	 * @since 1.0
+	 */
 	public function get_tmp_basepath( $prefix = self::NO_PREFIX ) {
 		return $this->prefix( $prefix ) . $this->tmp_dirname;
 	}
 
 	/**
-	 * @param string $user_path
-	 * @param array  $entry
+	 * Return the full path to the PDF file in the tmp directory
+	 *
+	 * @param string $user_path The user-defined path the PDFs should be saved into in the zip file
+	 * @param array  $entry     The Gravity Forms Entry array
+	 * @param int    $prefix    Configuration option to determine if the Filesystem path prefix should be returned
 	 *
 	 * @return string
+	 *
+	 * @since 1.0
 	 */
 	public function get_tmp_pdf_path( $user_path, $entry, $prefix = self::NO_PREFIX ) {
 		return $this->get_tmp_basepath( $prefix ) . $this->process_user_tags_in_path( $user_path, $entry );
@@ -107,12 +141,14 @@ class FilesystemHelper {
 	/**
 	 * Convert merge tags in user path and sanitize
 	 *
-	 * @param string $user_path
-	 * @param array  $entry
+	 * @param string $user_path The user-defined path the PDFs should be saved into in the zip file
+	 * @param array  $entry     The Gravity Forms Entry array
 	 *
 	 * @return string
 	 *
-	 * @TODO logging
+	 * @since 1.0
+	 *
+	 * @TODO  logging
 	 */
 	public function process_user_tags_in_path( $user_path, $entry ) {
 		$misc  = \GPDFAPI::get_misc_class();
@@ -133,9 +169,11 @@ class FilesystemHelper {
 	/**
 	 * Determine if the path prefix should be returned
 	 *
-	 * @param int $prefix
+	 * @param int $prefix Configuration option to determine if the Filesystem path prefix should be returned
 	 *
 	 * @return string
+	 *
+	 * @since 1.0
 	 */
 	protected function prefix( $prefix ) {
 		switch ( $prefix ) {

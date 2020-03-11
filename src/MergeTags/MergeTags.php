@@ -17,6 +17,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Class MergeTags
  *
  * @package GFPDF\Plugins\BulkGenerator\MergeTags
+ *
+ * @since 1.0
  */
 class MergeTags {
 	const REGEX = '/{%1$s:?(.*?)(?:\s)?}/ism';
