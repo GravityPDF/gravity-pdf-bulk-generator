@@ -44,7 +44,6 @@ class Zip implements ApiEndpointRegistration {
 	}
 
 	public function endpoint() {
-		/* @TODO - regex for session ID abstract */
 		register_rest_route( ApiNamespace::V1, '/generator/zip/(?P<sessionId>.+?)', [
 			'methods'  => \WP_REST_Server::CREATABLE,
 			'callback' => [ $this, 'response' ],

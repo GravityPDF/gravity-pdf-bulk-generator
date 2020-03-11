@@ -17,7 +17,6 @@ class ZipPath {
 
 	/* @TODO - do very thorough unit testing on this */
 	/* @TODO add logging */
-	/* @TODO DEBBIE to AUTO STRIP `/` from inside merge tags on front-end */
 	public function __invoke( $zip_path ) {
 		/* Check for backslashes and fail */
 		if ( strpos( $zip_path, '\\' ) !== false ) {

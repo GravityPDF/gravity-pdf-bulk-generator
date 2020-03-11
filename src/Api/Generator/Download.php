@@ -42,7 +42,6 @@ class Download implements ApiEndpointRegistration {
 	}
 
 	public function endpoint() {
-		/* @TODO - regex for session ID abstract */
 		register_rest_route( ApiNamespace::V1, '/generator/download/(?P<sessionId>.+?)', [
 			'methods'  => \WP_REST_Server::READABLE,
 			'callback' => [ $this, 'response' ],
