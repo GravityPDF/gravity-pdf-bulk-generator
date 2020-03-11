@@ -55,15 +55,10 @@ class Bootstrap extends Helper_Abstract_Addon {
 	 */
 	public function init( $classes = [] ) {
 
-		$data     = GPDFAPI::get_data_class();
-		$basepath = $data->template_tmp_location . 'bulk-generator/';
+		$data = GPDFAPI::get_data_class();
 
-		/* @TODO probably include default permissions https://flysystem.thephpleague.com/v1/docs/adapter/local/ */
-		$filesystem = new FilesystemHelper(
-			new Filesystem( new Local( $basepath ) )
-		);
-
-		$config = new Config( $filesystem );
+		$filesystem = $this->get_local_filesystem( $data->template_tmp_location . 'bulk-generator/' );
+		$config     = new Config( $filesystem );
 
 		/* Register our classes and pass back up to the parent initialiser */
 		$api_classes = $this->register_api_endpoints( [
@@ -97,6 +92,26 @@ class Bootstrap extends Helper_Abstract_Addon {
 
 		/* Run the setup */
 		parent::init( $classes );
+	}
+
+	protected function get_local_filesystem( $path ) {
+		$stat         = @stat( $path );
+		$folder_perms = $stat ? $stat['mode'] & 0007777 : 0777;
+		$file_perms   = $folder_perms & 0000666;
+
+		return new FilesystemHelper(
+			new Filesystem(
+				new Local(
+					$path,
+					LOCK_EX,
+					Local::DISALLOW_LINKS,
+					[
+						'file' => [ 'public' => $file_perms ],
+						'dir'  => [ 'public' => $folder_perms ],
+					]
+				)
+			)
+		);
 	}
 
 	protected function register_api_endpoints( $classes ) {
