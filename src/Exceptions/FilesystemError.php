@@ -2,6 +2,6 @@
 
 namespace GFPDF\Plugins\BulkGenerator\Exceptions;
 
-class ConfigCreateError extends FilesystemError {
+class FilesystemError extends BulkPdfGenerator {
 
 }

@@ -5,6 +5,7 @@ namespace GFPDF\Plugins\BulkGenerator\Api\Generator;
 use GFPDF\Plugins\BulkGenerator\Api\ApiEndpointRegistration;
 use GFPDF\Plugins\BulkGenerator\Api\ApiNamespace;
 use GFPDF\Plugins\BulkGenerator\Exceptions\ConfigNotLoaded;
+use GFPDF\Plugins\BulkGenerator\Exceptions\FilesystemError;
 use GFPDF\Plugins\BulkGenerator\Exceptions\InvalidPdfId;
 use GFPDF\Plugins\BulkGenerator\Exceptions\PdfConditionalLogicFailed;
 use GFPDF\Plugins\BulkGenerator\Exceptions\PdfGenerationError;
@@ -106,13 +107,15 @@ class Create implements ApiEndpointRegistration {
 
 			$tmp_pdf_path = $this->filesystem->get_tmp_pdf_path( $settings['path'], $entry );
 			if ( ! $this->filesystem->createDir( $tmp_pdf_path ) ) {
-				/* @todo throw exception */
+				throw new FilesystemError();
 			}
 
 			$tmp_pdf_filename = $this->get_unique_filename( $this->filesystem->get_filesystem(), $tmp_pdf_path, wp_basename( $pdf->get_path() ) );
 			if ( ! $this->filesystem->writeStream( "$tmp_pdf_path/$tmp_pdf_filename", fopen( $pdf->get_path(), 'r' ) ) ) {
-				/* @todo throw exception */
+				throw new FilesystemError();
 			}
+		} catch( FilesystemError $e ) {
+			return new \WP_Error( 'filesystem_error', '', [ 'status' => 500 ] );
 		} catch ( ConfigNotLoaded $e ) {
 			return new \WP_Error( 'session_config_not_loaded', '', [ 'status' => 500 ] );
 		} catch ( InvalidPdfId $e ) {
