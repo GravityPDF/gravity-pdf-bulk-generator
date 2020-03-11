@@ -2,9 +2,13 @@ export function stripForwardSlashes(directoryStructure) {
   const matchPattern = directoryStructure.match(/\{(.*?)\}/g)
   const structureArray = []
 
-  matchPattern.map(item => {
-    structureArray.push('/' + item.replace(/[/]/g, ''))
-  })
+  if (matchPattern) {
+    matchPattern.map(item => {
+      structureArray.push('/' + item.replace(/[/]/g, ''))
+    })
 
-  return structureArray.join('') + '/'
+    return structureArray.join('') + '/'
+  }
+
+  return directoryStructure
 }
