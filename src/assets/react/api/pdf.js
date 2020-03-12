@@ -1,14 +1,28 @@
-// Cookie Authentication
-const nonce = GPDF_BULK_GENERATOR.nonce
+/**
+ * @package     Gravity PDF Bulk Generator
+ * @copyright   Copyright (c) 2020, Blue Liquid Designs
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ * @since       1.0
+ */
 
+/**
+ * Fetch API request to obtain session ID (POST)
+ *
+ * @param path
+ * @param concurrency
+ *
+ * @returns {result: json}
+ *
+ * @since 1.0
+ */
 export const apiRequestSessionId = async ({ path, concurrency }) => {
   const url = `${GPDF_BULK_GENERATOR.rest_url}/generator/register`
 
-  const response  = await fetch(url, {
+  const response = await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'X-WP-Nonce': nonce
+      'X-WP-Nonce': GPDF_BULK_GENERATOR.nonce
     },
     body: JSON.stringify({ 'path': path, 'concurrency': concurrency })
   })
@@ -18,6 +32,16 @@ export const apiRequestSessionId = async ({ path, concurrency }) => {
   return result
 }
 
+/**
+ * Fetch API request to generate PDF (POST)
+ *
+ * @param listItem
+ * @param signal
+ *
+ * @returns {result: object}
+ *
+ * @since 1.0
+ */
 export const apiRequestGeneratePdf = async ({ listItem, signal }) => {
 
   const url = `${GPDF_BULK_GENERATOR.rest_url}/generator/create`
@@ -27,7 +51,7 @@ export const apiRequestGeneratePdf = async ({ listItem, signal }) => {
     signal,
     headers: {
       'Content-Type': 'application/json',
-      'X-WP-Nonce': nonce
+      'X-WP-Nonce': GPDF_BULK_GENERATOR.nonce
     },
     body: JSON.stringify(listItem)
   })
@@ -37,6 +61,15 @@ export const apiRequestGeneratePdf = async ({ listItem, signal }) => {
   return result
 }
 
+/**
+ * Fetch API request to generate PDF zip file (POST)
+ *
+ * @param sessionId
+ *
+ * @returns {result: json}
+ *
+ * @since 1.0
+ */
 export const apiRequestGeneratePdfZip = async sessionId => {
   const url = `${GPDF_BULK_GENERATOR.rest_url}/generator/zip/${sessionId}`
 
@@ -44,7 +77,7 @@ export const apiRequestGeneratePdfZip = async sessionId => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'X-WP-Nonce': nonce
+      'X-WP-Nonce': GPDF_BULK_GENERATOR.nonce
     }
   })
 

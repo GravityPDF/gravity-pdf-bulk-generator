@@ -1,3 +1,11 @@
+/**
+ * @package     Gravity PDF Bulk Generator
+ * @copyright   Copyright (c) 2020, Blue Liquid Designs
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ * @since       1.0
+ */
+
+/* Our Redux Action Type Constants */
 export const GENERATE_PDF_LIST_SUCCESS = 'GENERATE_PDF_LIST_SUCCESS'
 export const TOGGLE_MODAL = 'TOGGLE_MODAL'
 export const ESCAPE_CLOSE_MODAL = 'ESCAPE_CLOSE_MODAL'

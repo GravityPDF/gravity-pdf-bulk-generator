@@ -8,11 +8,11 @@ import {
   GET_SELECTED_ENTRY_IDS_SUCCESS,
   GET_SELECTED_ENTRY_IDS_FAILED
 } from '../actionTypes/form'
-import { apiRequestAllEntriesId} from '../api/form'
+import { apiRequestAllEntryIds } from '../api/form'
 
 export function* getSelectedEntryIds(payload) {
   try {
-    const result = yield call(apiRequestAllEntriesId, payload)
+    const result = yield call(apiRequestAllEntryIds, payload)
 
     yield put({ type: GET_SELECTED_ENTRY_IDS_SUCCESS , payload: result })
   } catch(error) {

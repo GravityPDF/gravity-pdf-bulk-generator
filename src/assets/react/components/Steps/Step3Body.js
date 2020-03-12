@@ -1,7 +1,35 @@
+/* Dependencies */
 import React from 'react'
-import Logs from '../Logs/Logs'
 import PropTypes from 'prop-types'
 
+/* Components */
+import Logs from '../Logs/Logs'
+
+/**
+ * @package     Gravity PDF Bulk Generator
+ * @copyright   Copyright (c) 2020, Blue Liquid Designs
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ * @since       1.0
+ */
+
+/**
+ * Display Step3Body UI
+ *
+ * @param downloadZipUrl
+ * @param success
+ * @param errors
+ * @param warnings
+ * @param toggleSuccess
+ * @param toggleErrors
+ * @param toggleWarnings
+ * @param generatePdfSuccess
+ * @param generatePdfFailed
+ * @param generatePdfWarning
+ *
+ * @returns {Step3Body: component}
+ *
+ * @since 1.0
+ */
 const Step3Body = (
   {
     downloadZipUrl,
@@ -40,6 +68,11 @@ const Step3Body = (
   </section>
 )
 
+/**
+ * PropTypes
+ *
+ * @since 1.0
+ */
 Step3Body.propTypes = {
   downloadZipUrl: PropTypes.string.isRequired,
   success: PropTypes.bool.isRequired,

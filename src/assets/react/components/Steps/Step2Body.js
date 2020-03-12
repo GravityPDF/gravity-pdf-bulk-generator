@@ -1,9 +1,37 @@
+/* Dependencies */
 import React from 'react'
 import PropTypes from 'prop-types'
 import { CircularProgressbar } from 'react-circular-progressbar'
+
+/* Components */
 import LoadingDots from '../LoadingDots/LoadingDots'
 import Logs from '../Logs/Logs'
 
+/**
+ * @package     Gravity PDF Bulk Generator
+ * @copyright   Copyright (c) 2020, Blue Liquid Designs
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ * @since       1.0
+ */
+
+/**
+ * Display Step2Body UI
+ *
+ * @param success
+ * @param errors
+ * @param warnings
+ * @param toggleSuccess
+ * @param toggleErrors
+ * @param toggleWarnings
+ * @param generatePdfSuccess
+ * @param generatePdfFailed
+ * @param generatePdfWarning
+ * @param downloadPercentage
+ *
+ * @returns {Step2Body: component}
+ *
+ * @since 1.0
+ */
 const Step2Body = (
   {
     success,
@@ -40,6 +68,11 @@ const Step2Body = (
   </section>
 )
 
+/**
+ * PropTypes
+ *
+ * @since 1.0
+ */
 Step2Body.propTypes = {
   success: PropTypes.bool.isRequired,
   errors: PropTypes.bool.isRequired,

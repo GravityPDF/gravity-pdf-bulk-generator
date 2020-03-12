@@ -1,8 +1,23 @@
+/* Redux Action Types */
 import {
   UPDATE_DIRECTORY_STRUCTURE,
   RESET_TAGPICKER_STATE
 } from '../actionTypes/tagPicker'
 
+/**
+ * @package     Gravity PDF Bulk Generator
+ * @copyright   Copyright (c) 2020, Blue Liquid Designs
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ * @since       1.0
+ */
+
+/**
+ * Setup the initial state of the "tag picker" portion of our Redux store
+ *
+ * @type {tags: [{id: 'string', label: 'string'}], directoryStructure: string}
+ *
+ * @since 1.0
+ */
 export const initialState = {
   tags: [
     { id: '{entry_id}', label: 'Entry ID' },
@@ -19,16 +34,36 @@ export const initialState = {
   directoryStructure: '/{entry_id}/'
 }
 
+/**
+ * The action for "tag picker" reducer which updates its state
+ *
+ * @param state
+ * @param action
+ *
+ * @returns {initialState: *} whether updated or not
+ *
+ * @since 1.0
+ */
 export default function (state = initialState, action) {
 
   switch (action.type) {
 
+    /**
+     * Process UPDATE_DIRECTORY_STRUCTURE
+     *
+     * @since 1.0
+     */
     case UPDATE_DIRECTORY_STRUCTURE:
       return {
         ...state,
         directoryStructure: action.payload
       }
 
+    /**
+     * Process RESET_TAGPICKER_STATE
+     *
+     * @since 1.0
+     */
     case RESET_TAGPICKER_STATE: {
       return {
         ...state,
@@ -37,5 +72,10 @@ export default function (state = initialState, action) {
     }
   }
 
+  /**
+   * None of the above action types fired so return state
+   *
+   * @since 1.0
+   */
   return state
 }
