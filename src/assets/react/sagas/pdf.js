@@ -13,6 +13,7 @@ import {
 import {
   GENERATE_SESSION_ID,
   GENERATE_SESSION_ID_SUCCESS,
+  GENERATE_PDF_WARNING,
   GENERATE_SESSION_ID_FAILED,
   GENERATE_PDF,
   GENERATE_PDF_SUCCESS,
@@ -76,9 +77,26 @@ export function * requestGeneratePdf (listItem, retryInterval, delayInterval) {
   }
 
   try {
-    yield retry(retryInterval, delayInterval, apiRequestGeneratePdf, data)
+    const result = yield retry(retryInterval, delayInterval, apiRequestGeneratePdf, data)
 
-    yield put({ type: GENERATE_PDF_SUCCESS, payload: listItem })
+    switch (result.status) {
+      // WIP - still need to integrate remaining status codes from the original plan
+
+      case 200:
+        yield put({ type: GENERATE_PDF_SUCCESS, payload: listItem })
+        break
+
+      case 400:
+        yield put({ type: GENERATE_PDF_WARNING, payload: listItem })
+        break
+
+      case 412:
+        yield put({ type: GENERATE_PDF_WARNING, payload: listItem })
+        break
+
+      default:
+        throw result
+    }
   } catch (error) {
     yield put({ type: GENERATE_PDF_FAILED, payload: listItem })
   } finally {
@@ -109,9 +127,18 @@ export function * generatePdf ({ payload }) {
 
   yield delay(1000)
 
-  const result = yield retry(3, 3000, apiRequestGeneratePdfZip, sessionId)
+  try {
+    const result = yield retry(3, 3000, apiRequestGeneratePdfZip, sessionId)
+    const downloadUrl = result.downloadUrl
 
-  yield put({ type: GENERATE_DOWNLOAD_ZIP_URL, payload: result.downloadUrl })
+    if (downloadUrl) {
+      yield put({ type: GENERATE_DOWNLOAD_ZIP_URL, payload: downloadUrl })
+    } else {
+      throw result
+    }
+  } catch (error) {
+    // To DO
+  }
 }
 
 export function * watchGeneratePDF () {
@@ -131,7 +158,7 @@ export function * watchGeneratePDF () {
 
     selectedEntryIds.map(id => {
       activePdfList.map(item => {
-        generatePdfList.push({ sessionId, entryId: id, pdfId: item })
+        generatePdfList.push({ sessionId, entryId: id, pdfId: item.id, pdfName: item.name })
       })
     })
 

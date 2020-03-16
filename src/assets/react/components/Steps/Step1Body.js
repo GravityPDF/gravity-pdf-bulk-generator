@@ -14,40 +14,38 @@ const Step1Body = (
     tagSelect,
     tagDeselect
   }
-) => {
-  return (
-    <section id='gfpdf-step1' className='gfpdf-step'>
-      <div className='gfpdf-settings-group'>
-        <h3>Select PDFs</h3>
+) => (
+  <section id='gfpdf-step1' className='gfpdf-step'>
+    <div className='gfpdf-settings-group'>
+      <h3>Select PDFs</h3>
 
-        <p>Specify which PDFs you would like to generate for the selected entries.</p>
+      <p>Specify which PDFs you would like to generate for the selected entries.</p>
 
-        <ListToggle
-          items={pdfList}
-          onChange={togglePdfStatus} />
-      </div>
+      <ListToggle
+        items={pdfList}
+        onChange={togglePdfStatus} />
+    </div>
 
-      <div className='gfpdf-settings-group'>
-        <h3>Directory Structure</h3>
+    <div className='gfpdf-settings-group'>
+      <h3>Directory Structure</h3>
 
-        <p>Specify the directory structure to use for the PDFs of the selected entries. Merge tags are
-          supported.</p>
+      <p>Specify the directory structure to use for the PDFs of the selected entries. Merge tags are
+        supported.</p>
 
-        <TagInput
-          value={directoryStructure}
-          onChange={updateDirectoryStructure} />
+      <TagInput
+        value={directoryStructure}
+        onChange={updateDirectoryStructure} />
 
-        <p>Common tags:</p>
+      <p>Common tags:</p>
 
-        <TagPicker
-          tags={tags}
-          onSelectCallback={tagSelect}
-          onDeselectCallback={tagDeselect}
-          inputValue={directoryStructure} />
-      </div>
-    </section>
-  )
-}
+      <TagPicker
+        tags={tags}
+        onSelectCallback={tagSelect}
+        onDeselectCallback={tagDeselect}
+        inputValue={directoryStructure} />
+    </div>
+  </section>
+)
 
 Step1Body.propTypes = {
   pdfList: PropTypes.array.isRequired,

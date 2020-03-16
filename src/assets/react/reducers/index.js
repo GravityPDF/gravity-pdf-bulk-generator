@@ -2,6 +2,7 @@ import { combineReducers } from 'redux'
 import formReducer from './formReducer'
 import tagPickerReducer from './tagPickerReducer'
 import pdfReducer from './pdfReducer'
+import logsReducer from './logsReducer'
 
 /**
  * Combine our Redux reducers for use in a single store
@@ -12,5 +13,6 @@ import pdfReducer from './pdfReducer'
 export default combineReducers({
   form: formReducer,
   tagPicker: tagPickerReducer,
-  pdf: pdfReducer
+  pdf: pdfReducer,
+  logs: logsReducer
 })

@@ -6,6 +6,7 @@ import {
   GENERATE_SESSION_ID_SUCCESS,
   GENERATE_SESSION_ID_FAILED,
   GENERATE_PDF_SUCCESS,
+  GENERATE_PDF_WARNING,
   GENERATE_PDF_FAILED,
   GENERATE_PDF_CANCEL,
   GENERATE_PDF_CANCELLED,
@@ -20,7 +21,8 @@ export const initialState = {
   modal: false,
   pdfList: [],
   generatePdfSuccess: [],
-  generatePdFailed: [],
+  generatePdfFailed: [],
+  generatePdfWarning: [],
   generatePdfCancel: false,
   generatePdfCounter: 0,
   downloadPercentage: 0,
@@ -108,13 +110,23 @@ export default function (state = initialState, action) {
       }
     }
 
-    case GENERATE_PDF_FAILED: {
-      const list = []
+    case GENERATE_PDF_WARNING: {
+      const list = state.generatePdfWarning
       list.push(action.payload)
 
       return {
         ...state,
-        generatePdFailed: list
+        generatePdfWarning: list
+      }
+    }
+
+    case GENERATE_PDF_FAILED: {
+      const list = state.generatePdfFailed
+      list.push(action.payload)
+
+      return {
+        ...state,
+        generatePdfFailed: list
       }
     }
 
@@ -128,7 +140,8 @@ export default function (state = initialState, action) {
       return {
         ...state,
         generatePdfSuccess: [],
-        generatePdFailed: [],
+        generatePdfFailed: [],
+        generatePdfWarning: [],
         generatePdfCancel: false,
         generatePdfCounter: 0,
         downloadPercentage: 0,
@@ -168,7 +181,8 @@ export default function (state = initialState, action) {
         modal: false,
         pdfList: list,
         generatePdfSuccess: [],
-        generatePdFailed: [],
+        generatePdfFailed: [],
+        generatePdfWarning: [],
         generatePdfCancel: false,
         generatePdfCounter: 0,
         downloadPercentage: 0,

@@ -38,7 +38,7 @@ class BulkGenerator extends React.Component {
   }
 
   componentDidUpdate (prevProps) {
-    const { generatePdfCancel, downloadPercentage } = this.props
+    const { generatePdfCancel, downloadPercentage, history } = this.props
 
     // Set setGlobalState if cancelled at Step 2
     if (prevProps.location.pathname === '/step/2'  && prevProps.generatePdfCancel !== generatePdfCancel) {
@@ -47,6 +47,8 @@ class BulkGenerator extends React.Component {
 
     // Set setGlobalState after a successful download and modal closed at Step 3
     if (prevProps.location.pathname === '/step/3' && downloadPercentage === 0) {
+      history.push('/')
+
       this.setGlobalState()
     }
   }
