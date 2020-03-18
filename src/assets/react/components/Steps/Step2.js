@@ -7,7 +7,7 @@ import {
   toggleErrors,
   toggleWarnings
 } from '../../actions/logs'
-import ProgressBar from '../ProgressBar'
+import ProgressBar from '../ProgressBar/ProgressBar'
 import { cancelButton } from '../../helpers/cancelButton'
 import Step2Body from './Step2Body'
 
