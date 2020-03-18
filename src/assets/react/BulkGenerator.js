@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import PopUp from './components/PopUp'
+import PopUp from './components/PopUp/PopUp'
 import { processCheckbox, getSelectedEntryIds } from './actions/form'
 import {
   generatePdfListSuccess,

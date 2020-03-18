@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { CircularProgressbar } from 'react-circular-progressbar'
-import LoadingDots from '../LoadingDots'
+import LoadingDots from '../LoadingDots/LoadingDots'
 import Logs from '../Logs/Logs'
 
 const Step2Body = (

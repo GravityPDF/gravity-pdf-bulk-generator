@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import ListToggle from '../ListToggle'
+import ListToggle from '../ListToggle/ListToggle'
 import TagInput from '../TagPicker/TagInput'
 import TagPicker from '../TagPicker/TagPicker'
 

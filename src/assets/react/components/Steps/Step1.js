@@ -8,7 +8,7 @@ import {
   toggleModal
 } from '../../actions/pdf'
 import Step1Body from './Step1Body'
-import ProgressBar from '../ProgressBar'
+import ProgressBar from '../ProgressBar/ProgressBar'
 import { stripForwardSlashes } from '../../helpers/stripForwardSlashes'
 import { cancelButton } from '../../helpers/cancelButton'
 
