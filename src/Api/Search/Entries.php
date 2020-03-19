@@ -29,60 +29,64 @@ class Entries implements ApiEndpointRegistration {
 	 * @since 1.0
 	 */
 	public function endpoint() {
-		register_rest_route( ApiNamespace::V1, '/search/(?P<form_id>[0-9]+)/entries', [
-			'methods'  => \WP_REST_Server::CREATABLE,
-			'callback' => [ $this, 'response' ],
+		register_rest_route(
+			ApiNamespace::V1,
+			'/search/(?P<form_id>[0-9]+)/entries',
+			[
+				'methods'             => \WP_REST_Server::CREATABLE,
+				'callback'            => [ $this, 'response' ],
 
-			'permission_callback' => function() {
-				$gform = \GPDFAPI::get_form_class();
+				'permission_callback' => function() {
+					$gform = \GPDFAPI::get_form_class();
 
-				return $gform->has_capability( 'gravityforms_view_entries' );
-			},
+					return $gform->has_capability( 'gravityforms_view_entries' );
+				},
 
-			'args' => [
-				'form_id' => [
-					'required'    => true,
-					'type'        => 'integer',
-					'description' => __( 'The Gravity Forms ID to limit our search to', 'gravity-pdf-bulk-generator' ),
+				'args'                => [
+					'form_id'  => [
+						'required'    => true,
+						'type'        => 'integer',
+						'description' => __( 'The Gravity Forms ID to limit our search to', 'gravity-pdf-bulk-generator' ),
+					],
+
+					's'        => [
+						'required'    => false,
+						'type'        => 'string',
+						'description' => __( 'A search parameter', 'gravity-pdf-bulk-generator' ),
+					],
+
+					'field_id' => [
+						'required'    => false,
+						'type'        => 'string',
+						'description' => __( 'What the search parameter will focus on', 'gravity-pdf-bulk-generator' ),
+					],
+
+					'operator' => [
+						'required'    => false,
+						'type'        => 'string',
+						'description' => __( 'The search parameter comparison type', 'gravity-pdf-bulk-generator' ),
+					],
+
+					'order'    => [
+						'required'    => false,
+						'type'        => 'string',
+						'description' => __( 'Whether ASC or DESC order', 'gravity-pdf-bulk-generator' ),
+					],
+
+					'orderby'  => [
+						'required'    => false,
+						'type'        => 'string',
+						'description' => __( 'The field ID to order against', 'gravity-pdf-bulk-generator' ),
+					],
+
+					'filter'   => [
+						'required'    => false,
+						'type'        => 'string',
+						'description' => __( 'A filter parameter', 'gravity-pdf-bulk-generator' ),
+					],
 				],
-
-				's' => [
-					'required'    => false,
-					'type'        => 'string',
-					'description' => __( 'A search parameter', 'gravity-pdf-bulk-generator' ),
-				],
-
-				'field_id' => [
-					'required'    => false,
-					'type'        => 'string',
-					'description' => __( 'What the search parameter will focus on', 'gravity-pdf-bulk-generator' ),
-				],
-
-				'operator' => [
-					'required'    => false,
-					'type'        => 'string',
-					'description' => __( 'The search parameter comparison type', 'gravity-pdf-bulk-generator' ),
-				],
-
-				'order' => [
-					'required'    => false,
-					'type'        => 'string',
-					'description' => __( 'Whether ASC or DESC order', 'gravity-pdf-bulk-generator' ),
-				],
-
-				'orderby' => [
-					'required'    => false,
-					'type'        => 'string',
-					'description' => __( 'The field ID to order against', 'gravity-pdf-bulk-generator' ),
-				],
-
-				'filter' => [
-					'required'    => false,
-					'type'        => 'string',
-					'description' => __( 'A filter parameter', 'gravity-pdf-bulk-generator' ),
-				],
-			],
-		] );
+			]
+		);
 	}
 
 	/**
@@ -119,7 +123,10 @@ class Entries implements ApiEndpointRegistration {
 
 			/* Get the search query criteria */
 			$search_criteria = $entry_list->get_search_criteria();
-			$paging          = [ 'offset' => 0, 'page_size' => true ];
+			$paging          = [
+				'offset'    => 0,
+				'page_size' => true,
+			];
 			$sorting         = $this->get_sorting_query( $entry_list );
 
 			/* Do the query and return just the Entry IDs (no data) */
@@ -132,7 +139,7 @@ class Entries implements ApiEndpointRegistration {
 			$entry_ids = $query_method_reflection->invoke( $q );
 
 			return array_merge( ...$entry_ids );
-		} catch( \Exception $e ) {
+		} catch ( \Exception $e ) {
 			return new \WP_Error( $e->getMessage(), '', [ 'status' => 500 ] );
 		}
 	}

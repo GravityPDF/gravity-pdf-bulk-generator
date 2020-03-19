@@ -61,13 +61,15 @@ class Bootstrap extends Helper_Abstract_Addon {
 		$config     = new Config( $filesystem );
 
 		/* Register our classes and pass back up to the parent initialiser */
-		$api_classes = $this->register_api_endpoints( [
-			new Register( $config, $filesystem ),
-			new Create( $config, $filesystem ),
-			new Download( $config, $filesystem ),
-			new Entries(),
-			new Zip( $config, $filesystem ),
-		] );
+		$api_classes = $this->register_api_endpoints(
+			[
+				new Register( $config, $filesystem ),
+				new Create( $config, $filesystem ),
+				new Download( $config, $filesystem ),
+				new Entries(),
+				new Zip( $config, $filesystem ),
+			]
+		);
 
 		$mergetag_classes = [];
 		if ( ! defined( 'GV_PLUGIN_VERSION' ) ) {
@@ -83,9 +85,7 @@ class Bootstrap extends Helper_Abstract_Addon {
 			$classes,
 			$api_classes,
 			$mergetag_classes,
-			[
-
-			]
+			[]
 		);
 
 		$this->move_to_class();
@@ -153,43 +153,56 @@ class Bootstrap extends Helper_Abstract_Addon {
 				return;
 			}
 
-			$pdfs = array_filter( $pdfs, function( $pdf ) {
-				return $pdf['active'] === true;
-			} );
+			$pdfs = array_filter(
+				$pdfs,
+				function( $pdf ) {
+					return $pdf['active'] === true;
+				}
+			);
 
 			if ( count( $pdfs ) === 0 ) {
 				return;
 			}
 
-			add_filter( 'gform_entry_list_bulk_actions', function( $actions ) {
-				$actions['download_pdf'] = esc_html__( 'Download PDF', 'gravity-pdf-bulk-generator' );
+			add_filter(
+				'gform_entry_list_bulk_actions',
+				function( $actions ) {
+					$actions['download_pdf'] = esc_html__( 'Download PDF', 'gravity-pdf-bulk-generator' );
 
-				return $actions;
-			} );
+					return $actions;
+				}
+			);
 
-			add_action( 'admin_enqueue_scripts', function() use ( $form_id, $pdfs ) {
-				wp_enqueue_script(
-					'gfpdf_bulk_generator',
-					plugin_dir_url( GFPDF_PDF_BULK_GENERATOR_FILE ) . 'dist/bulk-generator.min.js',
-					[],
-					time(),
-					true
-				);
+			add_action(
+				'admin_enqueue_scripts',
+				function() use ( $form_id, $pdfs ) {
+					wp_enqueue_script(
+						'gfpdf_bulk_generator',
+						plugin_dir_url( GFPDF_PDF_BULK_GENERATOR_FILE ) . 'dist/bulk-generator.min.js',
+						[],
+						time(),
+						true
+					);
 
-				wp_localize_script( 'gfpdf_bulk_generator', 'GPDF_BULK_GENERATOR', [
-					'rest_url' => rest_url( ApiNamespace::V1 ),
-					'nonce'    => wp_create_nonce( 'wp_rest' ),
-					'form_id'  => $form_id,
-					'pdfs'     => $pdfs,
-				] );
+					wp_localize_script(
+						'gfpdf_bulk_generator',
+						'GPDF_BULK_GENERATOR',
+						[
+							'rest_url' => rest_url( ApiNamespace::V1 ),
+							'nonce'    => wp_create_nonce( 'wp_rest' ),
+							'form_id'  => $form_id,
+							'pdfs'     => $pdfs,
+						]
+					);
 
-				wp_enqueue_style(
-					'gfpdf_bulk_generator',
-					plugin_dir_url( GFPDF_PDF_BULK_GENERATOR_FILE ) . 'dist/bulk-generator.min.css',
-					[],
-					time()
-				);
-			} );
+					wp_enqueue_style(
+						'gfpdf_bulk_generator',
+						plugin_dir_url( GFPDF_PDF_BULK_GENERATOR_FILE ) . 'dist/bulk-generator.min.css',
+						[],
+						time()
+					);
+				}
+			);
 		}
 	}
 
@@ -223,18 +236,21 @@ class Bootstrap extends Helper_Abstract_Addon {
 $name = 'Gravity PDF Bulk Generator';
 $slug = 'gravity-pdf-bulk-generator';
 
-$plugin = apply_filters( 'gfpdf_bulk_generator_initialise', new Bootstrap(
-	$slug,
-	$name,
-	'Gravity PDF',
-	GFPDF_PDF_BULK_GENERATOR_VERSION,
-	GFPDF_PDF_BULK_GENERATOR_FILE,
-	GPDFAPI::get_data_class(),
-	GPDFAPI::get_options_class(),
-	new Helper_Singleton(),
-	new Helper_Logger( $slug, $name ),
-	new Helper_Notices()
-) );
+$plugin = apply_filters(
+	'gfpdf_bulk_generator_initialise',
+	new Bootstrap(
+		$slug,
+		$name,
+		'Gravity PDF',
+		GFPDF_PDF_BULK_GENERATOR_VERSION,
+		GFPDF_PDF_BULK_GENERATOR_FILE,
+		GPDFAPI::get_data_class(),
+		GPDFAPI::get_options_class(),
+		new Helper_Singleton(),
+		new Helper_Logger( $slug, $name ),
+		new Helper_Notices()
+	)
+);
 
 $plugin->set_edd_download_id( '' );
 $plugin->set_addon_documentation_slug( 'shop-plugin-bulk-generator-add-on' );

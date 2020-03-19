@@ -68,37 +68,41 @@ class Create implements ApiEndpointRegistration {
 	 * @since 1.0
 	 */
 	public function endpoint() {
-		register_rest_route( ApiNamespace::V1, '/generator/create/', [
-			'methods'  => \WP_REST_Server::CREATABLE,
-			'callback' => [ $this, 'response' ],
+		register_rest_route(
+			ApiNamespace::V1,
+			'/generator/create/',
+			[
+				'methods'             => \WP_REST_Server::CREATABLE,
+				'callback'            => [ $this, 'response' ],
 
-			'permission_callback' => function() {
-				$gform = \GPDFAPI::get_form_class();
+				'permission_callback' => function() {
+					$gform = \GPDFAPI::get_form_class();
 
-				return $gform->has_capability( 'gravityforms_view_entries' );
-			},
+					return $gform->has_capability( 'gravityforms_view_entries' );
+				},
 
-			'args' => [
-				'sessionId' => [
-					'required'          => true,
-					'type'              => 'string',
-					'description'       => sprintf( __( 'An alphanumeric active session ID returned via the %1$s/generator/register/ endpoint.', 'gravity-pdf-bulk-generator' ), ApiNamespace::V1 ),
-					'validate_callback' => new SessionId( $this->filesystem ),
+				'args'                => [
+					'sessionId' => [
+						'required'          => true,
+						'type'              => 'string',
+						'description'       => sprintf( __( 'An alphanumeric active session ID returned via the %1$s/generator/register/ endpoint.', 'gravity-pdf-bulk-generator' ), ApiNamespace::V1 ),
+						'validate_callback' => new SessionId( $this->filesystem ),
+					],
+
+					'entryId'   => [
+						'required'    => true,
+						'type'        => 'integer',
+						'description' => __( 'The Gravity Forms Entry ID', 'gravity-pdf-bulk-generator' ),
+					],
+
+					'pdfId'     => [
+						'required'    => true,
+						'type'        => 'string',
+						'description' => __( 'An alphanumeric ID used to represent the Gravity Forms PDF Settings ID', 'gravity-pdf-bulk-generator' ),
+					],
 				],
-
-				'entryId' => [
-					'required'    => true,
-					'type'        => 'integer',
-					'description' => __( 'The Gravity Forms Entry ID', 'gravity-pdf-bulk-generator' ),
-				],
-
-				'pdfId' => [
-					'required'    => true,
-					'type'        => 'string',
-					'description' => __( 'An alphanumeric ID used to represent the Gravity Forms PDF Settings ID', 'gravity-pdf-bulk-generator' ),
-				],
-			],
-		] );
+			]
+		);
 	}
 
 	/**
@@ -122,15 +126,15 @@ class Create implements ApiEndpointRegistration {
 		try {
 			/* Setup the current session ID and load the config file settings from filesystem */
 			$settings = $this->config->set_session_id( $session_id )
-			                         ->fetch()
-			                         ->get_all_settings();
+									 ->fetch()
+									 ->get_all_settings();
 
 			/* Generate our PDF if we can get the settings, verify its active, and conditional logic passes */
 			$pdf = new Pdf( $entry['form_id'], $request->get_param( 'pdfId' ) );
 			$pdf->fetch()
-			    ->evaluate_active()
-			    ->evaluate_conditional_logic( $entry )
-			    ->generate( $entry['id'] );
+				->evaluate_active()
+				->evaluate_conditional_logic( $entry )
+				->generate( $entry['id'] );
 
 			/* Create the Bulk PDF folder structure in the filesystem */
 			$tmp_pdf_path = $this->filesystem->get_tmp_pdf_path( $settings['path'], $entry );

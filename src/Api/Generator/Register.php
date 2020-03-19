@@ -57,31 +57,35 @@ class Register implements ApiEndpointRegistration {
 	 * @since 1.0
 	 */
 	public function endpoint() {
-		register_rest_route( ApiNamespace::V1, '/generator/register', [
-			'methods'  => \WP_REST_Server::CREATABLE,
-			'callback' => [ $this, 'response' ],
+		register_rest_route(
+			ApiNamespace::V1,
+			'/generator/register',
+			[
+				'methods'             => \WP_REST_Server::CREATABLE,
+				'callback'            => [ $this, 'response' ],
 
-			'permission_callback' => function() {
-				$gform = \GPDFAPI::get_form_class();
+				'permission_callback' => function() {
+					$gform = \GPDFAPI::get_form_class();
 
-				return $gform->has_capability( 'gravityforms_view_entries' );
-			},
+					return $gform->has_capability( 'gravityforms_view_entries' );
+				},
 
-			'args' => [
-				'path' => [
-					'required'          => true,
-					'type'              => 'string',
-					'description'       => __( 'The path each generated PDF should be saved into in the zip file. Merge tags are supported.', 'gravity-pdf-bulk-generator' ),
-					'validate_callback' => new ZipPath(),
+				'args'                => [
+					'path'        => [
+						'required'          => true,
+						'type'              => 'string',
+						'description'       => __( 'The path each generated PDF should be saved into in the zip file. Merge tags are supported.', 'gravity-pdf-bulk-generator' ),
+						'validate_callback' => new ZipPath(),
+					],
+
+					'concurrency' => [
+						'required'    => true,
+						'type'        => 'integer',
+						'description' => __( 'The number of concurrent PDFs that should be generated simultaneously.', 'gravity-pdf-bulk-generator' ),
+					],
 				],
-
-				'concurrency' => [
-					'required'    => true,
-					'type'        => 'integer',
-					'description' => __( 'The number of concurrent PDFs that should be generated simultaneously.', 'gravity-pdf-bulk-generator' ),
-				],
-			],
-		] );
+			]
+		);
 	}
 
 	/**
@@ -110,11 +114,13 @@ class Register implements ApiEndpointRegistration {
 		/* Save session config file */
 		try {
 			$this->config->set_session_id( $session_id )
-			             ->set_all_settings( [
-				             'path'        => $request->get_param( 'path' ),
-				             'concurrency' => $request->get_param( 'concurrency' ),
-			             ] )
-			             ->save();
+						->set_all_settings(
+							[
+								'path'        => $request->get_param( 'path' ),
+								'concurrency' => $request->get_param( 'concurrency' ),
+							]
+						)
+						 ->save();
 		} catch ( BulkPdfGenerator $e ) {
 			return new \WP_Error( 'error_creating_config', [ 'status' => 500 ] );
 		}

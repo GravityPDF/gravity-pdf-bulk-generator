@@ -31,11 +31,11 @@ class CreatedBy {
 	/**
 	 * Search for the {created_by} merge tag and then replace
 	 *
-	 * @param string $text String to replace merge tags on
-	 * @param array  $form Gravity Forms object
-	 * @param array  $entry Gravity Forms Entry object
+	 * @param string $text       String to replace merge tags on
+	 * @param array  $form       Gravity Forms object
+	 * @param array  $entry      Gravity Forms Entry object
 	 * @param bool   $url_encode Encode replacement values or leave it raw
-	 * @param bool   $esc_html Escape replacement values or leave it raw
+	 * @param bool   $esc_html   Escape replacement values or leave it raw
 	 *
 	 * @return string processed $text string
 	 *
@@ -65,11 +65,11 @@ class CreatedBy {
 			switch ( $property ) {
 				case 'roles':
 					$value = implode( ', ', $entry_creator->roles );
-				break;
+					break;
 
 				default:
 					$value = $entry_creator->get( $property );
-				break;
+					break;
 			}
 
 			$value = $url_encode ? urlencode( $value ) : $value;

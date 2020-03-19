@@ -13,7 +13,7 @@ use League\Flysystem\Filesystem;
  */
 class FilesystemHelper {
 
-	const NO_PREFIX = 1;
+	const NO_PREFIX  = 1;
 	const ADD_PREFIX = 2;
 
 	/**

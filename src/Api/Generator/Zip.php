@@ -54,25 +54,29 @@ class Zip implements ApiEndpointRegistration {
 	 * @since 1.0
 	 */
 	public function endpoint() {
-		register_rest_route( ApiNamespace::V1, '/generator/zip/(?P<sessionId>.+?)', [
-			'methods'  => \WP_REST_Server::CREATABLE,
-			'callback' => [ $this, 'response' ],
+		register_rest_route(
+			ApiNamespace::V1,
+			'/generator/zip/(?P<sessionId>.+?)',
+			[
+				'methods'             => \WP_REST_Server::CREATABLE,
+				'callback'            => [ $this, 'response' ],
 
-			'permission_callback' => function() {
-				$gform = \GPDFAPI::get_form_class();
+				'permission_callback' => function() {
+					$gform = \GPDFAPI::get_form_class();
 
-				return $gform->has_capability( 'gravityforms_view_entries' );
-			},
+					return $gform->has_capability( 'gravityforms_view_entries' );
+				},
 
-			'args' => [
-				'sessionId' => [
-					'required'          => true,
-					'type'              => 'string',
-					'description'       => sprintf( __( 'An alphanumeric active session ID returned via the %1$s/generator/register/ endpoint.', 'gravity-pdf-bulk-generator' ), ApiNamespace::V1 ),
-					'validate_callback' => new SessionId( $this->filesystem ),
+				'args'                => [
+					'sessionId' => [
+						'required'          => true,
+						'type'              => 'string',
+						'description'       => sprintf( __( 'An alphanumeric active session ID returned via the %1$s/generator/register/ endpoint.', 'gravity-pdf-bulk-generator' ), ApiNamespace::V1 ),
+						'validate_callback' => new SessionId( $this->filesystem ),
+					],
 				],
-			],
-		] );
+			]
+		);
 	}
 
 	/**

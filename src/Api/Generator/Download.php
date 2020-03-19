@@ -58,26 +58,30 @@ class Download implements ApiEndpointRegistration {
 	 * @since 1.0
 	 */
 	public function endpoint() {
-		register_rest_route( ApiNamespace::V1, '/generator/download/(?P<sessionId>.+?)', [
-			'methods'  => \WP_REST_Server::READABLE,
-			'callback' => [ $this, 'response' ],
+		register_rest_route(
+			ApiNamespace::V1,
+			'/generator/download/(?P<sessionId>.+?)',
+			[
+				'methods'             => \WP_REST_Server::READABLE,
+				'callback'            => [ $this, 'response' ],
 
-			'permission_callback' => function( $request ) {
-				$signer   = new Helper_Url_Signer();
-				$home_url = untrailingslashit( strtok( home_url(), '?' ) );
+				'permission_callback' => function( $request ) {
+					$signer   = new Helper_Url_Signer();
+					$home_url = untrailingslashit( strtok( home_url(), '?' ) );
 
-				return $signer->verify( $home_url . $_SERVER['REQUEST_URI'] );
-			},
+					return $signer->verify( $home_url . $_SERVER['REQUEST_URI'] );
+				},
 
-			'args' => [
-				'sessionId' => [
-					'required'          => true,
-					'type'              => 'string',
-					'description'       => sprintf( __( 'An alphanumeric active session ID returned via the %1$s/generator/register/ endpoint.', 'gravity-pdf-bulk-generator' ), ApiNamespace::V1 ),
-					'validate_callback' => new SessionId( $this->filesystem ),
+				'args'                => [
+					'sessionId' => [
+						'required'          => true,
+						'type'              => 'string',
+						'description'       => sprintf( __( 'An alphanumeric active session ID returned via the %1$s/generator/register/ endpoint.', 'gravity-pdf-bulk-generator' ), ApiNamespace::V1 ),
+						'validate_callback' => new SessionId( $this->filesystem ),
+					],
 				],
-			],
-		] );
+			]
+		);
 	}
 
 	/**
@@ -114,7 +118,7 @@ class Download implements ApiEndpointRegistration {
 			 */
 			$this->filesystem->deleteDir( $this->filesystem->get_tmp_basepath() );
 
-		} catch( \Exception $e ) {
+		} catch ( \Exception $e ) {
 			return new \WP_Error( $e->getMessage(), [ 'status' => 500 ] );
 		}
 
