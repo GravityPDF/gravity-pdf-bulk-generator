@@ -147,8 +147,6 @@ class FilesystemHelper {
 	 * @return string
 	 *
 	 * @since 1.0
-	 *
-	 * @TODO  logging
 	 */
 	public function process_user_tags_in_path( $user_path, $entry ) {
 		$misc  = \GPDFAPI::get_misc_class();

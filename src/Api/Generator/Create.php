@@ -78,7 +78,12 @@ class Create implements ApiEndpointRegistration {
 				'permission_callback' => function() {
 					$gform = \GPDFAPI::get_form_class();
 
-					return $gform->has_capability( 'gravityforms_view_entries' );
+					$capabilities = $gform->has_capability( 'gravityforms_view_entries' );
+					if ( ! $capabilities ) {
+						$this->logger->warning( 'Permission denied: user does not have "gravityforms_view_entries" capabilities' );
+					}
+
+					return $capabilities;
 				},
 
 				'args'                => [
@@ -86,7 +91,7 @@ class Create implements ApiEndpointRegistration {
 						'required'          => true,
 						'type'              => 'string',
 						'description'       => sprintf( __( 'An alphanumeric active session ID returned via the %1$s/generator/register/ endpoint.', 'gravity-pdf-bulk-generator' ), ApiNamespace::V1 ),
-						'validate_callback' => new SessionId( $this->filesystem ),
+						'validate_callback' => new SessionId( $this->filesystem, $this->logger ),
 					],
 
 					'entryId'   => [
@@ -120,10 +125,27 @@ class Create implements ApiEndpointRegistration {
 		if ( is_wp_error( $entry ) ) {
 			$entry->add_data( [ 'status' => 403 ] );
 
+			$this->logger->error(
+				'Entry not found',
+				[
+					'context' => $entry->get_error_messages(),
+				]
+			);
+
 			return $entry;
 		}
 
 		try {
+			$this->logger->notice(
+				'Begin PDF Creation',
+				[
+					'session' => $session_id,
+					'form'    => $entry['form_id'],
+					'entry'   => $entry['id'],
+					'pdf'     => $request->get_param( 'pdfId' ),
+				]
+			);
+
 			/* Setup the current session ID and load the config file settings from filesystem */
 			$settings = $this->config->set_session_id( $session_id )
 									 ->fetch()
@@ -163,6 +185,18 @@ class Create implements ApiEndpointRegistration {
 			return new \WP_Error( $e->getMessage(), '', [ 'status' => 500 ] );
 		} catch ( \Exception $e ) {
 			return new \WP_Error( 'unknown_error', '', [ 'status' => 500 ] );
+		} finally {
+			if ( ! empty( $e ) ) {
+				$this->logger->error(
+					$e,
+					[
+						'session' => $session_id,
+						'form'    => $entry['form_id'],
+						'entry'   => $entry['id'],
+						'pdf'     => $request->get_param( 'pdfId' ),
+					]
+				);
+			}
 		}
 	}
 

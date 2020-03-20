@@ -2,6 +2,7 @@
 
 namespace GFPDF\Plugins\BulkGenerator\Api\Search;
 
+use GFPDF\Helper\Helper_Trait_Logger;
 use GFPDF\Plugins\BulkGenerator\Api\ApiEndpointRegistration;
 use GFPDF\Plugins\BulkGenerator\Api\ApiNamespace;
 
@@ -23,6 +24,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Entries implements ApiEndpointRegistration {
 
+	use Helper_Trait_Logger;
+
 	/**
 	 * Register the REST API Endpoints
 	 *
@@ -39,7 +42,12 @@ class Entries implements ApiEndpointRegistration {
 				'permission_callback' => function() {
 					$gform = \GPDFAPI::get_form_class();
 
-					return $gform->has_capability( 'gravityforms_view_entries' );
+					$capabilities = $gform->has_capability( 'gravityforms_view_entries' );
+					if ( ! $capabilities ) {
+						$this->logger->error( 'Permission denied: user does not have "gravityforms_view_entries" capabilities' );
+					}
+
+					return $capabilities;
 				},
 
 				'args'                => [
@@ -112,6 +120,13 @@ class Entries implements ApiEndpointRegistration {
 			/* Mimics an Entry List request */
 			$_GET = $request->get_params();
 
+			$this->logger->notice(
+				'Begin Entry Search',
+				[
+					'params' => $request->get_params(),
+				]
+			);
+
 			/* Setup the Entry List Table object that will do the heavy lifting for us */
 			$entry_list_reflection = new \ReflectionClass( '\GF_Entry_List_Table' );
 			$entry_list            = $entry_list_reflection->newInstanceWithoutConstructor();
@@ -137,9 +152,13 @@ class Entries implements ApiEndpointRegistration {
 			$query_method_reflection->setAccessible( true );
 
 			$entry_ids = $query_method_reflection->invoke( $q );
+			$entry_ids = array_merge( ...$entry_ids );
 
-			return array_merge( ...$entry_ids );
+			$this->logger->notice( 'Entry Search Complete', [ 'ids' => $entry_ids ] );
+
+			return $entry_ids;
 		} catch ( \Exception $e ) {
+			$this->logger->error( $e->getMessage() );
 			return new \WP_Error( $e->getMessage(), '', [ 'status' => 500 ] );
 		}
 	}

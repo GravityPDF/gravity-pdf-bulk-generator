@@ -2,6 +2,7 @@
 
 namespace GFPDF\Plugins\BulkGenerator\Api\Generator;
 
+use GFPDF\Helper\Helper_Trait_Logger;
 use GFPDF\Helper\Helper_Url_Signer;
 use GFPDF\Plugins\BulkGenerator\Api\ApiEndpointRegistration;
 use GFPDF\Plugins\BulkGenerator\Api\ApiNamespace;
@@ -26,6 +27,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @package GFPDF\Plugins\BulkGenerator\Api\Generator
  */
 class Download implements ApiEndpointRegistration {
+
+	use Helper_Trait_Logger;
 
 	/**
 	 * @var Config
@@ -69,7 +72,12 @@ class Download implements ApiEndpointRegistration {
 					$signer   = new Helper_Url_Signer();
 					$home_url = untrailingslashit( strtok( home_url(), '?' ) );
 
-					return $signer->verify( $home_url . $_SERVER['REQUEST_URI'] );
+					$verified = $signer->verify( $home_url . $_SERVER['REQUEST_URI'] );
+					if ( ! $verified ) {
+						$this->logger->warning( 'Permission denied: signed URL is invalid' );
+					}
+
+					return $verified;
 				},
 
 				'args'                => [
@@ -77,7 +85,7 @@ class Download implements ApiEndpointRegistration {
 						'required'          => true,
 						'type'              => 'string',
 						'description'       => sprintf( __( 'An alphanumeric active session ID returned via the %1$s/generator/register/ endpoint.', 'gravity-pdf-bulk-generator' ), ApiNamespace::V1 ),
-						'validate_callback' => new SessionId( $this->filesystem ),
+						'validate_callback' => new SessionId( $this->filesystem, $this->logger ),
 					],
 				],
 			]
@@ -94,8 +102,8 @@ class Download implements ApiEndpointRegistration {
 	 * @since 1.0
 	 */
 	public function response( \WP_REST_Request $request ) {
-		/* @TODO add logging */
 		try {
+			$this->logger->notice( 'Begin Zip Download', [ 'session' => $request->get_param( 'sessionId' ) ] );
 			$this->config->set_session_id( $request->get_param( 'sessionId' ) );
 
 			/* Verify the zip file still exists, otherwise return error */
@@ -117,8 +125,8 @@ class Download implements ApiEndpointRegistration {
 			 * overhead as possible. Now we are finished with it, we'll clean it all up.
 			 */
 			$this->filesystem->deleteDir( $this->filesystem->get_tmp_basepath() );
-
 		} catch ( \Exception $e ) {
+			$this->logger->error( $e->getMessage(), [ 'session' => $request->get_param( 'sessionId' ) ] );
 			return new \WP_Error( $e->getMessage(), [ 'status' => 500 ] );
 		}
 
