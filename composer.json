@@ -19,12 +19,5 @@
     "psr-4": {
       "GFPDF\\Plugins\\BulkGenerator\\": "src/"
     }
-  },
-  "scripts": {
-    "post-update-cmd": [
-      "yarn global add gulp-cli",
-      "yarn && gulp",
-      "yarn run build"
-    ]
   }
 }

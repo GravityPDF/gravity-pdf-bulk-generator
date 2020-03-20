@@ -21,6 +21,10 @@ tar -zxf ${PACKAGE_DIR}/package.tar.gz --directory ${PACKAGE_DIR} && rm ${PACKAG
 # Run Composer
 composer install --quiet --no-dev  --prefer-dist --optimize-autoloader --working-dir ${PACKAGE_DIR}
 
+# Generate translation file
+npm install --global wp-pot-cli
+wp-pot --domain gravity-pdf-bulk-generator --src ${PACKAGE_DIR}/src/**/*.php --src ${PACKAGE_DIR}/*.php --package 'Gravity PDF Bulk Generator' --dest-file ${PACKAGE_DIR}/languages/gravity-pdf-bulk-generator.pot --relative-to ${PACKAGE_DIR} > /dev/null
+
 # Cleanup Node JS
 rm -R ${PACKAGE_DIR}/node_modules
 
