@@ -2,6 +2,7 @@
 
 namespace GFPDF\Plugins\BulkGenerator\Api\Generator;
 
+use GFPDF\Helper\Helper_Trait_Logger;
 use GFPDF\Helper\Helper_Url_Signer;
 use GFPDF\Plugins\BulkGenerator\Api\ApiEndpointRegistration;
 use GFPDF\Plugins\BulkGenerator\Api\ApiNamespace;
@@ -28,6 +29,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @package GFPDF\Plugins\BulkGenerator\Api\Generator
  */
 class Zip implements ApiEndpointRegistration {
+
+	use Helper_Trait_Logger;
 
 	/**
 	 * @var Config
@@ -64,7 +67,12 @@ class Zip implements ApiEndpointRegistration {
 				'permission_callback' => function() {
 					$gform = \GPDFAPI::get_form_class();
 
-					return $gform->has_capability( 'gravityforms_view_entries' );
+					$capabilities = $gform->has_capability( 'gravityforms_view_entries' );
+					if ( ! $capabilities ) {
+						$this->logger->warning( 'Permission denied: user does not have "gravityforms_view_entries" capabilities' );
+					}
+
+					return $capabilities;
 				},
 
 				'args'                => [
@@ -72,7 +80,7 @@ class Zip implements ApiEndpointRegistration {
 						'required'          => true,
 						'type'              => 'string',
 						'description'       => sprintf( __( 'An alphanumeric active session ID returned via the %1$s/generator/register/ endpoint.', 'gravity-pdf-bulk-generator' ), ApiNamespace::V1 ),
-						'validate_callback' => new SessionId( $this->filesystem ),
+						'validate_callback' => new SessionId( $this->filesystem, $this->logger ),
 					],
 				],
 			]
@@ -89,12 +97,12 @@ class Zip implements ApiEndpointRegistration {
 	 * @since 1.0
 	 */
 	public function response( \WP_REST_Request $request ) {
-		/* @TODO add logging */
-
 		$session_id = $request->get_param( 'sessionId' );
 		$this->config->set_session_id( $session_id );
 
 		try {
+			$this->logger->notice( 'Begin PDF to Zip process', [ 'session' => $session_id ] );
+
 			/* Create/load our Zip file */
 			$zip = new Filesystem(
 				new ZipArchiveAdapter( $this->filesystem->get_zip_path( FilesystemHelper::ADD_PREFIX ) )
@@ -115,6 +123,7 @@ class Zip implements ApiEndpointRegistration {
 				/* If the zip doesn't already contain the file, include it in the archive */
 				if ( ! $zip->has( $zip_file_path ) ) {
 					$zip->put( $zip_file_path, $this->filesystem->read( $info['path'] ) );
+					$this->logger->notice( 'Saved PDF in zip', [ 'file' => $zip_file_path ] );
 				}
 			}
 
@@ -152,6 +161,9 @@ class Zip implements ApiEndpointRegistration {
 		 */
 		$expiry = apply_filters( 'gfpdf_bg_download_url_timeout', '12 hours' );
 
-		return $signer->sign( $download_url, $expiry );
+		$url = $signer->sign( $download_url, $expiry );
+		$this->logger->notice( 'Generated secure download URL', [ 'url' => $url ] );
+
+		return $url;
 	}
 }

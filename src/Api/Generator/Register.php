@@ -2,6 +2,7 @@
 
 namespace GFPDF\Plugins\BulkGenerator\Api\Generator;
 
+use GFPDF\Helper\Helper_Trait_Logger;
 use GFPDF\Plugins\BulkGenerator\Api\ApiEndpointRegistration;
 use GFPDF\Plugins\BulkGenerator\Api\ApiNamespace;
 use GFPDF\Plugins\BulkGenerator\Exceptions\BulkPdfGenerator;
@@ -26,6 +27,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @package GFPDF\Plugins\BulkGenerator\Api\Generator
  */
 class Register implements ApiEndpointRegistration {
+
+	use Helper_Trait_Logger;
 
 	/**
 	 * @var Config
@@ -67,7 +70,12 @@ class Register implements ApiEndpointRegistration {
 				'permission_callback' => function() {
 					$gform = \GPDFAPI::get_form_class();
 
-					return $gform->has_capability( 'gravityforms_view_entries' );
+					$capabilities = $gform->has_capability( 'gravityforms_view_entries' );
+					if ( ! $capabilities ) {
+						$this->logger->warning( 'Permission denied: user does not have "gravityforms_view_entries" capabilities' );
+					}
+
+					return $capabilities;
 				},
 
 				'args'                => [
@@ -75,7 +83,7 @@ class Register implements ApiEndpointRegistration {
 						'required'          => true,
 						'type'              => 'string',
 						'description'       => __( 'The path each generated PDF should be saved into in the zip file. Merge tags are supported.', 'gravity-pdf-bulk-generator' ),
-						'validate_callback' => new ZipPath(),
+						'validate_callback' => new ZipPath( $this->get_logger() ),
 					],
 
 					'concurrency' => [
@@ -99,7 +107,7 @@ class Register implements ApiEndpointRegistration {
 	 */
 	public function response( \WP_REST_Request $request ) {
 
-		/* @TODO add logging */
+		$this->logger->notice( 'Begin Bulk Generator registration' );
 
 		/* Get a unique Session ID not currently in use */
 		do {
@@ -108,6 +116,7 @@ class Register implements ApiEndpointRegistration {
 
 		/* Create tmp Session directory */
 		if ( ! $this->filesystem->createDir( $session_id ) ) {
+			$this->logger->error( 'Could not create temporary session directory', [ 'session' => $request->get_param( 'sessionId' ) ] );
 			return new \WP_Error( 'error_creating_path', [ 'status' => 500 ] );
 		}
 
@@ -122,9 +131,9 @@ class Register implements ApiEndpointRegistration {
 						)
 						 ->save();
 		} catch ( BulkPdfGenerator $e ) {
+			$this->logger->error( 'Could not create session config file', [ 'session' => $request->get_param( 'sessionId' ) ] );
 			return new \WP_Error( 'error_creating_config', [ 'status' => 500 ] );
 		}
-
 		return [
 			'sessionId' => $session_id,
 		];
