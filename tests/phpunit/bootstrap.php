@@ -1,14 +1,22 @@
 <?php
 
+namespace GFPDF\Plugins\BulkGenerator;
+
 /**
- * PHPUnit bootstrap file
- *
- * @package Gravity_Pdf_Bulk_Generator
+ * @package     Gravity PDF Bulk Generator
+ * @copyright   Copyright (c) 2020, Blue Liquid Designs
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  */
+
 if ( function_exists( 'xdebug_disable' ) ) {
 	xdebug_disable();
 }
 
+/**
+ * Class GravityPDF_Bulk_Generator_Unit_Tests_Bootstrap
+ *
+ * @package GFPDF\Plugins\BulkGenerator
+ */
 class GravityPDF_Bulk_Generator_Unit_Tests_Bootstrap {
 
 	/** @var string directory where wordpress-tests-lib is installed */
@@ -50,8 +58,8 @@ class GravityPDF_Bulk_Generator_Unit_Tests_Bootstrap {
 		require_once $this->plugin_dir . '/tmp/gravity-forms-pdf-extended/pdf.php';
 
 		/* set up Gravity Forms database */
-		RGFormsModel::drop_tables();
-		( function_exists( 'gf_upgrade' ) ) ? gf_upgrade()->maybe_upgrade() : @GFForms::setup( true );
+		\RGFormsModel::drop_tables();
+		( function_exists( 'gf_upgrade' ) ) ? gf_upgrade()->maybe_upgrade() : \GFForms::setup( true );
 
 		require $this->plugin_dir . '/gravity-pdf-bulk-generator.php';
 

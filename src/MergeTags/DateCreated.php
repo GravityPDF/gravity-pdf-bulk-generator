@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0
  */
-class DateCreated extends Date {
+class DateCreated extends DateHandler {
 
 	/**
 	 * @var string

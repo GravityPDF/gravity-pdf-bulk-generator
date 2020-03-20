@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @package GFPDF\Plugins\BulkGenerator\MergeTags
  */
-abstract class Date {
+abstract class DateHandler {
 
 	/**
 	 * @var string
@@ -85,11 +85,11 @@ abstract class Date {
 
 		$atts = [
 			'format'    => $this->get_format_from_modifiers( $exploded, false ),
-			'human'     => in_array( 'human', $exploded ), // {date_created:human}
-			'diff'      => in_array( 'diff', $exploded ), // {date_created:diff}
-			'raw'       => in_array( 'raw', $exploded ), // {date_created:raw}
-			'timestamp' => in_array( 'timestamp', $exploded ), // {date_created:timestamp}
-			'time'      => in_array( 'time', $exploded ),  // {date_created:time}
+			'human'     => in_array( 'human', $exploded, true ), // {date_created:human}
+			'diff'      => in_array( 'diff', $exploded, true ), // {date_created:diff}
+			'raw'       => in_array( 'raw', $exploded, true ), // {date_created:raw}
+			'timestamp' => in_array( 'timestamp', $exploded, true ), // {date_created:timestamp}
+			'time'      => in_array( 'time', $exploded, true ),  // {date_created:time}
 		];
 
 		return $this->get_formatted_date( $date_created, $atts );
@@ -172,7 +172,7 @@ abstract class Date {
 	 * @since 1.0
 	 */
 	protected function get_format_from_modifiers( $exploded, $backup = '' ) {
-		$format_key_index = array_search( 'format', $exploded );
+		$format_key_index = array_search( 'format', $exploded, true );
 
 		/* If there's a "format:[php date format string]" date format, grab it */
 		if ( false !== $format_key_index && isset( $exploded[ $format_key_index + 1 ] ) ) {

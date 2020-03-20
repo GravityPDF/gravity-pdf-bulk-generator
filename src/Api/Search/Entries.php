@@ -163,7 +163,7 @@ class Entries implements ApiEndpointRegistration {
 		$sort_field_meta = \GFAPI::get_field( $_GET['form_id'], $sort_field );
 
 		if ( $sort_field_meta instanceof \GF_Field ) {
-			$is_numeric = $sort_field_meta->get_input_type() == 'number';
+			$is_numeric = $sort_field_meta->get_input_type() === 'number';
 		} else {
 			$entry_meta = \GFFormsModel::get_entry_meta( $_GET['form_id'] );
 			$is_numeric = rgars( $entry_meta, $sort_field . '/is_numeric' );
