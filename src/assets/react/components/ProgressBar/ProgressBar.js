@@ -1,12 +1,30 @@
+/* Dependencies */
 import React from 'react'
 import PropTypes from 'prop-types'
 
+/**
+ * @package     Gravity PDF Bulk Generator
+ * @copyright   Copyright (c) 2020, Blue Liquid Designs
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ * @since       1.0
+ */
+
+/* Array of constants */
 const steps = [
   'Configure',
   'Build',
   'Download'
 ]
 
+/**
+ * Display ProgressBar UI
+ *
+ * @param step
+ *
+ * @returns {ProgressBar: component}
+ *
+ * @since 1.0
+ */
 const ProgressBar = ({ step }) => {
   return (
     <ol className='gfpdf-progress-steps'>
@@ -21,6 +39,11 @@ const ProgressBar = ({ step }) => {
   )
 }
 
+/**
+ * PropTypes
+ *
+ * @since 1.0
+ */
 ProgressBar.propTypes = {
   step: PropTypes.number.isRequired
 }

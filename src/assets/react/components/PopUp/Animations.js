@@ -1,5 +1,20 @@
+/* Dependencies */
 import posed from 'react-pose'
 
+/**
+ * @package     Gravity PDF Bulk Generator
+ * @copyright   Copyright (c) 2020, Blue Liquid Designs
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ * @since       1.0
+ */
+
+/**
+ * Fade
+ *
+ * @type {<PoseElementProps>}
+ *
+ * @since 1.0
+ */
 export const Fade = posed.div({
   enter: {
     opacity: 1,
@@ -10,6 +25,13 @@ export const Fade = posed.div({
   exit: {opacity: 0}
 })
 
+/**
+ * SlideDown
+ *
+ * @type {<PoseElementProps>}
+ *
+ * @since 1.0
+ */
 export const SlideDown = posed.div({
   enter: {
     y: 0,

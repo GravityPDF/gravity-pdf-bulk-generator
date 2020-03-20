@@ -1,7 +1,34 @@
+/* Dependencies */
 import React from 'react'
-import InfoBox from './InfoBox'
 import PropTypes from 'prop-types'
 
+/* Components */
+import InfoBox from './InfoBox'
+
+/**
+ * @package     Gravity PDF Bulk Generator
+ * @copyright   Copyright (c) 2020, Blue Liquid Designs
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ * @since       1.0
+ */
+
+/**
+ * Display Logs UI
+ *
+ * @param success
+ * @param errors
+ * @param warnings
+ * @param toggleSuccess
+ * @param toggleErrors
+ * @param toggleWarnings
+ * @param generatePdfSuccess
+ * @param generatePdfFailed
+ * @param generatePdfWarning
+ *
+ * @returns {Logs: component}
+ *
+ * @since 1.0
+ */
 const Logs = (
   {
     success,
@@ -17,6 +44,7 @@ const Logs = (
 ) => (
   <div className='logs'>
     {
+      /* Display success logs */
       generatePdfSuccess.length > 0 && (
         <div className='log-box'>
           <InfoBox
@@ -29,6 +57,7 @@ const Logs = (
     }
 
     {
+      /* Display errors/failed logs */
       generatePdfFailed.length > 0 && (
         <div className='log-box'>
           <InfoBox
@@ -41,6 +70,7 @@ const Logs = (
     }
 
     {
+      /* Display warning logs */
       generatePdfWarning.length > 0 && (
         <div className='log-box'>
           <InfoBox
@@ -54,6 +84,11 @@ const Logs = (
   </div>
 )
 
+/**
+ * PropTypes
+ *
+ * @since 1.0
+ */
 Logs.propTypes = {
   success: PropTypes.bool.isRequired,
   errors: PropTypes.bool.isRequired,

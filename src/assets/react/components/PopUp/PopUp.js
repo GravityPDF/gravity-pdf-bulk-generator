@@ -1,21 +1,39 @@
+/* Dependencies */
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Route } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { PoseGroup } from 'react-pose'
-import {
-  escapeCloseModal,
-  generatePdfCancel,
-  resetPdfState
-} from '../../actions/pdf'
+
+/* Redux Actions */
+import { escapeCloseModal, generatePdfCancel, resetPdfState } from '../../actions/pdf'
 import { resetTagPickerState } from '../../actions/tagPicker'
+
+/* Components */
 import { cancelButton } from '../../helpers/cancelButton'
 import { Fade, SlideDown } from './Animations'
 import { Overlay } from './Overlay'
 import Steps from '../Steps/Steps'
 
+/**
+ * @package     Gravity PDF Bulk Generator
+ * @copyright   Copyright (c) 2020, Blue Liquid Designs
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ * @since       1.0
+ */
+
+/**
+ * PopUp Component
+ *
+ * @since 1.0
+ */
 class PopUp extends React.Component {
 
+  /**
+   * PropTypes
+   *
+   * @since 1.0
+   */
   static propTypes = {
     escapeCloseModal: PropTypes.func.isRequired,
     downloadPercentage: PropTypes.number.isRequired,
@@ -26,11 +44,23 @@ class PopUp extends React.Component {
     modal: PropTypes.bool.isRequired
   }
 
+  /**
+   * Assign keyword listener to document on mount
+   *
+   * @since 1.0
+   */
   componentDidMount () {
     document.addEventListener('keydown', this.escapeKeyListener)
   }
 
-  escapeKeyListener = e => {
+  /**
+   * Listen if 'escape' key is pressed from the keyboard
+   *
+   * @param event
+   *
+   * @since 1.0
+   */
+  escapeKeyListener = event => {
     const {
       escapeCloseModal,
       downloadPercentage,
@@ -40,13 +70,15 @@ class PopUp extends React.Component {
       history
     } = this.props
     const { pathname } = history.location
-    const { keyCode } = e
+    const { keyCode } = event
     const escapeKey = 27
 
+    /* 'escape' key is pressed at Step1 */
     if (keyCode === escapeKey && pathname === '/step/1') {
       cancelButton({ escapeCloseModal, history })
     }
 
+    /* 'escape' key is pressed at Step2 */
     if (keyCode === escapeKey && pathname === '/step/2') {
       cancelButton({
         escapeCloseModal,
@@ -56,6 +88,7 @@ class PopUp extends React.Component {
       })
     }
 
+    /* 'escape' key is pressed at Step3 */
     if (keyCode === escapeKey && pathname === '/step/3') {
       cancelButton({
         escapeCloseModal,
@@ -66,6 +99,13 @@ class PopUp extends React.Component {
     }
   }
 
+  /**
+   * Display PopUp UI
+   *
+   * @returns {PopUp: component}
+   *
+   * @since 1.0
+   */
   render () {
     return (
       <PoseGroup flipMove={false}>
@@ -91,10 +131,24 @@ class PopUp extends React.Component {
   }
 }
 
+/**
+ * Map redux state to props
+ *
+ * @param state
+ *
+ * @returns {downloadPercentage: number}
+ *
+ * @since 1.0
+ */
 const mapStateToProps = state => ({
   downloadPercentage: state.pdf.downloadPercentage
 })
 
+/**
+ * Connect and dispatch redux actions as props
+ *
+ * @since 1.0
+ */
 export default connect(mapStateToProps, {
   escapeCloseModal,
   generatePdfCancel,

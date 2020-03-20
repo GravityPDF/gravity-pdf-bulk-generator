@@ -1,3 +1,4 @@
+/* Redux Action Types */
 import {
   GENERATE_PDF_LIST_SUCCESS,
   TOGGLE_MODAL,
@@ -14,8 +15,26 @@ import {
   GENERATE_DOWNLOAD_ZIP_URL,
   RESET_PDF_STATE
 } from '../actionTypes/pdf'
+
+/* Helpers */
 import { generateActivePdfList } from '../helpers/generateActivePdfList'
 
+/**
+ * @package     Gravity PDF Bulk Generator
+ * @copyright   Copyright (c) 2020, Blue Liquid Designs
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ * @since       1.0
+ */
+
+/**
+ * Setup the initial state of the "PDF" portion of our Redux store
+ *
+ * @type {sessionId: string, modal: boolean, pdfList: array, generatePdfSuccess: array,
+ * generatePdfFailed: array, generatePdfWarning: array, generatePdfCancel: boolean,
+ * generatePdfCounter: number, downloadPercentage: number, downloadZipUrl: string}
+ *
+ * @since 1.0
+ */
 export const initialState = {
   sessionId: '',
   modal: false,
@@ -29,16 +48,36 @@ export const initialState = {
   downloadZipUrl: ''
 }
 
+/**
+ * The action for "PDF" reducer which updates its state
+ *
+ * @param state
+ * @param action
+ *
+ * @returns {initialState: *} whether updated or not
+ *
+ * @since 1.0
+ */
 export default function (state = initialState, action) {
 
   switch (action.type) {
 
+    /**
+     * Process GENERATE_PDF_LIST_SUCCESS
+     *
+     * @since 1.0
+     */
     case GENERATE_PDF_LIST_SUCCESS:
       return {
         ...state,
         pdfList: action.payload
       }
 
+    /**
+     * Process TOGGLE_MODAL
+     *
+     * @since 1.0
+     */
     case TOGGLE_MODAL: {
       return {
         ...state,
@@ -46,6 +85,11 @@ export default function (state = initialState, action) {
       }
     }
 
+    /**
+     * Process ESCAPE_CLOSE_MODAL
+     *
+     * @since 1.0
+     */
     case ESCAPE_CLOSE_MODAL: {
       return {
         ...state,
@@ -53,10 +97,15 @@ export default function (state = initialState, action) {
       }
     }
 
+    /**
+     * Process TOGGLE_PDF_STATUS
+     *
+     * @since 1.0
+     */
     case TOGGLE_PDF_STATUS: {
       const list = [...state.pdfList]
 
-      // If toggle all pdf switch is clicked
+      /* If toggle all pdf switch is clicked */
       if (action.payload === 0) {
         if (list[0]['active'] === false && generateActivePdfList(list).length > 0) {
           for (let x = 0; x < list.length; x++) {
@@ -69,7 +118,7 @@ export default function (state = initialState, action) {
         }
       }
 
-      // If individual toggle pdf switch is clicked
+      /* If individual toggle pdf switch is clicked */
       if (action.payload !== 0) {
         list[action.payload]['active'] = !list[action.payload]['active']
 
@@ -77,7 +126,7 @@ export default function (state = initialState, action) {
           list[0]['active'] = false
         }
 
-        if (generateActivePdfList(list).length === list.length -1) {
+        if (generateActivePdfList(list).length === list.length - 1) {
           list[0]['active'] = true
         }
       }
@@ -88,18 +137,33 @@ export default function (state = initialState, action) {
       }
     }
 
+    /**
+     * Process GENERATE_SESSION_ID_SUCCESS
+     *
+     * @since 1.0
+     */
     case GENERATE_SESSION_ID_SUCCESS:
       return {
         ...state,
         sessionId: action.payload
       }
 
+    /**
+     * Process GENERATE_SESSION_ID_FAILED
+     *
+     * @since 1.0
+     */
     case GENERATE_SESSION_ID_FAILED:
       return {
         ...state,
         sessionId: action.payload
       }
 
+    /**
+     * Process GENERATE_PDF_SUCCESS
+     *
+     * @since 1.0
+     */
     case GENERATE_PDF_SUCCESS: {
       const list = state.generatePdfSuccess
       list.push(action.payload)
@@ -110,6 +174,11 @@ export default function (state = initialState, action) {
       }
     }
 
+    /**
+     * Process GENERATE_PDF_WARNING
+     *
+     * @since 1.0
+     */
     case GENERATE_PDF_WARNING: {
       const list = state.generatePdfWarning
       list.push(action.payload)
@@ -120,6 +189,11 @@ export default function (state = initialState, action) {
       }
     }
 
+    /**
+     * Process GENERATE_PDF_FAILED
+     *
+     * @since 1.0
+     */
     case GENERATE_PDF_FAILED: {
       const list = state.generatePdfFailed
       list.push(action.payload)
@@ -130,12 +204,22 @@ export default function (state = initialState, action) {
       }
     }
 
+    /**
+     * Process GENERATE_PDF_CANCEL
+     *
+     * @since 1.0
+     */
     case GENERATE_PDF_CANCEL:
       return {
         ...state,
         generatePdfCancel: true
       }
 
+    /**
+     * Process GENERATE_PDF_CANCELLED
+     *
+     * @since 1.0
+     */
     case GENERATE_PDF_CANCELLED:
       return {
         ...state,
@@ -148,6 +232,11 @@ export default function (state = initialState, action) {
         downloadZipUrl: ''
       }
 
+    /**
+     * Process GENERATE_PDF_COUNTER
+     *
+     * @since 1.0
+     */
     case GENERATE_PDF_COUNTER: {
       let generatePdfCounter = state.generatePdfCounter + 1
       const selectedEntryIds = action.payload
@@ -161,6 +250,11 @@ export default function (state = initialState, action) {
       }
     }
 
+    /**
+     * Process GENERATE_DOWNLOAD_ZIP_URL
+     *
+     * @since 1.0
+     */
     case GENERATE_DOWNLOAD_ZIP_URL: {
       return {
         ...state,
@@ -168,6 +262,11 @@ export default function (state = initialState, action) {
       }
     }
 
+    /**
+     * Process RESET_PDF_STATE
+     *
+     * @since 1.0
+     */
     case RESET_PDF_STATE: {
       const list = []
 
@@ -191,5 +290,10 @@ export default function (state = initialState, action) {
     }
   }
 
+  /**
+   * None of the above action types fired so return state
+   *
+   * @since 1.0
+   */
   return state
 }
