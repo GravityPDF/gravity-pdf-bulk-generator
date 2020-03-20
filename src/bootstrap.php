@@ -88,7 +88,9 @@ class Bootstrap extends Helper_Abstract_Addon {
 			[]
 		);
 
-		$this->move_to_class();
+		if ( \GFForms::get_page() === 'entry_list' ) {
+			$this->setup_bulk_generator();
+		}
 
 		/* Run the setup */
 		parent::init( $classes );
@@ -142,68 +144,79 @@ class Bootstrap extends Helper_Abstract_Addon {
 		return $classes;
 	}
 
-	/* @TODO */
-	public function move_to_class() {
-		if ( \GFForms::get_page() === 'entry_list' ) {
+	/**
+	 * Register the required assets to work
+	 *
+	 * @Internal Loaded on the Gravity Forms Entry List page in the WP Admin area by default
+	 *
+	 * @since    1.0
+	 */
+	public function setup_bulk_generator() {
 
-			$form_id = (int) rgget( 'id' );
-			$pdfs    = \GPDFAPI::get_form_pdfs( $form_id );
+		/* Get form and PDF info */
+		$form_id = (int) rgget( 'id' );
+		$pdfs    = \GPDFAPI::get_form_pdfs( $form_id );
 
-			if ( is_wp_error( $pdfs ) ) {
-				return;
-			}
-
-			$pdfs = array_filter(
-				$pdfs,
-				function( $pdf ) {
-					return $pdf['active'] === true;
-				}
-			);
-
-			if ( count( $pdfs ) === 0 ) {
-				return;
-			}
-
-			add_filter(
-				'gform_entry_list_bulk_actions',
-				function( $actions ) {
-					$actions['download_pdf'] = esc_html__( 'Download PDF', 'gravity-pdf-bulk-generator' );
-
-					return $actions;
-				}
-			);
-
-			add_action(
-				'admin_enqueue_scripts',
-				function() use ( $form_id, $pdfs ) {
-					wp_enqueue_script(
-						'gfpdf_bulk_generator',
-						plugin_dir_url( GFPDF_PDF_BULK_GENERATOR_FILE ) . 'dist/bulk-generator.min.js',
-						[],
-						time(),
-						true
-					);
-
-					wp_localize_script(
-						'gfpdf_bulk_generator',
-						'GPDF_BULK_GENERATOR',
-						[
-							'rest_url' => rest_url( ApiNamespace::V1 ),
-							'nonce'    => wp_create_nonce( 'wp_rest' ),
-							'form_id'  => $form_id,
-							'pdfs'     => $pdfs,
-						]
-					);
-
-					wp_enqueue_style(
-						'gfpdf_bulk_generator',
-						plugin_dir_url( GFPDF_PDF_BULK_GENERATOR_FILE ) . 'dist/bulk-generator.min.css',
-						[],
-						time()
-					);
-				}
-			);
+		if ( is_wp_error( $pdfs ) ) {
+			return;
 		}
+
+		/* Filter out non-active PDFs */
+		$pdfs = array_filter(
+			$pdfs,
+			function( $pdf ) {
+				return $pdf['active'] === true;
+			}
+		);
+
+		if ( count( $pdfs ) === 0 ) {
+			return;
+		}
+
+		/* Register our Bulk PDF Action */
+		add_filter(
+			'gform_entry_list_bulk_actions',
+			function( $actions ) {
+				$actions['download_pdf'] = esc_html__( 'Download PDF', 'gravity-pdf-bulk-generator' );
+
+				return $actions;
+			}
+		);
+
+		/* Load our assets */
+		add_action(
+			'admin_enqueue_scripts',
+			function() use ( $form_id, $pdfs ) {
+
+				$version = defined( 'WP_DEBUG' ) && WP_DEBUG === true ? time() : GFPDF_PDF_BULK_GENERATOR_VERSION;
+
+				wp_enqueue_script(
+					'gfpdf_bulk_generator',
+					plugin_dir_url( GFPDF_PDF_BULK_GENERATOR_FILE ) . 'dist/bulk-generator.min.js',
+					[],
+					$version,
+					true
+				);
+
+				wp_localize_script(
+					'gfpdf_bulk_generator',
+					'GPDF_BULK_GENERATOR',
+					[
+						'rest_url' => rest_url( ApiNamespace::V1 ),
+						'nonce'    => wp_create_nonce( 'wp_rest' ),
+						'form_id'  => $form_id,
+						'pdfs'     => $pdfs,
+					]
+				);
+
+				wp_enqueue_style(
+					'gfpdf_bulk_generator',
+					plugin_dir_url( GFPDF_PDF_BULK_GENERATOR_FILE ) . 'dist/bulk-generator.min.css',
+					[],
+					$version
+				);
+			}
+		);
 	}
 
 	/**
