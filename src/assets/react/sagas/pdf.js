@@ -1,5 +1,5 @@
+/* Dependencies */
 import {
-  call,
   cancel,
   cancelled,
   delay,
@@ -10,6 +10,8 @@ import {
   retry,
   select
 } from 'redux-saga/effects'
+
+/* Action Types */
 import {
   GENERATE_SESSION_ID,
   GENERATE_SESSION_ID_SUCCESS,
@@ -22,14 +24,21 @@ import {
   GENERATE_PDF_COUNTER,
   GENERATE_DOWNLOAD_ZIP_URL
 } from '../actionTypes/pdf'
-import {
-  apiRequestSessionId,
-  apiRequestGeneratePdf,
-  apiRequestGeneratePdfZip
-} from '../api/pdf'
+
+/* APIs */
+import { apiRequestSessionId, apiRequestGeneratePdf, apiRequestGeneratePdfZip } from '../api/pdf'
+
+/* Helpers */
 import { generateActivePdfList } from '../helpers/generateActivePdfList'
 
-// Selectors
+/**
+ * @package     Gravity PDF Bulk Generator
+ * @copyright   Copyright (c) 2020, Blue Liquid Designs
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ * @since       1.0
+ */
+
+/* Selectors */
 export const getStateSelectedEntryIds = state => state.form.selectedEntryIds
 export const getStatePdfList = state => state.pdf.pdfList
 export const getStateGeneratePdfcancel = state => state.pdf.generatePdfCancel
@@ -77,15 +86,14 @@ export function * requestGeneratePdf (listItem, retryInterval, delayInterval) {
   }
 
   try {
-    const result = yield retry(retryInterval, delayInterval, apiRequestGeneratePdf, data)
+    yield retry(retryInterval, delayInterval, apiRequestGeneratePdf, data)
+
+    yield put({ type: GENERATE_PDF_SUCCESS, payload: listItem })
+  } catch (error) {
+    const result = JSON.parse(error.message).response
 
     switch (result.status) {
       // WIP - still need to integrate remaining status codes from the original plan
-
-      case 200:
-        yield put({ type: GENERATE_PDF_SUCCESS, payload: listItem })
-        break
-
       case 400:
         yield put({ type: GENERATE_PDF_WARNING, payload: listItem })
         break
@@ -95,10 +103,8 @@ export function * requestGeneratePdf (listItem, retryInterval, delayInterval) {
         break
 
       default:
-        throw result
+        yield put({ type: GENERATE_PDF_FAILED, payload: listItem })
     }
-  } catch (error) {
-    yield put({ type: GENERATE_PDF_FAILED, payload: listItem })
   } finally {
     if (yield(cancelled())) {
       abortController.abort()

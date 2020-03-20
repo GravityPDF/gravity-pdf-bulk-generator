@@ -1,8 +1,8 @@
-
 /**
  * @package     Gravity PDF Bulk Generator
  * @copyright   Copyright (c) 2020, Blue Liquid Designs
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ * @since       1.0
  */
 
 /**
@@ -16,10 +16,16 @@
  */
 export const api = async (url, init) => {
   const response = await fetch(url, init)
+  let result
 
-  if(!response.ok) {
-    throw new Error(response)
+  /* If response.ok is false, return an error */
+  if (!response.ok) {
+    result = await response.json()
+
+    return throw new Error(JSON.stringify({ response: result.message }))
   }
 
-  return response
+  result = await response
+
+  return result
 }

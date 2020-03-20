@@ -1,3 +1,4 @@
+/* APIs */
 import { api } from './api'
 
 /**
@@ -20,7 +21,7 @@ import { api } from './api'
 export const apiRequestAllEntryIds = async ({ formId, filterData }) => {
   const url = `${GPDF_BULK_GENERATOR.rest_url}/search/${formId}/entries`
 
-  const response = await api(url, {
+  const result = await api(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -29,7 +30,5 @@ export const apiRequestAllEntryIds = async ({ formId, filterData }) => {
     body: JSON.stringify(filterData)
   })
 
-  const result = await response.json()
-
-  return result
+  return result.json()
 }
