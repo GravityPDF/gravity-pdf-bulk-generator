@@ -270,4 +270,4 @@ $plugin->set_addon_documentation_slug( 'shop-plugin-bulk-generator-add-on' );
 $plugin->init();
 
 /* Use the action below to access our Bootstrap class, and any singletons saved in $plugin->singleton */
-do_action( 'gfpdf_bulk_generator_bootrapped', $plugin );
+do_action( 'gfpdf_bulk_generator_bootstrapped', $plugin );
