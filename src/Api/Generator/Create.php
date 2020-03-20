@@ -148,7 +148,7 @@ class Create implements ApiEndpointRegistration {
 				throw new FilesystemError();
 			}
 
-			/* @TODO delete initial PDF */
+			unlink( $pdf->get_path() );
 		} catch ( FilesystemError $e ) {
 			return new \WP_Error( 'filesystem_error', '', [ 'status' => 500 ] );
 		} catch ( ConfigNotLoaded $e ) {
