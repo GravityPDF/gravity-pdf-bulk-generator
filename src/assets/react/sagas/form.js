@@ -1,5 +1,5 @@
 import {
-  call,
+  retry,
   takeLatest,
   put
 } from 'redux-saga/effects'
@@ -12,7 +12,8 @@ import { apiRequestAllEntryIds } from '../api/form'
 
 export function* getSelectedEntryIds(payload) {
   try {
-    const result = yield call(apiRequestAllEntryIds, payload)
+    const result = yield retry(3, 3000, apiRequestAllEntryIds, payload)
+
 
     yield put({ type: GET_SELECTED_ENTRY_IDS_SUCCESS , payload: result })
   } catch(error) {

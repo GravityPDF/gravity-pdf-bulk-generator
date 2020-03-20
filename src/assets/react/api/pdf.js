@@ -1,3 +1,5 @@
+import { api } from './api'
+
 /**
  * @package     Gravity PDF Bulk Generator
  * @copyright   Copyright (c) 2020, Blue Liquid Designs
@@ -18,7 +20,7 @@
 export const apiRequestSessionId = async ({ path, concurrency }) => {
   const url = `${GPDF_BULK_GENERATOR.rest_url}/generator/register`
 
-  const response = await fetch(url, {
+  const response = await api(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -46,7 +48,7 @@ export const apiRequestGeneratePdf = async ({ listItem, signal }) => {
 
   const url = `${GPDF_BULK_GENERATOR.rest_url}/generator/create`
 
-  const response = await fetch(url, {
+  const response = await api(url, {
     method: 'POST',
     signal,
     headers: {
@@ -73,7 +75,7 @@ export const apiRequestGeneratePdf = async ({ listItem, signal }) => {
 export const apiRequestGeneratePdfZip = async sessionId => {
   const url = `${GPDF_BULK_GENERATOR.rest_url}/generator/zip/${sessionId}`
 
-  const response = await fetch(url, {
+  const response = await api(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

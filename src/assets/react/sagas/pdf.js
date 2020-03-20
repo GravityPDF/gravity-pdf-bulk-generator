@@ -36,7 +36,7 @@ export const getStateGeneratePdfcancel = state => state.pdf.generatePdfCancel
 
 export function * generateSessionId (payload) {
   try {
-    const result = yield call(apiRequestSessionId, payload)
+    const result = yield retry(3, 3000, apiRequestSessionId, payload)
 
     yield put({ type: GENERATE_SESSION_ID_SUCCESS, payload: result.sessionId })
 
