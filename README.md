@@ -27,24 +27,10 @@ Before beginning, ensure you have [Git](https://git-scm.com/), [Composer](https:
 
 We use PHPUnit to test out all the PHP we write. The tests are located in `tests/phpunit/unit-tests/`
 
-Installing the testing environment is best done using a flavour of Vagrant (try [Varying Vagrant Vagrants](https://github.com/Varying-Vagrant-Vagrants/VVV)).
+To create the testing environment you'll need to use a unix-style CLI, and have the following commands available: unzip, tar, curl/wget, svn, mysqladmin
 
-1. From your terminal SSH into your Vagrant box using the `vagrant ssh` command
-2. `cd` into the root of your Gravity PDF Bulk Generator directory
-3. Run `bash tests/bin/install.sh gravitypdf_test root root localhost` where `root root` is substituted for your mysql username and password (VVV users can run the command as is).
-4. Upon success you can run `vendor/bin/phpunit`
-
-#### Mocha (JS)
-
-We use the JS libaries, [Mocha](https://mochajs.org/) and [Chai](http://chaijs.com/)  to test our Javascript and use [Karma](https://karma-runner.github.io/1.0/index.html) to run those tests in a variety of browsers.
-
-The tests are located in `tests/mocha/unit-tests/`.
-
-Running the tests can easily be done with one of the following commands:
-
-* `yarn run test` – runs all the tests once in PhantomJS
-* `yarn run test:watch` – watches for changes to the tests and runs in PhantomJS
-* `yarn run test:all` – runs all tests in Firefox, Chrome and Internet Explorer
+1. Run `bash ./bin/install-wp-tests.sh gravitypdf_test root root localhost` where `root root` is substituted for your mysql username and password, and `localhost` is your database address.
+2. Upon success you can run `vendor/bin/phpunit` to fire off the testing suite
  
 ### Building JS
 
