@@ -61,7 +61,7 @@ class GPDF_Bulk_Generator_Checks {
 		$this->check_gravitypdf_version();
 
 		/* Check if any errors were thrown, enqueue them and exit early */
-		if ( sizeof( $this->notices ) > 0 ) {
+		if ( count( $this->notices ) > 0 ) {
 			add_action( 'admin_notices', [ $this, 'display_notices' ] );
 
 			return null;
