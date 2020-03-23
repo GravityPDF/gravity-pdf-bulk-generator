@@ -6,26 +6,22 @@
  */
 
 /**
- * Wrapper for the fetch() API which throws an error when the response isn't `.ok`
+ * Wrapper for the fetch() API which return a promise reject for some status codes
  *
  * @param string url
  * @param object init
+ *
  * @returns {Promise<Response>}
  *
  * @since 1.0
  */
 export const api = async (url, init) => {
   const response = await fetch(url, init)
-  let result
 
-  /* If response.ok is false, return an error */
-  if (!response.ok) {
-    result = await response.json()
-
-    return throw new Error(JSON.stringify({ response: result.message }))
+  /* Promise reject for status code 400 and 500 */
+  if (response.status === 408 || response.status >= 500) {
+    return Promise.reject(response)
   }
 
-  result = await response
-
-  return result
+  return response
 }

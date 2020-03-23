@@ -109,7 +109,7 @@ class Download implements ApiEndpointRegistration {
 			/* Verify the zip file still exists, otherwise return error */
 			$zip_path = $this->filesystem->get_zip_path();
 			if ( ! $this->filesystem->has( $zip_path ) ) {
-				return new \WP_Error( 'zip_not_found', [ 'status' => 404 ] );
+				return new \WP_Error( 'zip_not_found', '', [ 'status' => 404 ] );
 			}
 
 			/* Send zip file to browser */
@@ -127,7 +127,7 @@ class Download implements ApiEndpointRegistration {
 			$this->filesystem->deleteDir( $this->filesystem->get_tmp_basepath() );
 		} catch ( \Exception $e ) {
 			$this->logger->error( $e->getMessage(), [ 'session' => $request->get_param( 'sessionId' ) ] );
-			return new \WP_Error( $e->getMessage(), [ 'status' => 500 ] );
+			return new \WP_Error( $e->getMessage(), '', [ 'status' => 500 ] );
 		}
 
 		$this->end();

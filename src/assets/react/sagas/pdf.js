@@ -1,32 +1,22 @@
 /* Dependencies */
-import {
-  cancel,
-  cancelled,
-  delay,
-  fork,
-  take,
-  takeLatest,
-  put,
-  retry,
-  select
-} from 'redux-saga/effects'
+import { cancel, cancelled, delay, fork, put, retry, select, take, takeLatest } from 'redux-saga/effects'
 
-/* Action Types */
+/* Redux Action Types */
 import {
-  GENERATE_SESSION_ID,
-  GENERATE_SESSION_ID_SUCCESS,
-  GENERATE_PDF_WARNING,
-  GENERATE_SESSION_ID_FAILED,
+  GENERATE_DOWNLOAD_ZIP_URL,
   GENERATE_PDF,
-  GENERATE_PDF_SUCCESS,
   GENERATE_PDF_CANCELLED,
-  GENERATE_PDF_FAILED,
   GENERATE_PDF_COUNTER,
-  GENERATE_DOWNLOAD_ZIP_URL
+  GENERATE_PDF_FAILED,
+  GENERATE_PDF_SUCCESS,
+  GENERATE_PDF_WARNING,
+  GENERATE_SESSION_ID,
+  GENERATE_SESSION_ID_FAILED,
+  GENERATE_SESSION_ID_SUCCESS
 } from '../actionTypes/pdf'
 
 /* APIs */
-import { apiRequestSessionId, apiRequestGeneratePdf, apiRequestGeneratePdfZip } from '../api/pdf'
+import { apiRequestGeneratePdf, apiRequestGeneratePdfZip, apiRequestSessionId } from '../api/pdf'
 
 /* Helpers */
 import { generateActivePdfList } from '../helpers/generateActivePdfList'
@@ -45,9 +35,15 @@ export const getStateGeneratePdfcancel = state => state.pdf.generatePdfCancel
 
 export function * generateSessionId (payload) {
   try {
-    const result = yield retry(3, 3000, apiRequestSessionId, payload)
+    const response = yield retry(3, 3000, apiRequestSessionId, payload)
 
-    yield put({ type: GENERATE_SESSION_ID_SUCCESS, payload: result.sessionId })
+    if(!response.ok) {
+      throw response
+    }
+
+    const responseBody = yield response.json()
+
+    yield put({ type: GENERATE_SESSION_ID_SUCCESS, payload: responseBody.sessionId })
 
     const selectedEntryIds = yield select(getStateSelectedEntryIds)
     const pdfList = yield select(getStatePdfList)
@@ -60,7 +56,7 @@ export function * generateSessionId (payload) {
     yield put({
       type: GENERATE_PDF,
       payload: {
-        sessionId: result.sessionId,
+        sessionId: responseBody.sessionId,
         concurrency: payload.concurrency,
         retryInterval: payload.retryInterval,
         delayInterval: payload.delayInterval,
@@ -86,13 +82,15 @@ export function * requestGeneratePdf (listItem, retryInterval, delayInterval) {
   }
 
   try {
-    yield retry(retryInterval, delayInterval, apiRequestGeneratePdf, data)
+    const response = yield retry(retryInterval, delayInterval, apiRequestGeneratePdf, data)
+
+    if(!response.ok) {
+      throw response
+    }
 
     yield put({ type: GENERATE_PDF_SUCCESS, payload: listItem })
   } catch (error) {
-    const result = JSON.parse(error.message).response
-
-    switch (result.status) {
+    switch (error.status) {
       // WIP - still need to integrate remaining status codes from the original plan
       case 400:
         yield put({ type: GENERATE_PDF_WARNING, payload: listItem })
@@ -134,14 +132,14 @@ export function * generatePdf ({ payload }) {
   yield delay(1000)
 
   try {
-    const result = yield retry(3, 3000, apiRequestGeneratePdfZip, sessionId)
-    const downloadUrl = result.downloadUrl
+    const response = yield retry(3, 3000, apiRequestGeneratePdfZip, sessionId)
+    const responseBody = yield response.json()
 
-    if (downloadUrl) {
-      yield put({ type: GENERATE_DOWNLOAD_ZIP_URL, payload: downloadUrl })
-    } else {
-      throw result
+    if (!response.ok || !responseBody.downloadUrl) {
+      throw response
     }
+
+    yield put({ type: GENERATE_DOWNLOAD_ZIP_URL, payload: responseBody.downloadUrl })
   } catch (error) {
     // To DO
   }

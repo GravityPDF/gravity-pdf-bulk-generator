@@ -14,14 +14,14 @@ import { api } from './api'
  * @param formId
  * @param filterData
  *
- * @returns {result: json}
+ * @returns Response
  *
  * @since 1.0
  */
-export const apiRequestAllEntryIds = async ({ formId, filterData }) => {
+export const apiRequestAllEntryIds = ({ formId, filterData }) => {
   const url = `${GPDF_BULK_GENERATOR.rest_url}/search/${formId}/entries`
 
-  const result = await api(url, {
+  return api(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -29,6 +29,4 @@ export const apiRequestAllEntryIds = async ({ formId, filterData }) => {
     },
     body: JSON.stringify(filterData)
   })
-
-  return result.json()
 }

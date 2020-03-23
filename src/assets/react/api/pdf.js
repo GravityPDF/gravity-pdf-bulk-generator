@@ -14,14 +14,14 @@ import { api } from './api'
  * @param path
  * @param concurrency
  *
- * @returns {result: json}
+ * @returns Response
  *
  * @since 1.0
  */
-export const apiRequestSessionId = async ({ path, concurrency }) => {
+export const apiRequestSessionId = ({ path, concurrency }) => {
   const url = `${GPDF_BULK_GENERATOR.rest_url}/generator/register`
 
-  const result = await api(url, {
+  return api(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -29,8 +29,6 @@ export const apiRequestSessionId = async ({ path, concurrency }) => {
     },
     body: JSON.stringify({ 'path': path, 'concurrency': concurrency })
   })
-
-  return result.json()
 }
 
 /**
@@ -39,15 +37,14 @@ export const apiRequestSessionId = async ({ path, concurrency }) => {
  * @param listItem
  * @param signal
  *
- * @returns {result: object}
+ * @returns Response
  *
  * @since 1.0
  */
-export const apiRequestGeneratePdf = async ({ listItem, signal }) => {
-
+export const apiRequestGeneratePdf = ({ listItem, signal }) => {
   const url = `${GPDF_BULK_GENERATOR.rest_url}/generator/create`
 
-  const result = await api(url, {
+  return api(url, {
     method: 'POST',
     signal,
     headers: {
@@ -56,29 +53,25 @@ export const apiRequestGeneratePdf = async ({ listItem, signal }) => {
     },
     body: JSON.stringify(listItem)
   })
-
-  return result
 }
 
 /**
  * Fetch API request to generate PDF zip file (POST)
  *
- * @param sessionId
+ * @param string sessionId
  *
- * @returns {result: json}
+ * @returns Response
  *
  * @since 1.0
  */
-export const apiRequestGeneratePdfZip = async sessionId => {
+export const apiRequestGeneratePdfZip = sessionId => {
   const url = `${GPDF_BULK_GENERATOR.rest_url}/generator/zip/${sessionId}`
 
-  const result = await api(url, {
+  return api(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'X-WP-Nonce': GPDF_BULK_GENERATOR.nonce
     }
   })
-
-  return result.json()
 }

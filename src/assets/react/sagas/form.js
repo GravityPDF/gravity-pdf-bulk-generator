@@ -1,7 +1,7 @@
 /* Dependencies */
 import { retry, takeLatest, put } from 'redux-saga/effects'
 
-/* Action Types */
+/* Redux Action Types */
 import {
   GET_SELECTED_ENTRY_IDS,
   GET_SELECTED_ENTRY_IDS_SUCCESS,
@@ -20,9 +20,15 @@ import { apiRequestAllEntryIds } from '../api/form'
 
 export function* getSelectedEntryIds(payload) {
   try {
-    const result = yield retry(3, 3000, apiRequestAllEntryIds, payload)
+    const response = yield retry(3, 3000, apiRequestAllEntryIds, payload)
 
-    yield put({ type: GET_SELECTED_ENTRY_IDS_SUCCESS , payload: result })
+    if(!response.ok) {
+      throw response
+    }
+
+    const responseBody = yield response.json()
+
+    yield put({ type: GET_SELECTED_ENTRY_IDS_SUCCESS , payload: responseBody })
   } catch(error) {
     yield put({ type: GET_SELECTED_ENTRY_IDS_FAILED, payload: 'Error occured. Something went wrong..' })
   }
