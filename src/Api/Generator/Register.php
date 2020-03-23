@@ -117,7 +117,7 @@ class Register implements ApiEndpointRegistration {
 		/* Create tmp Session directory */
 		if ( ! $this->filesystem->createDir( $session_id ) ) {
 			$this->logger->error( 'Could not create temporary session directory', [ 'session' => $request->get_param( 'sessionId' ) ] );
-			return new \WP_Error( 'error_creating_path', [ 'status' => 500 ] );
+			return new \WP_Error( 'error_creating_path', '', [ 'status' => 500 ] );
 		}
 
 		/* Save session config file */
@@ -132,7 +132,7 @@ class Register implements ApiEndpointRegistration {
 						 ->save();
 		} catch ( BulkPdfGenerator $e ) {
 			$this->logger->error( 'Could not create session config file', [ 'session' => $request->get_param( 'sessionId' ) ] );
-			return new \WP_Error( 'error_creating_config', [ 'status' => 500 ] );
+			return new \WP_Error( 'error_creating_config', '', [ 'status' => 500 ] );
 		}
 		return [
 			'sessionId' => $session_id,
