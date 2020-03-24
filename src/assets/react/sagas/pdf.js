@@ -1,18 +1,19 @@
 /* Dependencies */
-import { cancel, cancelled, delay, fork, put, retry, select, take, takeLatest } from 'redux-saga/effects'
+import { cancel, delay, fork, put, retry, select, take, takeLatest } from 'redux-saga/effects'
 
 /* Redux Action Types */
 import {
   GENERATE_DOWNLOAD_ZIP_URL,
   GENERATE_PDF,
-  GENERATE_PDF_CANCELLED,
+  GENERATE_PDF_CANCEL,
   GENERATE_PDF_COUNTER,
   GENERATE_PDF_FAILED,
   GENERATE_PDF_SUCCESS,
   GENERATE_PDF_WARNING,
   GENERATE_SESSION_ID,
   GENERATE_SESSION_ID_FAILED,
-  GENERATE_SESSION_ID_SUCCESS
+  GENERATE_SESSION_ID_SUCCESS,
+  STORE_ABORT_CONTROLLER
 } from '../actionTypes/pdf'
 
 /* APIs */
@@ -32,8 +33,10 @@ import { generateActivePdfList } from '../helpers/generateActivePdfList'
 export const getStateSelectedEntryIds = state => state.form.selectedEntryIds
 export const getStatePdfList = state => state.pdf.pdfList
 export const getStateGeneratePdfcancel = state => state.pdf.generatePdfCancel
+export const getStateAbortControllers = state => state.pdf.abortControllers
 
 export function * generateSessionId (payload) {
+
   try {
     const response = yield retry(3, 3000, apiRequestSessionId, payload)
 
@@ -58,7 +61,7 @@ export function * generateSessionId (payload) {
       payload: {
         sessionId: responseBody.sessionId,
         concurrency: payload.concurrency,
-        retryInterval: payload.retryInterval,
+        requestRetry: payload.requestRetry,
         delayInterval: payload.delayInterval,
         selectedEntryIds,
         pdfList
@@ -73,16 +76,27 @@ export function * watchGenerateSessionId () {
   yield takeLatest(GENERATE_SESSION_ID, generateSessionId)
 }
 
-export function * requestGeneratePdf (listItem, retryInterval, delayInterval) {
-  // Cancelling a fetch request with AbortController
+export function * checkGeneratePdfCancel () {
+  return yield select(getStateGeneratePdfcancel)
+}
+
+export function * requestGeneratePdf (listItem, requestRetry, delayInterval) {
+  /* Cancelling a fetch request with AbortController */
   const abortController = new AbortController()
   const data = {
     listItem,
     signal: abortController.signal
   }
 
+  /* Triggered by Step2 cancel button (return false and stop the process). */
+  if (yield checkGeneratePdfCancel()) {
+    return false
+  }
+
+  yield put({ type: STORE_ABORT_CONTROLLER, payload: abortController })
+
   try {
-    const response = yield retry(retryInterval, delayInterval, apiRequestGeneratePdf, data)
+    const response = yield retry(requestRetry, delayInterval, apiRequestGeneratePdf, data)
 
     if(!response.ok) {
       throw response
@@ -90,6 +104,11 @@ export function * requestGeneratePdf (listItem, retryInterval, delayInterval) {
 
     yield put({ type: GENERATE_PDF_SUCCESS, payload: listItem })
   } catch (error) {
+    /* Triggered by Step2 cancel button (return false and stop the process). */
+    if (yield checkGeneratePdfCancel()) {
+      return false
+    }
+
     switch (error.status) {
       // WIP - still need to integrate remaining status codes from the original plan
       case 400:
@@ -104,10 +123,9 @@ export function * requestGeneratePdf (listItem, retryInterval, delayInterval) {
         yield put({ type: GENERATE_PDF_FAILED, payload: listItem })
     }
   } finally {
-    if (yield(cancelled())) {
-      abortController.abort()
-
-      yield put({ type: GENERATE_PDF_CANCELLED })
+    /* Triggered by Step2 cancel button (return nothing and stop the process). */
+    if (yield checkGeneratePdfCancel()) {
+      /* Return nothing */
     } else {
       const selectedEntryIds = yield select(getStateSelectedEntryIds)
 
@@ -117,14 +135,12 @@ export function * requestGeneratePdf (listItem, retryInterval, delayInterval) {
 }
 
 export function * generatePdf ({ payload }) {
-  const { list, sessionId, retryInterval, delayInterval } = payload
-  const generatePdfCancel = yield select(getStateGeneratePdfcancel)
+  let { list, sessionId, requestRetry, delayInterval } = payload
 
   for (let i = 0; i < list.length; i++) {
-    const task = yield fork(requestGeneratePdf, list[i], retryInterval, delayInterval)
+    const task = yield fork(requestGeneratePdf, list[i], requestRetry, delayInterval)
 
-    // Triggered by StepTwo cancel button
-    if (generatePdfCancel) {
+    if (yield checkGeneratePdfCancel()) {
       return yield cancel(task)
     }
   }
@@ -132,7 +148,7 @@ export function * generatePdf ({ payload }) {
   yield delay(1000)
 
   try {
-    const response = yield retry(3, 3000, apiRequestGeneratePdfZip, sessionId)
+    const response = yield retry(requestRetry, delayInterval, apiRequestGeneratePdfZip, sessionId)
     const responseBody = yield response.json()
 
     if (!response.ok || !responseBody.downloadUrl) {
@@ -146,14 +162,14 @@ export function * generatePdf ({ payload }) {
 }
 
 export function * watchGeneratePDF () {
-  let generatePdfList = []
+  const generatePdfList = []
 
   while (true) {
     const { payload } = yield take(GENERATE_PDF)
     const {
       sessionId,
       concurrency,
-      retryInterval,
+      requestRetry,
       delayInterval,
       selectedEntryIds,
       pdfList
@@ -171,10 +187,22 @@ export function * watchGeneratePDF () {
         payload: {
           list: generatePdfList.splice(0, concurrency),
           sessionId,
-          retryInterval,
+          requestRetry,
           delayInterval
         }
       })
     }
   }
+}
+
+export function * generatePdfCancel () {
+  const abortControllers = yield select(getStateAbortControllers)
+
+  abortControllers.map(abortController => {
+    abortController.abort()
+  })
+}
+
+export function * watchGeneratePdfCancel () {
+  yield takeLatest(GENERATE_PDF_CANCEL, generatePdfCancel)
 }

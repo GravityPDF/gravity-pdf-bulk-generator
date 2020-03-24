@@ -48,13 +48,13 @@ class Step1 extends React.Component {
   /**
    * Initialize component state
    *
-   * @type {concurrency: number, retryInterval: number, delayInterval: number
+   * @type {concurrency: number, requestRetry: number, delayInterval: number
    *
    * @since 1.0
    */
   state = {
     concurrency: 5,
-    retryInterval: 3,
+    requestRetry: 3,
     delayInterval: 3000
   }
 
@@ -101,7 +101,7 @@ class Step1 extends React.Component {
   build = e => {
     e.preventDefault()
 
-    const { concurrency, retryInterval, delayInterval } = this.state
+    const { concurrency, requestRetry, delayInterval } = this.state
     const { directoryStructure, pdfList } = this.props
 
     /* Generate active PDF list */
@@ -118,7 +118,7 @@ class Step1 extends React.Component {
       const path = stripForwardSlashes(directoryStructure)
 
       /* Generate session ID and  */
-      this.props.generateSessionId(path, concurrency, retryInterval, delayInterval)
+      this.props.generateSessionId(path, concurrency, requestRetry, delayInterval)
       this.props.history.push('/step/2')
     }
   }

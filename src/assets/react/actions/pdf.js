@@ -88,12 +88,12 @@ export const togglePdfStatus = index => {
  *
  * @since 1.0
  */
-export const generateSessionId = (path, concurrency, retryInterval, delayInterval) => {
+export const generateSessionId = (path, concurrency, requestRetry, delayInterval) => {
   return {
     type: GENERATE_SESSION_ID,
     path,
     concurrency,
-    retryInterval,
+    requestRetry,
     delayInterval
   }
 }

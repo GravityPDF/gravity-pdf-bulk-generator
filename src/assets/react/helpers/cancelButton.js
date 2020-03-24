@@ -27,7 +27,6 @@ export const cancelButton = (
     history,
     toggleModal,
     escapeCloseModal,
-    downloadPercentage,
     generatePdfCancel,
     resetTagPickerState,
     resetPdfState
@@ -46,13 +45,13 @@ export const cancelButton = (
   }
 
   /* Check current path and downloadPercentage */
-  if (pathname === '/step/2' && downloadPercentage < 100) {
+  if (pathname === '/step/2') {
     if (confirm('Are you sure you want to cancel download?')) {
       return (
         e && e.preventDefault(),
         toggleModal && toggleModal(),
         escapeCloseModal && escapeCloseModal(),
-        generatePdfCancel(),
+        generatePdfCancel && generatePdfCancel(),
         history.push('/')
       )
     }
@@ -67,7 +66,8 @@ export const cancelButton = (
       toggleModal && toggleModal(),
       escapeCloseModal && escapeCloseModal(),
       resetTagPickerState(),
-      resetPdfState()
+      resetPdfState(),
+      history.push('/')
     )
   }
 }

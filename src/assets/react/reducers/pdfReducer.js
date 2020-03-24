@@ -13,7 +13,8 @@ import {
   GENERATE_PDF_CANCELLED,
   GENERATE_PDF_COUNTER,
   GENERATE_DOWNLOAD_ZIP_URL,
-  RESET_PDF_STATE
+  RESET_PDF_STATE,
+  STORE_ABORT_CONTROLLER
 } from '../actionTypes/pdf'
 
 /* Helpers */
@@ -45,7 +46,8 @@ export const initialState = {
   generatePdfCancel: false,
   generatePdfCounter: 0,
   downloadPercentage: 0,
-  downloadZipUrl: ''
+  downloadZipUrl: '',
+  abortControllers: []
 }
 
 /**
@@ -63,6 +65,22 @@ export default function (state = initialState, action) {
   switch (action.type) {
 
     /**
+     * Process STORE_ABORT_CONTROLLER
+     *
+     * @since 1.0
+     */
+    case STORE_ABORT_CONTROLLER: {
+      const list = state.abortControllers
+
+      list.push(action.payload)
+
+      return {
+        ...state,
+        abortControllers: list
+      }
+    }
+
+    /**
      * Process GENERATE_PDF_LIST_SUCCESS
      *
      * @since 1.0
@@ -78,24 +96,22 @@ export default function (state = initialState, action) {
      *
      * @since 1.0
      */
-    case TOGGLE_MODAL: {
+    case TOGGLE_MODAL:
       return {
         ...state,
         modal: !state.modal
       }
-    }
 
     /**
      * Process ESCAPE_CLOSE_MODAL
      *
      * @since 1.0
      */
-    case ESCAPE_CLOSE_MODAL: {
+    case ESCAPE_CLOSE_MODAL:
       return {
         ...state,
         modal: false
       }
-    }
 
     /**
      * Process TOGGLE_PDF_STATUS
@@ -166,6 +182,7 @@ export default function (state = initialState, action) {
      */
     case GENERATE_PDF_SUCCESS: {
       const list = state.generatePdfSuccess
+
       list.push(action.payload)
 
       return {
@@ -181,6 +198,7 @@ export default function (state = initialState, action) {
      */
     case GENERATE_PDF_WARNING: {
       const list = state.generatePdfWarning
+
       list.push(action.payload)
 
       return {
@@ -196,6 +214,7 @@ export default function (state = initialState, action) {
      */
     case GENERATE_PDF_FAILED: {
       const list = state.generatePdfFailed
+
       list.push(action.payload)
 
       return {
@@ -223,6 +242,7 @@ export default function (state = initialState, action) {
     case GENERATE_PDF_CANCELLED:
       return {
         ...state,
+        sessionId: '',
         generatePdfSuccess: [],
         generatePdfFailed: [],
         generatePdfWarning: [],
@@ -277,6 +297,7 @@ export default function (state = initialState, action) {
 
       return {
         ...state,
+        sessionId: '',
         modal: false,
         pdfList: list,
         generatePdfSuccess: [],

@@ -41,6 +41,7 @@ class BulkGenerator extends React.Component {
     processCheckbox: PropTypes.func.isRequired,
     getSelectedEntryIds: PropTypes.func.isRequired,
     toggleModal: PropTypes.func.isRequired,
+    generatePdfCancelled: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
     modal: PropTypes.bool.isRequired
   }
@@ -67,29 +68,6 @@ class BulkGenerator extends React.Component {
 
     /* Form action event listener */
     this.setEventListener()
-  }
-
-  /**
-   * On update, call function setGlobalState()
-   *
-   * @param prevProps
-   *
-   * @since 1.0
-   */
-  componentDidUpdate (prevProps) {
-    const { generatePdfCancel, downloadPercentage, history } = this.props
-
-    /* Set setGlobalState if cancelled at Step 2 */
-    if (prevProps.location.pathname === '/step/2' && prevProps.generatePdfCancel !== generatePdfCancel) {
-      this.setGlobalState()
-    }
-
-    /* Set setGlobalState after a successful download and modal closed at Step 3 */
-    if (prevProps.location.pathname === '/step/3' && downloadPercentage === 0) {
-      history.push('/')
-
-      this.setGlobalState()
-    }
   }
 
   /**
@@ -179,11 +157,31 @@ class BulkGenerator extends React.Component {
           return
         }
 
+        /* Set global state and add 'Toggle All' option in the list */
+        this.setGlobalState()
+
+        /* Check for previous history */
+        this.checkHistory()
+
         /* Redux action */
         this.props.processCheckbox(ids)
         this.processEntryIds()
       })
     })
+  }
+
+  /**
+   * Check for previous history
+   *
+   * @since 1.0
+   */
+  checkHistory = () => {
+    const { generatePdfCancel } = this.props
+
+    /* Check if cancelled from Step2 */
+    if (generatePdfCancel) {
+      this.props.generatePdfCancelled()
+    }
   }
 
   /**
