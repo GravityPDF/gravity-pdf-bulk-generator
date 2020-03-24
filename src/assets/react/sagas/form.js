@@ -19,10 +19,9 @@ import { apiRequestAllEntryIds } from '../api/form'
  */
 
 export function* getSelectedEntryIds(payload) {
-  const { retryInterval, delayInterval } = payload
 
   try {
-    const response = yield retry(retryInterval, delayInterval, apiRequestAllEntryIds, payload)
+    const response = yield retry(3, 500, apiRequestAllEntryIds, payload)
 
     if(!response.ok) {
       throw response

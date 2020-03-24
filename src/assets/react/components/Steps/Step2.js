@@ -154,7 +154,6 @@ class Step2 extends React.Component {
             onClick={e => cancelButton({
               e,
               toggleModal,
-              downloadPercentage,
               generatePdfCancel,
               history
             })}>

@@ -5,7 +5,6 @@ import {
   TOGGLE_PDF_STATUS,
   GENERATE_SESSION_ID,
   GENERATE_PDF_CANCEL,
-  GENERATE_PDF_CANCELLED,
   RESET_PDF_STATE
 } from '../actionTypes/pdf'
 
@@ -88,13 +87,11 @@ export const togglePdfStatus = index => {
  *
  * @since 1.0
  */
-export const generateSessionId = (path, concurrency, retryInterval, delayInterval) => {
+export const generateSessionId = (path, concurrency) => {
   return {
     type: GENERATE_SESSION_ID,
     path,
-    concurrency,
-    retryInterval,
-    delayInterval
+    concurrency
   }
 }
 
@@ -108,19 +105,6 @@ export const generateSessionId = (path, concurrency, retryInterval, delayInterva
 export const generatePdfCancel = () => {
   return {
     type: GENERATE_PDF_CANCEL
-  }
-}
-
-/**
- * Reset value for affected state
- *
- * @returns {{type: string}}
- *
- * @since 1.0
- */
-export const generatePdfCancelled = () => {
-  return {
-    type: GENERATE_PDF_CANCELLED
   }
 }
 

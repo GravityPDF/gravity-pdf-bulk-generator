@@ -50,7 +50,7 @@ export const cancelButton = (
         e && e.preventDefault(),
         toggleModal && toggleModal(),
         escapeCloseModal && escapeCloseModal(),
-        generatePdfCancel(),
+        generatePdfCancel && generatePdfCancel(),
         history.push('/')
       )
     }
@@ -65,7 +65,8 @@ export const cancelButton = (
       toggleModal && toggleModal(),
       escapeCloseModal && escapeCloseModal(),
       resetTagPickerState(),
-      resetPdfState()
+      resetPdfState(),
+      history.push('/')
     )
   }
 }
