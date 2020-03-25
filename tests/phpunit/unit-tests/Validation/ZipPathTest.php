@@ -48,6 +48,8 @@ class ZipPathTest extends \WP_UnitTestCase {
 			12 => [ false, './folder/../name.jpg/' ],
 			13 => [ true, '/0/123556/@8(.$!@*29' ],
 			14 => [ false, '/soemthing\here\and\something/there/..' ],
+			15 => [ false, '\\' ],
+			16 => [ false, '..' ],
 		];
 	}
 }
