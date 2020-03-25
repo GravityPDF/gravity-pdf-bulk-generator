@@ -122,7 +122,7 @@ class Zip implements ApiEndpointRegistration {
 
 				/* If the zip doesn't already contain the file, include it in the archive */
 				if ( ! $zip->has( $zip_file_path ) ) {
-					$zip->put( $zip_file_path, $this->filesystem->read( $info['path'] ) );
+					$zip->write( $zip_file_path, $this->filesystem->read( $info['path'] ) );
 					$this->logger->notice( 'Saved PDF in zip', [ 'file' => $zip_file_path ] );
 				}
 			}
