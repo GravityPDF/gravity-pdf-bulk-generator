@@ -13,7 +13,7 @@ use League\Flysystem\Filesystem;
  */
 class FilesystemHelper {
 
-	const NO_PREFIX  = 1;
+	const NO_PREFIX = 1;
 	const ADD_PREFIX = 2;
 
 	/**
@@ -174,13 +174,20 @@ class FilesystemHelper {
 	 * @since 1.0
 	 */
 	protected function prefix( $prefix ) {
+		/* getPathPrefix is only available to some filesystem adaptors */
+		$adaptor = $this->get_filesystem()->getAdapter();
+		if ( ! method_exists( $adaptor, 'getPathPrefix' ) ) {
+			$prefix = self::NO_PREFIX;
+		}
+
 		switch ( $prefix ) {
-			case self::NO_PREFIX:
-				return '';
+			case self::ADD_PREFIX:
+				return $adaptor->getPathPrefix();
 			break;
 
-			case self::ADD_PREFIX:
-				return $this->get_filesystem()->getAdapter()->getPathPrefix();
+			case self::NO_PREFIX:
+			default:
+				return '';
 			break;
 		}
 	}
