@@ -18,7 +18,7 @@ import { api } from './api'
  *
  * @since 1.0
  */
-export const apiRequestSessionId = ({ path, concurrency }) => {
+export const apiRequestSessionId = ({ path }) => {
   const url = `${GPDF_BULK_GENERATOR.rest_url}/generator/register`
 
   return api(url, {
@@ -27,7 +27,7 @@ export const apiRequestSessionId = ({ path, concurrency }) => {
       'Content-Type': 'application/json',
       'X-WP-Nonce': GPDF_BULK_GENERATOR.nonce
     },
-    body: JSON.stringify({ 'path': path, 'concurrency': concurrency })
+    body: JSON.stringify({ 'path': path })
   })
 }
 
