@@ -12,6 +12,7 @@ namespace GFPDF\Plugins\BulkGenerator\Validation;
  * Class ZipPathTest
  *
  * @package GFPDF\Plugins\BulkGenerator\Validation
+ * @mixin \PHPUnit\Framework\TestCase
  */
 class ZipPathTest extends \WP_UnitTestCase {
 

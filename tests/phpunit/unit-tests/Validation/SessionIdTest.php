@@ -16,6 +16,7 @@ use League\Flysystem\Memory\MemoryAdapter;
  * Class SessionIdTest
  *
  * @package GFPDF\Plugins\BulkGenerator\Validation
+ * @mixin \PHPUnit\Framework\TestCase
  */
 class SessionIdTest extends \WP_UnitTestCase {
 
