@@ -2,9 +2,10 @@
 
 namespace GFPDF\Plugins\BulkGenerator\Api\Generator;
 
-use GFPDF\Plugins\BulkGenerator\EnhancedMemoryAdaptor;
 use GFPDF\Plugins\BulkGenerator\Api\ApiNamespace;
 use GFPDF\Plugins\BulkGenerator\Api\DefaultApiTests;
+use GFPDF\Plugins\BulkGenerator\EnhancedMemoryAdapter;
+use GFPDF\Plugins\BulkGenerator\FailedNullAdapter;
 use GFPDF\Plugins\BulkGenerator\Model\Config;
 use GFPDF\Plugins\BulkGenerator\Utility\FilesystemHelper;
 use GFPDF\Plugins\BulkGenerator\Validation\SessionId;
@@ -53,18 +54,16 @@ class CreateTest extends DefaultApiTests {
 	}
 
 	protected function setup_endpoint_class( $adapter = null, $config_adapter = null ) {
-		$this->filesystem = new FilesystemHelper( new Filesystem( $adapter === null ? new EnhancedMemoryAdaptor() : $adapter, [ 'disable_asserts' => true ] ) );
+		$this->filesystem = new FilesystemHelper( new Filesystem( $adapter === null ? new EnhancedMemoryAdapter() : $adapter, [ 'disable_asserts' => true ] ) );
 		$this->filesystem->createDir( $this->session_id );
 		$this->filesystem->createDir( $this->dummy_session_id );
 
-		$config           = new Config( $config_adapter === null ? $this->filesystem : new FilesystemHelper( new Filesystem( $config_adapter, [ 'disable_asserts' => true ] ) ) );
-		$config->set_session_id( $this->session_id  )
+		$config = new Config( $config_adapter === null ? $this->filesystem : new FilesystemHelper( new Filesystem( $config_adapter, [ 'disable_asserts' => true ] ) ) );
+		$config->set_session_id( $this->session_id )
 		       ->set_all_settings( [ 'path' => '/' ] )
 		       ->save();
 
-		$this->filesystem->getAdapter()->setPathPrefix('');
-
-		$this->validator = new SessionId( $this->filesystem, $GLOBALS['GFPDF_Test']->log );
+		$config->set_session_id( '' );
 
 		$this->endpoint = new Create( $config, $this->filesystem );
 		$this->endpoint->set_logger( $GLOBALS['GFPDF_Test']->log );
@@ -134,5 +133,72 @@ class CreateTest extends DefaultApiTests {
 
 		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 'pdf_conditional_logic_failed', $response->get_data()['code'] );
+	}
+
+	public function test_pdf_generation_error() {
+		$request = new \WP_REST_Request( 'POST', $this->rest_route );
+		$request->set_param( 'sessionId', $this->session_id );
+		$request->set_param( 'entryId', $this->create_entry() );
+		$request->set_param( 'pdfId', '5e7bfc55b6ec9' );
+
+		$response = rest_get_server()->dispatch( $request );
+		$this->assertSame( 'pdf_generation_failure', $response->get_data()['code'] );
+	}
+
+	public function test_filesystem_error() {
+		$this->setup_endpoint_class( new FailedNullAdapter(), new EnhancedMemoryAdapter() );
+
+		$request = new \WP_REST_Request( 'POST', $this->rest_route );
+		$request->set_param( 'sessionId', $this->session_id );
+		$request->set_param( 'entryId', $this->create_entry() );
+		$request->set_param( 'pdfId', '5e7bfc55b6ec9' );
+
+		add_filter( 'gfpdf_mpdf_class_config', function( $config ) {
+			$config['mode']          = 'c';
+			$config['biDirectional'] = false;
+
+			return $config;
+		} );
+
+		$response = $this->endpoint->response( $request );
+		$this->assertSame( 'filesystem_error', $response->get_error_code() );
+	}
+
+	public function test_create_pdf() {
+		$request = new \WP_REST_Request( 'POST', $this->rest_route );
+		$request->set_param( 'sessionId', $this->session_id );
+		$request->set_param( 'entryId', $this->create_entry() );
+		$request->set_param( 'pdfId', '5e7bfc55b6ec9' );
+
+		add_filter( 'gfpdf_mpdf_class_config', function( $config ) {
+			$config['mode']          = 'c';
+			$config['biDirectional'] = false;
+
+			return $config;
+		} );
+
+		$response = rest_get_server()->dispatch( $request );
+		$this->assertSame( 200, $response->get_status() );
+		$this->assertStringStartsWith( '%PDF-1.4', $this->filesystem->read( '/tmp/Zadani.pdf' ) );
+	}
+
+	public function test_create_multiple_pdf() {
+		$request = new \WP_REST_Request( 'POST', $this->rest_route );
+		$request->set_param( 'sessionId', $this->session_id );
+		$request->set_param( 'entryId', $this->create_entry() );
+		$request->set_param( 'pdfId', '5e7bfc55b6ec9' );
+
+		add_filter( 'gfpdf_mpdf_class_config', function( $config ) {
+			$config['mode']          = 'c';
+			$config['biDirectional'] = false;
+
+			return $config;
+		} );
+
+		$response = rest_get_server()->dispatch( $request );
+		$response = rest_get_server()->dispatch( $request );
+
+		$this->assertStringStartsWith( '%PDF-1.4', $this->filesystem->read( '/tmp/Zadani.pdf' ) );
+		$this->assertStringStartsWith( '%PDF-1.4', $this->filesystem->read( '/tmp/Zadani1.pdf' ) );
 	}
 }

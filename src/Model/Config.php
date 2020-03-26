@@ -63,7 +63,7 @@ class Config {
 
 		/* Not all Filesystem adapters support method */
 		if ( method_exists( $adapter, 'setPathPrefix' ) ) {
-			$adapter->setPathPrefix( $adapter->getPathPrefix() . $session_id );
+			$adapter->setPathPrefix( $session_id );
 		}
 
 		return $this;

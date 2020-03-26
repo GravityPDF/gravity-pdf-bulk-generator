@@ -7,7 +7,7 @@ use GFPDF\Plugins\BulkGenerator\Api\DefaultApiTests;
 use GFPDF\Plugins\BulkGenerator\Model\Config;
 use GFPDF\Plugins\BulkGenerator\Utility\FilesystemHelper;
 use GFPDF\Plugins\BulkGenerator\Validation\SessionId;
-use League\Flysystem\Adapter\NullAdapter;
+use GFPDF\Plugins\BulkGenerator\FailedNullAdapter;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Memory\MemoryAdapter;
 
@@ -84,15 +84,4 @@ class RegisterTest extends DefaultApiTests {
 		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 500, $response->get_status() ); /* Config file creation failed */
 	}
-}
-
-class FailedNullAdapter extends NullAdapter {
-	public function write( $path, $contents, \League\Flysystem\Config $config ) {
-		return false;
-	}
-
-	public function createDir( $dirname, \League\Flysystem\Config $config ) {
-		return false;
-	}
-
 }
