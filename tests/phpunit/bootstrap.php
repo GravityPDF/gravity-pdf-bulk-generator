@@ -12,6 +12,8 @@ if ( function_exists( 'xdebug_disable' ) ) {
 	xdebug_disable();
 }
 
+require_once __DIR__ . '/helpers/EnhancedMemoryAdaptor.php';
+
 /**
  * Class GravityPDF_Bulk_Generator_Unit_Tests_Bootstrap
  *

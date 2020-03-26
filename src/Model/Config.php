@@ -172,11 +172,12 @@ class Config {
 	 * @return $this
 	 *
 	 * @throws ConfigCreateError
+	 * @throws \League\Flysystem\FileExistsException
 	 *
 	 * @since 1.0
 	 */
 	public function save() {
-		if ( ! $this->filesystem->put( $this->filesystem->get_config_path(), json_encode( $this->settings ) ) ) {
+		if ( ! $this->filesystem->write( $this->filesystem->get_config_path(), json_encode( $this->settings ) ) ) {
 			throw new ConfigCreateError();
 		}
 

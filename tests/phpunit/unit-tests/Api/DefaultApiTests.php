@@ -76,24 +76,30 @@ abstract class DefaultApiTests extends \WP_UnitTestCase {
 	 * @since    1.0
 	 */
 	public function test_authentication_check() {
-		$request = new \WP_REST_Request( 'POST', $this->rest_route );
-		$request->set_param( 'path', '/' );
+		wp_set_current_user( 0 );
+
+		/* Bypass the parameter required checks */
+		$request = $this->getMockBuilder( \WP_REST_Request::class )
+		                ->setConstructorArgs( [ 'POST', $this->rest_route ] )
+		                ->setMethods( [ 'set_attributes' ] )
+		                ->getMock();
 
 		/* Test logged out user auth failure */
 		$response = rest_get_server()->dispatch( $request );
-		$this->assertSame( 401, $response->get_status() );
+		$this->assertSame( 'rest_forbidden', $response->get_data()['code'] );
 
 		/* Test failed authentication as a logged in user */
-		$this->authenticate('editor');
+		$this->authenticate( 'editor' );
 
 		$response = rest_get_server()->dispatch( $request );
-		$this->assertSame( 403, $response->get_status() );
+		$this->assertSame( 'rest_forbidden', $response->get_data()['code'] );
 
 		/* Test for passed authentication */
 		$this->authenticate();
 
 		$response = rest_get_server()->dispatch( $request );
-		$this->assertNotSame( 403, $response->get_status() );
+		$code     = isset( $response->get_data()['code'] ) ? $response->get_data()['code'] : '';
+		$this->assertNotSame( 'rest_forbidden', $code );
 	}
 
 	/**
