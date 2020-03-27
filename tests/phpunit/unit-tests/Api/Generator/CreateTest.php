@@ -34,6 +34,9 @@ class CreateTest extends DefaultApiTests {
 
 	protected $form_id;
 
+	/**
+	 * @var FilesystemHelper
+	 */
 	protected $filesystem;
 
 	protected $session_id = '0bdff6b1954ebce8c0eac7a3a8203a6c';
@@ -196,6 +199,8 @@ class CreateTest extends DefaultApiTests {
 		} );
 
 		$response = rest_get_server()->dispatch( $request );
+		$this->filesystem->set_prefix( '' );
+
 		$response = rest_get_server()->dispatch( $request );
 
 		$this->assertStringStartsWith( '%PDF-1.4', $this->filesystem->read( '/tmp/Zadani.pdf' ) );

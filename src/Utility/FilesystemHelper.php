@@ -13,9 +13,6 @@ use League\Flysystem\Filesystem;
  */
 class FilesystemHelper {
 
-	const NO_PREFIX = 1;
-	const ADD_PREFIX = 2;
-
 	/**
 	 * @var Filesystem
 	 *
@@ -48,6 +45,8 @@ class FilesystemHelper {
 	 */
 	protected $tmp_dirname = 'tmp/';
 
+	protected $path_prefix = '';
+
 	/**
 	 * FilesystemHelper constructor.
 	 *
@@ -70,6 +69,10 @@ class FilesystemHelper {
 			throw new \BadMethodCallException( sprintf( 'Filesystem method "%s" does not exist', $method ) );
 		}
 
+		if ( isset( $arguments[0] ) && ! empty( $this->path_prefix ) ) {
+			$arguments[0] = $this->get_prefix() . $arguments[0];
+		}
+
 		return call_user_func_array( [ $this->get_filesystem(), $method ], $arguments );
 	}
 
@@ -87,14 +90,14 @@ class FilesystemHelper {
 	/**
 	 * Return the full path to the config file
 	 *
-	 * @param int $prefix Configuration option to determine if the Filesystem path prefix should be returned
+	 * @param int $prefix Configuration option to determine if the Filesystem path get_prefix should be returned
 	 *
 	 * @return string
 	 *
 	 * @since 1.0
 	 */
-	public function get_config_path( $prefix = self::NO_PREFIX ) {
-		return $this->prefix( $prefix ) . $this->config_filename;
+	public function get_config_path() {
+		return $this->config_filename;
 	}
 
 	/**
@@ -102,25 +105,25 @@ class FilesystemHelper {
 	 *
 	 * @param int $prefix
 	 *
-	 * @return string Configuration option to determine if the Filesystem path prefix should be returned
+	 * @return string Configuration option to determine if the Filesystem path get_prefix should be returned
 	 *
 	 * @since 1.0
 	 */
-	public function get_zip_path( $prefix = self::NO_PREFIX ) {
-		return $this->prefix( $prefix ) . $this->zip_filename;
+	public function get_zip_path() {
+		return $this->zip_filename;
 	}
 
 	/**
 	 * Return the full path to the tmp directory
 	 *
-	 * @param int $prefix Configuration option to determine if the Filesystem path prefix should be returned
+	 * @param int $prefix Configuration option to determine if the Filesystem path get_prefix should be returned
 	 *
 	 * @return string
 	 *
 	 * @since 1.0
 	 */
-	public function get_tmp_basepath( $prefix = self::NO_PREFIX ) {
-		return $this->prefix( $prefix ) . $this->tmp_dirname;
+	public function get_tmp_basepath() {
+		return $this->tmp_dirname;
 	}
 
 	/**
@@ -128,14 +131,14 @@ class FilesystemHelper {
 	 *
 	 * @param string $user_path The user-defined path the PDFs should be saved into in the zip file
 	 * @param array  $entry     The Gravity Forms Entry array
-	 * @param int    $prefix    Configuration option to determine if the Filesystem path prefix should be returned
+	 * @param int    $prefix    Configuration option to determine if the Filesystem path get_prefix should be returned
 	 *
 	 * @return string
 	 *
 	 * @since 1.0
 	 */
-	public function get_tmp_pdf_path( $user_path, $entry, $prefix = self::NO_PREFIX ) {
-		return $this->get_tmp_basepath( $prefix ) . $this->process_user_tags_in_path( $user_path, $entry );
+	public function get_tmp_pdf_path( $user_path, $entry ) {
+		return $this->get_tmp_basepath() . $this->process_user_tags_in_path( $user_path, $entry );
 	}
 
 	/**
@@ -161,11 +164,11 @@ class FilesystemHelper {
 
 		$user_path = implode( '/', array_filter( $user_path ) );
 
-		return trailingslashit( $user_path );
+		return ! empty( $user_path ) ? trailingslashit( $user_path ) : '';
 	}
 
 	/**
-	 * Determine if the path prefix should be returned
+	 * Determine if the path get_prefix should be returned
 	 *
 	 * @param int $prefix Configuration option to determine if the Filesystem path prefix should be returned
 	 *
@@ -173,23 +176,12 @@ class FilesystemHelper {
 	 *
 	 * @since 1.0
 	 */
-	protected function prefix( $prefix ) {
-		/* getPathPrefix is only available to some filesystem adaptors */
-		$adaptor = $this->get_filesystem()->getAdapter();
-		if ( ! method_exists( $adaptor, 'getPathPrefix' ) ) {
-			$prefix = self::NO_PREFIX;
-		}
+	public function get_prefix() {
+		return $this->path_prefix;
+	}
 
-		switch ( $prefix ) {
-			case self::ADD_PREFIX:
-				return $adaptor->getPathPrefix();
-			break;
-
-			case self::NO_PREFIX:
-			default:
-				return '';
-			break;
-		}
+	public function set_prefix( $prefix ) {
+		$this->path_prefix = ! empty( $prefix ) ? trailingslashit( $prefix ) : '';
 	}
 
 }

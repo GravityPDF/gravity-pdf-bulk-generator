@@ -59,12 +59,7 @@ class Config {
 	 * @since 1.0
 	 */
 	public function set_session_id( $session_id ) {
-		$adapter = $this->filesystem->getAdapter();
-
-		/* Not all Filesystem adapters support method */
-		if ( method_exists( $adapter, 'setPathPrefix' ) ) {
-			$adapter->setPathPrefix( $session_id );
-		}
+		$this->filesystem->set_prefix( $session_id );
 
 		return $this;
 	}

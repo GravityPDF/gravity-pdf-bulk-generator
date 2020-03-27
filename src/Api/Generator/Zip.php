@@ -6,6 +6,8 @@ use GFPDF\Helper\Helper_Trait_Logger;
 use GFPDF\Helper\Helper_Url_Signer;
 use GFPDF\Plugins\BulkGenerator\Api\ApiEndpointRegistration;
 use GFPDF\Plugins\BulkGenerator\Api\ApiNamespace;
+use GFPDF\Plugins\BulkGenerator\Exceptions\FilesystemError;
+use GFPDF\Plugins\BulkGenerator\Exceptions\NothingToZip;
 use GFPDF\Plugins\BulkGenerator\Model\Config;
 use GFPDF\Plugins\BulkGenerator\Utility\FilesystemHelper;
 use GFPDF\Plugins\BulkGenerator\Validation\SessionId;
@@ -61,8 +63,8 @@ class Zip implements ApiEndpointRegistration {
 			ApiNamespace::V1,
 			'/generator/zip/(?P<sessionId>.+?)',
 			[
-				'methods'             => \WP_REST_Server::CREATABLE,
-				'callback'            => [ $this, 'response' ],
+				'methods'  => \WP_REST_Server::CREATABLE,
+				'callback' => [ $this, 'response' ],
 
 				'permission_callback' => function() {
 					$gform = \GPDFAPI::get_form_class();
@@ -75,7 +77,7 @@ class Zip implements ApiEndpointRegistration {
 					return $capabilities;
 				},
 
-				'args'                => [
+				'args' => [
 					'sessionId' => [
 						'required'          => true,
 						'type'              => 'string',
@@ -104,12 +106,18 @@ class Zip implements ApiEndpointRegistration {
 			$this->logger->notice( 'Begin PDF to Zip process', [ 'session' => $session_id ] );
 
 			/* Create/load our Zip file */
-			$zip = new Filesystem(
-				new ZipArchiveAdapter( $this->filesystem->get_zip_path( FilesystemHelper::ADD_PREFIX ) )
+			$tmp_zip_path = \GPDFAPI::get_data_class()->template_tmp_location . $session_id;
+			$zip          = new Filesystem(
+				new ZipArchiveAdapter( $tmp_zip_path )
 			);
 
 			$tmp_basepath = $this->filesystem->get_tmp_basepath();
 			$contents     = $this->filesystem->listContents( $tmp_basepath, true );
+			$this->filesystem->set_prefix( '' );
+
+			if ( count( $contents ) === 0 ) {
+				throw new NothingToZip();
+			}
 
 			/* Loop over all the files in the tmp Session directory and move the unique PDFs to the zip */
 			foreach ( $contents as $info ) {
@@ -117,7 +125,7 @@ class Zip implements ApiEndpointRegistration {
 					continue;
 				}
 
-				$basepath_pattern = '/^' . preg_quote( $tmp_basepath, '/' ) . '/';
+				$basepath_pattern = '/^' . preg_quote( $session_id . '/' . $tmp_basepath, '/' ) . '/';
 				$zip_file_path    = preg_replace( $basepath_pattern, '', $info['path'] ); /* remove tmp basedir */
 
 				/* If the zip doesn't already contain the file, include it in the archive */
@@ -128,13 +136,29 @@ class Zip implements ApiEndpointRegistration {
 			}
 
 			/* Force the zip file to close (a PHP thing) */
-			$zip = null;
+			$zip->getAdapter()->getArchive()->close();
+
+			/* If no zip file exists, throw an error */
+			if ( ! is_file( $tmp_zip_path ) ) {
+				throw new FilesystemError();
+			}
+
+			$this->filesystem->set_prefix( $session_id );
+			$this->filesystem->put( $this->filesystem->get_zip_path(), file_get_contents( $tmp_zip_path ) );
 
 			return [
 				'downloadUrl' => $this->generate_signed_download_url( $session_id ),
 			];
+		} catch ( FilesystemError $e ) {
+			return new \WP_Error( 'no_zip_file_exists', '', [ 'status' => 500 ] );
+		} catch ( NothingToZip $e ) {
+			return new \WP_Error( 'no_pdfs_to_zip', '', [ 'status' => 400 ] );
 		} catch ( \Exception $e ) {
 			return new \WP_Error( $e->getCode(), $e->getMessage(), [ 'status' => 500 ] );
+		} finally {
+			if ( is_file( $tmp_zip_path ) ) {
+				unlink( $tmp_zip_path );
+			}
 		}
 	}
 
@@ -148,7 +172,7 @@ class Zip implements ApiEndpointRegistration {
 	 *
 	 * @internal The zip file is automatically deleted after it is 24 hours old
 	 *
-	 * @since 1.0
+	 * @since    1.0
 	 */
 	protected function generate_signed_download_url( $session_id ) {
 		$download_url = rest_url() . ApiNamespace::V1 . '/generator/download/' . $session_id;

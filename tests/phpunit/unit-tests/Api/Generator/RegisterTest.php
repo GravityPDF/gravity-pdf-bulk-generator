@@ -4,10 +4,10 @@ namespace GFPDF\Plugins\BulkGenerator\Api\Generator;
 
 use GFPDF\Plugins\BulkGenerator\Api\ApiNamespace;
 use GFPDF\Plugins\BulkGenerator\Api\DefaultApiTests;
+use GFPDF\Plugins\BulkGenerator\FailedNullAdapter;
 use GFPDF\Plugins\BulkGenerator\Model\Config;
 use GFPDF\Plugins\BulkGenerator\Utility\FilesystemHelper;
 use GFPDF\Plugins\BulkGenerator\Validation\SessionId;
-use GFPDF\Plugins\BulkGenerator\FailedNullAdapter;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Memory\MemoryAdapter;
 
@@ -33,6 +33,11 @@ class RegisterTest extends DefaultApiTests {
 	protected $endpoint;
 
 	/**
+	 * @var FilesystemHelper
+	 */
+	protected $filesystem;
+
+	/**
 	 * @var SessionId
 	 */
 	protected $validator;
@@ -40,19 +45,19 @@ class RegisterTest extends DefaultApiTests {
 	public function setUp() {
 		parent::setUp();
 
-		do_action('rest_api_init');
+		do_action( 'rest_api_init' );
 
 		$this->authenticate();
 		$this->setup_endpoint_class();
 	}
 
 	protected function setup_endpoint_class( $adapter = null, $config_adapter = null ) {
-		$filesystem = new FilesystemHelper( new Filesystem( $adapter === null ? new MemoryAdapter() : $adapter ) );
-		$config     = new Config( $config_adapter === null ? $filesystem : new FilesystemHelper( new Filesystem( $config_adapter ) ) );
+		$this->filesystem = new FilesystemHelper( new Filesystem( $adapter === null ? new MemoryAdapter() : $adapter ) );
+		$config           = new Config( $config_adapter === null ? $this->filesystem : new FilesystemHelper( new Filesystem( $config_adapter ) ) );
 
-		$this->validator = new SessionId( $filesystem, $GLOBALS['GFPDF_Test']->log );
+		$this->validator = new SessionId( $this->filesystem, $GLOBALS['GFPDF_Test']->log );
 
-		$this->endpoint = new Register( $config, $filesystem );
+		$this->endpoint = new Register( $config, $this->filesystem );
 		$this->endpoint->set_logger( $GLOBALS['GFPDF_Test']->log );
 
 		/* Override the existing endpoint to take advantage of our test classes */
@@ -64,7 +69,9 @@ class RegisterTest extends DefaultApiTests {
 		$request = new \WP_REST_Request( 'POST', $this->rest_route );
 		$request->set_param( 'path', '/' );
 
-		$response  = rest_get_server()->dispatch( $request );
+		$response = rest_get_server()->dispatch( $request );
+		$this->filesystem->set_prefix( '' );
+
 		$validator = $this->validator;
 		$this->assertTrue( $validator( $response->get_data()['sessionId'] ) );
 	}

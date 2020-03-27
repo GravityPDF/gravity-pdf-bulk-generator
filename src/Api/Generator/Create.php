@@ -165,7 +165,7 @@ class Create implements ApiEndpointRegistration {
 			}
 
 			/* Get the PDF filename (ensuring uniqueness) and save to the Bulk Generator filesystem location */
-			$tmp_pdf_filename = $this->get_unique_filename( $this->filesystem->get_filesystem(), $tmp_pdf_path, wp_basename( $pdf->get_path() ) );
+			$tmp_pdf_filename = $this->get_unique_filename( $this->filesystem, $tmp_pdf_path, wp_basename( $pdf->get_path() ) );
 			if ( ! $this->filesystem->writeStream( "$tmp_pdf_path/$tmp_pdf_filename", fopen( $pdf->get_path(), 'r' ) ) ) {
 				throw new FilesystemError();
 			}
@@ -203,7 +203,7 @@ class Create implements ApiEndpointRegistration {
 	/**
 	 * Check if a file already exists and then suffix the PDF name with an incrementing number until it is unique
 	 *
-	 * @param Filesystem $filesystem
+	 * @param FilesystemHelper|Filesystem $filesystem
 	 * @param string     $basepath
 	 * @param string     $filename
 	 *
@@ -211,7 +211,7 @@ class Create implements ApiEndpointRegistration {
 	 *
 	 * @since 1.0
 	 */
-	protected function get_unique_filename( Filesystem $filesystem, $basepath, $filename ) {
+	protected function get_unique_filename( $filesystem, $basepath, $filename ) {
 		$unique_filename = $filename;
 
 		$i = 1;
