@@ -69,10 +69,19 @@ class Download implements ApiEndpointRegistration {
 				'callback' => [ $this, 'response' ],
 
 				'permission_callback' => function( $request ) {
-					$signer   = new Helper_Url_Signer();
-					$home_url = untrailingslashit( strtok( home_url(), '?' ) );
+					if ( ! isset( $_SERVER['HTTP_HOST'] ) || ! isset( $_SERVER['REQUEST_URI'] ) ) {
+						return false;
+					}
 
-					$verified = $signer->verify( $home_url . $_SERVER['REQUEST_URI'] );
+					$signer = new Helper_Url_Signer();
+
+					$protocol = isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://';
+					$domain   = $_SERVER['HTTP_HOST'];
+					$request  = $_SERVER['REQUEST_URI'];
+
+					$url = $protocol . $domain . $request;
+
+					$verified = $signer->verify( $url );
 					if ( ! $verified ) {
 						$this->logger->warning( 'Permission denied: signed URL is invalid' );
 					}
@@ -113,9 +122,11 @@ class Download implements ApiEndpointRegistration {
 			}
 
 			/* Send zip file to browser */
-			header( 'Content-Type: application/zip' );
-			header( 'Content-Length: ' . $this->filesystem->getSize( $zip_path ) );
-			header( 'Content-Disposition: attachment; filename="' . wp_basename( $zip_path ) . '"' );
+			if ( ! headers_sent() ) {
+				header( 'Content-Type: application/zip' );
+				header( 'Content-Length: ' . $this->filesystem->getSize( $zip_path ) );
+				header( 'Content-Disposition: attachment; filename="' . wp_basename( $zip_path ) . '"' );
+			}
 
 			$stream = $this->filesystem->readStream( $this->filesystem->get_zip_path() );
 			while ( ! feof( $stream ) ) {
