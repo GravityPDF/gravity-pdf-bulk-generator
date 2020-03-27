@@ -168,9 +168,7 @@ class FilesystemHelper {
 	}
 
 	/**
-	 * Determine if the path get_prefix should be returned
-	 *
-	 * @param int $prefix Configuration option to determine if the Filesystem path prefix should be returned
+	 * Get the path prefix
 	 *
 	 * @return string
 	 *
@@ -180,8 +178,14 @@ class FilesystemHelper {
 		return $this->path_prefix;
 	}
 
+	/**
+	 * Set the path prefix
+	 *
+	 * @param string $prefix
+	 *
+	 * @since 1.0
+	 */
 	public function set_prefix( $prefix ) {
 		$this->path_prefix = ! empty( $prefix ) ? trailingslashit( $prefix ) : '';
 	}
-
 }
