@@ -45,6 +45,11 @@ class FilesystemHelper {
 	 */
 	protected $tmp_dirname = 'tmp/';
 
+	/**
+	 * @var string
+	 *
+	 * @since 1.0
+	 */
 	protected $path_prefix = '';
 
 	/**
@@ -131,7 +136,6 @@ class FilesystemHelper {
 	 *
 	 * @param string $user_path The user-defined path the PDFs should be saved into in the zip file
 	 * @param array  $entry     The Gravity Forms Entry array
-	 * @param int    $prefix    Configuration option to determine if the Filesystem path get_prefix should be returned
 	 *
 	 * @return string
 	 *
