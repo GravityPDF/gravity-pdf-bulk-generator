@@ -65,8 +65,8 @@ class Download implements ApiEndpointRegistration {
 			ApiNamespace::V1,
 			'/generator/download/(?P<sessionId>.+?)',
 			[
-				'methods'  => \WP_REST_Server::READABLE,
-				'callback' => [ $this, 'response' ],
+				'methods'             => \WP_REST_Server::READABLE,
+				'callback'            => [ $this, 'response' ],
 
 				'permission_callback' => function( $request ) {
 					if ( ! isset( $_SERVER['HTTP_HOST'] ) || ! isset( $_SERVER['REQUEST_URI'] ) ) {
@@ -89,7 +89,7 @@ class Download implements ApiEndpointRegistration {
 					return $verified;
 				},
 
-				'args' => [
+				'args'                => [
 					'sessionId' => [
 						'required'          => true,
 						'type'              => 'string',

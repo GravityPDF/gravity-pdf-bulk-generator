@@ -48,12 +48,12 @@ class ConfigTest extends \WP_UnitTestCase {
 		/* Save the test settings */
 		$this->assertEmpty( $this->config->get_all_settings() );
 		$this->config->set_all_settings( $settings )
-		             ->save();
+					 ->save();
 
 		/* Load the test settings */
-		$config = new Config ( $this->filesystem );
+		$config = new Config( $this->filesystem );
 		$config->set_session_id( self::SESSION_ID )
-		       ->fetch();
+			   ->fetch();
 
 		$this->assertSame( $settings, $config->get_all_settings() );
 	}

@@ -63,8 +63,8 @@ class Zip implements ApiEndpointRegistration {
 			ApiNamespace::V1,
 			'/generator/zip/(?P<sessionId>.+?)',
 			[
-				'methods'  => \WP_REST_Server::CREATABLE,
-				'callback' => [ $this, 'response' ],
+				'methods'             => \WP_REST_Server::CREATABLE,
+				'callback'            => [ $this, 'response' ],
 
 				'permission_callback' => function() {
 					$gform = \GPDFAPI::get_form_class();
@@ -77,7 +77,7 @@ class Zip implements ApiEndpointRegistration {
 					return $capabilities;
 				},
 
-				'args' => [
+				'args'                => [
 					'sessionId' => [
 						'required'          => true,
 						'type'              => 'string',

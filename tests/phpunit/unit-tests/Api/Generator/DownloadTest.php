@@ -62,15 +62,15 @@ class DownloadTest extends DefaultApiTests {
 
 		$config = new Config( $config_adapter === null ? $this->filesystem : new FilesystemHelper( new Filesystem( $config_adapter, [ 'disable_asserts' => true ] ) ) );
 		$config->set_session_id( self::SESSION_ID )
-		       ->set_all_settings( [ 'path' => '/' ] )
-		       ->save();
+			   ->set_all_settings( [ 'path' => '/' ] )
+			   ->save();
 
 		$config->set_session_id( '' );
 
 		$this->endpoint = $this->getMockBuilder( Download::class )
-		                       ->setConstructorArgs( [ $config, $this->filesystem ] )
-		                       ->setMethods( [ 'end' ] )
-		                       ->getMock();
+							   ->setConstructorArgs( [ $config, $this->filesystem ] )
+							   ->setMethods( [ 'end' ] )
+							   ->getMock();
 
 		$this->endpoint->set_logger( $GLOBALS['GFPDF_Test']->log );
 

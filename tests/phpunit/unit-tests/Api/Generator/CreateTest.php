@@ -39,7 +39,7 @@ class CreateTest extends DefaultApiTests {
 	 */
 	protected $filesystem;
 
-	protected $session_id = '0bdff6b1954ebce8c0eac7a3a8203a6c';
+	protected $session_id       = '0bdff6b1954ebce8c0eac7a3a8203a6c';
 	protected $dummy_session_id = '0bdff6b1954ebce8c0eac7a3a8203123';
 
 	/**
@@ -63,8 +63,8 @@ class CreateTest extends DefaultApiTests {
 
 		$config = new Config( $config_adapter === null ? $this->filesystem : new FilesystemHelper( new Filesystem( $config_adapter, [ 'disable_asserts' => true ] ) ) );
 		$config->set_session_id( $this->session_id )
-		       ->set_all_settings( [ 'path' => '/' ] )
-		       ->save();
+			   ->set_all_settings( [ 'path' => '/' ] )
+			   ->save();
 
 		$config->set_session_id( '' );
 
@@ -81,11 +81,13 @@ class CreateTest extends DefaultApiTests {
 
 		\GFAPI::get_form( $this->form_id );
 
-		return \GFAPI::add_entry( [
-			'form_id'  => $this->form_id,
-			'currency' => 'USD',
-			'1'        => 'Sample',
-		] );
+		return \GFAPI::add_entry(
+			[
+				'form_id'  => $this->form_id,
+				'currency' => 'USD',
+				'1'        => 'Sample',
+			]
+		);
 	}
 
 	public function test_entry_not_found_response() {
@@ -156,12 +158,15 @@ class CreateTest extends DefaultApiTests {
 		$request->set_param( 'entryId', $this->create_entry() );
 		$request->set_param( 'pdfId', '5e7bfc55b6ec9' );
 
-		add_filter( 'gfpdf_mpdf_class_config', function( $config ) {
-			$config['mode']          = 'c';
-			$config['biDirectional'] = false;
+		add_filter(
+			'gfpdf_mpdf_class_config',
+			function( $config ) {
+				$config['mode']          = 'c';
+				$config['biDirectional'] = false;
 
-			return $config;
-		} );
+				return $config;
+			}
+		);
 
 		$response = $this->endpoint->response( $request );
 		$this->assertSame( 'filesystem_error', $response->get_error_code() );
@@ -173,12 +178,15 @@ class CreateTest extends DefaultApiTests {
 		$request->set_param( 'entryId', $this->create_entry() );
 		$request->set_param( 'pdfId', '5e7bfc55b6ec9' );
 
-		add_filter( 'gfpdf_mpdf_class_config', function( $config ) {
-			$config['mode']          = 'c';
-			$config['biDirectional'] = false;
+		add_filter(
+			'gfpdf_mpdf_class_config',
+			function( $config ) {
+				$config['mode']          = 'c';
+				$config['biDirectional'] = false;
 
-			return $config;
-		} );
+				return $config;
+			}
+		);
 
 		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
@@ -191,12 +199,15 @@ class CreateTest extends DefaultApiTests {
 		$request->set_param( 'entryId', $this->create_entry() );
 		$request->set_param( 'pdfId', '5e7bfc55b6ec9' );
 
-		add_filter( 'gfpdf_mpdf_class_config', function( $config ) {
-			$config['mode']          = 'c';
-			$config['biDirectional'] = false;
+		add_filter(
+			'gfpdf_mpdf_class_config',
+			function( $config ) {
+				$config['mode']          = 'c';
+				$config['biDirectional'] = false;
 
-			return $config;
-		} );
+				return $config;
+			}
+		);
 
 		$response = rest_get_server()->dispatch( $request );
 		$this->filesystem->set_prefix( '' );

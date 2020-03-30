@@ -38,14 +38,16 @@ class FilesystemHelperTest extends \WP_UnitTestCase {
 	protected function create_entry() {
 		$form_id = \GFAPI::add_form( json_decode( file_get_contents( __DIR__ . '/../../json/sample.json' ), true ) );
 
-		$entry_id = \GFAPI::add_entry( [
-			'form_id'        => $form_id,
-			'created_by'     => $this->factory->user->create(),
-			'date_created'   => '2020-02-01 01:30:00',
-			'payment_status' => 'Paid',
-			'currency'       => 'USD',
-			'1'              => 'Sample',
-		] );
+		$entry_id = \GFAPI::add_entry(
+			[
+				'form_id'        => $form_id,
+				'created_by'     => $this->factory->user->create(),
+				'date_created'   => '2020-02-01 01:30:00',
+				'payment_status' => 'Paid',
+				'currency'       => 'USD',
+				'1'              => 'Sample',
+			]
+		);
 
 		return \GFAPI::get_entry( $entry_id );
 	}

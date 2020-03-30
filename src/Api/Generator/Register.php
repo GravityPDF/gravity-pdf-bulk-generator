@@ -79,7 +79,7 @@ class Register implements ApiEndpointRegistration {
 				},
 
 				'args'                => [
-					'path'        => [
+					'path' => [
 						'required'          => true,
 						'type'              => 'string',
 						'description'       => __( 'The path each generated PDF should be saved into in the zip file. Merge tags are supported.', 'gravity-pdf-bulk-generator' ),

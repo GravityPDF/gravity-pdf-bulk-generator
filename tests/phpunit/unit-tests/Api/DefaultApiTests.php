@@ -80,9 +80,9 @@ abstract class DefaultApiTests extends \WP_UnitTestCase {
 
 		/* Bypass the parameter required checks */
 		$request = $this->getMockBuilder( \WP_REST_Request::class )
-		                ->setConstructorArgs( [ 'POST', $this->rest_route ] )
-		                ->setMethods( [ 'set_attributes' ] )
-		                ->getMock();
+						->setConstructorArgs( [ 'POST', $this->rest_route ] )
+						->setMethods( [ 'set_attributes' ] )
+						->getMock();
 
 		/* Test logged out user auth failure */
 		$response = rest_get_server()->dispatch( $request );
