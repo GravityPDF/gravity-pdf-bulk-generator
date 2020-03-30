@@ -67,12 +67,14 @@ class Entries implements ApiEndpointRegistration {
 						'required'    => false,
 						'type'        => 'string',
 						'description' => __( 'What the search parameter will focus on', 'gravity-pdf-bulk-generator' ),
+						'default'     => '0',
 					],
 
 					'operator' => [
 						'required'    => false,
 						'type'        => 'string',
 						'description' => __( 'The search parameter comparison type', 'gravity-pdf-bulk-generator' ),
+						'default'     => 'contains',
 					],
 
 					'order'    => [
@@ -130,7 +132,7 @@ class Entries implements ApiEndpointRegistration {
 			/* Setup the Entry List Table object that will do the heavy lifting for us */
 			$entry_list_reflection = new \ReflectionClass( '\GF_Entry_List_Table' );
 			$entry_list            = $entry_list_reflection->newInstanceWithoutConstructor();
-			$entry_list->filter    = $_GET['filter'];
+			$entry_list->filter    = isset( $_GET['filter'] ) ? $_GET['filter'] : '';
 
 			$form_property_reflection = $entry_list_reflection->getProperty( '_form' );
 			$form_property_reflection->setAccessible( true );
@@ -159,6 +161,7 @@ class Entries implements ApiEndpointRegistration {
 			return $entry_ids;
 		} catch ( \Exception $e ) {
 			$this->logger->error( $e->getMessage() );
+
 			return new \WP_Error( $e->getMessage(), '', [ 'status' => 500 ] );
 		}
 	}
