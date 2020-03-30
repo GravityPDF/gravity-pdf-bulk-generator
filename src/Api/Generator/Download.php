@@ -65,14 +65,23 @@ class Download implements ApiEndpointRegistration {
 			ApiNamespace::V1,
 			'/generator/download/(?P<sessionId>.+?)',
 			[
-				'methods'             => \WP_REST_Server::READABLE,
-				'callback'            => [ $this, 'response' ],
+				'methods'  => \WP_REST_Server::READABLE,
+				'callback' => [ $this, 'response' ],
 
 				'permission_callback' => function( $request ) {
-					$signer   = new Helper_Url_Signer();
-					$home_url = untrailingslashit( strtok( home_url(), '?' ) );
+					if ( ! isset( $_SERVER['HTTP_HOST'] ) || ! isset( $_SERVER['REQUEST_URI'] ) ) {
+						return false;
+					}
 
-					$verified = $signer->verify( $home_url . $_SERVER['REQUEST_URI'] );
+					$signer = new Helper_Url_Signer();
+
+					$protocol = isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://';
+					$domain   = $_SERVER['HTTP_HOST'];
+					$request  = $_SERVER['REQUEST_URI'];
+
+					$url = $protocol . $domain . $request;
+
+					$verified = $signer->verify( $url );
 					if ( ! $verified ) {
 						$this->logger->warning( 'Permission denied: signed URL is invalid' );
 					}
@@ -80,7 +89,7 @@ class Download implements ApiEndpointRegistration {
 					return $verified;
 				},
 
-				'args'                => [
+				'args' => [
 					'sessionId' => [
 						'required'          => true,
 						'type'              => 'string',
@@ -113,10 +122,20 @@ class Download implements ApiEndpointRegistration {
 			}
 
 			/* Send zip file to browser */
-			header( 'Content-Type: application/zip' );
-			header( 'Content-Length: ' . $this->filesystem->getSize( $zip_path ) );
-			header( 'Content-Disposition: attachment; filename="' . wp_basename( $zip_path ) . '"' );
-			readfile( $this->filesystem->get_zip_path( FilesystemHelper::ADD_PREFIX ) );
+			if ( ! headers_sent() ) {
+				header( 'Content-Type: application/zip' );
+				header( 'Content-Length: ' . $this->filesystem->getSize( $zip_path ) );
+				header( 'Content-Disposition: attachment; filename="' . wp_basename( $zip_path ) . '"' );
+			}
+
+			$stream = $this->filesystem->readStream( $this->filesystem->get_zip_path() );
+			while ( ! feof( $stream ) ) {
+				echo fread( $stream, 2048 );
+				ob_flush();
+				flush();
+			}
+
+			fclose( $stream );
 
 			/*
 			 * Cleanup the session tmp directory.
@@ -127,6 +146,7 @@ class Download implements ApiEndpointRegistration {
 			$this->filesystem->deleteDir( $this->filesystem->get_tmp_basepath() );
 		} catch ( \Exception $e ) {
 			$this->logger->error( $e->getMessage(), [ 'session' => $request->get_param( 'sessionId' ) ] );
+
 			return new \WP_Error( $e->getMessage(), '', [ 'status' => 500 ] );
 		}
 
@@ -134,7 +154,7 @@ class Download implements ApiEndpointRegistration {
 	}
 
 	/**
-	 * @since 1.0
+	 * @since    1.0
 	 *
 	 * @Internal Moved to own method so we can stub during unit testing
 	 */
