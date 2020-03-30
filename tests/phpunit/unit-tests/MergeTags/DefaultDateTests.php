@@ -9,7 +9,7 @@ use GFCommon;
  *
  * @package GFPDF\Plugins\BulkGenerator\MergeTags
  */
-class DefaultDateTests extends \WP_UnitTestCase {
+abstract class DefaultDateTests extends \WP_UnitTestCase {
 
 	protected $mergetag;
 	protected $form;
@@ -39,7 +39,7 @@ class DefaultDateTests extends \WP_UnitTestCase {
 		$date             = $this->entry[ $this->mergetag ];
 		$entry_gmt_time   = mysql2date( 'G', $date );
 		$entry_local_time = GFCommon::get_local_timestamp( $entry_gmt_time );
-		$time_now         = current_time( 'timestamp' );
+		$time_now         = time();
 
 		/* Make sure the :raw option overrides all other options */
 		$this->assertEquals( $date, $this->r( "{{$this->mergetag}:raw}" ) );
