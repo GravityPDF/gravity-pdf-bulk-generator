@@ -2,10 +2,13 @@
 
 namespace GFPDF\Plugins\BulkGenerator\Model;
 
+use GFAPI;
+use GFPDF\Plugins\BulkGenerator\Exceptions\InvalidPdfId;
 use League\Flysystem\Filesystem;
 use GFPDF\Plugins\BulkGenerator\EnhancedMemoryAdapter;
+use WP_UnitTestCase;
 
-class PdfTest extends \WP_UnitTestCase {
+class PdfTest extends WP_UnitTestCase {
 
 	protected $pdf;
 	protected $filesystem;
@@ -24,9 +27,9 @@ class PdfTest extends \WP_UnitTestCase {
 	}
 
 	protected function create_entry() {
-		$this->form_id = \GFAPI::add_form( json_decode( file_get_contents( __DIR__ . '/../../json/sample.json' ), true ) );
+		$this->form_id = GFAPI::add_form( json_decode( file_get_contents( __DIR__ . '/../../json/sample.json' ), true ) );
 
-		$entry_id = \GFAPI::add_entry( [
+		$entry_id = GFAPI::add_entry( [
 			'form_id'        => $this->form_id,
 			'created_by'     => $this->factory->user->create(),
 			'date_created'   => '2020-02-01 01:30:00',
@@ -36,14 +39,14 @@ class PdfTest extends \WP_UnitTestCase {
 			'1'              => 'Sample',
 		] );
 
-		return \GFAPI::get_entry( $entry_id );
+		return GFAPI::get_entry( $entry_id );
 	}
-
 	/**
-	 * @expectedException \GFPDF\Plugins\BulkGenerator\Exceptions\InvalidPdfId
+	 * @expectedException GFPDF\Plugins\BulkGenerator\Exceptions\InvalidPdfId
 	 */
-	public function test_fetch_exemption() {
-		$this->pdf->fetch();
+	public function test_fetch_exemption_failed() {
+		$pdf = new Pdf(1231, '5e7bfc55b6ec9' );
+		$pdf->fetch();
 	}
 
 	public function test_has_setting() {
@@ -61,7 +64,7 @@ class PdfTest extends \WP_UnitTestCase {
 	}
 
 	public function test_get_all_settings() {
-			$this->assertNotSame(['test'=>1,'dummy_content'=>false],$this->pdf->get_all_settings());
+		$this->assertNotSame( [ 'test' => 1, 'dummy_content' => false ], $this->pdf->get_all_settings() );
 	}
 
 	public function test_evaluate_active() {
@@ -69,11 +72,7 @@ class PdfTest extends \WP_UnitTestCase {
 	}
 
 	public function test_evaluate_conditional_logic() {
-		$misc = \GPDFAPI::get_misc_class();
-
 		$this->pdf->evaluate_conditional_logic( $this->entry );
-		//$item = $misc->evaluate_conditional_logic( $this->pdf->get_setting( 'conditionalLogic' ), $data );
-		//$this->assertSame( 'null', $data->settings['conditionalLogic'] );
 	}
 
 
@@ -86,15 +85,27 @@ class PdfTest extends \WP_UnitTestCase {
 		$this->assertSame( $pdf_path, substr( strrchr( $this->pdf->get_path(), "/" ), 1 ) );
 	}
 
+	public function test_put() {
+		$this->config();
+		$this->pdf->generate( $this->entry['id'] );
+		$this->assertNotEmpty( $this->pdf->put( $this->filesystem, '\'/\'' ) );
+	}
+
 	public function test_get_path() {
+
+		$this->config();
+		$this->pdf->generate( $this->entry['id'] );
+		$this->assertNotEmpty( $this->pdf->get_path() );
 
 	}
 
-	public function test_put() {
-		$this->config();
-		$this->pdf->fetch()
-		          ->generate( $this->entry['id'] );
-		$this->assertNotEmpty( $this->pdf->put( $this->filesystem, '\'/\'' ) );
+	/**
+	 * @expectedException GFPDF\Plugins\BulkGenerator\Exceptions\PdfGenerationError
+	 */
+	public function test_get_path_exception() {
+		$this->pdf->generate( 133 );
+		$this->assertNotEmpty( $this->pdf->get_path() );
+
 	}
 
 
