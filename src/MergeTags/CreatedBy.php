@@ -43,11 +43,6 @@ class CreatedBy {
 	 */
 	public function process( $text, $form = [], $entry = [], $url_encode = false, $esc_html = false ) {
 
-		/* No user, exit early */
-		if ( empty( $entry['created_by'] ) ) {
-			return $text;
-		}
-
 		preg_match_all( sprintf( MergeTags::REGEX, 'created_by' ), $text, $matches, PREG_SET_ORDER );
 
 		/* No matches, exit early */
