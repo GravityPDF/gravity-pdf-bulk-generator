@@ -65,11 +65,11 @@ class CreatedBy {
 			switch ( $property ) {
 				case 'roles':
 					$value = implode( ', ', $entry_creator->roles );
-					break;
+				break;
 
 				default:
 					$value = $entry_creator->get( $property );
-					break;
+				break;
 			}
 
 			$value = $url_encode ? urlencode( $value ) : $value;

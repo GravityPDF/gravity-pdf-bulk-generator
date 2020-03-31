@@ -207,3 +207,4 @@ class CreateTest extends DefaultApiTests {
 		$this->assertStringStartsWith( '%PDF-1.4', $this->filesystem->read( '/tmp/Zadani1.pdf' ) );
 	}
 }
+
