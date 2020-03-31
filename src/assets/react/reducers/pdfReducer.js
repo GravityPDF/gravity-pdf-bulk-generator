@@ -223,6 +223,7 @@ export default function (state = initialState, action) {
     case GENERATE_PDF_CANCELLED:
       return {
         ...state,
+        sessionId: '',
         generatePdfSuccess: [],
         generatePdfFailed: [],
         generatePdfWarning: [],
@@ -277,6 +278,7 @@ export default function (state = initialState, action) {
 
       return {
         ...state,
+        sessionId: '',
         modal: false,
         pdfList: list,
         generatePdfSuccess: [],

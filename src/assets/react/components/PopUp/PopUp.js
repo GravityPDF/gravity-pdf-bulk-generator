@@ -36,7 +36,6 @@ class PopUp extends React.Component {
    */
   static propTypes = {
     escapeCloseModal: PropTypes.func.isRequired,
-    downloadPercentage: PropTypes.number.isRequired,
     generatePdfCancel: PropTypes.func.isRequired,
     resetTagPickerState: PropTypes.func.isRequired,
     resetPdfState: PropTypes.func.isRequired,
@@ -63,7 +62,6 @@ class PopUp extends React.Component {
   escapeKeyListener = event => {
     const {
       escapeCloseModal,
-      downloadPercentage,
       generatePdfCancel,
       resetTagPickerState,
       resetPdfState,
@@ -131,24 +129,11 @@ class PopUp extends React.Component {
 }
 
 /**
- * Map redux state to props
- *
- * @param state
- *
- * @returns {downloadPercentage: number}
- *
- * @since 1.0
- */
-const mapStateToProps = state => ({
-  downloadPercentage: state.pdf.downloadPercentage
-})
-
-/**
  * Connect and dispatch redux actions as props
  *
  * @since 1.0
  */
-export default connect(mapStateToProps, {
+export default connect(null, {
   escapeCloseModal,
   generatePdfCancel,
   resetTagPickerState,
