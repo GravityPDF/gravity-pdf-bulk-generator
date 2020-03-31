@@ -44,7 +44,7 @@ const Step1Body = (
     <div className='gfpdf-settings-group'>
       <h3>Select PDFs</h3>
 
-      <p>Specify which PDFs you would like to generate for the selected entries.</p>
+      <p>Specify the PDFs you would like to generate for the selected entries.</p>
 
       <ListToggle
         items={pdfList}
@@ -54,7 +54,7 @@ const Step1Body = (
     <div className='gfpdf-settings-group'>
       <h3>Directory Structure</h3>
 
-      <p>Specify the directory structure to use for the PDFs of the selected entries. Merge tags are
+      <p>Specify the directory structure to use for the PDFs of the selected entries. Form merge tags are
         supported.</p>
 
       <TagInput
