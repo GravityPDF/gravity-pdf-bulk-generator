@@ -139,7 +139,7 @@ class TagPicker extends React.Component {
         {
           tags.map((tag, index) => {
             const isActive = selectedTags.indexOf(tag.id) !== -1 ? ' active' : ''
-            const classes = 'gfpdf-button tag-picker' + isActive
+            const classes = 'button tag-picker' + isActive
 
             return (
               <button

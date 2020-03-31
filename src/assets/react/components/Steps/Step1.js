@@ -188,7 +188,7 @@ class Step1 extends React.Component {
 
         <footer>
           <button
-            className='gfpdf-button build'
+            className='button-primary build'
             onClick={this.build}>
             Build
           </button>

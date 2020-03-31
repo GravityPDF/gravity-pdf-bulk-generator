@@ -82,7 +82,6 @@ class PopUp extends React.Component {
     if (keyCode === escapeKey && pathname === '/step/2') {
       cancelButton({
         escapeCloseModal,
-        downloadPercentage,
         generatePdfCancel,
         history
       })

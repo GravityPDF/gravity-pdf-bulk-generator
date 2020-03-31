@@ -1,19 +1,1 @@
-@import 'src/assets/scss/config';
-@import './build';
-@import './cancel';
 @import './close';
-@import './tag-picker';
-
-.gfpdf-button {
-	text-shadow: none;
-	text-decoration: none;
-	min-height: 30px;
-	margin: 3px;
-	padding: 0px 12px;
-	line-height: 2;
-	cursor: pointer;
-	border: 1px solid $primary-color;
-	border-radius: 4px;
-	-webkit-appearance: none;
-	white-space: nowrap;
-}
