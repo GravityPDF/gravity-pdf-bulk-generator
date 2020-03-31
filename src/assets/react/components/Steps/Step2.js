@@ -110,7 +110,7 @@ class Step2 extends React.Component {
     } = this.props
 
     if (generatePdfSuccess.length > 0 && downloadPercentage === 100 && prevProps.downloadZipUrl !== downloadZipUrl) {
-      setTimeout(() => history.push('/step/3'), 1000)
+      history.push('/step/3')
     }
   }
 
@@ -156,7 +156,7 @@ class Step2 extends React.Component {
 
         <footer>
           <button
-            className={downloadPercentage === 100 ? 'gfpdf-button cancel hide' : 'gfpdf-button cancel'}
+            className="gfpdf-button cancel"
             onClick={e => cancelButton({
               e,
               toggleModal,
