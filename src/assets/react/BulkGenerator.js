@@ -6,7 +6,7 @@ import { withRouter } from 'react-router-dom'
 
 /* Redux Actions */
 import { processCheckbox, getSelectedEntryIds } from './actions/form'
-import { generatePdfListSuccess, toggleModal, generatePdfCancelled } from './actions/pdf'
+import { generatePdfListSuccess, toggleModal } from './actions/pdf'
 
 /* Components */
 import PopUp from './components/PopUp/PopUp'
@@ -57,38 +57,26 @@ class BulkGenerator extends React.Component {
   }
 
   /**
-   * On mount, call functions setGlobalState() and setEventListener()
+   * On mount, call function setEventListener()
    *
    * @since 1.0
    */
   componentDidMount () {
-    /* Request form  */
-    this.setGlobalState()
-
     /* Form action event listener */
     this.setEventListener()
   }
 
   /**
-   * On update, call function setGlobalState()
+   * On update, call functions based on conditions
    *
    * @param prevProps
    *
    * @since 1.0
    */
   componentDidUpdate (prevProps) {
-    const { generatePdfCancel, downloadPercentage, history } = this.props
-
-    /* Set setGlobalState if cancelled at Step 2 */
-    if (prevProps.location.pathname === '/step/2' && prevProps.generatePdfCancel !== generatePdfCancel) {
-      this.setGlobalState()
-    }
-
-    /* Set setGlobalState after a successful download and modal closed at Step 3 */
-    if (prevProps.location.pathname === '/step/3' && downloadPercentage === 0) {
-      history.push('/')
-
-      this.setGlobalState()
+    /* Call function deselectCheckbox() */
+    if (prevProps.location.pathname === '/step/2' && !this.props.modal) {
+      this.deselectCheckbox()
     }
   }
 
@@ -176,8 +164,11 @@ class BulkGenerator extends React.Component {
 
         /* Check for both selectors dropdown value */
         if (ids.length === 0 || e.target.previousElementSibling.value !== 'download_pdf') {
-          return
+          return false
         }
+
+        /* Set global state and add 'Toggle All' option in the list */
+        this.setGlobalState()
 
         /* Redux action */
         this.props.processCheckbox(ids)
@@ -228,6 +219,15 @@ class BulkGenerator extends React.Component {
   }
 
   /**
+   * Deselect checkbox after cancellation on Step2
+   *
+   * @since 1.0
+   */
+  deselectCheckbox = () => {
+    document.querySelector('#cb-select-all-1').click()
+  }
+
+  /**
    * Display BulkGenerator UI
    *
    * @returns {BulkGenerator: component}
@@ -269,6 +269,5 @@ export default withRouter(connect(mapStateToProps, {
   processCheckbox,
   getSelectedEntryIds,
   generatePdfListSuccess,
-  toggleModal,
-  generatePdfCancelled
+  toggleModal
 })(BulkGenerator))

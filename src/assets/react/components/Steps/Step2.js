@@ -97,17 +97,10 @@ class Step2 extends React.Component {
   /**
    * Check download percentage and proccess to Step3
    *
-   * @param prevProps
-   *
    * @since 1.0
    */
-  checkDownloadPercentage = (prevProps) => {
-    const {
-      generatePdfSuccess,
-      downloadPercentage,
-      downloadZipUrl,
-      history
-    } = this.props
+  checkDownloadPercentage = () => {
+    const { downloadPercentage, history } = this.props
 
     if (downloadPercentage === 100) {
       setTimeout(() => history.push('/step/3'), 350)
