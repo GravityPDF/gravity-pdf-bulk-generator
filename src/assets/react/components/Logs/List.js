@@ -25,7 +25,7 @@ const List = ({ list, state, title }) => (
     {
       list.map((item, index) => (
         <div key={index} className={'item ' + state.toString() + ' ' + title.toLowerCase()}>
-          {title === 'Success' ? 'Completed' : 'Failed'} generation of {item.pdfName}.pdf (#{item.pdfId}) for entry
+          {title === 'Success' ? 'Completed' : 'Failed'} generation of "{item.pdfName}.pdf" (#{item.pdfId}) for entry
           #{item.entryId}
         </div>
       ))

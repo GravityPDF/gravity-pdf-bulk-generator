@@ -46,13 +46,14 @@ const Step2Body = (
     downloadPercentage,
   }
 ) => (
-  <section>
-    <div id='gfpdf-step-2' className='gfpdf-step'>
+  <section className='gfpdf-step'>
+    <div id='gfpdf-step-2'>
       <CircularProgressbar
         value={downloadPercentage}
         text={`${downloadPercentage}%`} />
 
       <h2>Building your PDFs<LoadingDots /></h2>
+      <em>(Please do not navigate away from this page)</em>
     </div>
 
     <Logs
