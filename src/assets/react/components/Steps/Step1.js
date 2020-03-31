@@ -112,7 +112,7 @@ class Step1 extends React.Component {
 
     /* Check if there's an active PDF selected */
     if (activePdfList.length === 0) {
-      alert('Please select at least one PDF you would like to generate for this entries.')
+      alert('Please select at least one PDF to generate for the entries.')
     } else {
       /* Strip out forward slashes before passing to path */
       const path = stripForwardSlashes(directoryStructure)
