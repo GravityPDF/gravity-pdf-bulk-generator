@@ -1,5 +1,6 @@
 /* Dependencies */
 import { cancel, cancelled, delay, fork, put, retry, select, take, takeLatest } from 'redux-saga/effects'
+import Downloader from 'js-file-downloader'
 
 /* Redux Action Types */
 import {
@@ -12,11 +13,17 @@ import {
   GENERATE_PDF_WARNING,
   GENERATE_SESSION_ID,
   GENERATE_SESSION_ID_FAILED,
-  GENERATE_SESSION_ID_SUCCESS
+  GENERATE_SESSION_ID_SUCCESS,
+  REQUEST_DOWNLOAD_ZIP
 } from '../actionTypes/pdf'
+import { DOWNLOAD_ZIP_ATTEMPT } from '../actionTypes/logs'
 
 /* APIs */
-import { apiRequestGeneratePdf, apiRequestGeneratePdfZip, apiRequestSessionId } from '../api/pdf'
+import {
+  apiRequestGeneratePdf,
+  apiRequestGeneratePdfZip,
+  apiRequestSessionId
+} from '../api/pdf'
 
 /* Helpers */
 import { generateActivePdfList } from '../helpers/generateActivePdfList'
@@ -177,4 +184,21 @@ export function * watchGeneratePDF () {
       })
     }
   }
+}
+
+export function * requestDownloadZip ({ payload }) {
+  try {
+    yield new Downloader({
+      url: payload
+    })
+
+    // Called when download ended
+  } catch(error) {
+    // Called when an error occurred
+    yield put({ type: DOWNLOAD_ZIP_ATTEMPT })
+  }
+}
+
+export function * watchRequestDownloadZip () {
+  yield takeLatest(REQUEST_DOWNLOAD_ZIP, requestDownloadZip)
 }

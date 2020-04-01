@@ -32,7 +32,7 @@ import Logs from '../Logs/Logs'
  */
 const Step3Body = (
   {
-    downloadZipUrl,
+    requestDownloadZipUrl,
     success,
     errors,
     warnings,
@@ -49,9 +49,8 @@ const Step3Body = (
       <h2>Your PDFs are ready and the download will begin shortly.</h2>
 
       <p>
-        The zip file contains the PDFs for your selected entries. <a href={downloadZipUrl} download>Click here if
-        the download does not
-        start automatically</a>.
+        The zip file contains the PDFs for your selected entries.
+        <a href='#' onClick={requestDownloadZipUrl}> Click here if the download does not start automatically</a>.
       </p>
     </div>
 

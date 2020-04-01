@@ -1,7 +1,8 @@
 import {
   TOGGLE_SUCCESS,
   TOGGLE_ERRORS,
-  TOGGLE_WARNINGS
+  TOGGLE_WARNINGS,
+  RESET_LOGS_STATE
 } from '../actionTypes/logs'
 
 /**
@@ -49,5 +50,11 @@ export const toggleErrors = () => {
 export const toggleWarnings = () => {
   return {
     type: TOGGLE_WARNINGS
+  }
+}
+
+export const resetLogsState = () => {
+  return {
+    type: RESET_LOGS_STATE
   }
 }

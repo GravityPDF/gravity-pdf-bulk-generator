@@ -6,6 +6,7 @@ import {
   GENERATE_SESSION_ID,
   GENERATE_PDF_CANCEL,
   GENERATE_PDF_CANCELLED,
+  REQUEST_DOWNLOAD_ZIP,
   RESET_PDF_STATE
 } from '../actionTypes/pdf'
 
@@ -111,16 +112,10 @@ export const generatePdfCancel = () => {
   }
 }
 
-/**
- * Reset value for affected state
- *
- * @returns {{type: string}}
- *
- * @since 1.0
- */
-export const generatePdfCancelled = () => {
+export const requestDownloadZip = url => {
   return {
-    type: GENERATE_PDF_CANCELLED
+    type: REQUEST_DOWNLOAD_ZIP,
+    payload: url
   }
 }
 

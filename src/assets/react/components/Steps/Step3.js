@@ -4,9 +4,9 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 /* Redux Actions */
-import { toggleModal, resetPdfState } from '../../actions/pdf'
+import { toggleModal, resetPdfState, requestDownloadZip } from '../../actions/pdf'
 import { resetTagPickerState } from '../../actions/tagPicker'
-import { toggleSuccess, toggleErrors, toggleWarnings } from '../../actions/logs'
+import { toggleSuccess, toggleErrors, toggleWarnings, resetLogsState } from '../../actions/logs'
 
 /* Components */
 import ProgressBar from '../ProgressBar/ProgressBar'
@@ -52,9 +52,15 @@ class Step3 extends React.Component {
    * @since 1.0
    */
   componentDidMount () {
-    this.requestDownloadZipUrl()
+    setTimeout(() => this.requestDownloadZipUrl(), 350)
 
     document.addEventListener('focus', this.handleFocus, true)
+  }
+
+  componentDidUpdate () {
+    if (this.props.downloadZipAttempts === 3) {
+      console.log('Step3 - Fire Fatal')
+    }
   }
 
   /**
@@ -87,9 +93,8 @@ class Step3 extends React.Component {
    * @since 1.0
    */
   requestDownloadZipUrl = () => {
-    const { downloadZipUrl } = this.props
-
-    window.location.assign(downloadZipUrl)
+    console.log('Component - downloadzip request')
+    this.props.requestDownloadZip(this.props.downloadZipUrl)
   }
 
   /**
@@ -114,6 +119,7 @@ class Step3 extends React.Component {
       toggleModal,
       resetTagPickerState,
       resetPdfState,
+      resetLogsState,
       history
     } = this.props
 
@@ -121,7 +127,14 @@ class Step3 extends React.Component {
       <div ref={node => this.container = node} tabIndex='-1'>
         <button
           className='gfpdf-close-button'
-          onClick={e => cancelButton({ e, toggleModal, resetTagPickerState, resetPdfState, history })}>
+          onClick={e => cancelButton({
+            e,
+            toggleModal,
+            resetTagPickerState,
+            resetPdfState,
+            resetLogsState,
+            history
+          })}>
           <span className='screen-reader-text'>Close dialog</span>
         </button>
 
@@ -129,6 +142,7 @@ class Step3 extends React.Component {
 
         <Step3Body
           downloadZipUrl={downloadZipUrl}
+          requestDownloadZipUrl={this.requestDownloadZipUrl}
           success={success}
           errors={errors}
           warnings={warnings}
@@ -164,7 +178,8 @@ const mapStateToProps = state => ({
   generatePdfFailed: state.pdf.generatePdfFailed,
   generatePdfWarning: state.pdf.generatePdfWarning,
   downloadPercentage: state.pdf.downloadPercentage,
-  downloadZipUrl: state.pdf.downloadZipUrl
+  downloadZipUrl: state.pdf.downloadZipUrl,
+  downloadZipAttempts: state.logs.downloadZipAttempts
 })
 
 /**
@@ -176,7 +191,9 @@ export default connect(mapStateToProps, {
   toggleModal,
   resetTagPickerState,
   resetPdfState,
+  requestDownloadZip,
   toggleSuccess,
   toggleErrors,
-  toggleWarnings
+  toggleWarnings,
+  resetLogsState
 })(Step3)

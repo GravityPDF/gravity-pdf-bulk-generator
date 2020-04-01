@@ -19,8 +19,10 @@ import { apiRequestAllEntryIds } from '../api/form'
  */
 
 export function* getSelectedEntryIds(payload) {
+  const { retryInterval, delayInterval } = payload
+
   try {
-    const response = yield retry(3, 3000, apiRequestAllEntryIds, payload)
+    const response = yield retry(retryInterval, delayInterval, apiRequestAllEntryIds, payload)
 
     if(!response.ok) {
       throw response
@@ -30,7 +32,8 @@ export function* getSelectedEntryIds(payload) {
 
     yield put({ type: GET_SELECTED_ENTRY_IDS_SUCCESS , payload: responseBody })
   } catch(error) {
-    yield put({ type: GET_SELECTED_ENTRY_IDS_FAILED, payload: 'Error occured. Something went wrong..' })
+
+    yield put({ type: GET_SELECTED_ENTRY_IDS_FAILED, payload: error.statusText })
   }
 }
 

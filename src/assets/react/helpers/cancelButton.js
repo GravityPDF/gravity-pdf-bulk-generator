@@ -28,7 +28,8 @@ export const cancelButton = (
     escapeCloseModal,
     generatePdfCancel,
     resetTagPickerState,
-    resetPdfState
+    resetPdfState,
+    resetLogsState
   }
 ) => {
   const { pathname } = history.location
@@ -65,7 +66,9 @@ export const cancelButton = (
       toggleModal && toggleModal(),
       escapeCloseModal && escapeCloseModal(),
       resetTagPickerState(),
-      resetPdfState()
+      resetPdfState(),
+      resetLogsState && resetLogsState(),
+      history.push('/')
     )
   }
 }
