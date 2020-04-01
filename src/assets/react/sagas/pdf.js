@@ -1,5 +1,5 @@
 /* Dependencies */
-import { cancel, delay, fork, put, retry, select, take, takeLatest } from 'redux-saga/effects'
+import { call, cancel, cancelled, delay, fork, put, retry, select, take, takeLatest } from 'redux-saga/effects'
 
 /* Redux Action Types */
 import {
@@ -17,7 +17,12 @@ import {
 } from '../actionTypes/pdf'
 
 /* APIs */
-import { apiRequestGeneratePdf, apiRequestGeneratePdfZip, apiRequestSessionId } from '../api/pdf'
+import {
+  apiRequestGeneratePdf,
+  apiRequestGeneratePdfZip,
+  apiRequestSessionId,
+  apiRequestDownloadZipFile
+} from '../api/pdf'
 
 /* Helpers */
 import { generateActivePdfList } from '../helpers/generateActivePdfList'
@@ -34,6 +39,7 @@ export const getStateSelectedEntryIds = state => state.form.selectedEntryIds
 export const getStatePdfList = state => state.pdf.pdfList
 export const getStateGeneratePdfcancel = state => state.pdf.generatePdfCancel
 export const getStateAbortControllers = state => state.pdf.abortControllers
+export const getStateDownloadZipUrl = state => state.pdf.downloadZipUrl
 
 export function * generateSessionId (payload) {
 
@@ -119,21 +125,53 @@ export function * requestGeneratePdf (listItem) {
 }
 
 export function * generatePdf ({ payload }) {
-  let { list, sessionId } = payload
+  const { list } = payload
+  const generatePdfCancel = yield select(getStateGeneratePdfcancel)
 
   for (let i = 0; i < list.length; i++) {
     const task = yield fork(requestGeneratePdf, list[i])
 
-    if (yield checkGeneratePdfCancel()) {
+    // Triggered by StepTwo cancel button
+    if (generatePdfCancel) {
       return yield cancel(task)
     }
   }
 
-  if( yield checkGeneratePdfCancel() ) {
-    return
+  yield delay(1000)
+}
+
+export function * generateDownloadZipUrl (generatePdfList, sessionId) {
+  try {
+    const response = yield retry(3, 1000, apiRequestGeneratePdfZip, sessionId)
+    const responseBody = yield response.json()
+
+    if (!response.ok || !responseBody.downloadUrl) {
+      throw response
+    }
+
+    yield put({ type: GENERATE_DOWNLOAD_ZIP_URL, payload: responseBody.downloadUrl })
+  } catch (error) {
+    // To DO
   }
 
-  yield delay(1000)
+  /* Redux state for downloadZipUrl */
+  const downloadZipUrl = yield select(getStateDownloadZipUrl)
+
+  /* If generatePdfList array content are all processed, request download zip */
+  if (generatePdfList.length === 0) {
+    try {
+      const response = yield call(apiRequestDownloadZipFile, downloadZipUrl)
+
+      if (!response.ok) {
+        throw response
+      }
+
+      /* Auto download the generated PDF zip file */
+      window.location.assign(downloadZipUrl)
+    } catch(error) {
+      /* todo fatal error */
+    }
+  }
 }
 
 export function * watchGeneratePDF () {
@@ -163,18 +201,8 @@ export function * watchGeneratePDF () {
         }
       })
 
-      try {
-        const response = yield retry(3, 3000, apiRequestGeneratePdfZip, sessionId)
-        const responseBody = yield response.json()
-
-        if (!response.ok || !responseBody.downloadUrl) {
-          throw response
-        }
-
-        yield put({ type: GENERATE_DOWNLOAD_ZIP_URL, payload: responseBody.downloadUrl, sessionId: sessionId })
-      } catch (error) {
-        // To DO
-      }
+      /* Generate download zip url every end of the process (batch of 5)  */
+      yield generateDownloadZipUrl(generatePdfList, sessionId)
     }
   }
 }

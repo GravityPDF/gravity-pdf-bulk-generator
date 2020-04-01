@@ -75,3 +75,18 @@ export const apiRequestGeneratePdfZip = sessionId => {
     }
   })
 }
+
+/**
+ * Fetch API request to check if zip file url works fine
+ *
+ * @param url
+ *
+ * @returns Response
+ *
+ * @since 1.0
+ */
+export const apiRequestDownloadZipFile = url => {
+  return api(url, {
+    method: 'HEAD'
+  })
+}
