@@ -1,4 +1,7 @@
 /* Dependencies */
+import 'core-js/stable'
+import 'regenerator-runtime/runtime'
+
 import React from 'react'
 import { render } from 'react-dom'
 import { MemoryRouter as Router } from 'react-router-dom'
