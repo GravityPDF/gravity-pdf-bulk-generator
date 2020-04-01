@@ -155,7 +155,7 @@ export function * watchGeneratePDF () {
       })
     })
 
-    while (generatePdfList.length > 0 && ! (yield checkGeneratePdfCancel())) {
+    while (generatePdfList.length > 0 && !(yield checkGeneratePdfCancel())) {
       yield generatePdf({
         payload: {
           list: generatePdfList.splice(0, concurrency),
@@ -171,7 +171,7 @@ export function * watchGeneratePDF () {
           throw response
         }
 
-       yield put({ type: GENERATE_DOWNLOAD_ZIP_URL, payload: responseBody.downloadUrl, sessionId: sessionId })
+        yield put({ type: GENERATE_DOWNLOAD_ZIP_URL, payload: responseBody.downloadUrl, sessionId: sessionId })
       } catch (error) {
         // To DO
       }
