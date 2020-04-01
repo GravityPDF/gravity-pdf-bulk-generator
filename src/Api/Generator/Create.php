@@ -160,16 +160,18 @@ class Create implements ApiEndpointRegistration {
 
 			/* Create the Bulk PDF folder structure in the filesystem */
 			$tmp_pdf_path = $this->filesystem->get_tmp_pdf_path( $settings['path'], $entry );
-			if ( ! $this->filesystem->createDir( $tmp_pdf_path ) ) {
+			if ( ! $this->filesystem->createDir( $tmp_pdf_path ) || ! is_file( $pdf->get_path() ) ) {
 				throw new FilesystemError();
 			}
 
 			/* Get the PDF filename (ensuring uniqueness) and save to the Bulk Generator filesystem location */
-			$tmp_pdf_filename = $this->get_unique_filename( $this->filesystem, $tmp_pdf_path, wp_basename( $pdf->get_path() ) );
-			if ( ! $this->filesystem->writeStream( "$tmp_pdf_path/$tmp_pdf_filename", fopen( $pdf->get_path(), 'r' ) ) ) {
+			$tmp_pdf_filename = $this->get_unique_filename( $this->filesystem, $tmp_pdf_path, wp_basename( $pdf->get_path() ), $entry['id'], $request->get_param( 'pdfId' ) );
+			$pdf_stream       = fopen( $pdf->get_path(), 'rb' );
+			if ( ! $this->filesystem->writeStream( "$tmp_pdf_path/$tmp_pdf_filename", $pdf_stream ) ) {
 				throw new FilesystemError();
 			}
 
+			fclose( $pdf_stream );
 			unlink( $pdf->get_path() );
 		} catch ( FilesystemError $e ) {
 			return new \WP_Error( 'filesystem_error', '', [ 'status' => 500 ] );
@@ -204,22 +206,21 @@ class Create implements ApiEndpointRegistration {
 	 * Check if a file already exists and then suffix the PDF name with an incrementing number until it is unique
 	 *
 	 * @param FilesystemHelper|Filesystem $filesystem
-	 * @param string     $basepath
-	 * @param string     $filename
+	 * @param string                      $basepath
+	 * @param string                      $filename
+	 * @param int                         $entry_id
+	 * @param string                      $pdf_id
 	 *
 	 * @return string The unique filename
 	 *
 	 * @since 1.0
 	 */
-	protected function get_unique_filename( $filesystem, $basepath, $filename ) {
-		$unique_filename = $filename;
-
-		$i = 1;
-		while ( $filesystem->has( "$basepath/$unique_filename" ) ) {
-			$unique_filename = substr( $filename, 0, -4 ) . $i . '.pdf';
-			$i++;
+	protected function get_unique_filename( $filesystem, $basepath, $filename, $entry_id, $pdf_id ) {
+		if ( $filesystem->has( "$basepath/$filename" ) ) {
+			$pdf_id   = substr( $pdf_id, 0, 4 );
+			$filename = substr( $filename, 0, -4 ) . " ({$entry_id}-{$pdf_id}).pdf";
 		}
 
-		return $unique_filename;
+		return $filename;
 	}
 }
