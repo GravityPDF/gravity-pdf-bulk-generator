@@ -53,7 +53,9 @@ class BulkGenerator extends React.Component {
    * @since 1.0
    */
   state = {
-    formId: ''
+    formId: '',
+    retryInterval: 3,
+    delayInterval: 500
   }
 
   /**
@@ -198,12 +200,12 @@ class BulkGenerator extends React.Component {
    * @since 1.0
    */
   checkPopupSelectAllEntries = () => {
-    const { formId } = this.state
+    const { formId, retryInterval, delayInterval } = this.state
     /* Process search request filters through URL data*/
     const filterData = parseUrlForSearchParameters(window.location.search)
 
     /* Redux action */
-    this.props.getSelectedEntryIds(formId, filterData)
+    this.props.getSelectedEntryIds(formId, filterData, retryInterval, delayInterval)
   }
 
   /**
