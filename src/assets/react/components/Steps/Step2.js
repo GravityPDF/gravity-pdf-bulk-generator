@@ -2,15 +2,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-
 /* Redux Actions */
-import { toggleModal, generatePdfCancel } from '../../actions/pdf'
-import { toggleSuccess, toggleErrors, toggleWarnings } from '../../actions/logs'
-
+import { generatePdfCancel, toggleModal } from '../../actions/pdf'
+import { toggleErrors, toggleSuccess, toggleWarnings } from '../../actions/logs'
 /* Components */
 import ProgressBar from '../ProgressBar/ProgressBar'
 import Step2Body from './Step2Body'
-
+import FatalError from '../FatalError/FatalError'
 /* Helpers */
 import { cancelButton } from '../../helpers/cancelButton'
 
@@ -116,6 +114,7 @@ class Step2 extends React.Component {
    */
   render () {
     const {
+      selectedEntryIdsError,
       success,
       errors,
       warnings,
@@ -135,7 +134,7 @@ class Step2 extends React.Component {
       <div ref={node => this.container = node} tabIndex='-1'>
         <ProgressBar step={2} />
 
-        <Step2Body
+        {!selectedEntryIdsError && <Step2Body
           downloadPercentage={downloadPercentage}
           success={success}
           errors={errors}
@@ -145,7 +144,9 @@ class Step2 extends React.Component {
           toggleWarnings={toggleWarnings}
           generatePdfSuccess={generatePdfSuccess}
           generatePdfFailed={generatePdfFailed}
-          generatePdfWarning={generatePdfWarning} />
+          generatePdfWarning={generatePdfWarning} />}
+
+        {selectedEntryIdsError && <FatalError pluginUrl={GPDF_BULK_GENERATOR.plugin_url} adminUrl={GPDF_BULK_GENERATOR.admin_url} />}
 
         <footer>
           <button
@@ -178,6 +179,7 @@ class Step2 extends React.Component {
  * @since 1.0
  */
 const mapStateToProps = state => ({
+  selectedEntryIdsError: state.form.selectedEntryIdsError,
   success: state.logs.success,
   errors: state.logs.errors,
   warnings: state.logs.warnings,
