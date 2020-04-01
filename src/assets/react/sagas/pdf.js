@@ -130,19 +130,6 @@ export function * generatePdf ({ payload }) {
   }
 
   yield delay(1000)
-
-  try {
-    const response = yield retry(3, 3000, apiRequestGeneratePdfZip, sessionId)
-    const responseBody = yield response.json()
-
-    if (!response.ok || !responseBody.downloadUrl) {
-      throw response
-    }
-
-    yield put({ type: GENERATE_DOWNLOAD_ZIP_URL, payload: responseBody.downloadUrl })
-  } catch (error) {
-    // To DO
-  }
 }
 
 export function * watchGeneratePDF () {
@@ -175,6 +162,19 @@ export function * watchGeneratePDF () {
           delayInterval
         }
       })
+
+      try {
+        const response = yield retry(3, 1000, apiRequestGeneratePdfZip, sessionId)
+        const responseBody = yield response.json()
+
+        if (!response.ok || !responseBody.downloadUrl) {
+          throw response
+        }
+
+        yield put({ type: GENERATE_DOWNLOAD_ZIP_URL, payload: responseBody.downloadUrl })
+      } catch (error) {
+        // To DO
+      }
     }
   }
 }
