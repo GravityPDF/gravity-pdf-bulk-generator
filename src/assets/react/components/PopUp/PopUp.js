@@ -40,7 +40,8 @@ class PopUp extends React.Component {
     resetTagPickerState: PropTypes.func.isRequired,
     resetPdfState: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
-    modal: PropTypes.bool.isRequired
+    modal: PropTypes.bool.isRequired,
+    selectedEntryIdsError: PropTypes.string.isRequired
   }
 
   /**
@@ -59,16 +60,17 @@ class PopUp extends React.Component {
    *
    * @since 1.0
    */
-  escapeKeyListener = event => {
+  escapeKeyListener = e => {
     const {
       escapeCloseModal,
       generatePdfCancel,
+      selectedEntryIdsError,
       resetTagPickerState,
       resetPdfState,
       history
     } = this.props
     const { pathname } = history.location
-    const { keyCode } = event
+    const { keyCode } = e
     const escapeKey = 27
 
     /* 'escape' key is pressed at Step1 */
@@ -81,6 +83,7 @@ class PopUp extends React.Component {
       cancelButton({
         escapeCloseModal,
         generatePdfCancel,
+        selectedEntryIdsError,
         history
       })
     }
@@ -129,11 +132,24 @@ class PopUp extends React.Component {
 }
 
 /**
+ * Map redux state to props
+ *
+ * @param state
+ *
+ * @returns {selectedEntryIdsError: string}
+ *
+ * @since 1.0
+ */
+const mapStateToProps = state => ({
+  selectedEntryIdsError: state.form.selectedEntryIdsError
+})
+
+/**
  * Connect and dispatch redux actions as props
  *
  * @since 1.0
  */
-export default connect(null, {
+export default connect(mapStateToProps, {
   escapeCloseModal,
   generatePdfCancel,
   resetTagPickerState,
