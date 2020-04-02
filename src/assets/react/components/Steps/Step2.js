@@ -45,7 +45,8 @@ class Step2 extends React.Component {
     downloadZipUrl: PropTypes.string.isRequired,
     toggleModal: PropTypes.func.isRequired,
     generatePdfCancel: PropTypes.func.isRequired,
-    history: PropTypes.object.isRequired
+    history: PropTypes.object.isRequired,
+    selectedEntryIdsError: PropTypes.string.isRequired
   }
 
   /**
@@ -66,6 +67,8 @@ class Step2 extends React.Component {
    */
   componentDidUpdate (prevProps) {
     this.checkDownloadPercentage(prevProps)
+
+    this.errorHandling()
   }
 
   /**
@@ -102,6 +105,13 @@ class Step2 extends React.Component {
 
     if (downloadPercentage === 100) {
       setTimeout(() => history.push('/step/3'), 350)
+    }
+  }
+
+  errorHandling = () => {
+    /* Check fatal error for all selected entry IDs request (search API endpoint) */
+    if (this.props.selectedEntryIdsError !== '') {
+      this.props.generatePdfCancel()
     }
   }
 
@@ -146,7 +156,12 @@ class Step2 extends React.Component {
           generatePdfFailed={generatePdfFailed}
           generatePdfWarning={generatePdfWarning} />}
 
-        {selectedEntryIdsError && <FatalError pluginUrl={GPDF_BULK_GENERATOR.plugin_url} adminUrl={GPDF_BULK_GENERATOR.admin_url} />}
+        {
+          selectedEntryIdsError &&
+            <FatalError
+              pluginUrl={GPDF_BULK_GENERATOR.plugin_url}
+              adminUrl={GPDF_BULK_GENERATOR.admin_url} />
+        }
 
         <footer>
           <button
@@ -154,8 +169,8 @@ class Step2 extends React.Component {
             onClick={e => cancelButton({
               e,
               toggleModal,
-              downloadPercentage,
               generatePdfCancel,
+              selectedEntryIdsError,
               history
             })}>
             Cancel

@@ -208,6 +208,7 @@ class Step1 extends React.Component {
  * @since 1.0
  */
 const mapStateToProps = state => ({
+  selectedEntryIdsError: state.form.selectedEntryIdsError,
   tags: state.tagPicker.tags,
   directoryStructure: state.tagPicker.directoryStructure,
   pdfList: state.pdf.pdfList

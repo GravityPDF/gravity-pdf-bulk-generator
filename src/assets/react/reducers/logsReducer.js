@@ -2,9 +2,7 @@
 import {
   TOGGLE_SUCCESS,
   TOGGLE_ERRORS,
-  TOGGLE_WARNINGS,
-  DOWNLOAD_ZIP_ATTEMPT,
-  RESET_LOGS_STATE
+  TOGGLE_WARNINGS
 } from '../actionTypes/logs'
 
 /**
@@ -24,8 +22,7 @@ import {
 export const initialState = {
   success: false,
   errors: false,
-  warnings: false,
-  downloadZipAttempts: 0
+  warnings: false
 }
 
 /**
@@ -73,17 +70,6 @@ export default function (state = initialState, action) {
       return {
         ...state,
         warnings: !state.warnings
-      }
-
-    case DOWNLOAD_ZIP_ATTEMPT:
-      return {
-        ...state,
-        downloadZipAttempts: state.downloadZipAttempts + 1
-      }
-
-    case RESET_LOGS_STATE:
-      return {
-        ...initialState
       }
   }
 

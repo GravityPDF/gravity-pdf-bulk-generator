@@ -2,7 +2,6 @@
   "name": "gravity-pdf-bulk-generator",
   "private": true,
   "dependencies": {
-    "js-file-downloader": "^1.1.5",
     "core-js": "3",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",

@@ -27,11 +27,12 @@ export const cancelButton = (
     toggleModal,
     escapeCloseModal,
     generatePdfCancel,
+    selectedEntryIdsError,
     resetTagPickerState,
-    resetPdfState,
-    resetLogsState
+    resetPdfState
   }
 ) => {
+
   const { pathname } = history.location
 
   /* Check current path */
@@ -44,14 +45,26 @@ export const cancelButton = (
     )
   }
 
-  /* Check current path and downloadPercentage */
+  /* Check current path */
   if (pathname === '/step/2') {
+    /* Prevent additional confirmation popup if fatal error occured already */
+    if (selectedEntryIdsError !== '') {
+      return (
+        e && e.preventDefault(),
+        toggleModal && toggleModal(),
+        generatePdfCancel(),
+        escapeCloseModal && escapeCloseModal(),
+        history.push('/')
+      )
+    }
+
+    /* Add additional native popup confirmation */
     if (confirm('Are you sure you want to cancel download?')) {
       return (
         e && e.preventDefault(),
         toggleModal && toggleModal(),
-        escapeCloseModal && escapeCloseModal(),
         generatePdfCancel(),
+        escapeCloseModal && escapeCloseModal(),
         history.push('/')
       )
     }
@@ -67,7 +80,6 @@ export const cancelButton = (
       escapeCloseModal && escapeCloseModal(),
       resetTagPickerState(),
       resetPdfState(),
-      resetLogsState && resetLogsState(),
       history.push('/')
     )
   }

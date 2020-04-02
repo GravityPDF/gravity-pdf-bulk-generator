@@ -1,7 +1,6 @@
 /* Dependencies */
 import React, { Fragment } from 'react'
 import { Route, Switch } from 'react-router-dom'
-import { connect } from 'react-redux'
 
 /* Components */
 import Step1 from './Step1'
@@ -32,13 +31,9 @@ class Steps extends React.Component {
   render () {
     return (
       <Fragment>
-        {
-          this.props.selectedEntryIdsError === '' ? (
-            <header>
-              <h2>PDF Bulk Download</h2>
-            </header>
-          ) : null
-        }
+        <header>
+          <h2>PDF Bulk Download</h2>
+        </header>
 
         <Switch>
           <Route path='/step/1' component={Step1} />
@@ -50,8 +45,4 @@ class Steps extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
-  selectedEntryIdsError: state.form.selectedEntryIdsError
-})
-
-export default connect(mapStateToProps, {})(Steps)
+export default Steps

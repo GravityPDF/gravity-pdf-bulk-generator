@@ -76,8 +76,8 @@ class BulkGenerator extends React.Component {
    * @since 1.0
    */
   componentDidUpdate (prevProps) {
-    /* Call function deselectCheckbox() */
-    if (prevProps.location.pathname === '/step/2' && !this.props.modal) {
+    /* Modal closed/cancelled at Step2 */
+    if (this.props.location.pathname === '/' && prevProps.location.pathname === '/step/2') {
       this.deselectCheckbox()
     }
   }
