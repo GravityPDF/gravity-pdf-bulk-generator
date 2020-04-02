@@ -33,7 +33,8 @@
 
 		// Errors
 		.errors-container {
-			width: 60vh;
+			width: 100%;
+			max-width: 60vh;
 			border-top: 1px solid $secondary-color;
 			padding-bottom: 4px;
 
