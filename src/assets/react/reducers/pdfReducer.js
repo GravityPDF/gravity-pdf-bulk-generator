@@ -45,7 +45,8 @@ export const initialState = {
   generatePdfCounter: 0,
   downloadPercentage: 0,
   downloadZipUrl: '',
-  abortControllers: []
+  abortControllers: [],
+  fatalError: false,
 }
 
 /**

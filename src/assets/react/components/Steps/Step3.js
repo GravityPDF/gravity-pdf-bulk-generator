@@ -2,13 +2,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+
 /* Redux Actions */
-import { resetPdfState, toggleModal } from '../../actions/pdf'
+import { toggleModal, resetPdfState } from '../../actions/pdf'
 import { resetTagPickerState } from '../../actions/tagPicker'
-import { toggleErrors, toggleSuccess, toggleWarnings } from '../../actions/logs'
+import { toggleSuccess, toggleErrors, toggleWarnings } from '../../actions/logs'
+
 /* Components */
 import ProgressBar from '../ProgressBar/ProgressBar'
 import Step3Body from './Step3Body'
+
 /* Helpers */
 import { cancelButton } from '../../helpers/cancelButton'
 
@@ -49,6 +52,8 @@ class Step3 extends React.Component {
    * @since 1.0
    */
   componentDidMount () {
+    this.requestDownloadZipUrl()
+
     document.addEventListener('focus', this.handleFocus, true)
   }
 
@@ -74,6 +79,17 @@ class Step3 extends React.Component {
     if (!this.container.contains(e.target)) {
       this.container.focus()
     }
+  }
+
+  /**
+   * Auto download the generated PDF zip file
+   *
+   * @since 1.0
+   */
+  requestDownloadZipUrl = () => {
+    const { downloadZipUrl } = this.props
+
+    window.location.assign(downloadZipUrl)
   }
 
   /**

@@ -153,24 +153,21 @@ export function * generateDownloadZipUrl (generatePdfList, sessionId) {
   } catch (error) {
     // To DO
   }
+}
 
-  /* Redux state for downloadZipUrl */
-  const downloadZipUrl = yield select(getStateDownloadZipUrl)
+export function * validateDownloadZipUrl() {
+  try {
+    const downloadZipUrl = yield select(getStateDownloadZipUrl)
+    const response = yield call(apiRequestDownloadZipFile, downloadZipUrl)
 
-  /* If generatePdfList array content are all processed, request download zip */
-  if (generatePdfList.length === 0) {
-    try {
-      const response = yield call(apiRequestDownloadZipFile, downloadZipUrl)
-
-      if (!response.ok) {
-        throw response
-      }
-
-      /* Auto download the generated PDF zip file */
-      window.location.assign(downloadZipUrl)
-    } catch(error) {
-      /* todo fatal error */
+    if (!response.ok) {
+      throw response
     }
+
+    //TODO
+    //yield put({ type: GENERATE_DOWNLOAD_ZIP_URL, payload: responseBody.downloadUrl })
+  } catch(error) {
+    /* todo fatal error */
   }
 }
 
@@ -204,6 +201,8 @@ export function * watchGeneratePDF () {
       /* Generate download zip url every end of the process (batch of 5)  */
       yield generateDownloadZipUrl(generatePdfList, sessionId)
     }
+
+    yield validateDownloadZipUrl()
   }
 }
 
