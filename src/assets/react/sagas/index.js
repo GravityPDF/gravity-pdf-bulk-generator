@@ -3,7 +3,7 @@ import { all } from 'redux-saga/effects'
 
 /* Sagas */
 import { watchGetSelectedEntryIds } from './form'
-import { watchGenerateSessionId, watchGeneratePDF } from './pdf'
+import { watchGenerateSessionId, watchGeneratePDF, watchGeneratePdfCancel } from './pdf'
 
 /**
  * @package     Gravity PDF Bulk Generator
@@ -21,6 +21,7 @@ export default function * rootSaga () {
   yield all([
     watchGetSelectedEntryIds(),
     watchGenerateSessionId(),
-    watchGeneratePDF()
+    watchGeneratePDF(),
+    watchGeneratePdfCancel()
   ])
 }

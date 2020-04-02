@@ -34,7 +34,6 @@ class BulkGenerator extends React.Component {
    * @since 1.0
    */
   static propTypes = {
-    generatePdfCancel: PropTypes.bool.isRequired,
     downloadPercentage: PropTypes.number.isRequired,
     location: PropTypes.object.isRequired,
     generatePdfListSuccess: PropTypes.func.isRequired,
@@ -257,7 +256,6 @@ class BulkGenerator extends React.Component {
  */
 const mapStateToProps = state => ({
   modal: state.pdf.modal,
-  generatePdfCancel: state.pdf.generatePdfCancel,
   downloadPercentage: state.pdf.downloadPercentage,
   downloadZipUrl: state.pdf.downloadZipUrl
 })

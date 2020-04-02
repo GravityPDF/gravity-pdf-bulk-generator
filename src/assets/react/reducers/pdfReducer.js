@@ -1,21 +1,20 @@
 /* Redux Action Types */
 import {
-  GENERATE_PDF_LIST_SUCCESS,
-  TOGGLE_MODAL,
   ESCAPE_CLOSE_MODAL,
-  TOGGLE_PDF_STATUS,
-  GENERATE_SESSION_ID_SUCCESS,
-  GENERATE_SESSION_ID_FAILED,
+  GENERATE_DOWNLOAD_ZIP_URL,
+  GENERATE_PDF_CANCEL,
+  GENERATE_PDF_COUNTER,
+  GENERATE_PDF_FAILED,
+  GENERATE_PDF_LIST_SUCCESS,
   GENERATE_PDF_SUCCESS,
   GENERATE_PDF_WARNING,
-  GENERATE_PDF_FAILED,
-  GENERATE_PDF_CANCEL,
-  GENERATE_PDF_CANCELLED,
-  GENERATE_PDF_COUNTER,
-  GENERATE_DOWNLOAD_ZIP_URL,
-  RESET_PDF_STATE
+  GENERATE_SESSION_ID_FAILED,
+  GENERATE_SESSION_ID_SUCCESS,
+  RESET_PDF_STATE,
+  STORE_ABORT_CONTROLLER,
+  TOGGLE_MODAL,
+  TOGGLE_PDF_STATUS
 } from '../actionTypes/pdf'
-
 /* Helpers */
 import { generateActivePdfList } from '../helpers/generateActivePdfList'
 
@@ -45,7 +44,8 @@ export const initialState = {
   generatePdfCancel: false,
   generatePdfCounter: 0,
   downloadPercentage: 0,
-  downloadZipUrl: ''
+  downloadZipUrl: '',
+  abortControllers: []
 }
 
 /**
@@ -60,7 +60,28 @@ export const initialState = {
  */
 export default function (state = initialState, action) {
 
+  /* For those actions that require it, we prevent state being modified if the sessions don't match */
+  if (action.sessionId && action.sessionId !== state.sessionId) {
+    return state
+  }
+
   switch (action.type) {
+
+    /**
+     * Process STORE_ABORT_CONTROLLER
+     *
+     * @since 1.0
+     */
+    case STORE_ABORT_CONTROLLER: {
+      const list = [...state.abortControllers]
+
+      list.push(action.payload)
+
+      return {
+        ...state,
+        abortControllers: list
+      }
+    }
 
     /**
      * Process GENERATE_PDF_LIST_SUCCESS
@@ -70,6 +91,7 @@ export default function (state = initialState, action) {
     case GENERATE_PDF_LIST_SUCCESS:
       return {
         ...state,
+        generatePdfCancel: false,
         pdfList: action.payload
       }
 
@@ -78,24 +100,22 @@ export default function (state = initialState, action) {
      *
      * @since 1.0
      */
-    case TOGGLE_MODAL: {
+    case TOGGLE_MODAL:
       return {
         ...state,
         modal: !state.modal
       }
-    }
 
     /**
      * Process ESCAPE_CLOSE_MODAL
      *
      * @since 1.0
      */
-    case ESCAPE_CLOSE_MODAL: {
+    case ESCAPE_CLOSE_MODAL:
       return {
         ...state,
         modal: false
       }
-    }
 
     /**
      * Process TOGGLE_PDF_STATUS
@@ -165,7 +185,8 @@ export default function (state = initialState, action) {
      * @since 1.0
      */
     case GENERATE_PDF_SUCCESS: {
-      const list = state.generatePdfSuccess
+      const list = [...state.generatePdfSuccess]
+
       list.push(action.payload)
 
       return {
@@ -180,7 +201,8 @@ export default function (state = initialState, action) {
      * @since 1.0
      */
     case GENERATE_PDF_WARNING: {
-      const list = state.generatePdfWarning
+      const list = [...state.generatePdfWarning]
+
       list.push(action.payload)
 
       return {
@@ -195,7 +217,8 @@ export default function (state = initialState, action) {
      * @since 1.0
      */
     case GENERATE_PDF_FAILED: {
-      const list = state.generatePdfFailed
+      const list = [...state.generatePdfFailed]
+
       list.push(action.payload)
 
       return {
@@ -211,26 +234,8 @@ export default function (state = initialState, action) {
      */
     case GENERATE_PDF_CANCEL:
       return {
-        ...state,
+        ...initialState,
         generatePdfCancel: true
-      }
-
-    /**
-     * Process GENERATE_PDF_CANCELLED
-     *
-     * @since 1.0
-     */
-    case GENERATE_PDF_CANCELLED:
-      return {
-        ...state,
-        sessionId: '',
-        generatePdfSuccess: [],
-        generatePdfFailed: [],
-        generatePdfWarning: [],
-        generatePdfCancel: false,
-        generatePdfCounter: 0,
-        downloadPercentage: 0,
-        downloadZipUrl: ''
       }
 
     /**
@@ -269,25 +274,8 @@ export default function (state = initialState, action) {
      * @since 1.0
      */
     case RESET_PDF_STATE: {
-      const list = []
-
-      state.pdfList.map(item => {
-        item.active = false
-        list.push(item)
-      })
-
       return {
-        ...state,
-        sessionId: '',
-        modal: false,
-        pdfList: list,
-        generatePdfSuccess: [],
-        generatePdfFailed: [],
-        generatePdfWarning: [],
-        generatePdfCancel: false,
-        generatePdfCounter: 0,
-        downloadPercentage: 0,
-        downloadZipUrl: ''
+        ...initialState
       }
     }
   }

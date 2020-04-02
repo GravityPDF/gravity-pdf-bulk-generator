@@ -66,8 +66,7 @@ export default function (state = initialState, action) {
      */
     case RESET_TAGPICKER_STATE: {
       return {
-        ...state,
-        directoryStructure: '/{entry_id}/'
+        ...initialState
       }
     }
   }
