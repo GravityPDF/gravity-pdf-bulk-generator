@@ -95,19 +95,6 @@ class Step2 extends React.Component {
     }
   }
 
-  /**
-   * Check download percentage and proccess to Step3
-   *
-   * @since 1.0
-   */
-  checkDownloadPercentage = () => {
-    const { downloadPercentage, history } = this.props
-
-    if (downloadPercentage === 100) {
-      setTimeout(() => history.push('/step/3'), 350)
-    }
-  }
-
   errorHandling = () => {
     /* Check fatal error for all selected entry IDs request (search API endpoint) */
     if (this.props.selectedEntryIdsError !== '') {
