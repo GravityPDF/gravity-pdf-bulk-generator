@@ -1,5 +1,5 @@
 /* Dependencies */
-import { call, cancel, delay, fork, put, retry, select, take, takeLatest } from 'redux-saga/effects'
+import { call, cancel, cancelled, delay, fork, put, retry, select, take, takeLatest } from 'redux-saga/effects'
 /* Redux Action Types */
 import {
   GENERATE_DOWNLOAD_ZIP_URL,
@@ -111,9 +111,9 @@ export function * requestGeneratePdf (pdf) {
         yield put({ type: GENERATE_PDF_FAILED, payload: pdf })
     }
   } finally {
-      const selectedEntryIds = yield select(getStateSelectedEntryIds)
-
-      yield put({ type: GENERATE_PDF_COUNTER, payload: selectedEntryIds })
+    if (!(yield cancelled())) {
+      yield put({ type: GENERATE_PDF_COUNTER, payload: yield select(getStateSelectedEntryIds) })
+    }
   }
 }
 
