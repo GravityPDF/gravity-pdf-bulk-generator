@@ -61,11 +61,6 @@ export const initialState = {
  */
 export default function (state = initialState, action) {
 
-  /* For those actions that require it, we prevent state being modified if the sessions don't match */
-  if (action.sessionId && action.sessionId !== state.sessionId) {
-    return state
-  }
-
   switch (action.type) {
 
     /**

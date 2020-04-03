@@ -21,7 +21,6 @@ export default function * rootSaga () {
   yield all([
     watchGetSelectedEntryIds(),
     watchGenerateSessionId(),
-    watchGeneratePDF(),
-    watchGeneratePdfCancel()
+    watchGeneratePDF()
   ])
 }

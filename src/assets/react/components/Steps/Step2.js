@@ -61,13 +61,9 @@ class Step2 extends React.Component {
   /**
    * On update, call function checkDownloadPercentage()
    *
-   * @param prevProps
-   *
    * @since 1.0
    */
-  componentDidUpdate (prevProps) {
-    this.checkDownloadPercentage(prevProps)
-
+  componentDidUpdate () {
     this.errorHandling()
   }
 

@@ -41,7 +41,7 @@ export const apiRequestSessionId = ({ path }) => {
  *
  * @since 1.0
  */
-export const apiRequestGeneratePdf = ({ listItem, signal }) => {
+export const apiRequestGeneratePdf = ({ pdf, signal }) => {
   const url = `${GPDF_BULK_GENERATOR.rest_url}/generator/create`
 
   return api(url, {
@@ -51,7 +51,7 @@ export const apiRequestGeneratePdf = ({ listItem, signal }) => {
       'Content-Type': 'application/json',
       'X-WP-Nonce': GPDF_BULK_GENERATOR.nonce
     },
-    body: JSON.stringify(listItem)
+    body: JSON.stringify(pdf)
   })
 }
 
