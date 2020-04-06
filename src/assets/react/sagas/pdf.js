@@ -46,7 +46,7 @@ export const getStateDownloadZipUrl = state => state.pdf.downloadZipUrl
  * @since 1.0
  */
 export function * generateSessionId (payload) {
-  const { path, concurrency, retryInterval, delayInterval } = payload
+  const { path, concurrency } = payload
 
   /**
    * Call fetch API 3x
@@ -79,8 +79,6 @@ export function * generateSessionId (payload) {
       payload: {
         sessionId: responseBody.sessionId,
         concurrency,
-        retryInterval,
-        delayInterval,
         selectedEntryIds,
         pdfList
       }
@@ -104,12 +102,10 @@ export function * watchGenerateSessionId () {
  * Worker saga requestGeneratePdf
  *
  * @param pdf
- * @param retryInterval
- * @param delayInterval
  *
  * @since 1.0
  */
-export function * requestGeneratePdf (pdf, retryInterval, delayInterval) {
+export function * requestGeneratePdf (pdf) {
   /* Cancelling a fetch request with AbortController */
   const abortController = new AbortController()
   const data = {
@@ -126,7 +122,7 @@ export function * requestGeneratePdf (pdf, retryInterval, delayInterval) {
    * In case of failure will try to make another call after delay milliseconds
    */
   try {
-    const response = yield retry(retryInterval, delayInterval, apiRequestGeneratePdf, data)
+    const response = yield retry(3, 3000, apiRequestGeneratePdf, data)
 
     if (!response.ok) {
       throw response
@@ -159,16 +155,14 @@ export function * requestGeneratePdf (pdf, retryInterval, delayInterval) {
  * Worker saga generatePdf
  *
  * @param pdfs
- * @param retryInterval
- * @param delayInterval
  *
  * @since 1.0
  */
-export function * generatePdf ({ pdfs, retryInterval, delayInterval }) {
+export function * generatePdf ({ pdfs }) {
 
   /* Set individual pdf data request before the actual API call */
   for (let i = 0; i < pdfs.length; i++) {
-    yield fork(requestGeneratePdf, pdfs[i], retryInterval, delayInterval)
+    yield fork(requestGeneratePdf, pdfs[i])
   }
 
   yield delay(1000)
@@ -247,19 +241,15 @@ export function * generatePdfCancel () {
  *
  * @param pdfs
  * @param concurrency
- * @param retryInterval
- * @param delayInterval
  * @param sessionId
  *
  * @since 1.0
  */
-export function * bulkGeneratePdf ({ pdfs, concurrency, retryInterval, delayInterval, sessionId }) {
+export function * bulkGeneratePdf ({ pdfs, concurrency, sessionId }) {
   /* Loop through pdfs array and remove 5 items (splice 5) after every batch of 5 items excecuted */
   while (pdfs.length > 0) {
     yield generatePdf({
-      pdfs: pdfs.splice(0, concurrency),
-      retryInterval,
-      delayInterval
+      pdfs: pdfs.splice(0, concurrency)
     })
 
     /* Generate download zip url every end of the process (batch of 5)  */
@@ -282,8 +272,6 @@ export function * watchGeneratePDF () {
     const {
       sessionId,
       concurrency,
-      retryInterval,
-      delayInterval,
       selectedEntryIds,
       pdfList
     } = payload
@@ -301,8 +289,6 @@ export function * watchGeneratePDF () {
     const generator = yield fork(bulkGeneratePdf, {
       pdfs,
       concurrency,
-      retryInterval,
-      delayInterval,
       sessionId
     })
 

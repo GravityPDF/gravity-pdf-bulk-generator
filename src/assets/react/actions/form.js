@@ -31,20 +31,15 @@ export const processCheckbox = ids => {
  *
  * @param formId
  * @param filterData
- * @param retryInterval
- * @param delayInterval
  *
- * @returns {{ formId: string, filterData: object, retryInterval: number,
- * delayInterval: number, type: string }}
+ * @returns {{ formId: string, filterData: object, type: string }}
  *
  * @since 1.0
  */
-export const getSelectedEntryIds = (formId, filterData, retryInterval, delayInterval) => {
+export const getSelectedEntryIds = (formId, filterData) => {
   return {
     type: GET_SELECTED_ENTRY_IDS,
     formId,
-    filterData,
-    retryInterval,
-    delayInterval
+    filterData
   }
 }
