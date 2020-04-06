@@ -1,9 +1,5 @@
 /* Redux Action Types */
-import {
-  TOGGLE_SUCCESS,
-  TOGGLE_ERRORS,
-  TOGGLE_WARNINGS
-} from '../actionTypes/logs'
+import { TOGGLE_SUCCESS, TOGGLE_ERRORS, TOGGLE_WARNINGS } from '../actionTypes/logs'
 
 /**
  * @package     Gravity PDF Bulk Generator
@@ -15,7 +11,7 @@ import {
 /**
  * Setup the initial state of the "logs" portion of our Redux store
  *
- * @type {success: boolean, warnings: boolean, errors: boolean}
+ * @type { success: boolean, warnings: boolean, errors: boolean }
  *
  * @since 1.0
  */
@@ -31,7 +27,7 @@ export const initialState = {
  * @param state
  * @param action
  *
- * @returns {initialState: *} whether updated or not
+ * @returns { initialState: * } whether updated or not
  *
  * @since 1.0
  */

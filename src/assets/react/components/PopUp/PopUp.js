@@ -4,11 +4,9 @@ import PropTypes from 'prop-types'
 import { Route } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { PoseGroup } from 'react-pose'
-
 /* Redux Actions */
 import { escapeCloseModal, generatePdfCancel, resetPdfState } from '../../actions/pdf'
 import { resetTagPickerState } from '../../actions/tagPicker'
-
 /* Components */
 import { cancelButton } from '../../helpers/cancelButton'
 import { Fade, SlideDown } from './Animations'
@@ -41,11 +39,11 @@ class PopUp extends React.Component {
     resetPdfState: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
     modal: PropTypes.bool.isRequired,
-    selectedEntryIdsError: PropTypes.string.isRequired
+    fatalError: PropTypes.bool.isRequired
   }
 
   /**
-   * Assign keyword listener to document on mount
+   * On mount, Assign keyword listener to document on mount
    *
    * @since 1.0
    */
@@ -62,9 +60,9 @@ class PopUp extends React.Component {
    */
   escapeKeyListener = e => {
     const {
+      fatalError,
       escapeCloseModal,
       generatePdfCancel,
-      selectedEntryIdsError,
       resetTagPickerState,
       resetPdfState,
       history
@@ -82,8 +80,8 @@ class PopUp extends React.Component {
     if (keyCode === escapeKey && pathname === '/step/2') {
       cancelButton({
         escapeCloseModal,
+        fatalError,
         generatePdfCancel,
-        selectedEntryIdsError,
         history
       })
     }
@@ -102,7 +100,7 @@ class PopUp extends React.Component {
   /**
    * Display PopUp UI
    *
-   * @returns {PopUp: component}
+   * @returns { PopUp: component }
    *
    * @since 1.0
    */
@@ -136,12 +134,12 @@ class PopUp extends React.Component {
  *
  * @param state
  *
- * @returns {selectedEntryIdsError: string}
+ * @returns { fatalError: boolean }
  *
  * @since 1.0
  */
 const mapStateToProps = state => ({
-  selectedEntryIdsError: state.form.selectedEntryIdsError
+  fatalError: state.pdf.fatalError.fatalError
 })
 
 /**

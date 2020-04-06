@@ -15,7 +15,7 @@ import PropTypes from 'prop-types'
  * @param value
  * @param onChange
  *
- * @returns {TagInput: component}
+ * @returns { TagInput: component }
  *
  * @since 1.0
  */

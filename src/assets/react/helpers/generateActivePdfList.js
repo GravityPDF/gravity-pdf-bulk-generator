@@ -11,7 +11,7 @@
  *
  * @param pdfList
  *
- * @returns {list: array}
+ * @returns { list: array }
  *
  * @since 1.0
  */

@@ -1,7 +1,5 @@
-import {
-  PROCESS_CHECKBOX,
-  GET_SELECTED_ENTRY_IDS
-} from '../actionTypes/form'
+/* Redux Action Types */
+import { PROCESS_CHECKBOX, GET_SELECTED_ENTRY_IDS } from '../actionTypes/form'
 
 /**
  * @package     Gravity PDF Bulk Generator
@@ -17,7 +15,7 @@ import {
  *
  * @param ids
  *
- * @returns {{payload: array, type: string}}
+ * @returns {{ payload: array, type: string }}
  *
  * @since 1.0
  */
@@ -33,8 +31,11 @@ export const processCheckbox = ids => {
  *
  * @param formId
  * @param filterData
+ * @param retryInterval
+ * @param delayInterval
  *
- * @returns {{formId: string, filterData: object, type: string}}
+ * @returns {{ formId: string, filterData: object, retryInterval: number,
+ * delayInterval: number, type: string }}
  *
  * @since 1.0
  */

@@ -3,14 +3,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-
 /* Redux Actions */
 import { processCheckbox, getSelectedEntryIds } from './actions/form'
 import { generatePdfListSuccess, toggleModal } from './actions/pdf'
-
 /* Components */
 import PopUp from './components/PopUp/PopUp'
-
 /* Helpers */
 import { parseUrlForSearchParameters } from './helpers/parseUrlForSearchParameters'
 
@@ -47,14 +44,17 @@ class BulkGenerator extends React.Component {
   /**
    * Initialize component state
    *
-   * @type {formId: string}
+   * @type { formId: string, requestGenerateSearchResult: {
+   * retryInterval: number, delayInterval: number }}
    *
    * @since 1.0
    */
   state = {
     formId: '',
-    retryInterval: 3,
-    delayInterval: 500
+    requestGenerateSearchResult: {
+      retryInterval: 3,
+      delayInterval: 500
+    }
   }
 
   /**
@@ -127,7 +127,7 @@ class BulkGenerator extends React.Component {
    * @param pdfs
    * @param active
    *
-   * @returns {list: array}
+   * @returns { list: array }
    *
    * @since 1.0
    */
@@ -199,7 +199,8 @@ class BulkGenerator extends React.Component {
    * @since 1.0
    */
   checkPopupSelectAllEntries = () => {
-    const { formId, retryInterval, delayInterval } = this.state
+    const { formId } = this.state
+    const { retryInterval, delayInterval } = this.state.requestGenerateSearchResult
     /* Process search request filters through URL data*/
     const filterData = parseUrlForSearchParameters(window.location.search)
 
@@ -231,7 +232,7 @@ class BulkGenerator extends React.Component {
   /**
    * Display BulkGenerator UI
    *
-   * @returns {BulkGenerator: component}
+   * @returns { BulkGenerator: component }
    *
    * @since 1.0
    */
@@ -249,8 +250,7 @@ class BulkGenerator extends React.Component {
  *
  * @param state
  *
- * @returns {modal: boolean, generatePdfCancel: function,
- * downloadPercentage: number, downloadZipUrl: *string}
+ * @returns { modal: boolean, downloadPercentage: number, downloadZipUrl: string }
  *
  * @since 1.0
  */

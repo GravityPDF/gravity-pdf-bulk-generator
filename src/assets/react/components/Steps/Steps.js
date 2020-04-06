@@ -1,7 +1,6 @@
 /* Dependencies */
 import React, { Fragment } from 'react'
 import { Route, Switch } from 'react-router-dom'
-
 /* Components */
 import Step1 from './Step1'
 import Step2 from './Step2'
@@ -24,7 +23,7 @@ class Steps extends React.Component {
   /**
    * Display Steps UI
    *
-   * @returns {Steps: component}
+   * @returns { Steps: component }
    *
    * @since 1.0
    */

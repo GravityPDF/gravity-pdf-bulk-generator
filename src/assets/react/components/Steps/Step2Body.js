@@ -2,7 +2,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { CircularProgressbar } from 'react-circular-progressbar'
-
 /* Components */
 import LoadingDots from '../LoadingDots/LoadingDots'
 import Logs from '../Logs/Logs'

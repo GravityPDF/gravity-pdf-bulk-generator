@@ -1,7 +1,6 @@
 /* Dependencies */
 import React from 'react'
 import PropTypes from 'prop-types'
-
 /* Components */
 import List from './List'
 
@@ -20,7 +19,7 @@ import List from './List'
  * @param toggle
  * @param state
  *
- * @returns {InfoBox: component}
+ * @returns { InfoBox: component }
  *
  * @since 1.0
  */

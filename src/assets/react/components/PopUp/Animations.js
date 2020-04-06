@@ -11,7 +11,7 @@ import posed from 'react-pose'
 /**
  * Fade
  *
- * @type {<PoseElementProps>}
+ * @type { <PoseElementProps> }
  *
  * @since 1.0
  */

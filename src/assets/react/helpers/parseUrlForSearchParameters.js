@@ -10,7 +10,7 @@
  *
  * @param currentUrl
  *
- * @returns {data: object}
+ * @returns { data: object }
  *
  * @since 1.0
  */

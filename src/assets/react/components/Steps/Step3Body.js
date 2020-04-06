@@ -1,7 +1,6 @@
 /* Dependencies */
 import React from 'react'
 import PropTypes from 'prop-types'
-
 /* Components */
 import Logs from '../Logs/Logs'
 
@@ -15,18 +14,18 @@ import Logs from '../Logs/Logs'
 /**
  * Display Step3Body UI
  *
- * @param downloadZipUrl
  * @param success
  * @param errors
  * @param warnings
- * @param toggleSuccess
- * @param toggleErrors
- * @param toggleWarnings
  * @param generatePdfSuccess
  * @param generatePdfFailed
  * @param generatePdfWarning
+ * @param downloadZipUrl
+ * @param toggleSuccess
+ * @param toggleErrors
+ * @param toggleWarnings
  *
- * @returns {Step3Body: component}
+ * @returns { Step3Body: component }
  *
  * @since 1.0
  */
@@ -73,16 +72,16 @@ const Step3Body = (
  * @since 1.0
  */
 Step3Body.propTypes = {
-  downloadZipUrl: PropTypes.string.isRequired,
   success: PropTypes.bool.isRequired,
   errors: PropTypes.bool.isRequired,
   warnings: PropTypes.bool.isRequired,
-  toggleSuccess: PropTypes.func.isRequired,
-  toggleErrors: PropTypes.func.isRequired,
-  toggleWarnings: PropTypes.func.isRequired,
   generatePdfSuccess: PropTypes.arrayOf(PropTypes.object).isRequired,
   generatePdfFailed: PropTypes.arrayOf(PropTypes.object).isRequired,
-  generatePdfWarning: PropTypes.arrayOf(PropTypes.object).isRequired
+  generatePdfWarning: PropTypes.arrayOf(PropTypes.object).isRequired,
+  downloadZipUrl: PropTypes.string.isRequired,
+  toggleSuccess: PropTypes.func.isRequired,
+  toggleErrors: PropTypes.func.isRequired,
+  toggleWarnings: PropTypes.func.isRequired
 }
 
 export default Step3Body

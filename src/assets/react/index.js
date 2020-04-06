@@ -1,18 +1,14 @@
 /* Dependencies */
 import 'core-js/stable'
 import 'regenerator-runtime/runtime'
-
 import React from 'react'
 import { render } from 'react-dom'
 import { MemoryRouter as Router } from 'react-router-dom'
 import { Provider } from 'react-redux'
-
 /* Redux store */
 import { getStore } from './store'
-
 /* Components */
 import BulkGenerator from './bulkGenerator'
-
 /* Styles */
 import '../scss/main.scss'
 

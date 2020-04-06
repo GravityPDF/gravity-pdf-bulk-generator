@@ -38,6 +38,8 @@ class TagPicker extends React.Component {
    *
    * @param props
    *
+   * @type { selectedTags: array }
+   *
    * @since 1.0
    */
   constructor (props) {
@@ -68,7 +70,7 @@ class TagPicker extends React.Component {
    *
    * @param value
    *
-   * @returns {selectedTags: array}
+   * @returns { selectedTags: array }
    *
    * @since 1.0
    */
@@ -91,7 +93,7 @@ class TagPicker extends React.Component {
    *
    * @param string
    *
-   * @returns {result: string}
+   * @returns { result: string }
    *
    * @since 1.0
    */
@@ -108,7 +110,7 @@ class TagPicker extends React.Component {
    * @param tag
    * @param e
    *
-   * @returns {onDeselectCallback: function, onSelectCallback: function}
+   * @returns { onDeselectCallback: function, onSelectCallback: function }
    *
    * @since 1.0
    */
@@ -126,7 +128,7 @@ class TagPicker extends React.Component {
   /**
    * Display TagPicker UI
    *
-   * @returns {TagPicker: component}
+   * @returns { TagPicker: component }
    *
    * @since 1.0
    */

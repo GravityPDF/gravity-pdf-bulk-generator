@@ -45,26 +45,41 @@ class Step2 extends React.Component {
     downloadZipUrl: PropTypes.string.isRequired,
     toggleModal: PropTypes.func.isRequired,
     generatePdfCancel: PropTypes.func.isRequired,
+    fatalError: PropTypes.objectOf(
+      PropTypes.shape({
+        verifyProcess: PropTypes.bool.isRequired,
+        fatalError: PropTypes.bool.isRequired
+      })
+    ).isRequired,
     history: PropTypes.object.isRequired,
-    selectedEntryIdsError: PropTypes.string.isRequired
   }
 
   /**
-   * Add focus event to document on mount
+   * On mount, Add focus event to document and call function errorHandling()
    *
    * @since 1.0
    */
   componentDidMount () {
     document.addEventListener('focus', this.handleFocus, true)
+
+    /* Verify that there's no fatal error */
+    if (this.props.fatalError.verifyProcess) {
+      this.errorHandling()
+    }
   }
 
   /**
-   * On update, call function checkDownloadPercentage()
+   * On update, call function errorHandling()
+   *
+   * @param prevPros
    *
    * @since 1.0
    */
-  componentDidUpdate () {
-    this.errorHandling()
+  componentDidUpdate (prevPros) {
+    /* Verify that there's no fatal error */
+    if (prevPros.fatalError.verifyProcess !== this.props.fatalError.verifyProcess) {
+      this.errorHandling()
+    }
   }
 
   /**
@@ -91,23 +106,33 @@ class Step2 extends React.Component {
     }
   }
 
+  /**
+   * Check for fatal error
+   *
+   * @returns { generatePdfCancel: redux action | history: push history }
+   *
+   * @since 1.0
+   */
   errorHandling = () => {
-    /* Check fatal error for all selected entry IDs request (search API endpoint) */
-    if (this.props.selectedEntryIdsError !== '') {
-      this.props.generatePdfCancel()
+    const { generatePdfCancel, history } = this.props
+
+    if (this.props.fatalError.fatalError) {
+      return generatePdfCancel()
     }
+
+    /* Proceed to Step3 */
+    return history.push('/step/3')
   }
 
   /**
    * Display Step2 UI
    *
-   * @returns {Step2: component}
+   * @returns { Step2: component }
    *
    * @since 1.0
    */
   render () {
     const {
-      selectedEntryIdsError,
       success,
       errors,
       warnings,
@@ -122,12 +147,13 @@ class Step2 extends React.Component {
       generatePdfCancel,
       history
     } = this.props
+    const { fatalError } = this.props.fatalError
 
     return (
       <div ref={node => this.container = node} tabIndex='-1'>
         <ProgressBar step={2} />
 
-        {!selectedEntryIdsError && <Step2Body
+        {!fatalError && <Step2Body
           downloadPercentage={downloadPercentage}
           success={success}
           errors={errors}
@@ -140,20 +166,20 @@ class Step2 extends React.Component {
           generatePdfWarning={generatePdfWarning} />}
 
         {
-          selectedEntryIdsError &&
-            <FatalError
-              pluginUrl={GPDF_BULK_GENERATOR.plugin_url}
-              adminUrl={GPDF_BULK_GENERATOR.admin_url} />
+          fatalError &&
+          <FatalError
+            pluginUrl={GPDF_BULK_GENERATOR.plugin_url}
+            adminUrl={GPDF_BULK_GENERATOR.admin_url} />
         }
 
         <footer>
           <button
-            className="button cancel"
+            className='button cancel'
             onClick={e => cancelButton({
               e,
               toggleModal,
+              fatalError,
               generatePdfCancel,
-              selectedEntryIdsError,
               history
             })}>
             Cancel
@@ -169,15 +195,14 @@ class Step2 extends React.Component {
  *
  * @param state
  *
- * @returns {success: boolean, errors: boolean, warnings: boolean,
+ * @returns { success: boolean, errors: boolean, warnings: boolean,
  * generatePdfSuccess: array of objects, generatePdfFailed: array of objects,
  * generatePdfWarning: array of objects, downloadPercentage: number,
- * downloadZipUrl: string}
+ * downloadZipUrl: string, fatalError: object }
  *
  * @since 1.0
  */
 const mapStateToProps = state => ({
-  selectedEntryIdsError: state.form.selectedEntryIdsError,
   success: state.logs.success,
   errors: state.logs.errors,
   warnings: state.logs.warnings,
@@ -185,7 +210,8 @@ const mapStateToProps = state => ({
   generatePdfFailed: state.pdf.generatePdfFailed,
   generatePdfWarning: state.pdf.generatePdfWarning,
   downloadPercentage: state.pdf.downloadPercentage,
-  downloadZipUrl: state.pdf.downloadZipUrl
+  downloadZipUrl: state.pdf.downloadZipUrl,
+  fatalError: state.pdf.fatalError
 })
 
 /**

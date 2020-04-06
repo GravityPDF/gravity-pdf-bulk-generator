@@ -1,3 +1,4 @@
+/* Redux Action Types */
 import {
   GENERATE_PDF_LIST_SUCCESS,
   TOGGLE_MODAL,
@@ -22,7 +23,7 @@ import {
  *
  * @param data
  *
- * @returns {{payload: array, type: string}}
+ * @returns {{ payload: array, type: string }}
  *
  * @since 1.0
  */
@@ -36,7 +37,7 @@ export const generatePdfListSuccess = data => {
 /**
  * Toggle modal state
  *
- * @returns {{type: string}}
+ * @returns {{ type: string }}
  *
  * @since 1.0
  */
@@ -49,7 +50,7 @@ export const toggleModal = () => {
 /**
  * Switch modal state to false
  *
- * @returns {{type: string}}
+ * @returns {{ type: string }}
  *
  * @since 1.0
  */
@@ -64,7 +65,7 @@ export const escapeCloseModal = () => {
  *
  * @param index
  *
- * @returns {{payload: number, type: string}
+ * @returns {{ payload: number, type: string }}
  *
  * @since 1.0
  */
@@ -83,22 +84,25 @@ export const togglePdfStatus = index => {
  * @param retryInterval
  * @param delayInterval
  *
- * @returns {{path: string, retryInterval: number, type: string, delayInterval: number, concurrency: number}}
+ * @returns {{ path: string, concurrency: number, retryInterval: number,
+ * delayInterval: number, type: string }}
  *
  * @since 1.0
  */
-export const generateSessionId = (path, concurrency) => {
+export const generateSessionId = (path, concurrency, retryInterval, delayInterval) => {
   return {
     type: GENERATE_SESSION_ID,
     path,
-    concurrency
+    concurrency,
+    retryInterval,
+    delayInterval
   }
 }
 
 /**
  * Switch generatePdfCancel state to true
  *
- * @returns {{type: string}}
+ * @returns {{ type: string }}
  *
  * @since 1.0
  */
@@ -111,7 +115,7 @@ export const generatePdfCancel = () => {
 /**
  * Reset PDF state
  *
- * @returns {{type: string}}
+ * @returns {{ type: string }}
  *
  * @since 1.0
  */

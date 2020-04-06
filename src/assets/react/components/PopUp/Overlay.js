@@ -11,7 +11,7 @@ import React from 'react'
 /**
  * Display Overlay UI
  *
- * @returns {Overlay: component}
+ * @returns { Overlay: component }
  *
  * @since 1.0
  */

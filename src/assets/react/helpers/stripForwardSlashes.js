@@ -10,7 +10,7 @@
  *
  * @param directoryStructure
  *
- * @returns {result|directoryStructure: string|*}
+ * @returns { result: string | directoryStructure: string|* }
  *
  * @since 1.0
  */

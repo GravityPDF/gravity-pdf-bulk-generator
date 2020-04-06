@@ -1,6 +1,5 @@
 /* Dependencies */
 import { combineReducers } from 'redux'
-
 /* Redux Reducers */
 import formReducer from './formReducer'
 import tagPickerReducer from './tagPickerReducer'

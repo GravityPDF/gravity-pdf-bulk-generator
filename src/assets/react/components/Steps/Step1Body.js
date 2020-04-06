@@ -1,7 +1,6 @@
 /* Dependencies */
 import React from 'react'
 import PropTypes from 'prop-types'
-
 /* Components */
 import ListToggle from '../ListToggle/ListToggle'
 import TagInput from '../TagPicker/TagInput'
@@ -17,15 +16,15 @@ import TagPicker from '../TagPicker/TagPicker'
 /**
  * Display Step1Body UI
  *
- * @param pdfList
- * @param togglePdfStatus
- * @param directoryStructure
- * @param updateDirectoryStructure
  * @param tags
+ * @param directoryStructure
+ * @param pdfList
+ * @param updateDirectoryStructure
+ * @param togglePdfStatus
  * @param tagSelect
  * @param tagDeselect
  *
- * @returns {Step1Body: component}
+ * @returns { Step1Body: component }
  *
  * @since 1.0
  */
@@ -78,11 +77,11 @@ const Step1Body = (
  * @since 1.0
  */
 Step1Body.propTypes = {
-  pdfList: PropTypes.array.isRequired,
-  togglePdfStatus: PropTypes.func.isRequired,
-  directoryStructure: PropTypes.string.isRequired,
-  updateDirectoryStructure: PropTypes.func.isRequired,
   tags: PropTypes.arrayOf(PropTypes.object).isRequired,
+  directoryStructure: PropTypes.string.isRequired,
+  pdfList: PropTypes.array.isRequired,
+  updateDirectoryStructure: PropTypes.func.isRequired,
+  togglePdfStatus: PropTypes.func.isRequired,
   tagSelect: PropTypes.func.isRequired,
   tagDeselect: PropTypes.func.isRequired
 }

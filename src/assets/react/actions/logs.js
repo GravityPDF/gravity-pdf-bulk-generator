@@ -1,8 +1,5 @@
-import {
-  TOGGLE_SUCCESS,
-  TOGGLE_ERRORS,
-  TOGGLE_WARNINGS
-} from '../actionTypes/logs'
+/* Redux Action Types */
+import { TOGGLE_SUCCESS, TOGGLE_ERRORS, TOGGLE_WARNINGS } from '../actionTypes/logs'
 
 /**
  * @package     Gravity PDF Bulk Generator
@@ -16,7 +13,7 @@ import {
 /**
  * Toggle success log state
  *
- * @returns {{type: string}}
+ * @returns {{ type: string }}
  *
  * @since 1.0
  */
@@ -29,7 +26,7 @@ export const toggleSuccess = () => {
 /**
  * Toggle errors log state
  *
- * @returns {{type: string}}
+ * @returns {{ type: string }}
  *
  * @since 1.0
  */
@@ -42,7 +39,7 @@ export const toggleErrors = () => {
 /**
  * Toggle warnings log state
  *
- * @returns {{type: string}}
+ * @returns {{ type: string }}
  *
  * @since 1.0
  */

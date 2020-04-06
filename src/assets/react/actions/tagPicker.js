@@ -1,7 +1,5 @@
-import {
-  UPDATE_DIRECTORY_STRUCTURE,
-  RESET_TAGPICKER_STATE
-} from '../actionTypes/tagPicker'
+/* Redux Action Types */
+import { UPDATE_DIRECTORY_STRUCTURE, RESET_TAGPICKER_STATE } from '../actionTypes/tagPicker'
 
 /**
  * @package     Gravity PDF Bulk Generator
@@ -17,7 +15,7 @@ import {
  *
  * @param directoryStructure
  *
- * @returns {{payload: string, type: string}}
+ * @returns {{ payload: string, type: string }}
  *
  * @since 1.0
  */
@@ -31,7 +29,7 @@ export const updateDirectoryStructure = directoryStructure => {
 /**
  * Reset tag picker directoryStructure state
  *
- * @returns {{type: string}}
+ * @returns {{ type: string }}
  *
  * @since 1.0
  */

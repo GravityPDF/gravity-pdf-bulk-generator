@@ -18,7 +18,7 @@ import Switch from 'react-switch'
  * @param screenReaderLabel
  * @param onChange
  *
- * @returns {ToggleSwitch: component}
+ * @returns { ToggleSwitch: component }
  *
  * @since 1.0
  */

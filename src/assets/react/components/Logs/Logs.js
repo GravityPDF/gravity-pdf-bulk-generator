@@ -1,7 +1,6 @@
 /* Dependencies */
 import React from 'react'
 import PropTypes from 'prop-types'
-
 /* Components */
 import InfoBox from './InfoBox'
 
@@ -25,7 +24,7 @@ import InfoBox from './InfoBox'
  * @param generatePdfFailed
  * @param generatePdfWarning
  *
- * @returns {Logs: component}
+ * @returns { Logs: component }
  *
  * @since 1.0
  */

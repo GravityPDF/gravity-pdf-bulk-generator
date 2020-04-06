@@ -1,8 +1,5 @@
 /* Redux Action Types */
-import {
-  UPDATE_DIRECTORY_STRUCTURE,
-  RESET_TAGPICKER_STATE
-} from '../actionTypes/tagPicker'
+import { UPDATE_DIRECTORY_STRUCTURE, RESET_TAGPICKER_STATE } from '../actionTypes/tagPicker'
 
 /**
  * @package     Gravity PDF Bulk Generator
@@ -40,7 +37,7 @@ export const initialState = {
  * @param state
  * @param action
  *
- * @returns {initialState: *} whether updated or not
+ * @returns { initialState: * } whether updated or not
  *
  * @since 1.0
  */

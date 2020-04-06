@@ -2,15 +2,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-
 /* Redux Actions */
 import { updateDirectoryStructure } from '../../actions/tagPicker'
 import { generateSessionId, togglePdfStatus, toggleModal } from '../../actions/pdf'
-
 /* Components */
 import Step1Body from './Step1Body'
 import ProgressBar from '../ProgressBar/ProgressBar'
-
 /* Helpers */
 import { stripForwardSlashes } from '../../helpers/stripForwardSlashes'
 import { cancelButton } from '../../helpers/cancelButton'
@@ -48,16 +45,21 @@ class Step1 extends React.Component {
   /**
    * Initialize component state
    *
-   * @type {concurrency: number}
+   * @type { requestGeneratePdf: { concurrency: number, retryInterval: number,
+   * delayInterval, number }}
    *
    * @since 1.0
    */
   state = {
-    concurrency: 5
+    requestGeneratePdf: {
+      concurrency: 5,
+      retryInterval: 3,
+      delayInterval: 3000
+    }
   }
 
   /**
-   * Add focus event to document on mount
+   * On mount, Add focus event to document on mount
    *
    * @since 1.0
    */
@@ -79,7 +81,7 @@ class Step1 extends React.Component {
    * container we will focus the container instead. In most cases this keeps the focus from
    * jumping outside our Template Container and allows for better keyboard navigation.
    *
-   * @param e
+   * @param event
    *
    * @since 1.0
    */
@@ -92,14 +94,14 @@ class Step1 extends React.Component {
   /**
    * Request to build the bulk PDF download. Generate session ID and process to Step2
    *
-   * @param e
+   * @param event
    *
    * @since 1.0
    */
   build = e => {
     e.preventDefault()
 
-    const { concurrency } = this.state
+    const { concurrency, retryInterval, delayInterval } = this.state.requestGeneratePdf
     const { directoryStructure, pdfList } = this.props
 
     /* Generate active PDF list */
@@ -116,7 +118,7 @@ class Step1 extends React.Component {
       const path = stripForwardSlashes(directoryStructure)
 
       /* Generate session ID and  */
-      this.props.generateSessionId(path, concurrency)
+      this.props.generateSessionId(path, concurrency, retryInterval, delayInterval)
       this.props.history.push('/step/2')
     }
   }
@@ -150,17 +152,17 @@ class Step1 extends React.Component {
   /**
    * Display Step1 UI
    *
-   * @returns {Step1: component}
+   * @returns { Step1: component }
    *
    * @since 1.0
    */
   render () {
     const {
-      pdfList,
-      togglePdfStatus,
-      directoryStructure,
-      updateDirectoryStructure,
       tags,
+      directoryStructure,
+      pdfList,
+      updateDirectoryStructure,
+      togglePdfStatus,
       toggleModal,
       history
     } = this.props
@@ -201,12 +203,11 @@ class Step1 extends React.Component {
  *
  * @param state
  *
- * @returns {tags: array of objects, directoryStructure: string, pdfList: array}
+ * @returns { tags: array of objects, directoryStructure: string, pdfList: array }
  *
  * @since 1.0
  */
 const mapStateToProps = state => ({
-  selectedEntryIdsError: state.form.selectedEntryIdsError,
   tags: state.tagPicker.tags,
   directoryStructure: state.tagPicker.directoryStructure,
   pdfList: state.pdf.pdfList
