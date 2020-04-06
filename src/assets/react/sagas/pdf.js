@@ -9,7 +9,6 @@ import {
   GENERATE_PDF_SUCCESS,
   GENERATE_PDF_WARNING,
   GENERATE_DOWNLOAD_ZIP_URL,
-  VALIDATED_DOWNLOAD_ZIP_URL,
   GENERATE_SESSION_ID,
   GENERATE_SESSION_ID_SUCCESS,
   STORE_ABORT_CONTROLLER,
@@ -46,7 +45,9 @@ export const getStateDownloadZipUrl = state => state.pdf.downloadZipUrl
  * @since 1.0
  */
 export function * generateSessionId (payload) {
-  const { path, concurrency } = payload
+  const { path, concurrency, history } = payload
+
+  history.push('/step/2')
 
   /**
    * Call fetch API 3x
@@ -64,9 +65,8 @@ export function * generateSessionId (payload) {
 
     yield put({ type: GENERATE_SESSION_ID_SUCCESS, payload: responseBody.sessionId })
 
-    /* Redux state for selectedEntryIds */
+    /* Redux state for selectedEntryIds & pdfList */
     const selectedEntryIds = yield select(getStateSelectedEntryIds)
-    /* Redux state for pdfList */
     const pdfList = yield select(getStatePdfList)
 
     // Remove 'Toggle All' in the list before processing if exists
@@ -79,6 +79,7 @@ export function * generateSessionId (payload) {
       payload: {
         sessionId: responseBody.sessionId,
         concurrency,
+        history,
         selectedEntryIds,
         pdfList
       }
@@ -173,7 +174,7 @@ export function * generatePdf ({ pdfs }) {
  *
  * @since 1.0
  */
-export function * validateDownloadZipUrl () {
+export function * validateDownloadZipUrl (history) {
   /* Call fetch API */
   try {
     const downloadZipUrl = yield select(getStateDownloadZipUrl)
@@ -183,10 +184,10 @@ export function * validateDownloadZipUrl () {
       throw response
     }
 
-    yield put({ type: VALIDATED_DOWNLOAD_ZIP_URL, payload: response.url })
-
     /* Auto download the validated download zip URL */
     window.location.assign(response.url)
+
+    history.push('/step/3')
   } catch (error) {
     /* Update redux state fatalError to true */
     yield put({ type: FATAL_ERROR })
@@ -245,11 +246,11 @@ export function * generatePdfCancel () {
  *
  * @since 1.0
  */
-export function * bulkGeneratePdf ({ pdfs, concurrency, sessionId }) {
+export function * bulkGeneratePdf ({ pdfs, concurrency, sessionId, history }) {
   /* Loop through pdfs array and remove 5 items (splice 5) after every batch of 5 items excecuted */
   while (pdfs.length > 0) {
     yield generatePdf({
-      pdfs: pdfs.splice(0, concurrency)
+      pdfs: pdfs.splice(0, concurrency),
     })
 
     /* Generate download zip url every end of the process (batch of 5)  */
@@ -257,7 +258,7 @@ export function * bulkGeneratePdf ({ pdfs, concurrency, sessionId }) {
   }
 
   /* Validate generated download zip url at the very end of the cycle */
-  yield validateDownloadZipUrl()
+  yield validateDownloadZipUrl(history)
 }
 
 /**
@@ -272,6 +273,7 @@ export function * watchGeneratePDF () {
     const {
       sessionId,
       concurrency,
+      history,
       selectedEntryIds,
       pdfList
     } = payload
@@ -289,6 +291,7 @@ export function * watchGeneratePDF () {
     const generator = yield fork(bulkGeneratePdf, {
       pdfs,
       concurrency,
+      history,
       sessionId
     })
 

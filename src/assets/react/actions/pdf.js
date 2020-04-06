@@ -86,11 +86,12 @@ export const togglePdfStatus = index => {
  *
  * @since 1.0
  */
-export const generateSessionId = (path, concurrency) => {
+export const generateSessionId = (path, concurrency, history) => {
   return {
     type: GENERATE_SESSION_ID,
     path,
-    concurrency
+    concurrency,
+    history
   }
 }
 

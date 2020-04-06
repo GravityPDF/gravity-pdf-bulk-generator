@@ -45,36 +45,16 @@ class Step2 extends React.Component {
     downloadZipUrl: PropTypes.string.isRequired,
     toggleModal: PropTypes.func.isRequired,
     generatePdfCancel: PropTypes.func.isRequired,
-    fatalError: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired,
   }
 
   /**
-   * On mount, Add focus event to document and call function errorHandling()
+   * On mount, Add focus event to document
    *
    * @since 1.0
    */
   componentDidMount () {
     document.addEventListener('focus', this.handleFocus, true)
-
-    /* Verify that there's no fatal error */
-    if (this.props.fatalError.verifyProcess) {
-      this.errorHandling()
-    }
-  }
-
-  /**
-   * On update, call function errorHandling()
-   *
-   * @param prevPros
-   *
-   * @since 1.0
-   */
-  componentDidUpdate (prevPros) {
-    /* Verify that there's no fatal error */
-    if (prevPros.fatalError.verifyProcess !== this.props.fatalError.verifyProcess) {
-      this.errorHandling()
-    }
   }
 
   /**
@@ -91,32 +71,14 @@ class Step2 extends React.Component {
    * container we will focus the container instead. In most cases this keeps the focus from
    * jumping outside our Template Container and allows for better keyboard navigation.
    *
-   * @param e
+   * @param event
    *
    * @since 1.0
    */
-  handleFocus = e => {
-    if (!this.container.contains(e.target)) {
+  handleFocus = event => {
+    if (!this.container.contains(event.target)) {
       this.container.focus()
     }
-  }
-
-  /**
-   * Check for fatal error
-   *
-   * @returns { generatePdfCancel: redux action | history: push history }
-   *
-   * @since 1.0
-   */
-  errorHandling = () => {
-    const { generatePdfCancel, history } = this.props
-
-    if (this.props.fatalError.fatalError) {
-      return generatePdfCancel()
-    }
-
-    /* Proceed to Step3 */
-    return history.push('/step/3')
   }
 
   /**
@@ -140,9 +102,9 @@ class Step2 extends React.Component {
       downloadPercentage,
       toggleModal,
       generatePdfCancel,
+      fatalError,
       history
     } = this.props
-    const { fatalError } = this.props.fatalError
 
     return (
       <div ref={node => this.container = node} tabIndex='-1'>

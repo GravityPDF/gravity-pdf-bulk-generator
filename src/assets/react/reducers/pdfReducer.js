@@ -8,7 +8,6 @@ import {
   GENERATE_PDF_SUCCESS,
   GENERATE_PDF_WARNING,
   GENERATE_DOWNLOAD_ZIP_URL,
-  VALIDATED_DOWNLOAD_ZIP_URL,
   GENERATE_SESSION_ID_SUCCESS,
   RESET_PDF_STATE,
   STORE_ABORT_CONTROLLER,
@@ -48,10 +47,11 @@ export const initialState = {
   downloadPercentage: 0,
   downloadZipUrl: '',
   abortControllers: [],
-  fatalError: {
-    verifyProcess: false,
-    fatalError: false
-  }
+  // fatalError: {
+  //   verifyProcess: false,
+  //   fatalError: false
+  // }
+  fatalError: false
 }
 
 /**
@@ -267,32 +267,10 @@ export default function (state = initialState, action) {
         downloadZipUrl: action.payload
       }
 
-    /**
-     * Process VALIDATED_DOWNLOAD_ZIP_URL
-     *
-     * @since 1.0
-     */
-    case VALIDATED_DOWNLOAD_ZIP_URL:
-      return {
-        ...state,
-        fatalError: {
-          verifyProcess: true,
-          fatalError: false
-        }
-      }
-
-    /**
-     * Process FATAL_ERROR
-     *
-     * @since 1.0
-     */
     case FATAL_ERROR:
       return {
         ...state,
-        fatalError: {
-          verifyProcess: true,
-          fatalError: true
-        }
+        fatalError: true
       }
 
     /**

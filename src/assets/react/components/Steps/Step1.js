@@ -8,6 +8,7 @@ import { generateSessionId, togglePdfStatus, toggleModal } from '../../actions/p
 /* Components */
 import Step1Body from './Step1Body'
 import ProgressBar from '../ProgressBar/ProgressBar'
+import FatalError from '../FatalError/FatalError'
 /* Helpers */
 import { stripForwardSlashes } from '../../helpers/stripForwardSlashes'
 import { cancelButton } from '../../helpers/cancelButton'
@@ -97,7 +98,7 @@ class Step1 extends React.Component {
     e.preventDefault()
 
     const { concurrency } = this.state
-    const { directoryStructure, pdfList } = this.props
+    const { directoryStructure, pdfList, history } = this.props
 
     /* Generate active PDF list */
     const activePdfList = []
@@ -112,9 +113,8 @@ class Step1 extends React.Component {
       /* Strip out forward slashes before passing to path */
       const path = stripForwardSlashes(directoryStructure)
 
-      /* Generate session ID and  */
-      this.props.generateSessionId(path, concurrency)
-      this.props.history.push('/step/2')
+      /* Generate session ID */
+      this.props.generateSessionId(path, concurrency, history)
     }
   }
 
@@ -156,6 +156,7 @@ class Step1 extends React.Component {
       tags,
       directoryStructure,
       pdfList,
+      fatalError,
       updateDirectoryStructure,
       togglePdfStatus,
       toggleModal,
@@ -172,22 +173,36 @@ class Step1 extends React.Component {
 
         <ProgressBar step={1} />
 
-        <Step1Body
-          pdfList={pdfList}
-          togglePdfStatus={togglePdfStatus}
-          directoryStructure={directoryStructure}
-          updateDirectoryStructure={updateDirectoryStructure}
-          tags={tags}
-          tagSelect={this.tagSelect}
-          tagDeselect={this.tagDeselect} />
 
-        <footer>
-          <button
-            className='button-primary build'
-            onClick={this.build}>
-            Build
-          </button>
-        </footer>
+        {
+          !fatalError && (
+            <div>
+              <Step1Body
+                pdfList={pdfList}
+                togglePdfStatus={togglePdfStatus}
+                directoryStructure={directoryStructure}
+                updateDirectoryStructure={updateDirectoryStructure}
+                tags={tags}
+                tagSelect={this.tagSelect}
+                tagDeselect={this.tagDeselect} />
+
+              <footer>
+                <button
+                  className='button-primary build'
+                  onClick={this.build}>
+                  Build
+                </button>
+              </footer>
+            </div>
+          )
+        }
+
+        {
+          fatalError &&
+          <FatalError
+            pluginUrl={GPDF_BULK_GENERATOR.plugin_url}
+            adminUrl={GPDF_BULK_GENERATOR.admin_url} />
+        }
       </div>
     )
   }
@@ -205,7 +220,8 @@ class Step1 extends React.Component {
 const mapStateToProps = state => ({
   tags: state.tagPicker.tags,
   directoryStructure: state.tagPicker.directoryStructure,
-  pdfList: state.pdf.pdfList
+  pdfList: state.pdf.pdfList,
+  fatalError: state.pdf.fatalError
 })
 
 /**
