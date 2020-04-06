@@ -279,6 +279,11 @@ export default function (state = initialState, action) {
         downloadZipUrl: action.payload
       }
 
+    /**
+     * Process VALIDATED_DOWNLOAD_ZIP_URL
+     *
+     * @since 1.0
+     */
     case VALIDATED_DOWNLOAD_ZIP_URL:
       return {
         ...state,
@@ -288,6 +293,11 @@ export default function (state = initialState, action) {
         }
       }
 
+    /**
+     * Process FATAL_ERROR
+     *
+     * @since 1.0
+     */
     case FATAL_ERROR:
       return {
         ...state,
