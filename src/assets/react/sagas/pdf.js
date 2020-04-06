@@ -11,7 +11,6 @@ import {
   GENERATE_DOWNLOAD_ZIP_URL,
   VALIDATED_DOWNLOAD_ZIP_URL,
   GENERATE_SESSION_ID,
-  GENERATE_SESSION_ID_FAILED,
   GENERATE_SESSION_ID_SUCCESS,
   STORE_ABORT_CONTROLLER,
   FATAL_ERROR
@@ -65,7 +64,9 @@ export function * generateSessionId (payload) {
 
     yield put({ type: GENERATE_SESSION_ID_SUCCESS, payload: responseBody.sessionId })
 
+    /* Redux state for selectedEntryIds */
     const selectedEntryIds = yield select(getStateSelectedEntryIds)
+    /* Redux state for pdfList */
     const pdfList = yield select(getStatePdfList)
 
     // Remove 'Toggle All' in the list before processing if exists
@@ -85,7 +86,8 @@ export function * generateSessionId (payload) {
       }
     })
   } catch (error) {
-    yield put({ type: GENERATE_SESSION_ID_FAILED, payload: 'Error occured. Something went wrong..' })
+    /* Update redux state fatalError to true */
+    yield put({ type: FATAL_ERROR })
   }
 }
 
@@ -147,6 +149,7 @@ export function * requestGeneratePdf (pdf, retryInterval, delayInterval) {
     }
   } finally {
     if (!(yield cancelled())) {
+      /* Generate download request counter for Step2 */
       yield put({ type: GENERATE_PDF_COUNTER, payload: yield select(getStateSelectedEntryIds) })
     }
   }
@@ -163,6 +166,7 @@ export function * requestGeneratePdf (pdf, retryInterval, delayInterval) {
  */
 export function * generatePdf ({ pdfs, retryInterval, delayInterval }) {
 
+  /* Set individual pdf data request before the actual API call */
   for (let i = 0; i < pdfs.length; i++) {
     yield fork(requestGeneratePdf, pdfs[i], retryInterval, delayInterval)
   }
@@ -186,6 +190,9 @@ export function * validateDownloadZipUrl () {
     }
 
     yield put({ type: VALIDATED_DOWNLOAD_ZIP_URL, payload: response.url })
+
+    /* Auto download the validated download zip URL */
+    window.location.assign(response.url)
   } catch (error) {
     /* Update redux state fatalError to true */
     yield put({ type: FATAL_ERROR })
@@ -226,8 +233,10 @@ export function * generateDownloadZipUrl (sessionId) {
  * @since 1.0
  */
 export function * generatePdfCancel () {
+  /* Redux state for abortControllers */
   const abortControllers = yield select(getStateAbortControllers)
 
+  /* AbortController API call for requestGeneratePdf before it has completed */
   abortControllers.map(abortController => {
     abortController.abort()
   })
@@ -245,6 +254,7 @@ export function * generatePdfCancel () {
  * @since 1.0
  */
 export function * bulkGeneratePdf ({ pdfs, concurrency, retryInterval, delayInterval, sessionId }) {
+  /* Loop through pdfs array and remove 5 items (splice 5) after every batch of 5 items excecuted */
   while (pdfs.length > 0) {
     yield generatePdf({
       pdfs: pdfs.splice(0, concurrency),
@@ -267,6 +277,7 @@ export function * bulkGeneratePdf ({ pdfs, concurrency, retryInterval, delayInte
  */
 export function * watchGeneratePDF () {
   while (true) {
+    /* Listen to redux action type GENERATE_PDF event */
     const { payload } = yield take(GENERATE_PDF)
     const {
       sessionId,
@@ -279,12 +290,14 @@ export function * watchGeneratePDF () {
     const pdfs = []
     const activePdfList = generateActivePdfList(pdfList)
 
+    /* Construct content for pdfs array */
     selectedEntryIds.map(id => {
       activePdfList.map(item => {
         pdfs.push({ sessionId, entryId: id, pdfId: item.id, pdfName: item.name })
       })
     })
 
+    /* Yield fork worker saga bulkGeneratePdf */
     const generator = yield fork(bulkGeneratePdf, {
       pdfs,
       concurrency,
@@ -293,10 +306,13 @@ export function * watchGeneratePDF () {
       sessionId
     })
 
+    /* Listen to redux action type GENERATE_PDF_CANCEL event */
     yield take(GENERATE_PDF_CANCEL)
 
+    /* Yield call worker saga generatePdfCancel */
     yield generatePdfCancel()
 
+    /* Cancel the ongoing task for worker saga bulkGeneratePdf */
     yield cancel(generator)
   }
 }

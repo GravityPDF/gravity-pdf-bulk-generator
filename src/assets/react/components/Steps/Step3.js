@@ -34,7 +34,6 @@ class Step3 extends React.Component {
     generatePdfSuccess: PropTypes.arrayOf(PropTypes.object).isRequired,
     generatePdfFailed: PropTypes.arrayOf(PropTypes.object).isRequired,
     generatePdfWarning: PropTypes.arrayOf(PropTypes.object).isRequired,
-    downloadPercentage: PropTypes.number.isRequired,
     downloadZipUrl: PropTypes.string.isRequired,
     toggleModal: PropTypes.func.isRequired,
     resetPdfState: PropTypes.func.isRequired,

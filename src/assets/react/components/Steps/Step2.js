@@ -45,12 +45,7 @@ class Step2 extends React.Component {
     downloadZipUrl: PropTypes.string.isRequired,
     toggleModal: PropTypes.func.isRequired,
     generatePdfCancel: PropTypes.func.isRequired,
-    fatalError: PropTypes.objectOf(
-      PropTypes.shape({
-        verifyProcess: PropTypes.bool.isRequired,
-        fatalError: PropTypes.bool.isRequired
-      })
-    ).isRequired,
+    fatalError: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired,
   }
 

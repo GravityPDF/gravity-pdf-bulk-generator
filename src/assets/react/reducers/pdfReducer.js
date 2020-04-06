@@ -9,7 +9,6 @@ import {
   GENERATE_PDF_WARNING,
   GENERATE_DOWNLOAD_ZIP_URL,
   VALIDATED_DOWNLOAD_ZIP_URL,
-  GENERATE_SESSION_ID_FAILED,
   GENERATE_SESSION_ID_SUCCESS,
   RESET_PDF_STATE,
   STORE_ABORT_CONTROLLER,
@@ -165,17 +164,6 @@ export default function (state = initialState, action) {
      * @since 1.0
      */
     case GENERATE_SESSION_ID_SUCCESS:
-      return {
-        ...state,
-        sessionId: action.payload
-      }
-
-    /**
-     * Process GENERATE_SESSION_ID_FAILED
-     *
-     * @since 1.0
-     */
-    case GENERATE_SESSION_ID_FAILED:
       return {
         ...state,
         sessionId: action.payload
