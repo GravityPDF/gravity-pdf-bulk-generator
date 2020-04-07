@@ -1,18 +1,14 @@
 /* Dependencies */
 import 'core-js/stable'
 import 'regenerator-runtime/runtime'
-
 import React from 'react'
 import { render } from 'react-dom'
-import { MemoryRouter as Router } from 'react-router-dom'
+import { ConnectedRouter } from 'connected-react-router'
 import { Provider } from 'react-redux'
-
 /* Redux store */
-import { getStore } from './store'
-
+import configureStore, { history } from './store/configureStore'
 /* Components */
 import BulkGenerator from './bulkGenerator'
-
 /* Styles */
 import '../scss/main.scss'
 
@@ -49,13 +45,13 @@ if (entryList !== null && bulkActionOptions.length !== 0) {
  * @since 1.0
  */
 export default function loadBulkGenerator (container) {
-  const store = getStore()
+  const store = configureStore()
 
   render(
     <Provider store={store}>
-      <Router>
+      <ConnectedRouter history={history}>
         <BulkGenerator />
-      </Router>
+      </ConnectedRouter>
     </Provider>,
     container
   )

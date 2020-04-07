@@ -1,19 +1,20 @@
 /* Redux Action Types */
 import {
   ESCAPE_CLOSE_MODAL,
-  GENERATE_DOWNLOAD_ZIP_URL,
   GENERATE_PDF_CANCEL,
   GENERATE_PDF_COUNTER,
   GENERATE_PDF_FAILED,
   GENERATE_PDF_LIST_SUCCESS,
   GENERATE_PDF_SUCCESS,
   GENERATE_PDF_WARNING,
-  GENERATE_SESSION_ID_FAILED,
+  GENERATE_DOWNLOAD_ZIP_URL,
+  VALIDATED_DOWNLOAD_ZIP_URL,
   GENERATE_SESSION_ID_SUCCESS,
   RESET_PDF_STATE,
   STORE_ABORT_CONTROLLER,
   TOGGLE_MODAL,
-  TOGGLE_PDF_STATUS
+  TOGGLE_PDF_STATUS,
+  FATAL_ERROR
 } from '../actionTypes/pdf'
 /* Helpers */
 import { generateActivePdfList } from '../helpers/generateActivePdfList'
@@ -28,9 +29,10 @@ import { generateActivePdfList } from '../helpers/generateActivePdfList'
 /**
  * Setup the initial state of the "PDF" portion of our Redux store
  *
- * @type {sessionId: string, modal: boolean, pdfList: array, generatePdfSuccess: array,
+ * @type { sessionId: string, modal: boolean, pdfList: array, generatePdfSuccess: array,
  * generatePdfFailed: array, generatePdfWarning: array, generatePdfCancel: boolean,
- * generatePdfCounter: number, downloadPercentage: number, downloadZipUrl: string}
+ * generatePdfCounter: number, downloadPercentage: number, downloadZipUrl: string,
+ * abortControllers: array, fatalError: object }
  *
  * @since 1.0
  */
@@ -45,7 +47,8 @@ export const initialState = {
   generatePdfCounter: 0,
   downloadPercentage: 0,
   downloadZipUrl: '',
-  abortControllers: []
+  abortControllers: [],
+  fatalError: false
 }
 
 /**
@@ -54,16 +57,11 @@ export const initialState = {
  * @param state
  * @param action
  *
- * @returns {initialState: *} whether updated or not
+ * @returns { initialState: * } whether updated or not
  *
  * @since 1.0
  */
 export default function (state = initialState, action) {
-
-  /* For those actions that require it, we prevent state being modified if the sessions don't match */
-  if (action.sessionId && action.sessionId !== state.sessionId) {
-    return state
-  }
 
   switch (action.type) {
 
@@ -169,17 +167,6 @@ export default function (state = initialState, action) {
       }
 
     /**
-     * Process GENERATE_SESSION_ID_FAILED
-     *
-     * @since 1.0
-     */
-    case GENERATE_SESSION_ID_FAILED:
-      return {
-        ...state,
-        sessionId: action.payload
-      }
-
-    /**
      * Process GENERATE_PDF_SUCCESS
      *
      * @since 1.0
@@ -234,8 +221,17 @@ export default function (state = initialState, action) {
      */
     case GENERATE_PDF_CANCEL:
       return {
-        ...initialState,
-        generatePdfCancel: true
+        ...state,
+        sessionId: '',
+        pdfList: [],
+        generatePdfSuccess: [],
+        generatePdfFailed: [],
+        generatePdfWarning: [],
+        generatePdfCancel: true,
+        generatePdfCounter: 0,
+        downloadPercentage: 0,
+        downloadZipUrl: '',
+        abortControllers: []
       }
 
     /**
@@ -261,23 +257,32 @@ export default function (state = initialState, action) {
      *
      * @since 1.0
      */
-    case GENERATE_DOWNLOAD_ZIP_URL: {
+    case GENERATE_DOWNLOAD_ZIP_URL:
       return {
         ...state,
         downloadZipUrl: action.payload
       }
-    }
+
+    /**
+     * Process FATAL_ERROR
+     *
+     * @since 1.0
+     */
+    case FATAL_ERROR:
+      return {
+        ...state,
+        fatalError: true
+      }
 
     /**
      * Process RESET_PDF_STATE
      *
      * @since 1.0
      */
-    case RESET_PDF_STATE: {
+    case RESET_PDF_STATE:
       return {
         ...initialState
       }
-    }
   }
 
   /**

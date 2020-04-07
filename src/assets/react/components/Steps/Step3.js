@@ -52,8 +52,6 @@ class Step3 extends React.Component {
    * @since 1.0
    */
   componentDidMount () {
-    this.requestDownloadZipUrl()
-
     document.addEventListener('focus', this.handleFocus, true)
   }
 
@@ -79,17 +77,6 @@ class Step3 extends React.Component {
     if (!this.container.contains(e.target)) {
       this.container.focus()
     }
-  }
-
-  /**
-   * Auto download the generated PDF zip file
-   *
-   * @since 1.0
-   */
-  requestDownloadZipUrl = () => {
-    const { downloadZipUrl } = this.props
-
-    window.location.assign(downloadZipUrl)
   }
 
   /**

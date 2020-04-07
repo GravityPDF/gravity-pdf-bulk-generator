@@ -27,7 +27,7 @@ export const cancelButton = (
     toggleModal,
     escapeCloseModal,
     generatePdfCancel,
-    selectedEntryIdsError,
+    fatalError,
     resetTagPickerState,
     resetPdfState
   }
@@ -48,7 +48,7 @@ export const cancelButton = (
   /* Check current path */
   if (pathname === '/step/2') {
     /* Prevent additional confirmation popup if fatal error occured already */
-    if (selectedEntryIdsError !== '') {
+    if (fatalError) {
       return (
         e && e.preventDefault(),
         toggleModal && toggleModal(),

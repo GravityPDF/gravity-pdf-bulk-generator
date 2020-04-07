@@ -3,14 +3,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-
 /* Redux Actions */
 import { processCheckbox, getSelectedEntryIds } from './actions/form'
-import { generatePdfListSuccess, toggleModal } from './actions/pdf'
-
+import { generatePdfListSuccess } from './actions/pdf'
 /* Components */
 import PopUp from './components/PopUp/PopUp'
-
 /* Helpers */
 import { parseUrlForSearchParameters } from './helpers/parseUrlForSearchParameters'
 
@@ -39,7 +36,6 @@ class BulkGenerator extends React.Component {
     generatePdfListSuccess: PropTypes.func.isRequired,
     processCheckbox: PropTypes.func.isRequired,
     getSelectedEntryIds: PropTypes.func.isRequired,
-    toggleModal: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
     modal: PropTypes.bool.isRequired
   }
@@ -47,14 +43,12 @@ class BulkGenerator extends React.Component {
   /**
    * Initialize component state
    *
-   * @type {formId: string}
+   * @type { formId: }
    *
    * @since 1.0
    */
   state = {
-    formId: '',
-    retryInterval: 3,
-    delayInterval: 500
+    formId: ''
   }
 
   /**
@@ -127,7 +121,7 @@ class BulkGenerator extends React.Component {
    * @param pdfs
    * @param active
    *
-   * @returns {list: array}
+   * @returns { list: array }
    *
    * @since 1.0
    */
@@ -189,8 +183,6 @@ class BulkGenerator extends React.Component {
     if (popupSelectAllEntries === '1') {
       this.checkPopupSelectAllEntries()
     }
-
-    this.processRequestData()
   }
 
   /**
@@ -199,24 +191,12 @@ class BulkGenerator extends React.Component {
    * @since 1.0
    */
   checkPopupSelectAllEntries = () => {
-    const { formId, retryInterval, delayInterval } = this.state
+    const { formId } = this.state
     /* Process search request filters through URL data*/
     const filterData = parseUrlForSearchParameters(window.location.search)
 
     /* Redux action */
-    this.props.getSelectedEntryIds(formId, filterData, retryInterval, delayInterval)
-  }
-
-  /**
-   * Push to Step1
-   *
-   * @since 1.0
-   */
-  processRequestData = () => {
-    const { toggleModal, history } = this.props
-
-    toggleModal()
-    history.push('/step/1')
+    this.props.getSelectedEntryIds(formId, filterData)
   }
 
   /**
@@ -231,15 +211,13 @@ class BulkGenerator extends React.Component {
   /**
    * Display BulkGenerator UI
    *
-   * @returns {BulkGenerator: component}
+   * @returns { BulkGenerator: component }
    *
    * @since 1.0
    */
   render () {
-    const { modal, history } = this.props
-
     return (
-      <PopUp modal={modal} history={history} />
+      <PopUp modal={this.props.modal} history={this.props.history} />
     )
   }
 }
@@ -249,8 +227,7 @@ class BulkGenerator extends React.Component {
  *
  * @param state
  *
- * @returns {modal: boolean, generatePdfCancel: function,
- * downloadPercentage: number, downloadZipUrl: *string}
+ * @returns { modal: boolean, downloadPercentage: number, downloadZipUrl: string }
  *
  * @since 1.0
  */
@@ -268,6 +245,5 @@ const mapStateToProps = state => ({
 export default withRouter(connect(mapStateToProps, {
   processCheckbox,
   getSelectedEntryIds,
-  generatePdfListSuccess,
-  toggleModal
+  generatePdfListSuccess
 })(BulkGenerator))

@@ -1,8 +1,7 @@
 /* Redux Action Types */
 import {
   PROCESS_CHECKBOX,
-  GET_SELECTED_ENTRY_IDS_SUCCESS,
-  GET_SELECTED_ENTRY_IDS_FAILED
+  GET_SELECTED_ENTRY_IDS_SUCCESS
 } from '../actionTypes/form'
 
 /**
@@ -15,13 +14,12 @@ import {
 /**
  * Setup the initial state of the "form" portion of our Redux store
  *
- * @type {selectedEntryIds: array, selectedEntryIdsError: string}
+ * @type {selectedEntryIds: array }
  *
  * @since 1.0
  */
 export const initialState = {
-  selectedEntryIds: [],
-  selectedEntryIdsError: ''
+  selectedEntryIds: []
 }
 
 /**
@@ -68,17 +66,6 @@ export default function (state = initialState, action) {
       return {
         ...state,
         selectedEntryIds: action.payload
-      }
-
-    /**
-     * Process GET_SELECTED_ENTRY_IDS_FAILED
-     *
-     * @since 1.0
-     */
-    case GET_SELECTED_ENTRY_IDS_FAILED:
-      return {
-        ...state,
-        selectedEntryIdsError: action.payload
       }
   }
 

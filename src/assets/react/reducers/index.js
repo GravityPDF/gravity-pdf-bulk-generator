@@ -1,6 +1,6 @@
 /* Dependencies */
 import { combineReducers } from 'redux'
-
+import { connectRouter } from 'connected-react-router'
 /* Redux Reducers */
 import formReducer from './formReducer'
 import tagPickerReducer from './tagPickerReducer'
@@ -20,9 +20,14 @@ import logsReducer from './logsReducer'
  *
  * @since 1.0
  */
-export default combineReducers({
+
+
+const createRootReducer = history => combineReducers({
+  router: connectRouter(history),
   form: formReducer,
   tagPicker: tagPickerReducer,
   pdf: pdfReducer,
   logs: logsReducer
 })
+
+export default createRootReducer

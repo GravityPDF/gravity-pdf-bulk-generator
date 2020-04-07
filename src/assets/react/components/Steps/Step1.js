@@ -2,15 +2,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-
 /* Redux Actions */
 import { updateDirectoryStructure } from '../../actions/tagPicker'
 import { generateSessionId, togglePdfStatus, toggleModal } from '../../actions/pdf'
-
 /* Components */
 import Step1Body from './Step1Body'
 import ProgressBar from '../ProgressBar/ProgressBar'
-
+import FatalError from '../FatalError/FatalError'
 /* Helpers */
 import { stripForwardSlashes } from '../../helpers/stripForwardSlashes'
 import { cancelButton } from '../../helpers/cancelButton'
@@ -117,7 +115,6 @@ class Step1 extends React.Component {
 
       /* Generate session ID and  */
       this.props.generateSessionId(path, concurrency)
-      this.props.history.push('/step/2')
     }
   }
 
@@ -156,11 +153,12 @@ class Step1 extends React.Component {
    */
   render () {
     const {
-      pdfList,
-      togglePdfStatus,
-      directoryStructure,
-      updateDirectoryStructure,
       tags,
+      directoryStructure,
+      pdfList,
+      fatalError,
+      togglePdfStatus,
+      updateDirectoryStructure,
       toggleModal,
       history
     } = this.props
@@ -175,22 +173,34 @@ class Step1 extends React.Component {
 
         <ProgressBar step={1} />
 
-        <Step1Body
-          pdfList={pdfList}
-          togglePdfStatus={togglePdfStatus}
-          directoryStructure={directoryStructure}
-          updateDirectoryStructure={updateDirectoryStructure}
-          tags={tags}
-          tagSelect={this.tagSelect}
-          tagDeselect={this.tagDeselect} />
+        {
+          !fatalError &&
+            <div>
+              <Step1Body
+                pdfList={pdfList}
+                togglePdfStatus={togglePdfStatus}
+                directoryStructure={directoryStructure}
+                updateDirectoryStructure={updateDirectoryStructure}
+                tags={tags}
+                tagSelect={this.tagSelect}
+                tagDeselect={this.tagDeselect} />
 
-        <footer>
-          <button
-            className='button-primary build'
-            onClick={this.build}>
-            Build
-          </button>
-        </footer>
+              <footer>
+                <button
+                  className='button-primary build'
+                  onClick={this.build}>
+                  Build
+                </button>
+              </footer>
+            </div>
+        }
+
+        {
+          fatalError &&
+          <FatalError
+            pluginUrl={GPDF_BULK_GENERATOR.plugin_url}
+            adminUrl={GPDF_BULK_GENERATOR.admin_url} />
+        }
       </div>
     )
   }
@@ -201,15 +211,16 @@ class Step1 extends React.Component {
  *
  * @param state
  *
- * @returns {tags: array of objects, directoryStructure: string, pdfList: array}
+ * @returns { tags: array of objects, directoryStructure: string,
+ * pdfList: array, fatalError: boolean }
  *
  * @since 1.0
  */
 const mapStateToProps = state => ({
-  selectedEntryIdsError: state.form.selectedEntryIdsError,
   tags: state.tagPicker.tags,
   directoryStructure: state.tagPicker.directoryStructure,
-  pdfList: state.pdf.pdfList
+  pdfList: state.pdf.pdfList,
+  fatalError: state.pdf.fatalError
 })
 
 /**

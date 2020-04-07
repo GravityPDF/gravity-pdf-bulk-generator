@@ -1,13 +1,13 @@
 /* Dependencies */
+import { createMemoryHistory } from 'history'
+import { routerMiddleware } from 'connected-react-router'
 import { createStore, applyMiddleware } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import createSagaMiddleware from 'redux-saga'
-
 /* Redux Saga */
 import rootSaga from '../sagas'
-
 /* Redux Reducers */
-import rootReducers from '../reducers/index'
+import createRootReducer from '../reducers/index'
 
 /**
  * @package     Gravity PDF Bulk Generator
@@ -16,29 +16,34 @@ import rootReducers from '../reducers/index'
  * @since       1.0
  */
 
+export const history = createMemoryHistory()
+
 /* Initialize Saga Middleware */
 const sagaMiddleware = createSagaMiddleware()
-const middlewares = [sagaMiddleware]
+const middlewares = [routerMiddleware(history), sagaMiddleware]
 const middlewareEnhancer = applyMiddleware(...middlewares)
 const enhancers = [middlewareEnhancer]
 /* Initialize Redux dev tools */
 const composedEnhancers = composeWithDevTools(...enhancers)
-/* Create our store and enable composedEnhancers */
-const store = createStore(
-  rootReducers,
-  composedEnhancers
-)
-
-/* Run Saga Middleware */
-sagaMiddleware.run(rootSaga)
 
 /**
  * Holds the whole redux state tree of the application
  *
- * @returns {store: object}
+ * @param preloadedState
+ *
+ * @returns { store: object }
  *
  * @since 1.0
  */
-export function getStore () {
+export default function configureStore(preloadedState) {
+  const store = createStore(
+    createRootReducer(history),
+    preloadedState,
+    composedEnhancers
+  )
+
+  /* Run Saga Middleware */
+  sagaMiddleware.run(rootSaga)
+
   return store
 }
