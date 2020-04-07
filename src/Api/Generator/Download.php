@@ -136,18 +136,22 @@ class Download implements ApiEndpointRegistration {
 			}
 
 			fclose( $stream );
-
-			/*
-			 * Cleanup the session tmp directory.
-			 *
-			 * We left this directory intact until now to ensure naming conflicts could be resolved with as little
-			 * overhead as possible. Now we are finished with it, we'll clean it all up.
-			 */
-			$this->filesystem->deleteDir( $this->filesystem->get_tmp_basepath() );
 		} catch ( \Exception $e ) {
 			$this->logger->error( $e->getMessage(), [ 'session' => $request->get_param( 'sessionId' ) ] );
 
 			return new \WP_Error( $e->getMessage(), '', [ 'status' => 500 ] );
+		}
+
+		/*
+		 * Cleanup the session tmp directory.
+		 *
+		 * We left this directory intact until now to ensure naming conflicts could be resolved with as little
+		 * overhead as possible. Now we are finished with it, we'll clean it all up.
+		 */
+		try {
+			$this->filesystem->deleteDir( $this->filesystem->get_tmp_basepath() );
+		} catch ( \Exception $e ) {
+			/* ignore */
 		}
 
 		$this->end();
