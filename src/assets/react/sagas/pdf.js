@@ -35,6 +35,7 @@ import { generateActivePdfList } from '../helpers/generateActivePdfList'
 /* Selectors */
 export const getStateSelectedEntryIds = state => state.form.selectedEntryIds
 export const getStatePdfList = state => state.pdf.pdfList
+export const getStateGeneratePdfCancel = state => state.pdf.generatePdfCancel
 export const getStateAbortControllers = state => state.pdf.abortControllers
 export const getStateDownloadZipUrl = state => state.pdf.downloadZipUrl
 
@@ -49,7 +50,13 @@ export const getStateDownloadZipUrl = state => state.pdf.downloadZipUrl
 export function * generateSessionId (payload) {
   const { path, concurrency } = payload
 
+  /* Show modal Step2 */
   yield put(push('/step/2'))
+
+  /* Ensure fatal error will be called if something goes wrong on search entries endpoint response */
+  if (yield select(getStateGeneratePdfCancel)) {
+    return yield put({ type: FATAL_ERROR })
+  }
 
   try {
     const response = yield retry(3, 3000, apiRequestSessionId, path)
@@ -173,21 +180,20 @@ export function * generatePdf ({ pdfs }) {
 export function * validateDownloadZipUrl () {
   const downloadZipUrl = yield select(getStateDownloadZipUrl)
 
-  if (downloadZipUrl !== '') {
-    try {
-      const response = yield call(apiRequestDownloadZipFile, downloadZipUrl)
+  try {
+    const response = yield call(apiRequestDownloadZipFile, downloadZipUrl)
 
-      if (!response.ok) {
-        throw response
-      }
-
-      yield put(push('/step/3'))
-
-      /* Auto download the validated download zip URL */
-      window.location.assign(response.url)
-    } catch (error) {
-      yield put({ type: FATAL_ERROR })
+    if (!response.ok) {
+      throw response
     }
+
+    /* Show modal Step3 */
+    yield put(push('/step/3'))
+
+    /* Auto download the validated download zip URL */
+    window.location.assign(response.url)
+  } catch (error) {
+    yield put({ type: FATAL_ERROR })
   }
 }
 
