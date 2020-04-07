@@ -18,7 +18,7 @@ import { api } from './api'
  *
  * @since 1.0
  */
-export const apiRequestSessionId = ({ path }) => {
+export const apiRequestSessionId = (path) => {
   const url = `${GPDF_BULK_GENERATOR.rest_url}/generator/register`
 
   return api(url, {
@@ -41,7 +41,7 @@ export const apiRequestSessionId = ({ path }) => {
  *
  * @since 1.0
  */
-export const apiRequestGeneratePdf = ({ listItem, signal }) => {
+export const apiRequestGeneratePdf = ({ pdf, signal }) => {
   const url = `${GPDF_BULK_GENERATOR.rest_url}/generator/create`
 
   return api(url, {
@@ -51,7 +51,7 @@ export const apiRequestGeneratePdf = ({ listItem, signal }) => {
       'Content-Type': 'application/json',
       'X-WP-Nonce': GPDF_BULK_GENERATOR.nonce
     },
-    body: JSON.stringify(listItem)
+    body: JSON.stringify(pdf)
   })
 }
 
@@ -72,6 +72,24 @@ export const apiRequestGeneratePdfZip = sessionId => {
     headers: {
       'Content-Type': 'application/json',
       'X-WP-Nonce': GPDF_BULK_GENERATOR.nonce
+    }
+  })
+}
+
+/**
+ * Fetch API request to check if zip file url works fine
+ *
+ * @param url
+ *
+ * @returns Response
+ *
+ * @since 1.0
+ */
+export const apiRequestDownloadZipFile = url => {
+  return api(url, {
+    method: 'HEAD',
+    headers: {
+      'Content-Type': 'application/json'
     }
   })
 }

@@ -2,15 +2,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-
 /* Redux Actions */
 import { updateDirectoryStructure } from '../../actions/tagPicker'
 import { generateSessionId, togglePdfStatus, toggleModal } from '../../actions/pdf'
-
 /* Components */
 import Step1Body from './Step1Body'
 import ProgressBar from '../ProgressBar/ProgressBar'
-
 /* Helpers */
 import { stripForwardSlashes } from '../../helpers/stripForwardSlashes'
 import { cancelButton } from '../../helpers/cancelButton'
@@ -35,20 +32,20 @@ class Step1 extends React.Component {
    * @since 1.0
    */
   static propTypes = {
+    tags: PropTypes.arrayOf(PropTypes.object).isRequired,
     directoryStructure: PropTypes.string.isRequired,
     pdfList: PropTypes.array.isRequired,
-    generateSessionId: PropTypes.func.isRequired,
-    history: PropTypes.object.isRequired,
     updateDirectoryStructure: PropTypes.func.isRequired,
+    generateSessionId: PropTypes.func.isRequired,
     togglePdfStatus: PropTypes.func.isRequired,
-    tags: PropTypes.arrayOf(PropTypes.object).isRequired,
-    toggleModal: PropTypes.func.isRequired
+    toggleModal: PropTypes.func.isRequired,
+    history: PropTypes.object.isRequired,
   }
 
   /**
    * Initialize component state
    *
-   * @type {concurrency: number}
+   * @type { concurrency: int }
    *
    * @since 1.0
    */
@@ -57,7 +54,7 @@ class Step1 extends React.Component {
   }
 
   /**
-   * Add focus event to document on mount
+   * On mount, Add focus event to document on mount
    *
    * @since 1.0
    */
@@ -79,12 +76,12 @@ class Step1 extends React.Component {
    * container we will focus the container instead. In most cases this keeps the focus from
    * jumping outside our Template Container and allows for better keyboard navigation.
    *
-   * @param e
+   * @param event
    *
    * @since 1.0
    */
-  handleFocus = e => {
-    if (!this.container.contains(e.target)) {
+  handleFocus = event => {
+    if (!this.container.contains(event.target)) {
       this.container.focus()
     }
   }
@@ -92,12 +89,12 @@ class Step1 extends React.Component {
   /**
    * Request to build the bulk PDF download. Generate session ID and process to Step2
    *
-   * @param e
+   * @param event
    *
    * @since 1.0
    */
-  build = e => {
-    e.preventDefault()
+  build = event => {
+    event.preventDefault()
 
     const { concurrency } = this.state
     const { directoryStructure, pdfList } = this.props
@@ -117,7 +114,6 @@ class Step1 extends React.Component {
 
       /* Generate session ID and  */
       this.props.generateSessionId(path, concurrency)
-      this.props.history.push('/step/2')
     }
   }
 
@@ -150,17 +146,17 @@ class Step1 extends React.Component {
   /**
    * Display Step1 UI
    *
-   * @returns {Step1: component}
+   * @returns { Step1: component }
    *
    * @since 1.0
    */
   render () {
     const {
-      pdfList,
-      togglePdfStatus,
-      directoryStructure,
-      updateDirectoryStructure,
       tags,
+      directoryStructure,
+      pdfList,
+      updateDirectoryStructure,
+      togglePdfStatus,
       toggleModal,
       history
     } = this.props
@@ -201,12 +197,11 @@ class Step1 extends React.Component {
  *
  * @param state
  *
- * @returns {tags: array of objects, directoryStructure: string, pdfList: array}
+ * @returns { tags: array of objects, directoryStructure: string, pdfList: array }
  *
  * @since 1.0
  */
 const mapStateToProps = state => ({
-  selectedEntryIdsError: state.form.selectedEntryIdsError,
   tags: state.tagPicker.tags,
   directoryStructure: state.tagPicker.directoryStructure,
   pdfList: state.pdf.pdfList

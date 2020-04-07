@@ -99,6 +99,7 @@ class Zip implements ApiEndpointRegistration {
 	 * @since 1.0
 	 */
 	public function response( \WP_REST_Request $request ) {
+
 		$session_id = $request->get_param( 'sessionId' );
 		$this->config->set_session_id( $session_id );
 

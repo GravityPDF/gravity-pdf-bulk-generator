@@ -2,16 +2,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-
 /* Redux Actions */
 import { toggleModal, resetPdfState } from '../../actions/pdf'
 import { resetTagPickerState } from '../../actions/tagPicker'
 import { toggleSuccess, toggleErrors, toggleWarnings } from '../../actions/logs'
-
 /* Components */
 import ProgressBar from '../ProgressBar/ProgressBar'
 import Step3Body from './Step3Body'
-
 /* Helpers */
 import { cancelButton } from '../../helpers/cancelButton'
 
@@ -28,26 +25,24 @@ class Step3 extends React.Component {
    * @since 1.0
    */
   static propTypes = {
-    sessionId: PropTypes.string.isRequired,
     success: PropTypes.bool.isRequired,
     errors: PropTypes.bool.isRequired,
     warnings: PropTypes.bool.isRequired,
-    toggleSuccess: PropTypes.func.isRequired,
-    toggleErrors: PropTypes.func.isRequired,
-    toggleWarnings: PropTypes.func.isRequired,
     generatePdfSuccess: PropTypes.arrayOf(PropTypes.object).isRequired,
     generatePdfFailed: PropTypes.arrayOf(PropTypes.object).isRequired,
     generatePdfWarning: PropTypes.arrayOf(PropTypes.object).isRequired,
-    downloadPercentage: PropTypes.number.isRequired,
     downloadZipUrl: PropTypes.string.isRequired,
+    toggleSuccess: PropTypes.func.isRequired,
+    toggleErrors: PropTypes.func.isRequired,
+    toggleWarnings: PropTypes.func.isRequired,
     toggleModal: PropTypes.func.isRequired,
-    resetPdfState: PropTypes.func.isRequired,
     resetTagPickerState: PropTypes.func.isRequired,
+    resetPdfState: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired
   }
 
   /**
-   * On mount, call function requestDownloadZipUrl() and add focus event to document
+   * On mount, call function requestDownloadZipUrl and add focus event to document
    *
    * @since 1.0
    */
@@ -67,6 +62,15 @@ class Step3 extends React.Component {
   }
 
   /**
+   * Auto download the generated PDF zip file
+   *
+   * @since 1.0
+   */
+  requestDownloadZipUrl = () => {
+    window.location.assign(this.props.downloadZipUrl)
+  }
+
+  /**
    * When a focus event is fired and it's not apart of any DOM elements in our
    * container we will focus the container instead. In most cases this keeps the focus from
    * jumping outside our Template Container and allows for better keyboard navigation.
@@ -82,35 +86,24 @@ class Step3 extends React.Component {
   }
 
   /**
-   * Auto download the generated PDF zip file
-   *
-   * @since 1.0
-   */
-  requestDownloadZipUrl = () => {
-    const { downloadZipUrl } = this.props
-
-    window.location.assign(downloadZipUrl)
-  }
-
-  /**
    * Display Step3 UI
    *
-   * @returns {Step3: component}
+   * @returns { Step3: component }
    *
    * @since 1.0
    */
   render () {
     const {
-      downloadZipUrl,
       success,
       errors,
       warnings,
-      toggleSuccess,
-      toggleErrors,
-      toggleWarnings,
       generatePdfSuccess,
       generatePdfFailed,
       generatePdfWarning,
+      downloadZipUrl,
+      toggleSuccess,
+      toggleErrors,
+      toggleWarnings,
       toggleModal,
       resetTagPickerState,
       resetPdfState,
@@ -128,16 +121,16 @@ class Step3 extends React.Component {
         <ProgressBar step={3} />
 
         <Step3Body
-          downloadZipUrl={downloadZipUrl}
           success={success}
           errors={errors}
           warnings={warnings}
-          toggleSuccess={toggleSuccess}
-          toggleErrors={toggleErrors}
-          toggleWarnings={toggleWarnings}
           generatePdfSuccess={generatePdfSuccess}
           generatePdfFailed={generatePdfFailed}
-          generatePdfWarning={generatePdfWarning} />
+          generatePdfWarning={generatePdfWarning}
+          downloadZipUrl={downloadZipUrl}
+          toggleSuccess={toggleSuccess}
+          toggleErrors={toggleErrors}
+          toggleWarnings={toggleWarnings} />
       </div>
     )
   }
@@ -148,22 +141,19 @@ class Step3 extends React.Component {
  *
  * @param state
  *
- * @returns {sessionId: string, success: boolean, errors: boolean, warnings: boolean,
+ * @returns { success: boolean, errors: boolean, warnings: boolean,
  * generatePdfSuccess: array of objects, generatePdfFailed: array of objects,
- * generatePdfWarning: array of objects, downloadPercentage: number,
- * downloadZipUrl: string}
+ * generatePdfWarning: array of objects, downloadZipUrl: string }
  *
  * @since 1.0
  */
 const mapStateToProps = state => ({
-  sessionId: state.pdf.sessionId,
   success: state.logs.success,
   errors: state.logs.errors,
   warnings: state.logs.warnings,
   generatePdfSuccess: state.pdf.generatePdfSuccess,
   generatePdfFailed: state.pdf.generatePdfFailed,
   generatePdfWarning: state.pdf.generatePdfWarning,
-  downloadPercentage: state.pdf.downloadPercentage,
   downloadZipUrl: state.pdf.downloadZipUrl
 })
 

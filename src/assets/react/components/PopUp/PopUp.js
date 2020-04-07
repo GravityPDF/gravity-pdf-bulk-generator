@@ -41,7 +41,7 @@ class PopUp extends React.Component {
     resetPdfState: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
     modal: PropTypes.bool.isRequired,
-    selectedEntryIdsError: PropTypes.string.isRequired
+    fatalError: PropTypes.bool.isRequired
   }
 
   /**
@@ -64,7 +64,7 @@ class PopUp extends React.Component {
     const {
       escapeCloseModal,
       generatePdfCancel,
-      selectedEntryIdsError,
+      fatalError,
       resetTagPickerState,
       resetPdfState,
       history
@@ -83,7 +83,7 @@ class PopUp extends React.Component {
       cancelButton({
         escapeCloseModal,
         generatePdfCancel,
-        selectedEntryIdsError,
+        fatalError,
         history
       })
     }
@@ -136,12 +136,12 @@ class PopUp extends React.Component {
  *
  * @param state
  *
- * @returns {selectedEntryIdsError: string}
+ * @returns { fatalError: boolean }
  *
  * @since 1.0
  */
 const mapStateToProps = state => ({
-  selectedEntryIdsError: state.form.selectedEntryIdsError
+  fatalError: state.pdf.fatalError
 })
 
 /**
