@@ -39,7 +39,8 @@ export const getStateAbortControllers = state => state.pdf.abortControllers
 export const getStateDownloadZipUrl = state => state.pdf.downloadZipUrl
 
 /**
- * Worker saga generateSessionId
+ * Kick off the Bulk Generator Process, generate a Unique Session ID, collect the user configuration and
+ * send to the next step (generating the PDFs).
  *
  * @param payload
  *
@@ -50,14 +51,8 @@ export function * generateSessionId (payload) {
 
   yield put(push('/step/2'))
 
-  /**
-   * Call fetch API 3x
-   *
-   * In case of failure will try to make another call after delay milliseconds
-   */
   try {
     const response = yield retry(3, 3000, apiRequestSessionId, path)
-
     if (!response.ok) {
       throw response
     }
@@ -66,12 +61,10 @@ export function * generateSessionId (payload) {
 
     yield put({ type: GENERATE_SESSION_ID_SUCCESS, payload: responseBody.sessionId })
 
-    /* Redux state for selectedEntryIds */
     const selectedEntryIds = yield select(getStateSelectedEntryIds)
-    /* Redux state for pdfList */
     const pdfList = yield select(getStatePdfList)
 
-    // Remove 'Toggle All' in the list before processing if exists
+    /* Remove 'Toggle All' in the list before processing, if exists */
     if (pdfList[0]['id'] === '0') {
       pdfList.shift()
     }
@@ -86,13 +79,12 @@ export function * generateSessionId (payload) {
       }
     })
   } catch (error) {
-    /* Update redux state fatalError to true */
     yield put({ type: FATAL_ERROR })
   }
 }
 
 /**
- * Watcher saga watchGenerateSessionId
+ * A watcher to trigger Step 1 in the Bulk Generator process
  *
  * @since 1.0
  */
@@ -101,28 +93,26 @@ export function * watchGenerateSessionId () {
 }
 
 /**
- * Worker saga requestGeneratePdf
+ * Handle the individual PDF generation for the Bulk Generator. This includes calling our API, handling failures,
+ * cancellations, and incrementing the counter (if not cancelled).
  *
  * @param pdf
  *
  * @since 1.0
  */
 export function * requestGeneratePdf (pdf) {
-  /* Cancelling a fetch request with AbortController */
+  /*
+   * Prepare the data for our API call
+   * We store the AbortController in the Redux state so we can easily cancel ALL running API calls on demand
+   */
   const abortController = new AbortController()
   const data = {
     pdf,
     signal: abortController.signal
   }
 
-  /* Store abortController into redux state array */
   yield put({ type: STORE_ABORT_CONTROLLER, payload: abortController })
 
-  /**
-   * Call fetch API 3x
-   *
-   * In case of failure will try to make another call after delay milliseconds
-   */
   try {
     const response = yield retry(3, 3000, apiRequestGeneratePdf, data)
 
@@ -133,7 +123,7 @@ export function * requestGeneratePdf (pdf) {
     yield put({ type: GENERATE_PDF_SUCCESS, payload: pdf })
   } catch (error) {
     switch (error.status) {
-      // WIP - still need to integrate remaining status codes from the original plan
+      // @todo - still need to integrate remaining status codes from the original plan
       case 400:
         yield put({ type: GENERATE_PDF_WARNING, payload: pdf })
         break
@@ -147,31 +137,32 @@ export function * requestGeneratePdf (pdf) {
     }
   } finally {
     if (!(yield cancelled())) {
-      /* Generate download request counter for Step2 */
       yield put({ type: GENERATE_PDF_COUNTER, payload: yield select(getStateSelectedEntryIds) })
     }
   }
 }
 
 /**
- * Worker saga generatePdf
+ * Created forked processes that'll handle the individual PDF generation.
+ * This is an intermediary step that allows a specific number of requests to be made at one time, determined by how
+ * many PDFs are included in the array.
  *
- * @param pdfs
+ * @param array pdfs
  *
  * @since 1.0
  */
 export function * generatePdf ({ pdfs }) {
-
-  /* Set individual pdf data request before the actual API call */
   for (let i = 0; i < pdfs.length; i++) {
     yield fork(requestGeneratePdf, pdfs[i])
   }
 
+  /* Prevent the saga from existing until all forked requests are completed AND the delay time has lapsed */
   yield delay(1000)
 }
 
 /**
- * Worker saga validateDownloadZipUrl
+ * Make a HEAD API request to validate that the Zip Download URL is still valid before sending the user on there
+ * way to actually download their zip package.
  *
  * @since 1.0
  */
@@ -179,7 +170,6 @@ export function * validateDownloadZipUrl () {
   const downloadZipUrl = yield select(getStateDownloadZipUrl)
 
   if (downloadZipUrl !== '') {
-    /* Call fetch API */
     try {
       const response = yield call(apiRequestDownloadZipFile, downloadZipUrl)
 
@@ -192,25 +182,20 @@ export function * validateDownloadZipUrl () {
       /* Auto download the validated download zip URL */
       window.location.assign(response.url)
     } catch (error) {
-      /* Update redux state fatalError to true */
       yield put({ type: FATAL_ERROR })
     }
   }
 }
 
 /**
- * Worker saga generateDownloadZipUrl
+ * Call our API and Zip up the PDFs that have been generated so far. If we don't get a valid response, a fatal error
+ * will be triggered
  *
- * @param sessionId
+ * @param string sessionId
  *
  * @since 1.0
  */
 export function * generateDownloadZipUrl (sessionId) {
-  /**
-   * Call fetch API 3x
-   *
-   * In case of failure will try to make another call after delay milliseconds
-   */
   try {
     const response = yield retry(3, 1000, apiRequestGeneratePdfZip, sessionId)
     const responseBody = yield response.json()
@@ -221,13 +206,12 @@ export function * generateDownloadZipUrl (sessionId) {
 
     yield put({ type: GENERATE_DOWNLOAD_ZIP_URL, payload: responseBody.downloadUrl })
   } catch (error) {
-    /* Update redux state fatalError to true */
     yield put({ type: FATAL_ERROR })
   }
 }
 
 /**
- * Worker saga generatePdfCancel
+ * If a cancel event is triggered we'll abort all the stored 'AbortController's
  *
  * @since 1.0
  */
@@ -242,31 +226,33 @@ export function * generatePdfCancel () {
 }
 
 /**
- * Worker saga bulkGeneratePdf
+ * Handle Step 2/3/4 of the Bulk Generator Process
+ * This function calls other functions which process a fixed number of PDFs at a time, zip up those PDFs and return a valid URL,
+ * then validate that URL and send the user on their way to download the valid zip.
  *
- * @param pdfs
- * @param concurrency
- * @param sessionId
+ * @param array pdfs
+ * @param int concurrency
+ * @param string sessionId
  *
  * @since 1.0
  */
 export function * bulkGeneratePdf ({ pdfs, concurrency, sessionId }) {
-  /* Loop through pdfs array and remove 5 items (splice 5) after every batch of 5 items excecuted */
   while (pdfs.length > 0) {
     yield generatePdf({
       pdfs: pdfs.splice(0, concurrency)
     })
 
-    /* Generate download zip url every end of the process (batch of 5)  */
     yield generateDownloadZipUrl(sessionId)
   }
 
-  /* Validate generated download zip url at the very end of the cycle */
   yield validateDownloadZipUrl()
 }
 
 /**
- * Watcher saga watchGeneratePDF
+ * Our top-level saga which handles the pre- and post- logic for step 2 / 3 / 4 and triggers `bulkGeneratePdf` to actually
+ * do the Bulk Generator processes.
+ *
+ * This function prepares the PDF object so it includes the appropriate info for the API and handles cancellations.
  *
  * @since 1.0
  */
@@ -308,10 +294,20 @@ export function * watchGeneratePDF () {
   }
 }
 
+/**
+ * Handle the Fatal Error logic
+ *
+ * @since 1.0
+ */
 export function * fatalError() {
   yield put({ type: GENERATE_PDF_CANCEL })
 }
 
+/**
+ * Watch for a Fatal Error event and calls the function to handle it
+ *
+ * @since 1.0
+ */
 export function * watchFatalError () {
   yield takeLatest(FATAL_ERROR, fatalError)
 }
