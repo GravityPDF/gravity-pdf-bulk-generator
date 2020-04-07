@@ -22,18 +22,18 @@ import { apiRequestAllEntryIds } from '../api/form'
  *
  * @since 1.0
  */
-export function* getSelectedEntryIds(payload) {
+export function * getSelectedEntryIds (payload) {
   try {
     const response = yield retry(3, 500, apiRequestAllEntryIds, payload)
 
-    if(!response.ok) {
+    if (!response.ok) {
       throw response
     }
 
     const responseBody = yield response.json()
 
-    yield put({ type: GET_SELECTED_ENTRY_IDS_SUCCESS , payload: responseBody })
-  } catch(error) {
+    yield put({ type: GET_SELECTED_ENTRY_IDS_SUCCESS, payload: responseBody })
+  } catch (error) {
     yield put({ type: FATAL_ERROR })
   }
 }
@@ -43,7 +43,7 @@ export function* getSelectedEntryIds(payload) {
  *
  * @since 1.0
  */
-export function* watchGetSelectedEntryIds() {
+export function * watchGetSelectedEntryIds () {
   yield takeLatest(GET_SELECTED_ENTRY_IDS, getSelectedEntryIds)
 }
 
@@ -52,7 +52,7 @@ export function* watchGetSelectedEntryIds() {
  *
  * @since 1.0
  */
-export function* processCheckbox() {
+export function * processCheckbox () {
   /* Show modal Step1 */
   yield put(push('/step/1'))
 
@@ -64,6 +64,6 @@ export function* processCheckbox() {
  *
  * @since 1.0
  */
-export function * watcherProcessCheckbox() {
+export function * watcherProcessCheckbox () {
   yield takeLatest(PROCESS_CHECKBOX, processCheckbox)
 }
