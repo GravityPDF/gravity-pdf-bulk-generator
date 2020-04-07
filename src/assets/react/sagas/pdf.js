@@ -48,8 +48,6 @@ export const getStateDownloadZipUrl = state => state.pdf.downloadZipUrl
 export function * generateSessionId (payload) {
   const { path, concurrency } = payload
 
-  console.log('saga ', path, concurrency)
-
   yield put(push('/step/2'))
 
   /**

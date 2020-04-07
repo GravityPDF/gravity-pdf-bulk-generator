@@ -173,34 +173,22 @@ class Step1 extends React.Component {
 
         <ProgressBar step={1} />
 
-        {
-          !fatalError &&
-            <div>
-              <Step1Body
-                pdfList={pdfList}
-                togglePdfStatus={togglePdfStatus}
-                directoryStructure={directoryStructure}
-                updateDirectoryStructure={updateDirectoryStructure}
-                tags={tags}
-                tagSelect={this.tagSelect}
-                tagDeselect={this.tagDeselect} />
+        <Step1Body
+          pdfList={pdfList}
+          togglePdfStatus={togglePdfStatus}
+          directoryStructure={directoryStructure}
+          updateDirectoryStructure={updateDirectoryStructure}
+          tags={tags}
+          tagSelect={this.tagSelect}
+          tagDeselect={this.tagDeselect} />
 
-              <footer>
-                <button
-                  className='button-primary build'
-                  onClick={this.build}>
-                  Build
-                </button>
-              </footer>
-            </div>
-        }
-
-        {
-          fatalError &&
-          <FatalError
-            pluginUrl={GPDF_BULK_GENERATOR.plugin_url}
-            adminUrl={GPDF_BULK_GENERATOR.admin_url} />
-        }
+        <footer>
+          <button
+            className='button-primary build'
+            onClick={this.build}>
+            Build
+          </button>
+        </footer>
       </div>
     )
   }

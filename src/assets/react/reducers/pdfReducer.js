@@ -223,7 +223,6 @@ export default function (state = initialState, action) {
       return {
         ...state,
         sessionId: '',
-        pdfList: [],
         generatePdfSuccess: [],
         generatePdfFailed: [],
         generatePdfWarning: [],
