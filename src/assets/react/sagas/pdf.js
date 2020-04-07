@@ -189,9 +189,6 @@ export function * validateDownloadZipUrl () {
 
     /* Show modal Step3 */
     yield put(push('/step/3'))
-
-    /* Auto download the validated download zip URL */
-    window.location.assign(response.url)
   } catch (error) {
     yield put({ type: FATAL_ERROR })
   }
