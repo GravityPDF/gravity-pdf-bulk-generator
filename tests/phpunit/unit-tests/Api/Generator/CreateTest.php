@@ -215,6 +215,6 @@ class CreateTest extends DefaultApiTests {
 		$response = rest_get_server()->dispatch( $request );
 
 		$this->assertStringStartsWith( '%PDF-1.4', $this->filesystem->read( '/tmp/Zadani.pdf' ) );
-		$this->assertStringStartsWith( '%PDF-1.4', $this->filesystem->read( '/tmp/Zadani1.pdf' ) );
+		$this->assertStringStartsWith( '%PDF-1.4', $this->filesystem->read( sprintf('/tmp/Zadani (%s-5e7b).pdf', $request->get_param('entryId' ) ) ) );
 	}
 }
