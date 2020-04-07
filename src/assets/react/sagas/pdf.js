@@ -164,7 +164,7 @@ export function * generatePdf ({ pdfs }) {
     yield fork(requestGeneratePdf, pdfs[i])
   }
 
-  /**
+  /*
    * Prevent the saga from existing until all forked requests are
    * completed AND the delay time has lapsed.
    */
@@ -293,24 +293,11 @@ export function * watchGeneratePDF () {
       sessionId
     })
 
-    /* Listen to redux action type GENERATE_PDF_CANCEL event */
+    /* Wait for a cancel event and then handle the cancel logic */
     yield take(GENERATE_PDF_CANCEL)
-
-    /* Yield call worker saga generatePdfCancel */
     yield generatePdfCancel()
-
-    /* Cancel the ongoing task for worker saga bulkGeneratePdf */
     yield cancel(generator)
   }
-}
-
-/**
- * Handle the Fatal Error logic
- *
- * @since 1.0
- */
-export function * fatalError () {
-  yield put({ type: GENERATE_PDF_CANCEL })
 }
 
 /**
@@ -319,5 +306,8 @@ export function * fatalError () {
  * @since 1.0
  */
 export function * watchFatalError () {
-  yield takeLatest(FATAL_ERROR, fatalError)
+  while(true) {
+    yield take(FATAL_ERROR)
+    yield put({ type: GENERATE_PDF_CANCEL })
+  }
 }
