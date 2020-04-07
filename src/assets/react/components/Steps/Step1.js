@@ -11,6 +11,7 @@ import ProgressBar from '../ProgressBar/ProgressBar'
 /* Helpers */
 import { stripForwardSlashes } from '../../helpers/stripForwardSlashes'
 import { cancelButton } from '../../helpers/cancelButton'
+import language from '../../helpers/language'
 
 /**
  * @package     Gravity PDF Bulk Generator
@@ -107,7 +108,7 @@ class Step1 extends React.Component {
 
     /* Check if there's an active PDF selected */
     if (activePdfList.length === 0) {
-      alert('Please select at least one PDF to generate for the entries.')
+      alert(language.stepActivePdfEmpty)
     } else {
       /* Strip out forward slashes before passing to path */
       const path = stripForwardSlashes(directoryStructure)
@@ -166,7 +167,7 @@ class Step1 extends React.Component {
         <button
           className='gfpdf-close-button'
           onClick={e => cancelButton({ e, toggleModal, history })}>
-          <span className='screen-reader-text'>Close dialog</span>
+          <span className='screen-reader-text'>{language.stepCloseDialog}</span>
         </button>
 
         <ProgressBar step={1} />
@@ -184,7 +185,7 @@ class Step1 extends React.Component {
           <button
             className='button-primary build'
             onClick={this.build}>
-            Build
+            {language.stepBuild}
           </button>
         </footer>
       </div>

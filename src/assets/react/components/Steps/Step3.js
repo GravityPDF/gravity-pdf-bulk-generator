@@ -11,6 +11,7 @@ import ProgressBar from '../ProgressBar/ProgressBar'
 import Step3Body from './Step3Body'
 /* Helpers */
 import { cancelButton } from '../../helpers/cancelButton'
+import language from '../../helpers/language'
 
 /**
  * Step3 Component
@@ -101,7 +102,7 @@ class Step3 extends React.Component {
           onClick={e => cancelButton({
             e, toggleModal, resetTagPickerState, resetPdfState, resetLogsState, history
           })}>
-          <span className='screen-reader-text'>Close dialog</span>
+          <span className='screen-reader-text'>{language.stepCloseDialog}</span>
         </button>
 
         <ProgressBar step={3} />

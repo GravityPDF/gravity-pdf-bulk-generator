@@ -7,6 +7,9 @@ import Step1 from './Step1'
 import Step2 from './Step2'
 import Step3 from './Step3'
 
+/* Helpers */
+import language from '../../helpers/language'
+
 /**
  * @package     Gravity PDF Bulk Generator
  * @copyright   Copyright (c) 2020, Blue Liquid Designs
@@ -32,7 +35,7 @@ class Steps extends React.Component {
     return (
       <Fragment>
         <header>
-          <h2>PDF Bulk Download</h2>
+          <h2>{language.stepTitle}</h2>
         </header>
 
         <Switch>

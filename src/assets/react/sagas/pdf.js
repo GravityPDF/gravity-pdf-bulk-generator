@@ -22,6 +22,8 @@ import {
 } from '../api/pdf'
 
 /* Helpers */
+import language from '../helpers/language'
+import { sprintf } from 'sprintf-js'
 import { constructPdfData } from '../helpers/generateActivePdfList'
 
 /**
@@ -126,20 +128,23 @@ export function * requestGeneratePdf (pdf) {
       throw response
     }
 
-    yield put({ type: GENERATE_PDF_SUCCESS, payload: pdf })
+    yield put({ type: GENERATE_PDF_SUCCESS, payload: sprintf( language.successMessage, pdf.pdfName, pdf.pdfId, pdf.entryId ) })
   } catch (error) {
     switch (error.status) {
-      // @todo - still need to integrate remaining status codes from the original plan
       case 400:
-        yield put({ type: GENERATE_PDF_WARNING, payload: pdf })
+        yield put({ type: GENERATE_PDF_WARNING, payload: sprintf( language.skippedMessageInactivePdf, pdf.pdfName, pdf.pdfId, pdf.entryId ) })
+        break
+
+      case 403:
+        yield put({ type: GENERATE_PDF_WARNING, payload: sprintf( language.skippedMessageInvalidId, pdf.pdfName, pdf.pdfId, pdf.entryId ) })
         break
 
       case 412:
-        yield put({ type: GENERATE_PDF_WARNING, payload: pdf })
+        yield put({ type: GENERATE_PDF_WARNING, payload: sprintf( language.skippedMessageConditionalLogic, pdf.pdfName, pdf.pdfId, pdf.entryId ) })
         break
 
       default:
-        yield put({ type: GENERATE_PDF_FAILED, payload: pdf })
+        yield put({ type: GENERATE_PDF_FAILED, payload: sprintf( language.errorMessage, pdf.pdfName, pdf.pdfId, pdf.entryId ) })
     }
   } finally {
     if (!(yield cancelled())) {

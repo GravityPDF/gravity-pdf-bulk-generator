@@ -5,6 +5,9 @@ import PropTypes from 'prop-types'
 /* Components */
 import Switch from '../Switch/Switch'
 
+/* Helpers */
+import language from '../../helpers/language'
+
 /**
  * @package     Gravity PDF Bulk Generator
  * @copyright   Copyright (c) 2020, Blue Liquid Designs
@@ -35,7 +38,7 @@ const ListToggle = ({ items, onChange }) => (
             </label>
 
             <Switch
-              screenReaderLabel='Label'
+              screenReaderLabel={language.label}
               active={pdf.active}
               onChange={onChange}
               id={index} />

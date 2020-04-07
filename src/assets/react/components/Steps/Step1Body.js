@@ -7,6 +7,9 @@ import ListToggle from '../ListToggle/ListToggle'
 import TagInput from '../TagPicker/TagInput'
 import TagPicker from '../TagPicker/TagPicker'
 
+/* Helpers */
+import language from '../../helpers/language'
+
 /**
  * @package     Gravity PDF Bulk Generator
  * @copyright   Copyright (c) 2020, Blue Liquid Designs
@@ -42,9 +45,9 @@ const Step1Body = (
 ) => (
   <section id='gfpdf-step1' className='gfpdf-step'>
     <div className='gfpdf-settings-group'>
-      <h3>Select PDFs</h3>
+      <h3>{language.stepSelectPdfs}</h3>
 
-      <p>Specify the PDFs you would like to generate for the selected entries.</p>
+      <p>{language.stepSelectPdfsDesc}</p>
 
       <ListToggle
         items={pdfList}
@@ -52,16 +55,15 @@ const Step1Body = (
     </div>
 
     <div className='gfpdf-settings-group'>
-      <h3>Directory Structure</h3>
+      <h3>{language.stepDirectoryStructure}</h3>
 
-      <p>Specify the directory structure to use for the PDFs of the selected entries. Form merge tags are
-        supported.</p>
+      <p>{language.stepDirectoryStructureDesc}</p>
 
       <TagInput
         value={directoryStructure}
         onChange={updateDirectoryStructure} />
 
-      <p>Common tags:</p>
+      <p>{language.stepCommonTagsLabel}</p>
 
       <TagPicker
         tags={tags}

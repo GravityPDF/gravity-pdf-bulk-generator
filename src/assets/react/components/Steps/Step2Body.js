@@ -6,6 +6,9 @@ import { CircularProgressbar } from 'react-circular-progressbar'
 import LoadingDots from '../LoadingDots/LoadingDots'
 import Logs from '../Logs/Logs'
 
+/* Helpers */
+import language from '../../helpers/language'
+
 /**
  * @package     Gravity PDF Bulk Generator
  * @copyright   Copyright (c) 2020, Blue Liquid Designs
@@ -29,8 +32,8 @@ const Step2Body = ({ downloadPercentage }) => (
         value={downloadPercentage}
         text={`${downloadPercentage}%`} />
 
-      <h2>Building your PDFs<LoadingDots /></h2>
-      <em>(Please do not navigate away from this page)</em>
+      <h2>{language.stepBuildingPdfs}<LoadingDots /></h2>
+      <em>{language.stepDoNotNavigateAway}</em>
     </div>
 
     <Logs />

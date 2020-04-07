@@ -91,7 +91,7 @@ class GPDF_Bulk_Generator_Checks {
 			return true;
 		}
 
-		/* Throw error */
+		/* translator: %s is the current plugin version number */
 		$this->notices[] = sprintf( esc_html__( 'Gravity PDF Version %s or higher is required to use this add-on. Please install/upgrade Gravity PDF to the latest version.', 'gravity-pdf-bulk-generator' ), $this->required_gravitypdf_version );
 	}
 

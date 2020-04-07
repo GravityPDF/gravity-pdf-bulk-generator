@@ -208,6 +208,79 @@ class Bootstrap extends Helper_Abstract_Addon {
 						'nonce'      => wp_create_nonce( 'wp_rest' ),
 						'form_id'    => $form_id,
 						'pdfs'       => $pdfs,
+
+						'language'   => [
+							/* ListToggle */
+							'label'                      => esc_html__( 'Label', 'gravity-pdf-bulk-generator' ),
+
+							/* Steps */
+							'stepTitle'                  => esc_html__( 'PDF Bulk Download', 'gravity-pdf-bulk-generator' ),
+
+							/* Step 1 */
+							'stepActivePdfEmpty'         => esc_html__( 'Please select at least one PDF to generate for the entries.', 'gravity-pdf-bulk-generator' ),
+							'stepCloseDialog'            => esc_html__( 'Close dialog', 'gravity-pdf-bulk-generator' ),
+							'stepBuild'                  => esc_html__( 'Build', 'gravity-pdf-bulk-generator' ),
+
+							'stepSelectPdfs'             => esc_html__( 'Select PDFs', 'gravity-pdf-bulk-generator' ),
+							'stepSelectPdfsDesc'         => esc_html__( 'Specify the PDFs you would like to generate for the selected entries.', 'gravity-pdf-bulk-generator' ),
+							'stepDirectoryStructure'     => esc_html__( 'Directory Structure', 'gravity-pdf-bulk-generator' ),
+							'stepDirectoryStructureDesc' => esc_html__( 'Specify the directory structure to use for the PDFs of the selected entries. Form merge tags are supported.', 'gravity-pdf-bulk-generator' ),
+							'stepCommonTagsLabel'        => esc_html__( 'Common tags:', 'gravity-pdf-bulk-generator' ),
+
+							/* Step 2 */
+							'stepBuildingPdfs'           => esc_html__( 'Building your PDFs', 'gravity-pdf-bulk-generator' ),
+							'stepDoNotNavigateAway'      => esc_html__( '(Please do not navigate away from this page)', 'gravity-pdf-bulk-generator' ),
+
+							/* Step 3 */
+							'stepDownloadTitle'          => esc_html__( 'Your PDFs are ready and the download will begin shortly.', 'gravity-pdf-bulk-generator' ),
+
+							/* translator: 1: Open Anchor Tag 2: Close Anchor Tag */
+							'stepDownloadDescription'    => esc_html__( 'The zip file contains the PDFs for your selected entries. %1$sClick here if the download does not start automatically%2$s.', 'gravity-pdf-bulk-generator' ),
+
+							/* Cancel Button */
+							'cancelLabel'                => esc_html__( 'Cancel', 'gravity-pdf-bulk-generator' ),
+							'cancelButtonConfirmation'   => esc_html__( 'Are you sure you want to cancel the download?', 'gravity-pdf-bulk-generator' ),
+
+							/* Fatal Error */
+							'fatalErrorTitle'            => esc_html__( 'Oops...', 'gravity-pdf-bulk-generator' ),
+							'fatalErrorDescription'      => esc_html__( 'An error occurred which prevented the Bulk Generator from completing!', 'gravity-pdf-bulk-generator' ),
+
+							/* translator: 1/2: Open Anchor Tag 3: Close Anchor Tag */
+							'fatalErrorInformation'      => esc_html__( 'Reload the page and try again. If the issue persists, %1$senable Logging%3$s, re-run the generator and then %2$sfill out a support ticket%3$s. One of our tech boffins will be happy to assist.', 'gravity-pdf-bulk-generator' ),
+							'fatalErrorImageAlt'         => esc_html__( 'Tech boffins at work.', 'gravity-pdf-bulk-generator' ),
+
+							/* Log Messages */
+							'successTitle'               => esc_html__( 'Success', 'gravity-pdf-bulk-generator' ),
+							'errorTitle'                 => esc_html__( 'Errors', 'gravity-pdf-bulk-generator' ),
+							'warningTitle'               => esc_html__( 'Warnings', 'gravity-pdf-bulk-generator' ),
+
+							/* translator: 1: PDF Name 2: PDF ID 3: Entry ID */
+							'successMessage'             => esc_html__( 'Generated %1$s (#%2$s) for Entry #%3$s', 'gravity-pdf-bulk-generator' ),
+
+							/* translator: 1: PDF Name 2: PDF ID 3: Entry ID */
+							'errorMessage'               => esc_html__( 'Failed generating %1$s (#%2$s) for Entry #%3$s', 'gravity-pdf-bulk-generator' ),
+
+							/* translator: 1: PDF Name 2: PDF ID 3: Entry ID */
+							'skippedMessageInvalidId'    => esc_html__( 'Invalid PDF ID: Skipped %1$s (#%2$s) for Entry #%3$s', 'gravity-pdf-bulk-generator' ),
+
+							/* translator: 1: PDF Name 2: PDF ID 3: Entry ID */
+							'skippedMessageInactivePdf'  => esc_html__( 'Inactive PDF: Skipped %1$s (#%2$s) for Entry #%3$s', 'gravity-pdf-bulk-generator' ),
+
+							/* translator: 1: PDF Name 2: PDF ID 3: Entry ID */
+							'skippedMessageConditionalLogic' => esc_html__( 'Conditional Logic Check: Skipped %1$s (#%2$s) for Entry #%3$s', 'gravity-pdf-bulk-generator' ),
+
+							/* Tag Cloud */
+							'tagYear'                    => esc_html__( 'Year', 'gravity-pdf-bulk-generator' ),
+							'tagMonth'                   => esc_html__( 'Month', 'gravity-pdf-bulk-generator' ),
+							'tagDay'                     => esc_html__( 'Day', 'gravity-pdf-bulk-generator' ),
+							'tagHour'                    => esc_html__( 'Hour', 'gravity-pdf-bulk-generator' ),
+							'tagMinute'                  => esc_html__( 'Minute', 'gravity-pdf-bulk-generator' ),
+							'tagPaymentStatus'           => esc_html__( 'Payment Status', 'gravity-pdf-bulk-generator' ),
+							'tagEntryId'                 => esc_html__( 'Entry ID', 'gravity-pdf-bulk-generator' ),
+							'tagUserLogin'               => esc_html__( 'User Login', 'gravity-pdf-bulk-generator' ),
+							'tagUserEmail'               => esc_html__( 'User Email', 'gravity-pdf-bulk-generator' ),
+							'tagUserDisplayName'         => esc_html__( 'User Display Name', 'gravity-pdf-bulk-generator' ),
+						],
 					]
 				);
 
@@ -243,6 +316,7 @@ class Bootstrap extends Helper_Abstract_Addon {
 			]
 		);
 
+		/* translator: %s: The plugin name */
 		$this->log->notice( sprintf( '%s plugin updater initialised', $this->get_name() ) );
 	}
 }

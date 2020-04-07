@@ -1,3 +1,5 @@
+import language from '../helpers/language'
+
 /**
  * @package     Gravity PDF Bulk Generator
  * @copyright   Copyright (c) 2020, Blue Liquid Designs
@@ -60,7 +62,7 @@ export const cancelButton = (
     }
 
     /* Add additional native popup confirmation */
-    if (confirm('Are you sure you want to cancel download?')) {
+    if (confirm(language.cancelButtonConfirmation)) {
       return (
         e && e.preventDefault(),
         toggleModal && toggleModal(),

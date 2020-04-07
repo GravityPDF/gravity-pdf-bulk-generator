@@ -4,6 +4,9 @@ import {
   RESET_TAGPICKER_STATE
 } from '../actionTypes/tagPicker'
 
+/* Helper */
+import language from '../helpers/language'
+
 /**
  * @package     Gravity PDF Bulk Generator
  * @copyright   Copyright (c) 2020, Blue Liquid Designs
@@ -20,16 +23,16 @@ import {
  */
 export const initialState = {
   tags: [
-    { id: '{date_created:format:Y}', label: 'Year' },
-    { id: '{date_created:format:m}', label: 'Month' },
-    { id: '{date_created:format:d}', label: 'Day' },
-    { id: '{date_created:format:H}', label: 'Hour' },
-    { id: '{date_created:format:i}', label: 'Minute' },
-    { id: '{entry:payment_status}', label: 'Payment Status' },
-    { id: '{entry_id}', label: 'Entry ID' },
-    { id: '{created_by:user_login}', label: 'User Login' },
-    { id: '{created_by:user_email}', label: 'User Email' },
-    { id: '{created_by:display_name}', label: 'User Display Name' },
+    { id: '{date_created:format:Y}', label: language.tagYear },
+    { id: '{date_created:format:m}', label: language.tagMonth },
+    { id: '{date_created:format:d}', label: language.tagDay },
+    { id: '{date_created:format:H}', label: language.tagHour },
+    { id: '{date_created:format:i}', label: language.tagMinute },
+    { id: '{entry:payment_status}', label: language.tagPaymentStatus },
+    { id: '{entry_id}', label: language.tagEntryId },
+    { id: '{created_by:user_login}', label: language.tagUserLogin },
+    { id: '{created_by:user_email}', label: language.tagUserEmail },
+    { id: '{created_by:display_name}', label: language.tagUserDisplayName },
   ],
   directoryStructure: '/{date_created:format:Y}/{date_created:format:m}/'
 }

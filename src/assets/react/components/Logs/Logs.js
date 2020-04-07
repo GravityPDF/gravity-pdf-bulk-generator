@@ -5,6 +5,9 @@ import { connect } from 'react-redux'
 /* Components */
 import InfoBox from './InfoBox'
 
+/* Helper */
+import language from '../../helpers/language'
+
 /**
  * @package     Gravity PDF Bulk Generator
  * @copyright   Copyright (c) 2020, Blue Liquid Designs
@@ -20,9 +23,9 @@ class Logs extends React.Component {
    * @since 1.0
    */
   static propTypes = {
-    generatePdfSuccess: PropTypes.arrayOf(PropTypes.object).isRequired,
-    generatePdfWarning: PropTypes.arrayOf(PropTypes.object).isRequired,
-    generatePdfFailed: PropTypes.arrayOf(PropTypes.object).isRequired
+    generatePdfSuccess: PropTypes.array.isRequired,
+    generatePdfWarning: PropTypes.array.isRequired,
+    generatePdfFailed: PropTypes.array.isRequired
   }
 
   /**
@@ -83,10 +86,10 @@ class Logs extends React.Component {
           generatePdfSuccess.length > 0 && (
             <div className='log-box'>
               <InfoBox
-                title='Success'
+                title={language.successTitle}
                 state={success}
                 toggle={this.toggleSuccess}
-                list={generatePdfSuccess} />
+                logs={generatePdfSuccess} />
             </div>
           )
         }
@@ -96,10 +99,10 @@ class Logs extends React.Component {
           generatePdfFailed.length > 0 && (
             <div className='log-box'>
               <InfoBox
-                title='Errors'
+                title={language.errorTitle}
                 state={errors}
                 toggle={this.toggleErrors}
-                list={generatePdfFailed} />
+                logs={generatePdfFailed} />
             </div>
           )
         }
@@ -109,10 +112,10 @@ class Logs extends React.Component {
           generatePdfWarning.length > 0 && (
             <div className='log-box'>
               <InfoBox
-                title='Warnings'
+                title={language.warningTitle}
                 state={warnings}
                 toggle={this.toggleWarnings}
-                list={generatePdfWarning} />
+                logs={generatePdfWarning} />
             </div>
           )
         }

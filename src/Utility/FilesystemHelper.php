@@ -71,6 +71,7 @@ class FilesystemHelper {
 	 */
 	public function __call( $method, $arguments ) {
 		if ( ! method_exists( $this->get_filesystem(), $method ) ) {
+			/* translator: %s is the name of a PHP class method (function) */
 			throw new \BadMethodCallException( sprintf( 'Filesystem method "%s" does not exist', $method ) );
 		}
 
