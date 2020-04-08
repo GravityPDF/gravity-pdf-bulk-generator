@@ -225,10 +225,5 @@ export default function (state = initialState, action) {
       }
   }
 
-  /**
-   * None of the above action types fired so return state
-   *
-   * @since 1.0
-   */
   return state
 }
