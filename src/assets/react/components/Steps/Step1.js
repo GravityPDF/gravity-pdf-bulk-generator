@@ -112,7 +112,7 @@ class Step1 extends React.Component {
       /* Strip out forward slashes before passing to path */
       const path = stripForwardSlashes(directoryStructure)
 
-      /* Generate session ID and  */
+      /* Kick off the Bulk Generator Process */
       this.props.generateSessionId(path, concurrency)
     }
   }
