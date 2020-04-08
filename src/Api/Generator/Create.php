@@ -178,15 +178,15 @@ class Create implements ApiEndpointRegistration {
 		} catch ( ConfigNotLoaded $e ) {
 			return new \WP_Error( 'session_config_not_loaded', '', [ 'status' => 500 ] );
 		} catch ( InvalidPdfId $e ) {
-			return new \WP_Error( $e->getMessage(), '', [ 'status' => 403 ] );
+			return new \WP_Error( 'invalid_pdf_id', $e->getMessage(), [ 'status' => 403 ] );
 		} catch ( PdfNotActive $e ) {
 			return new \WP_Error( 'pdf_not_active', '', [ 'status' => 400 ] );
 		} catch ( PdfConditionalLogicFailed $e ) {
 			return new \WP_Error( 'pdf_conditional_logic_failed', '', [ 'status' => 412 ] );
 		} catch ( PdfGenerationError $e ) {
-			return new \WP_Error( $e->getMessage(), '', [ 'status' => 500 ] );
+			return new \WP_Error( 'pdf_generation_error', $e->getMessage(), [ 'status' => 500 ] );
 		} catch ( \Exception $e ) {
-			return new \WP_Error( 'unknown_error', '', [ 'status' => 500 ] );
+			return new \WP_Error( 'unknown_error', $e->getMessage(), [ 'status' => 500 ] );
 		} finally {
 			if ( ! empty( $e ) ) {
 				$this->logger->error(
