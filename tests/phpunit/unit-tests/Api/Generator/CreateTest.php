@@ -147,7 +147,7 @@ class CreateTest extends DefaultApiTests {
 		$request->set_param( 'pdfId', '5e7bfc55b6ec9' );
 
 		$response = rest_get_server()->dispatch( $request );
-		$this->assertSame( 'pdf_generation_failure', $response->get_data()['code'] );
+		$this->assertSame( 'pdf_generation_error', $response->get_data()['code'] );
 	}
 
 	public function test_filesystem_error() {
