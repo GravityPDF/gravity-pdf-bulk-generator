@@ -1,8 +1,9 @@
 /* Redux Action Types */
 import {
-  TOGGLE_SUCCESS,
-  TOGGLE_ERRORS,
-  TOGGLE_WARNINGS
+  GENERATE_PDF_SUCCESS,
+  GENERATE_PDF_WARNING,
+  GENERATE_PDF_FAILED,
+  RESET_LOGS_STATE
 } from '../actionTypes/logs'
 
 /**
@@ -15,14 +16,14 @@ import {
 /**
  * Setup the initial state of the "logs" portion of our Redux store
  *
- * @type {success: boolean, warnings: boolean, errors: boolean}
+ * @type { generatePdfSuccess: array, generatePdfWarning: array, generatePdfFailed: array }
  *
  * @since 1.0
  */
 export const initialState = {
-  success: false,
-  errors: false,
-  warnings: false
+  generatePdfSuccess: [],
+  generatePdfWarning: [],
+  generatePdfFailed: []
 }
 
 /**
@@ -31,7 +32,7 @@ export const initialState = {
  * @param state
  * @param action
  *
- * @returns {initialState: *} whether updated or not
+ * @returns { initialState: * } whether updated or not
  *
  * @since 1.0
  */
@@ -40,36 +41,61 @@ export default function (state = initialState, action) {
   switch (action.type) {
 
     /**
-     * Process TOGGLE_SUCCESS
+     * Process GENERATE_PDF_SUCCESS
      *
      * @since 1.0
      */
-    case TOGGLE_SUCCESS:
+    case GENERATE_PDF_SUCCESS: {
+      const list = [...state.generatePdfSuccess]
+
+      list.push(action.payload)
+
       return {
         ...state,
-        success: !state.success
+        generatePdfSuccess: list
       }
+    }
 
     /**
-     * Process TOGGLE_ERRORS
+     * Process GENERATE_PDF_WARNING
      *
      * @since 1.0
      */
-    case TOGGLE_ERRORS:
+    case GENERATE_PDF_WARNING: {
+      const list = [...state.generatePdfWarning]
+
+      list.push(action.payload)
+
       return {
         ...state,
-        errors: !state.errors
+        generatePdfWarning: list
       }
+    }
 
     /**
-     * Process TOGGLE_WARNINGS
+     * Process GENERATE_PDF_FAILED
      *
      * @since 1.0
      */
-    case TOGGLE_WARNINGS:
+    case GENERATE_PDF_FAILED: {
+      const list = [...state.generatePdfFailed]
+
+      list.push(action.payload)
+
       return {
         ...state,
-        warnings: !state.warnings
+        generatePdfFailed: list
+      }
+    }
+
+    /**
+     * Process RESET_LOGS_STATE
+     *
+     * @since 1.0
+     */
+    case RESET_LOGS_STATE:
+      return {
+        ...initialState
       }
   }
 

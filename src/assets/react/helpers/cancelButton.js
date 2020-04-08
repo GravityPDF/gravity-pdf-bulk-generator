@@ -29,7 +29,8 @@ export const cancelButton = (
     generatePdfCancel,
     fatalError,
     resetTagPickerState,
-    resetPdfState
+    resetPdfState,
+    resetLogsState
   }
 ) => {
 
@@ -80,6 +81,7 @@ export const cancelButton = (
       escapeCloseModal && escapeCloseModal(),
       resetTagPickerState(),
       resetPdfState(),
+      resetLogsState(),
       history.push('/')
     )
   }

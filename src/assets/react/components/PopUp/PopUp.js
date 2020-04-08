@@ -4,11 +4,10 @@ import PropTypes from 'prop-types'
 import { Route } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { PoseGroup } from 'react-pose'
-
 /* Redux Actions */
 import { escapeCloseModal, generatePdfCancel, resetPdfState } from '../../actions/pdf'
 import { resetTagPickerState } from '../../actions/tagPicker'
-
+import { resetLogsState } from '../../actions/logs'
 /* Components */
 import { cancelButton } from '../../helpers/cancelButton'
 import { Fade, SlideDown } from './Animations'
@@ -39,6 +38,7 @@ class PopUp extends React.Component {
     generatePdfCancel: PropTypes.func.isRequired,
     resetTagPickerState: PropTypes.func.isRequired,
     resetPdfState: PropTypes.func.isRequired,
+    resetLogsState: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
     modal: PropTypes.bool.isRequired,
     fatalError: PropTypes.bool.isRequired
@@ -67,6 +67,7 @@ class PopUp extends React.Component {
       fatalError,
       resetTagPickerState,
       resetPdfState,
+      resetLogsState,
       history
     } = this.props
     const { pathname } = history.location
@@ -94,6 +95,7 @@ class PopUp extends React.Component {
         escapeCloseModal,
         resetTagPickerState,
         resetPdfState,
+        resetLogsState,
         history
       })
     }
@@ -153,5 +155,6 @@ export default connect(mapStateToProps, {
   escapeCloseModal,
   generatePdfCancel,
   resetTagPickerState,
-  resetPdfState
+  resetPdfState,
+  resetLogsState
 })(PopUp)

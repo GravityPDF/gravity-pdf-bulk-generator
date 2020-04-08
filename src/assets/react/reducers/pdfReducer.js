@@ -3,10 +3,7 @@ import {
   ESCAPE_CLOSE_MODAL,
   GENERATE_PDF_CANCEL,
   GENERATE_PDF_COUNTER,
-  GENERATE_PDF_FAILED,
   GENERATE_PDF_LIST_SUCCESS,
-  GENERATE_PDF_SUCCESS,
-  GENERATE_PDF_WARNING,
   GENERATE_DOWNLOAD_ZIP_URL,
   GENERATE_SESSION_ID_SUCCESS,
   RESET_PDF_STATE,
@@ -28,8 +25,7 @@ import { generateActivePdfList } from '../helpers/generateActivePdfList'
 /**
  * Setup the initial state of the "PDF" portion of our Redux store
  *
- * @type { sessionId: string, modal: boolean, pdfList: array, generatePdfSuccess: array,
- * generatePdfFailed: array, generatePdfWarning: array, generatePdfCancel: boolean,
+ * @type { sessionId: string, modal: boolean, pdfList: array, generatePdfCancel: boolean,
  * generatePdfCounter: number, downloadPercentage: number, downloadZipUrl: string,
  * abortControllers: array, fatalError: object }
  *
@@ -39,9 +35,6 @@ export const initialState = {
   sessionId: '',
   modal: false,
   pdfList: [],
-  generatePdfSuccess: [],
-  generatePdfFailed: [],
-  generatePdfWarning: [],
   generatePdfCancel: false,
   generatePdfCounter: 0,
   downloadPercentage: 0,
@@ -166,54 +159,6 @@ export default function (state = initialState, action) {
       }
 
     /**
-     * Process GENERATE_PDF_SUCCESS
-     *
-     * @since 1.0
-     */
-    case GENERATE_PDF_SUCCESS: {
-      const list = [...state.generatePdfSuccess]
-
-      list.push(action.payload)
-
-      return {
-        ...state,
-        generatePdfSuccess: list
-      }
-    }
-
-    /**
-     * Process GENERATE_PDF_WARNING
-     *
-     * @since 1.0
-     */
-    case GENERATE_PDF_WARNING: {
-      const list = [...state.generatePdfWarning]
-
-      list.push(action.payload)
-
-      return {
-        ...state,
-        generatePdfWarning: list
-      }
-    }
-
-    /**
-     * Process GENERATE_PDF_FAILED
-     *
-     * @since 1.0
-     */
-    case GENERATE_PDF_FAILED: {
-      const list = [...state.generatePdfFailed]
-
-      list.push(action.payload)
-
-      return {
-        ...state,
-        generatePdfFailed: list
-      }
-    }
-
-    /**
      * Process GENERATE_PDF_CANCEL
      *
      * @since 1.0
@@ -222,9 +167,6 @@ export default function (state = initialState, action) {
       return {
         ...state,
         sessionId: '',
-        generatePdfSuccess: [],
-        generatePdfFailed: [],
-        generatePdfWarning: [],
         generatePdfCancel: true,
         generatePdfCounter: 0,
         downloadPercentage: 0,
