@@ -2,7 +2,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { CircularProgressbar } from 'react-circular-progressbar'
-
 /* Components */
 import LoadingDots from '../LoadingDots/LoadingDots'
 import Logs from '../Logs/Logs'
@@ -17,35 +16,13 @@ import Logs from '../Logs/Logs'
 /**
  * Display Step2Body UI
  *
- * @param success
- * @param errors
- * @param warnings
- * @param toggleSuccess
- * @param toggleErrors
- * @param toggleWarnings
- * @param generatePdfSuccess
- * @param generatePdfFailed
- * @param generatePdfWarning
  * @param downloadPercentage
  *
- * @returns {Step2Body: component}
+ * @returns { Step2Body: component }
  *
  * @since 1.0
  */
-const Step2Body = (
-  {
-    success,
-    errors,
-    warnings,
-    toggleSuccess,
-    toggleErrors,
-    toggleWarnings,
-    generatePdfSuccess,
-    generatePdfFailed,
-    generatePdfWarning,
-    downloadPercentage,
-  }
-) => (
+const Step2Body = ({ downloadPercentage }) => (
   <section className='gfpdf-step'>
     <div id='gfpdf-step-2'>
       <CircularProgressbar
@@ -56,16 +33,7 @@ const Step2Body = (
       <em>(Please do not navigate away from this page)</em>
     </div>
 
-    <Logs
-      success={success}
-      errors={errors}
-      warnings={warnings}
-      toggleSuccess={toggleSuccess}
-      toggleErrors={toggleErrors}
-      toggleWarnings={toggleWarnings}
-      generatePdfSuccess={generatePdfSuccess}
-      generatePdfFailed={generatePdfFailed}
-      generatePdfWarning={generatePdfWarning} />
+    <Logs />
   </section>
 )
 
@@ -75,15 +43,6 @@ const Step2Body = (
  * @since 1.0
  */
 Step2Body.propTypes = {
-  success: PropTypes.bool.isRequired,
-  errors: PropTypes.bool.isRequired,
-  warnings: PropTypes.bool.isRequired,
-  toggleSuccess: PropTypes.func.isRequired,
-  toggleErrors: PropTypes.func.isRequired,
-  toggleWarnings: PropTypes.func.isRequired,
-  generatePdfSuccess: PropTypes.arrayOf(PropTypes.object).isRequired,
-  generatePdfFailed: PropTypes.arrayOf(PropTypes.object).isRequired,
-  generatePdfWarning: PropTypes.arrayOf(PropTypes.object).isRequired,
   downloadPercentage: PropTypes.number.isRequired
 }
 

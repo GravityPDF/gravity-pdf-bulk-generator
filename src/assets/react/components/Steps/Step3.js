@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 /* Redux Actions */
 import { toggleModal, resetPdfState } from '../../actions/pdf'
 import { resetTagPickerState } from '../../actions/tagPicker'
-import { toggleSuccess, toggleErrors, toggleWarnings } from '../../actions/logs'
+import { resetLogsState } from '../../actions/logs'
 /* Components */
 import ProgressBar from '../ProgressBar/ProgressBar'
 import Step3Body from './Step3Body'
@@ -25,19 +25,11 @@ class Step3 extends React.Component {
    * @since 1.0
    */
   static propTypes = {
-    success: PropTypes.bool.isRequired,
-    errors: PropTypes.bool.isRequired,
-    warnings: PropTypes.bool.isRequired,
-    generatePdfSuccess: PropTypes.arrayOf(PropTypes.object).isRequired,
-    generatePdfFailed: PropTypes.arrayOf(PropTypes.object).isRequired,
-    generatePdfWarning: PropTypes.arrayOf(PropTypes.object).isRequired,
     downloadZipUrl: PropTypes.string.isRequired,
-    toggleSuccess: PropTypes.func.isRequired,
-    toggleErrors: PropTypes.func.isRequired,
-    toggleWarnings: PropTypes.func.isRequired,
     toggleModal: PropTypes.func.isRequired,
     resetTagPickerState: PropTypes.func.isRequired,
     resetPdfState: PropTypes.func.isRequired,
+    resetLogsState: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired
   }
 
@@ -94,19 +86,11 @@ class Step3 extends React.Component {
    */
   render () {
     const {
-      success,
-      errors,
-      warnings,
-      generatePdfSuccess,
-      generatePdfFailed,
-      generatePdfWarning,
       downloadZipUrl,
-      toggleSuccess,
-      toggleErrors,
-      toggleWarnings,
       toggleModal,
       resetTagPickerState,
       resetPdfState,
+      resetLogsState,
       history
     } = this.props
 
@@ -114,23 +98,15 @@ class Step3 extends React.Component {
       <div ref={node => this.container = node} tabIndex='-1'>
         <button
           className='gfpdf-close-button'
-          onClick={e => cancelButton({ e, toggleModal, resetTagPickerState, resetPdfState, history })}>
+          onClick={e => cancelButton({
+            e, toggleModal, resetTagPickerState, resetPdfState, resetLogsState, history
+          })}>
           <span className='screen-reader-text'>Close dialog</span>
         </button>
 
         <ProgressBar step={3} />
 
-        <Step3Body
-          success={success}
-          errors={errors}
-          warnings={warnings}
-          generatePdfSuccess={generatePdfSuccess}
-          generatePdfFailed={generatePdfFailed}
-          generatePdfWarning={generatePdfWarning}
-          downloadZipUrl={downloadZipUrl}
-          toggleSuccess={toggleSuccess}
-          toggleErrors={toggleErrors}
-          toggleWarnings={toggleWarnings} />
+        <Step3Body downloadZipUrl={downloadZipUrl} />
       </div>
     )
   }
@@ -141,19 +117,11 @@ class Step3 extends React.Component {
  *
  * @param state
  *
- * @returns { success: boolean, errors: boolean, warnings: boolean,
- * generatePdfSuccess: array of objects, generatePdfFailed: array of objects,
- * generatePdfWarning: array of objects, downloadZipUrl: string }
+ * @returns { downloadZipUrl: string }
  *
  * @since 1.0
  */
 const mapStateToProps = state => ({
-  success: state.logs.success,
-  errors: state.logs.errors,
-  warnings: state.logs.warnings,
-  generatePdfSuccess: state.pdf.generatePdfSuccess,
-  generatePdfFailed: state.pdf.generatePdfFailed,
-  generatePdfWarning: state.pdf.generatePdfWarning,
   downloadZipUrl: state.pdf.downloadZipUrl
 })
 
@@ -166,7 +134,5 @@ export default connect(mapStateToProps, {
   toggleModal,
   resetTagPickerState,
   resetPdfState,
-  toggleSuccess,
-  toggleErrors,
-  toggleWarnings
+  resetLogsState
 })(Step3)

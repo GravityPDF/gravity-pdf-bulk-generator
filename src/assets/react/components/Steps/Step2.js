@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 /* Redux Actions */
 import { generatePdfCancel, toggleModal } from '../../actions/pdf'
-import { toggleErrors, toggleSuccess, toggleWarnings } from '../../actions/logs'
 /* Components */
 import ProgressBar from '../ProgressBar/ProgressBar'
 import Step2Body from './Step2Body'
@@ -32,15 +31,6 @@ class Step2 extends React.Component {
    * @since 1.0
    */
   static propTypes = {
-    success: PropTypes.bool.isRequired,
-    errors: PropTypes.bool.isRequired,
-    warnings: PropTypes.bool.isRequired,
-    toggleSuccess: PropTypes.func.isRequired,
-    toggleErrors: PropTypes.func.isRequired,
-    toggleWarnings: PropTypes.func.isRequired,
-    generatePdfSuccess: PropTypes.arrayOf(PropTypes.object).isRequired,
-    generatePdfFailed: PropTypes.arrayOf(PropTypes.object).isRequired,
-    generatePdfWarning: PropTypes.arrayOf(PropTypes.object).isRequired,
     downloadPercentage: PropTypes.number.isRequired,
     downloadZipUrl: PropTypes.string.isRequired,
     toggleModal: PropTypes.func.isRequired,
@@ -90,38 +80,13 @@ class Step2 extends React.Component {
    * @since 1.0
    */
   render () {
-    const {
-      success,
-      errors,
-      warnings,
-      toggleSuccess,
-      toggleErrors,
-      toggleWarnings,
-      generatePdfSuccess,
-      generatePdfFailed,
-      generatePdfWarning,
-      downloadPercentage,
-      fatalError,
-      toggleModal,
-      generatePdfCancel,
-      history
-    } = this.props
+    const { downloadPercentage, fatalError, toggleModal, generatePdfCancel, history } = this.props
 
     return (
       <div ref={node => this.container = node} tabIndex='-1'>
         <ProgressBar step={2} />
 
-        {!fatalError && <Step2Body
-          downloadPercentage={downloadPercentage}
-          success={success}
-          errors={errors}
-          warnings={warnings}
-          toggleSuccess={toggleSuccess}
-          toggleErrors={toggleErrors}
-          toggleWarnings={toggleWarnings}
-          generatePdfSuccess={generatePdfSuccess}
-          generatePdfFailed={generatePdfFailed}
-          generatePdfWarning={generatePdfWarning} />}
+        { !fatalError && <Step2Body downloadPercentage={downloadPercentage} /> }
 
         {
           fatalError &&
@@ -134,11 +99,7 @@ class Step2 extends React.Component {
           <button
             className='button cancel'
             onClick={e => cancelButton({
-              e,
-              toggleModal,
-              fatalError,
-              generatePdfCancel,
-              history
+              e, toggleModal, fatalError, generatePdfCancel, history
             })}>
             Cancel
           </button>
@@ -153,20 +114,11 @@ class Step2 extends React.Component {
  *
  * @param state
  *
- * @returns { success: boolean, errors: boolean, warnings: boolean,
- * generatePdfSuccess: array of objects, generatePdfFailed: array of objects,
- * generatePdfWarning: array of objects, downloadPercentage: number,
- * downloadZipUrl: string, fatalError: boolean }
+ * @returns { downloadPercentage: number, downloadZipUrl: string, fatalError: boolean }
  *
  * @since 1.0
  */
 const mapStateToProps = state => ({
-  success: state.logs.success,
-  errors: state.logs.errors,
-  warnings: state.logs.warnings,
-  generatePdfSuccess: state.pdf.generatePdfSuccess,
-  generatePdfFailed: state.pdf.generatePdfFailed,
-  generatePdfWarning: state.pdf.generatePdfWarning,
   downloadPercentage: state.pdf.downloadPercentage,
   downloadZipUrl: state.pdf.downloadZipUrl,
   fatalError: state.pdf.fatalError
@@ -177,10 +129,4 @@ const mapStateToProps = state => ({
  *
  * @since 1.0
  */
-export default connect(mapStateToProps, {
-  toggleModal,
-  generatePdfCancel,
-  toggleSuccess,
-  toggleErrors,
-  toggleWarnings
-})(Step2)
+export default connect(mapStateToProps, { toggleModal, generatePdfCancel })(Step2)

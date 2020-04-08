@@ -1,7 +1,7 @@
 /* Dependencies */
 import React from 'react'
 import PropTypes from 'prop-types'
-
+import { connect } from 'react-redux'
 /* Components */
 import InfoBox from './InfoBox'
 
@@ -12,93 +12,129 @@ import InfoBox from './InfoBox'
  * @since       1.0
  */
 
-/**
- * Display Logs UI
- *
- * @param success
- * @param errors
- * @param warnings
- * @param toggleSuccess
- * @param toggleErrors
- * @param toggleWarnings
- * @param generatePdfSuccess
- * @param generatePdfFailed
- * @param generatePdfWarning
- *
- * @returns {Logs: component}
- *
- * @since 1.0
- */
-const Logs = (
-  {
-    success,
-    errors,
-    warnings,
-    toggleSuccess,
-    toggleErrors,
-    toggleWarnings,
-    generatePdfSuccess,
-    generatePdfFailed,
-    generatePdfWarning
+class Logs extends React.Component {
+
+  /**
+   * PropTypes
+   *
+   * @since 1.0
+   */
+  static propTypes = {
+    generatePdfSuccess: PropTypes.arrayOf(PropTypes.object).isRequired,
+    generatePdfWarning: PropTypes.arrayOf(PropTypes.object).isRequired,
+    generatePdfFailed: PropTypes.arrayOf(PropTypes.object).isRequired
   }
-) => (
-  <div className='logs'>
-    {
-      /* Display success logs */
-      generatePdfSuccess.length > 0 && (
-        <div className='log-box'>
-          <InfoBox
-            title='Success'
-            state={success}
-            toggle={toggleSuccess}
-            list={generatePdfSuccess} />
-        </div>
-      )
-    }
 
-    {
-      /* Display errors/failed logs */
-      generatePdfFailed.length > 0 && (
-        <div className='log-box'>
-          <InfoBox
-            title='Errors'
-            state={errors}
-            toggle={toggleErrors}
-            list={generatePdfFailed} />
-        </div>
-      )
-    }
+  /**
+   * Initialize component state
+   *
+   * @type { success: boolean, errors: boolean, warnings: boolean }
+   *
+   * @since 1.0
+   */
+  state = {
+    success: false,
+    errors: false,
+    warnings: false
+  }
 
-    {
-      /* Display warning logs */
-      generatePdfWarning.length > 0 && (
-        <div className='log-box'>
-          <InfoBox
-            title='Warnings'
-            state={warnings}
-            toggle={toggleWarnings}
-            list={generatePdfWarning} />
-        </div>
-      )
-    }
-  </div>
-)
+  /**
+   * Toggle success log state
+   *
+   * @since 1.0
+   */
+  toggleSuccess = () => {
+    this.setState({ success: !this.state.success })
+  }
 
-/**
- * PropTypes
- *
- * @since 1.0
- */
-Logs.propTypes = {
-  success: PropTypes.bool.isRequired,
-  errors: PropTypes.bool.isRequired,
-  warnings: PropTypes.bool.isRequired,
-  toggleSuccess: PropTypes.func.isRequired,
-  toggleErrors: PropTypes.func.isRequired,
-  toggleWarnings: PropTypes.func.isRequired,
-  generatePdfSuccess: PropTypes.arrayOf(PropTypes.object).isRequired,
-  generatePdfFailed: PropTypes.arrayOf(PropTypes.object).isRequired,
-  generatePdfWarning: PropTypes.arrayOf(PropTypes.object).isRequired
+  /**
+   * Toggle errors log state
+   *
+   * @since 1.0
+   */
+  toggleErrors = () => {
+    this.setState({ errors: !this.state.errors })
+  }
+
+  /**
+   * Toggle warnings log state
+   *
+   * @since 1.0
+   */
+  toggleWarnings = () => {
+    this.setState({ warnings: !this.state.warnings })
+  }
+
+  /**
+   * Display Logs UI
+   *
+   * @returns { Logs: component }
+   *
+   * @since 1.0
+   */
+  render() {
+    const { success, errors, warnings } = this.state
+    const { generatePdfSuccess, generatePdfFailed, generatePdfWarning } = this.props
+
+    return (
+      <div className='logs'>
+        {
+          /* Display success logs */
+          generatePdfSuccess.length > 0 && (
+            <div className='log-box'>
+              <InfoBox
+                title='Success'
+                state={success}
+                toggle={this.toggleSuccess}
+                list={generatePdfSuccess} />
+            </div>
+          )
+        }
+
+        {
+          /* Display errors/failed logs */
+          generatePdfFailed.length > 0 && (
+            <div className='log-box'>
+              <InfoBox
+                title='Errors'
+                state={errors}
+                toggle={this.toggleErrors}
+                list={generatePdfFailed} />
+            </div>
+          )
+        }
+
+        {
+          /* Display warning logs */
+          generatePdfWarning.length > 0 && (
+            <div className='log-box'>
+              <InfoBox
+                title='Warnings'
+                state={warnings}
+                toggle={this.toggleWarnings}
+                list={generatePdfWarning} />
+            </div>
+          )
+        }
+      </div>
+    )
+  }
 }
 
-export default Logs
+/**
+ * Map redux state to props
+ *
+ * @param state
+ *
+ * @returns { generatePdfSuccess: array of objects, generatePdfFailed: array of objects,
+ * generatePdfWarning: array of objects }
+ *
+ * @since 1.0
+ */
+const mapStateToProps = state => ({
+  generatePdfSuccess: state.logs.generatePdfSuccess,
+  generatePdfFailed: state.logs.generatePdfFailed,
+  generatePdfWarning: state.logs.generatePdfWarning
+})
+
+export default connect(mapStateToProps, {})(Logs)
