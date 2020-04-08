@@ -1,7 +1,6 @@
 /* Redux Action Types */
 import {
   ESCAPE_CLOSE_MODAL,
-  GENERATE_PDF_CANCEL,
   GENERATE_PDF_COUNTER,
   GENERATE_PDF_LIST_SUCCESS,
   GENERATE_DOWNLOAD_ZIP_URL,
@@ -25,7 +24,7 @@ import { generateActivePdfList } from '../helpers/generateActivePdfList'
 /**
  * Setup the initial state of the "PDF" portion of our Redux store
  *
- * @type { sessionId: string, modal: boolean, pdfList: array, generatePdfCancel: boolean,
+ * @type { sessionId: string, modal: boolean, pdfList: array,
  * generatePdfCounter: number, downloadPercentage: number, downloadZipUrl: string,
  * abortControllers: array, fatalError: object }
  *
@@ -35,7 +34,6 @@ export const initialState = {
   sessionId: '',
   modal: false,
   pdfList: [],
-  generatePdfCancel: false,
   generatePdfCounter: 0,
   downloadPercentage: 0,
   downloadZipUrl: '',
@@ -81,7 +79,6 @@ export default function (state = initialState, action) {
     case GENERATE_PDF_LIST_SUCCESS:
       return {
         ...state,
-        generatePdfCancel: false,
         pdfList: action.payload
       }
 
@@ -156,22 +153,6 @@ export default function (state = initialState, action) {
       return {
         ...state,
         sessionId: action.payload
-      }
-
-    /**
-     * Process GENERATE_PDF_CANCEL
-     *
-     * @since 1.0
-     */
-    case GENERATE_PDF_CANCEL:
-      return {
-        ...state,
-        sessionId: '',
-        generatePdfCancel: true,
-        generatePdfCounter: 0,
-        downloadPercentage: 0,
-        downloadZipUrl: '',
-        abortControllers: []
       }
 
     /**

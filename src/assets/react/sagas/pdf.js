@@ -33,7 +33,7 @@ import { generateActivePdfList } from '../helpers/generateActivePdfList'
 /* Selectors */
 export const getStateSelectedEntryIds = state => state.form.selectedEntryIds
 export const getStatePdfList = state => state.pdf.pdfList
-export const getStateGeneratePdfCancel = state => state.pdf.generatePdfCancel
+export const getFatalErrorStatus = state => state.pdf.fatalError
 export const getStateAbortControllers = state => state.pdf.abortControllers
 export const getStateDownloadZipUrl = state => state.pdf.downloadZipUrl
 
@@ -51,9 +51,9 @@ export function * generateSessionId (payload) {
   /* Show modal Step2 */
   yield put(push('/step/2'))
 
-  /* Ensure fatal error will be called if something goes wrong on search entries endpoint response */
-  if (yield select(getStateGeneratePdfCancel)) {
-    return yield put({ type: FATAL_ERROR })
+  /* If a fatal error is already thrown, exit early */
+  if (yield select(getFatalErrorStatus)) {
+    return
   }
 
   try {
