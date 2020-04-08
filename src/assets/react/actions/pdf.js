@@ -80,10 +80,8 @@ export const togglePdfStatus = index => {
  *
  * @param path
  * @param concurrency
- * @param retryInterval
- * @param delayInterval
  *
- * @returns {{path: string, retryInterval: number, type: string, delayInterval: number, concurrency: number}}
+ * @returns {{path: string, retryInterval: number, type: string}}
  *
  * @since 1.0
  */
