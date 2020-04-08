@@ -10,7 +10,7 @@ import Step1Body from './Step1Body'
 import ProgressBar from '../ProgressBar/ProgressBar'
 /* Helpers */
 import { stripForwardSlashes } from '../../helpers/stripForwardSlashes'
-import { cancelButton } from '../../helpers/cancelButton'
+import { cancelModal } from '../../helpers/cancelModal'
 import language from '../../helpers/language'
 
 /**
@@ -166,7 +166,7 @@ class Step1 extends React.Component {
       <div ref={node => this.container = node} tabIndex='-1'>
         <button
           className='gfpdf-close-button'
-          onClick={e => cancelButton({ e, toggleModal, history })}>
+          onClick={e => cancelModal({ e, toggleModal, history })}>
           <span className='screen-reader-text'>{language.stepCloseDialog}</span>
         </button>
 

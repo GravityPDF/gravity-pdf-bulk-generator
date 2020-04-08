@@ -2,7 +2,7 @@
 import { all } from 'redux-saga/effects'
 /* Sagas */
 import { watchGetSelectedEntryIds, watcherProcessCheckbox } from './form'
-import { watchGenerateSessionId, watchGeneratePDF, watchFatalError } from './pdf'
+import { watchGenerateSessionId, watchGeneratePDF, watchFatalError, watchResetAllReducers } from './pdf'
 
 /**
  * @package     Gravity PDF Bulk Generator
@@ -22,6 +22,7 @@ export default function * rootSaga () {
     watcherProcessCheckbox(),
     watchGenerateSessionId(),
     watchGeneratePDF(),
-    watchFatalError()
+    watchFatalError(),
+    watchResetAllReducers()
   ])
 }

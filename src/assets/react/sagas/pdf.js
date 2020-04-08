@@ -10,9 +10,16 @@ import {
   GENERATE_PDF_COUNTER,
   GENERATE_SESSION_ID,
   GENERATE_SESSION_ID_SUCCESS,
-  STORE_ABORT_CONTROLLER
+  STORE_ABORT_CONTROLLER,
+  RESET_PDF_STATE
 } from '../actionTypes/pdf'
-import { GENERATE_PDF_SUCCESS, GENERATE_PDF_WARNING, GENERATE_PDF_FAILED } from '../actionTypes/logs'
+import {
+  GENERATE_PDF_SUCCESS,
+  GENERATE_PDF_WARNING,
+  GENERATE_PDF_FAILED,
+  RESET_LOGS_STATE
+} from '../actionTypes/logs'
+import { RESET_TAGPICKER_STATE } from '../actionTypes/tagPicker'
 /* APIs */
 import {
   apiRequestDownloadZipFile,
@@ -20,7 +27,6 @@ import {
   apiRequestGeneratePdfZip,
   apiRequestSessionId
 } from '../api/pdf'
-
 /* Helpers */
 import language from '../helpers/language'
 import { sprintf } from 'sprintf-js'
@@ -185,7 +191,7 @@ export function * validateDownloadZipUrl () {
   const downloadZipUrl = yield select(getStateDownloadZipUrl)
 
   try {
-    if(downloadZipUrl.length === 0) {
+    if (downloadZipUrl.length === 0) {
       throw {}
     }
 
@@ -302,8 +308,27 @@ export function * watchGeneratePDF () {
  * @since 1.0
  */
 export function * watchFatalError () {
-  while(true) {
+  while (true) {
     yield take(FATAL_ERROR)
     yield put({ type: GENERATE_PDF_CANCEL })
+  }
+}
+
+/**
+ * Watch for router '/' location changed, trigger cancel event and reset 3 of our reducers state
+ *
+ * @since 1.0
+ */
+export function * watchResetAllReducers () {
+  while (true) {
+    const path = yield take('@@router/LOCATION_CHANGE')
+    const { payload } = path
+
+    if (payload.location.pathname === '/' && payload.action === 'PUSH') {
+      yield put({ type: GENERATE_PDF_CANCEL })
+      yield put({ type: RESET_PDF_STATE })
+      yield put({ type: RESET_LOGS_STATE })
+      yield put({ type: RESET_TAGPICKER_STATE })
+    }
   }
 }

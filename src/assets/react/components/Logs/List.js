@@ -31,7 +31,7 @@ const List = ({ log, title }) => (
  * @since 1.0
  */
 List.propTypes = {
-  log: PropTypes.array.isRequired,
+  log: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
 }
 

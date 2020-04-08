@@ -1,7 +1,4 @@
-import {
-  PROCESS_CHECKBOX,
-  GET_SELECTED_ENTRY_IDS
-} from '../actionTypes/form'
+import { PROCESS_CHECKBOX, GET_SELECTED_ENTRY_IDS } from '../actionTypes/form'
 
 /**
  * @package     Gravity PDF Bulk Generator
