@@ -10,6 +10,7 @@ import Step2Body from './Step2Body'
 import FatalError from '../FatalError/FatalError'
 /* Helpers */
 import { cancelButton } from '../../helpers/cancelButton'
+import language from '../../helpers/language'
 
 /**
  * @package     Gravity PDF Bulk Generator
@@ -101,7 +102,7 @@ class Step2 extends React.Component {
             onClick={e => cancelButton({
               e, toggleModal, fatalError, generatePdfCancel, history
             })}>
-            Cancel
+            {language.cancelLabel}
           </button>
         </footer>
       </div>

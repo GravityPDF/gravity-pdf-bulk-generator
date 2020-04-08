@@ -16,7 +16,7 @@ import List from './List'
  * Display Logs InfoBox UI
  *
  * @param title
- * @param list
+ * @param logs
  * @param toggle
  * @param state
  *
@@ -27,7 +27,7 @@ import List from './List'
 const InfoBox = (
   {
     title,
-    list,
+    logs,
     toggle,
     state
   }
@@ -35,17 +35,23 @@ const InfoBox = (
   <div className={'errors-container ' + state.toString()}>
     <h3 className={title.toLowerCase()} onClick={toggle}>
         <span className='lines'>
-          {title} ({list.length})
+          {title} ({logs.length})
           <span className='expand'>
             {state ? '-' : '+'}
           </span>
         </span>
     </h3>
 
-    <List
-      list={list}
-      state={state}
-      title={title} />
+    <div className='items'>
+      {
+        logs.map((log, index) => (
+          <List
+            log={log}
+            title={title}
+            key={index} />
+        ))
+      }
+    </div>
   </div>
 )
 
@@ -56,13 +62,7 @@ const InfoBox = (
  */
 InfoBox.propTypes = {
   title: PropTypes.string.isRequired,
-  list: PropTypes.arrayOf(
-    PropTypes.shape({
-      pdfName: PropTypes.string,
-      pdfId: PropTypes.string,
-      entryId: PropTypes.string
-    })
-  ),
+  logs: PropTypes.array.isRequired,
   toggle: PropTypes.func.isRequired,
   state: PropTypes.bool.isRequired
 }

@@ -12,24 +12,16 @@ import PropTypes from 'prop-types'
 /**
  * Display Logs List UI
  *
- * @param list
- * @param state
+ * @param log
  * @param title
  *
  * @returns {List: component}
  *
  * @since 1.0
  */
-const List = ({ list, state, title }) => (
-  <div className='items'>
-    {
-      list.map((item, index) => (
-        <div key={index} className={'item ' + state.toString() + ' ' + title.toLowerCase()}>
-          {title === 'Success' ? 'Completed' : 'Failed'} generation of {'"'+item.pdfName+'.pdf"'} (#{item.pdfId}) for entry
-          #{item.entryId}
-        </div>
-      ))
-    }
+const List = ({ log, title }) => (
+  <div className={'item ' + title.toLowerCase()}>
+    {log}
   </div>
 )
 
@@ -39,14 +31,7 @@ const List = ({ list, state, title }) => (
  * @since 1.0
  */
 List.propTypes = {
-  list: PropTypes.arrayOf(
-    PropTypes.shape({
-      pdfName: PropTypes.string.isRequired,
-      pdfId: PropTypes.string.isRequired,
-      entryId: PropTypes.string.isRequired
-    })
-  ).isRequired,
-  state: PropTypes.bool.isRequired,
+  log: PropTypes.array.isRequired,
   title: PropTypes.string.isRequired,
 }
 
