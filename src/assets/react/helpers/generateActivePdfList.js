@@ -7,9 +7,9 @@
 
 /**
  * A simple function that return only an array of active PDF list from the
- * orignal PDF list
+ * original PDF list
  *
- * @param pdfList
+ * @param pdfList: array
  *
  * @returns {list: array}
  *
@@ -27,4 +27,28 @@ export const generateActivePdfList = (pdfList) => {
   })
 
   return list
+}
+
+/**
+ * Take the raw entry IDs and PDF List and build an array containing each iteration
+ *
+ * @param entryIds: array
+ * @param pdfList: array
+ * @param sessionId: string
+ * @returns {[]}
+ *
+ * @since 1.0
+ */
+export const constructPdfData = (entryIds, pdfList, sessionId) => {
+  const pdfs = []
+
+  const activePdfList = generateActivePdfList(pdfList)
+
+  entryIds.map(id => {
+    activePdfList.map(item => {
+      pdfs.push({ sessionId, entryId: id, pdfId: item.id, pdfName: item.name })
+    })
+  })
+
+  return pdfs
 }

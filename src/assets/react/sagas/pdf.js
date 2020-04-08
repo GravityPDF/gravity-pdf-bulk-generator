@@ -20,8 +20,9 @@ import {
   apiRequestGeneratePdfZip,
   apiRequestSessionId
 } from '../api/pdf'
+
 /* Helpers */
-import { generateActivePdfList } from '../helpers/generateActivePdfList'
+import { constructPdfData } from '../helpers/generateActivePdfList'
 
 /**
  * @package     Gravity PDF Bulk Generator
@@ -273,21 +274,8 @@ export function * watchGeneratePDF () {
   while (true) {
     /* Listen to redux action type GENERATE_PDF event */
     const { payload } = yield take(GENERATE_PDF)
-    const {
-      sessionId,
-      concurrency,
-      selectedEntryIds,
-      pdfList
-    } = payload
-    const pdfs = []
-    const activePdfList = generateActivePdfList(pdfList)
-
-    /* Construct content for pdfs array */
-    selectedEntryIds.map(id => {
-      activePdfList.map(item => {
-        pdfs.push({ sessionId, entryId: id, pdfId: item.id, pdfName: item.name })
-      })
-    })
+    const { sessionId, concurrency, selectedEntryIds, pdfList } = payload
+    const pdfs = constructPdfData(selectedEntryIds, pdfList, sessionId)
 
     /* Yield fork worker saga bulkGeneratePdf */
     const generator = yield fork(bulkGeneratePdf, {
