@@ -3,17 +3,17 @@ import { call, cancel, cancelled, delay, fork, put, retry, select, take, takeLat
 import { push } from 'connected-react-router'
 /* Redux Action Types */
 import {
+  FATAL_ERROR,
+  GENERATE_DOWNLOAD_ZIP_URL,
   GENERATE_PDF,
   GENERATE_PDF_CANCEL,
   GENERATE_PDF_COUNTER,
   GENERATE_PDF_FAILED,
   GENERATE_PDF_SUCCESS,
   GENERATE_PDF_WARNING,
-  GENERATE_DOWNLOAD_ZIP_URL,
   GENERATE_SESSION_ID,
   GENERATE_SESSION_ID_SUCCESS,
-  STORE_ABORT_CONTROLLER,
-  FATAL_ERROR
+  STORE_ABORT_CONTROLLER
 } from '../actionTypes/pdf'
 /* APIs */
 import {
@@ -181,8 +181,11 @@ export function * validateDownloadZipUrl () {
   const downloadZipUrl = yield select(getStateDownloadZipUrl)
 
   try {
-    const response = yield call(apiRequestDownloadZipFile, downloadZipUrl)
+    if(downloadZipUrl.length === 0) {
+      throw {}
+    }
 
+    const response = yield call(apiRequestDownloadZipFile, downloadZipUrl)
     if (!response.ok) {
       throw response
     }
@@ -212,8 +215,10 @@ export function * generateDownloadZipUrl (sessionId) {
     }
 
     yield put({ type: GENERATE_DOWNLOAD_ZIP_URL, payload: responseBody.downloadUrl })
-  } catch (error) {
-    yield put({ type: FATAL_ERROR })
+  } catch (response) {
+    if (response.status >= 500) {
+      yield put({ type: FATAL_ERROR })
+    }
   }
 }
 
