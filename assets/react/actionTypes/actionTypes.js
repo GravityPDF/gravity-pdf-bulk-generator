@@ -5,4 +5,5 @@
  * @since       1.0
  */
 
+/* Our Redux Action Type Constants */
 export const RESET_ALL_STATE = 'RESET_ALL_STATE'

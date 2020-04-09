@@ -1,11 +1,5 @@
-import {
-  GENERATE_PDF_LIST_SUCCESS,
-  TOGGLE_MODAL,
-  ESCAPE_CLOSE_MODAL,
-  TOGGLE_PDF_STATUS,
-  GENERATE_SESSION_ID,
-  RESET_PDF_STATE
-} from '../actionTypes/pdf'
+/* Redux Action Types */
+import { GENERATE_PDF_LIST_SUCCESS, TOGGLE_PDF_STATUS, GENERATE_SESSION_ID } from '../actionTypes/pdf'
 
 /**
  * @package     Gravity PDF Bulk Generator
@@ -21,7 +15,7 @@ import {
  *
  * @param data
  *
- * @returns {{payload: array, type: string}}
+ * @returns {{ payload: array, type: string }}
  *
  * @since 1.0
  */
@@ -33,37 +27,11 @@ export const generatePdfListSuccess = data => {
 }
 
 /**
- * Toggle modal state
- *
- * @returns {{type: string}}
- *
- * @since 1.0
- */
-export const toggleModal = () => {
-  return {
-    type: TOGGLE_MODAL
-  }
-}
-
-/**
- * Switch modal state to false
- *
- * @returns {{type: string}}
- *
- * @since 1.0
- */
-export const escapeCloseModal = () => {
-  return {
-    type: ESCAPE_CLOSE_MODAL
-  }
-}
-
-/**
  * Toggle PDF status state
  *
  * @param index
  *
- * @returns {{payload: number, type: string}
+ * @returns {{ payload: int, type: string }}
  *
  * @since 1.0
  */
@@ -80,7 +48,7 @@ export const togglePdfStatus = index => {
  * @param path
  * @param concurrency
  *
- * @returns {{path: string, retryInterval: number, type: string}}
+ * @returns {{ path: string, concurrency: int, type: string }}
  *
  * @since 1.0
  */
@@ -89,18 +57,5 @@ export const generateSessionId = (path, concurrency) => {
     type: GENERATE_SESSION_ID,
     path,
     concurrency
-  }
-}
-
-/**
- * Reset PDF state
- *
- * @returns {{type: string}}
- *
- * @since 1.0
- */
-export const resetPdfState = () => {
-  return {
-    type: RESET_PDF_STATE
   }
 }

@@ -11,7 +11,7 @@ import React from 'react'
 /**
  * Display LoadingDots UI
  *
- * @returns {LoadingDots: component}
+ * @returns { LoadingDots: component }
  *
  * @since 1.0
  */

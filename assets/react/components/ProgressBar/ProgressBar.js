@@ -21,7 +21,7 @@ const steps = [
  *
  * @param step
  *
- * @returns {ProgressBar: component}
+ * @returns { ProgressBar: component }
  *
  * @since 1.0
  */

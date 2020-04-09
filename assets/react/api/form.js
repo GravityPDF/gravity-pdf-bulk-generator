@@ -11,8 +11,8 @@ import { api } from './api'
 /**
  * Fetch API request to obtain all entry IDs (POST)
  *
- * @param formId
- * @param filterData
+ * @param formId: string
+ * @param filterData: object
  *
  * @returns Response
  *

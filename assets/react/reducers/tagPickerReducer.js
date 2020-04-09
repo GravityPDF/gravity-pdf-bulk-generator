@@ -1,12 +1,8 @@
 /* Redux Action Types */
-import {
-  UPDATE_DIRECTORY_STRUCTURE,
-  RESET_TAGPICKER_STATE
-} from '../actionTypes/tagPicker'
-
+import { RESET_ALL_STATE } from '../actionTypes/actionTypes'
+import { UPDATE_DIRECTORY_STRUCTURE, RESET_TAGPICKER_STATE } from '../actionTypes/tagPicker'
 /* Helper */
 import language from '../helpers/language'
-import { RESET_ALL_STATE } from '../actionTypes/actionTypes'
 
 /**
  * @package     Gravity PDF Bulk Generator
@@ -18,7 +14,7 @@ import { RESET_ALL_STATE } from '../actionTypes/actionTypes'
 /**
  * Setup the initial state of the "tag picker" portion of our Redux store
  *
- * @type {tags: [{id: 'string', label: 'string'}], directoryStructure: string}
+ * @type { tags: [ {id: 'string', label: 'string'} ], directoryStructure: string }
  *
  * @since 1.0
  */
@@ -41,10 +37,10 @@ export const initialState = {
 /**
  * The action for "tag picker" reducer which updates its state
  *
- * @param state
- * @param action
+ * @param state: object
+ * @param action: object
  *
- * @returns {initialState: *} whether updated or not
+ * @returns { initialState: * } whether updated or not
  *
  * @since 1.0
  */
@@ -64,7 +60,7 @@ export default function (state = initialState, action) {
       }
 
     /**
-     * Process RESET_TAGPICKER_STATE
+     * Process RESET_ALL_STATE & RESET_TAGPICKER_STATE
      *
      * @since 1.0
      */

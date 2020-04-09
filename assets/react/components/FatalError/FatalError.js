@@ -1,11 +1,27 @@
 /* Dependencies */
 import React from 'react'
 import PropTypes from 'prop-types'
-
+import { sprintf } from 'sprintf-js'
 /* Helpers */
 import language from '../../helpers/language'
-import { sprintf } from 'sprintf-js'
 
+/**
+ * @package     Gravity PDF Bulk Generator
+ * @copyright   Copyright (c) 2020, Blue Liquid Designs
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ * @since       1.0
+ */
+
+/**
+ * Display FatalError UI
+ *
+ * @param pluginUrl
+ * @param adminUrl
+ *
+ * @returns { FatalError: component }
+ *
+ * @since 1.0
+ */
 const FatalError = ({ pluginUrl, adminUrl }) => (
   <section id='gfpdf-fatal-error' className='gfpdf-step'>
     <div id='gfpdf-fatal-error-title'>{language.fatalErrorTitle}</div>

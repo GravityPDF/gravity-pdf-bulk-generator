@@ -8,13 +8,13 @@
 /**
  * A simple function that parse URL filter data into an object
  *
- * @param currentUrl
+ * @param currentUrl: string
  *
- * @returns {data: object}
+ * @returns { data: object }
  *
  * @since 1.0
  */
-export const parseUrlForSearchParameters = (currentUrl) => {
+export const parseUrlForSearchParameters = currentUrl => {
   const filterDetails = [
     ['s', /s=(.*)/],
     ['field_id', /field_id=(.*)/],

@@ -1,3 +1,4 @@
+/* Redux Action Types */
 import { UPDATE_DIRECTORY_STRUCTURE } from '../actionTypes/tagPicker'
 
 /**
@@ -14,7 +15,7 @@ import { UPDATE_DIRECTORY_STRUCTURE } from '../actionTypes/tagPicker'
  *
  * @param directoryStructure
  *
- * @returns {{payload: string, type: string}}
+ * @returns {{ payload: string, type: string }}
  *
  * @since 1.0
  */

@@ -1,3 +1,4 @@
+/* Helpers */
 import language from '../helpers/language'
 
 /**
@@ -10,20 +11,13 @@ import language from '../helpers/language'
 /**
  * A simple function that check current step path, then resets the entire application state
  *
- * @param e
- * @param fatalError
- * @param history
+ * @param e: object
+ * @param fatalError: boolean
+ * @param history: object
  *
  * @since 1.0
  */
-export const cancelModal = (
-  {
-    e,
-    fatalError,
-    history
-  }
-) => {
-
+export const cancelModal = ({ e, fatalError, history }) => {
   e && e.preventDefault()
 
   /* Check current path */

@@ -70,11 +70,10 @@ class PopUp extends React.Component {
    * @since 1.0
    */
   render () {
-    const { modal } = this.props
 
     return (
       <PoseGroup flipMove={false}>
-        {modal && [
+        {this.props.modal && [
           <Fade key='fade'>
             <Route
               key='overlay'
@@ -109,9 +108,4 @@ const mapStateToProps = state => ({
   fatalError: state.pdf.fatalError
 })
 
-/**
- * Connect and dispatch redux actions as props
- *
- * @since 1.0
- */
 export default connect(mapStateToProps, null)(PopUp)

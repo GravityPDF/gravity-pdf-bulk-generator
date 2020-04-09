@@ -8,9 +8,9 @@
 /**
  * A simple function that strip out forward slashes '/' from inside directoryStructure / merge tags
  *
- * @param directoryStructure
+ * @param directoryStructure: string
  *
- * @returns {result|directoryStructure: string|*}
+ * @returns { result|directoryStructure: string|* }
  *
  * @since 1.0
  */

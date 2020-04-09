@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 /* Components */
 import InfoBox from './InfoBox'
-
 /* Helper */
 import language from '../../helpers/language'
 
@@ -15,6 +14,11 @@ import language from '../../helpers/language'
  * @since       1.0
  */
 
+/**
+ * Logs Component
+ *
+ * @since 1.0
+ */
 class Logs extends React.Component {
 
   /**

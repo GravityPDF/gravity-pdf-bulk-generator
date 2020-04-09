@@ -1,3 +1,4 @@
+/* Redux Action Types */
 import { PROCESS_CHECKBOX, GET_SELECTED_ENTRY_IDS } from '../actionTypes/form'
 
 /**
@@ -14,7 +15,7 @@ import { PROCESS_CHECKBOX, GET_SELECTED_ENTRY_IDS } from '../actionTypes/form'
  *
  * @param ids
  *
- * @returns {{payload: array, type: string}}
+ * @returns {{ payload: array, type: string }}
  *
  * @since 1.0
  */
@@ -31,7 +32,7 @@ export const processCheckbox = ids => {
  * @param formId
  * @param filterData
  *
- * @returns {{formId: string, filterData: object, type: string}}
+ * @returns {{ formId: string, filterData: object, type: string }}
  *
  * @since 1.0
  */

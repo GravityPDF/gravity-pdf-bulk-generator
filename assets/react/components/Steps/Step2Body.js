@@ -5,7 +5,6 @@ import { CircularProgressbar } from 'react-circular-progressbar'
 /* Components */
 import LoadingDots from '../LoadingDots/LoadingDots'
 import Logs from '../Logs/Logs'
-
 /* Helpers */
 import language from '../../helpers/language'
 
