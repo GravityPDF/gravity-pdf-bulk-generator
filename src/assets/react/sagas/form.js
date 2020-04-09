@@ -15,6 +15,15 @@ import { apiRequestAllEntryIds } from '../api/form'
  */
 
 /**
+ * Watch for the selected entry IDs event and calls the function to handle it
+ *
+ * @since 1.0
+ */
+export function * watchGetSelectedEntryIds () {
+  yield takeLatest(GET_SELECTED_ENTRY_IDS, getSelectedEntryIds)
+}
+
+/**
  * Call our API and process the response based on requested filter data. If we don't get a valid response,
  * a fatal error will be triggered.
  *
@@ -39,12 +48,12 @@ export function * getSelectedEntryIds (payload) {
 }
 
 /**
- * Watch for the selected entry IDs event and calls the function to handle it
+ * Watch for process checkbox event and calls the function to handle it
  *
  * @since 1.0
  */
-export function * watchGetSelectedEntryIds () {
-  yield takeLatest(GET_SELECTED_ENTRY_IDS, getSelectedEntryIds)
+export function * watcherProcessCheckbox () {
+  yield takeLatest(PROCESS_CHECKBOX, processCheckbox)
 }
 
 /**
@@ -57,13 +66,4 @@ export function * processCheckbox () {
   yield put(push('/step/1'))
 
   yield put({ type: TOGGLE_MODAL })
-}
-
-/**
- * Watch for process checkbox event and calls the function to handle it
- *
- * @since 1.0
- */
-export function * watcherProcessCheckbox () {
-  yield takeLatest(PROCESS_CHECKBOX, processCheckbox)
 }
