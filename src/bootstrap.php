@@ -51,7 +51,7 @@ class Bootstrap extends Helper_Abstract_Addon {
 	 *
 	 * @param array $classes An array of classes to store in our singleton
 	 *
-	 * since 0.1
+	 * @since 1.0
 	 */
 	public function init( $classes = [] ) {
 
@@ -297,7 +297,7 @@ class Bootstrap extends Helper_Abstract_Addon {
 	/**
 	 * Check the plugin's license is active and initialise the EDD Updater
 	 *
-	 * since 0.1
+	 * @since 1.0
 	 */
 	public function plugin_updater() {
 
@@ -341,7 +341,7 @@ $plugin = apply_filters(
 	)
 );
 
-$plugin->set_edd_download_id( '' );
+$plugin->set_edd_download_id( '40028' );
 $plugin->set_addon_documentation_slug( 'shop-plugin-bulk-generator-add-on' );
 $plugin->init();
 

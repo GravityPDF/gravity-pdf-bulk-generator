@@ -3,12 +3,12 @@
 /**
  * Plugin Name:     Gravity PDF Bulk Generator
  * Plugin URI:      https://gravitypdf.com/shop/bulk-generator-add-on/
- * Description:
+ * Description:     Bulk export Gravity PDF documents from your Gravity Forms entries.
  * Author:          Gravity PDF
  * Author URI:      https://gravitypdf.com
  * Text Domain:     gravity-pdf-bulk-generator
  * Domain Path:     /languages
- * Version:         0.1
+ * Version:         1.0.0-beta1
  */
 
 /**
@@ -23,12 +23,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 define( 'GFPDF_PDF_BULK_GENERATOR_FILE', __FILE__ );
-define( 'GFPDF_PDF_BULK_GENERATOR_VERSION', '0.1' );
+define( 'GFPDF_PDF_BULK_GENERATOR_VERSION', '1.0.0-beta1' );
 
 /**
  * Class GPDF_Bulk_Generator_Checks
  *
- * @since 0.1
+ * @since 1.0
  */
 class GPDF_Bulk_Generator_Checks {
 
@@ -37,14 +37,14 @@ class GPDF_Bulk_Generator_Checks {
 	 *
 	 * @var array
 	 *
-	 * @since 0.1
+	 * @since 1.0
 	 */
 	private $notices = [];
 
 	/**
 	 * @var string
 	 *
-	 * @since 0.1
+	 * @since 1.0
 	 */
 	private $required_gravitypdf_version = '4.3.0-beta1';
 
@@ -53,7 +53,7 @@ class GPDF_Bulk_Generator_Checks {
 	 *
 	 * @return void
 	 *
-	 * @since 0.1
+	 * @since 1.0
 	 */
 	public function init() {
 
@@ -80,7 +80,7 @@ class GPDF_Bulk_Generator_Checks {
 	 *
 	 * @return bool
 	 *
-	 * @since 0.1
+	 * @since 1.0
 	 */
 	public function check_gravitypdf_version() {
 
@@ -100,7 +100,7 @@ class GPDF_Bulk_Generator_Checks {
 	 *
 	 * @return void
 	 *
-	 * @since 0.1
+	 * @since 1.0
 	 */
 	public function display_notices() {
 		?>

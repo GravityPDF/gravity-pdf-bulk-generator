@@ -8,6 +8,6 @@ User's with a valid, active license key can receive support for this plugin by f
 
 == Changelog ==
 
-= Version 0.1 =
+= Version 1.0.0-beta1 =
 
 * Initial Release
