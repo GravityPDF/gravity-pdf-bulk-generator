@@ -20,7 +20,7 @@ import PropTypes from 'prop-types'
  * @since 1.0
  */
 const List = ({ log, title }) => (
-  <div className={'item ' + title.toLowerCase()}>
+  <div className={'log-entry ' + title.toLowerCase()}>
     {log}
   </div>
 )

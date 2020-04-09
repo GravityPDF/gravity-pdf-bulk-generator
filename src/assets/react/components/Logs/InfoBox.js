@@ -1,7 +1,6 @@
 /* Dependencies */
 import React from 'react'
 import PropTypes from 'prop-types'
-
 /* Components */
 import List from './List'
 
@@ -32,25 +31,27 @@ const InfoBox = (
     state
   }
 ) => (
-  <div className={'errors-container ' + state.toString()}>
-    <h3 className={title.toLowerCase()} onClick={toggle}>
+  <div className='log-wrapper'>
+    <div className={'log-container ' + state.toString()}>
+      <h3 className={title.toLowerCase()} onClick={toggle}>
         <span className='lines'>
           {title} ({logs.length})
           <span className='expand'>
             {state ? '-' : '+'}
           </span>
         </span>
-    </h3>
+      </h3>
 
-    <div className='items'>
-      {
-        logs.map((log, index) => (
-          <List
-            log={log}
-            title={title}
-            key={index} />
-        ))
-      }
+      <div className='log-entries'>
+        {
+          logs.map((log, index) => (
+            <List
+              log={log}
+              title={title}
+              key={index} />
+          ))
+        }
+      </div>
     </div>
   </div>
 )

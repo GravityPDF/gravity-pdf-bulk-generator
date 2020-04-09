@@ -80,46 +80,40 @@ class Logs extends React.Component {
     const { generatePdfSuccess, generatePdfFailed, generatePdfWarning } = this.props
 
     return (
-      <div className='logs'>
+      <section className='logs'>
         {
           /* Display success logs */
           generatePdfSuccess.length > 0 && (
-            <div className='log-box'>
               <InfoBox
                 title={language.successTitle}
                 state={success}
                 toggle={this.toggleSuccess}
                 logs={generatePdfSuccess} />
-            </div>
           )
         }
 
         {
           /* Display errors/failed logs */
           generatePdfFailed.length > 0 && (
-            <div className='log-box'>
               <InfoBox
                 title={language.errorTitle}
                 state={errors}
                 toggle={this.toggleErrors}
                 logs={generatePdfFailed} />
-            </div>
           )
         }
 
         {
           /* Display warning logs */
           generatePdfWarning.length > 0 && (
-            <div className='log-box'>
               <InfoBox
                 title={language.warningTitle}
                 state={warnings}
                 toggle={this.toggleWarnings}
                 logs={generatePdfWarning} />
-            </div>
           )
         }
-      </div>
+      </section>
     )
   }
 }
