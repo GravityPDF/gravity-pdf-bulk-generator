@@ -70,9 +70,9 @@ class BulkGenerator extends React.Component {
    * @since 1.0
    */
   componentDidUpdate (prevProps) {
-    /* Modal closed/cancelled at Step2 */
-    if (this.props.location.pathname === '/' && prevProps.location.pathname === '/step/2') {
-      this.deselectCheckbox()
+    /* Check modal state */
+    if (!this.props.modal && prevProps.modal) {
+      this.deselectCheckboxes()
     }
   }
 
@@ -201,12 +201,20 @@ class BulkGenerator extends React.Component {
   }
 
   /**
-   * Deselect checkbox after cancellation on Step2
+   * Deselect checkboxes after modal has been closed
    *
    * @since 1.0
    */
-  deselectCheckbox = () => {
-    document.querySelector('#cb-select-all-1').click()
+  deselectCheckboxes = () => {
+    const selectAllBox = document.querySelectorAll('input[id="cb-select-all-1"]:checked')
+    const checkboxes = document.querySelectorAll('input[name="entry[]"]:checked')
+    const items = [...selectAllBox, ...checkboxes]
+
+    items.map(item => {
+      if (item.type === 'checkbox') {
+        item.checked = false
+      }
+    })
   }
 
   /**
@@ -217,8 +225,10 @@ class BulkGenerator extends React.Component {
    * @since 1.0
    */
   render () {
+    const { modal, history } = this.props
+
     return (
-      <PopUp modal={this.props.modal} history={this.props.history} />
+      <PopUp modal={modal} history={history} />
     )
   }
 }
