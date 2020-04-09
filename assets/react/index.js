@@ -8,7 +8,7 @@ import { Provider } from 'react-redux'
 /* Redux store */
 import configureStore, { history } from './store/configureStore'
 /* Components */
-import BulkGenerator from './bulkGenerator'
+import BulkGenerator from './BulkGenerator'
 /* Styles */
 import '../scss/main.scss'
 

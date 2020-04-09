@@ -20,8 +20,6 @@ import logsReducer from './logsReducer'
  *
  * @since 1.0
  */
-
-
 const createRootReducer = history => combineReducers({
   router: connectRouter(history),
   form: formReducer,

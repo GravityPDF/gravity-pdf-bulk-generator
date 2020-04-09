@@ -7,7 +7,7 @@ import createSagaMiddleware from 'redux-saga'
 /* Redux Saga */
 import rootSaga from '../sagas'
 /* Redux Reducers */
-import createRootReducer from '../reducers/index'
+import createRootReducer from '../reducers'
 
 /**
  * @package     Gravity PDF Bulk Generator
