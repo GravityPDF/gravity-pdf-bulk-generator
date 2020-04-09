@@ -212,6 +212,7 @@ class Bootstrap extends Helper_Abstract_Addon {
 						'language'   => [
 							/* ListToggle */
 							'label'                      => esc_html__( 'Label', 'gravityforms' ),
+							'toggleAll'                  => esc_html__( 'Toggle All', 'gravity-pdf-bulk-generator' ),
 
 							/* Steps */
 							'stepTitle'                  => esc_html__( 'PDF Bulk Download', 'gravity-pdf-bulk-generator' ),

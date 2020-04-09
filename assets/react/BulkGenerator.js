@@ -10,6 +10,7 @@ import { generatePdfListSuccess } from './actions/pdf'
 import PopUp from './components/PopUp/PopUp'
 /* Helpers */
 import { parseUrlForSearchParameters } from './helpers/parseUrlForSearchParameters'
+import language from './helpers/language'
 
 /**
  * @package     Gravity PDF Bulk Generator
@@ -105,7 +106,7 @@ class BulkGenerator extends React.Component {
       list = this.generatePdfList(pdfsArray, true)
 
       /* Add 'Toggle All' in the list */
-      list.unshift({ id: '0', name: 'Toggle All', templateSelected: '', active: true })
+      list.unshift({ id: '0', name: language.ToggleAll, templateSelected: '', active: true })
     } else {
       /* Set active true by default if there's only 1 pdf template */
       list = this.generatePdfList(pdfsArray, true)
