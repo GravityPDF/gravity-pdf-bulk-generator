@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 /* Redux Actions */
 import { processCheckbox, getSelectedEntryIds } from './actions/form'
-import { generatePdfListSuccess, resetPdfState } from './actions/pdf'
+import { generatePdfListSuccess } from './actions/pdf'
 /* Components */
 import PopUp from './components/PopUp/PopUp'
 /* Helpers */
@@ -36,7 +36,6 @@ class BulkGenerator extends React.Component {
     generatePdfListSuccess: PropTypes.func.isRequired,
     processCheckbox: PropTypes.func.isRequired,
     getSelectedEntryIds: PropTypes.func.isRequired,
-    resetPdfState: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
     modal: PropTypes.bool.isRequired
   }
@@ -44,7 +43,7 @@ class BulkGenerator extends React.Component {
   /**
    * Initialize component state
    *
-   * @type { formId: }
+   * @type { formId }
    *
    * @since 1.0
    */
@@ -164,7 +163,6 @@ class BulkGenerator extends React.Component {
         }
 
         /* Set global state and add 'Toggle All' option in the list */
-        this.props.resetPdfState()
         this.setGlobalState()
 
         /* Redux action */
@@ -248,5 +246,4 @@ export default withRouter(connect(mapStateToProps, {
   processCheckbox,
   getSelectedEntryIds,
   generatePdfListSuccess,
-  resetPdfState
 })(BulkGenerator))

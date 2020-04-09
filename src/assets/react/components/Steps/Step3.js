@@ -2,8 +2,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-/* Redux Actions */
-import { toggleModal } from '../../actions/pdf'
 /* Components */
 import ProgressBar from '../ProgressBar/ProgressBar'
 import Step3Body from './Step3Body'
@@ -25,7 +23,6 @@ class Step3 extends React.Component {
    */
   static propTypes = {
     downloadZipUrl: PropTypes.string.isRequired,
-    toggleModal: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired
   }
 
@@ -81,13 +78,13 @@ class Step3 extends React.Component {
    * @since 1.0
    */
   render () {
-    const { downloadZipUrl, toggleModal, history } = this.props
+    const { downloadZipUrl, history } = this.props
 
     return (
       <div ref={node => this.container = node} tabIndex='-1'>
         <button
           className='gfpdf-close-button'
-          onClick={e => cancelModal({ e, toggleModal, history })}>
+          onClick={e => cancelModal({ e, history })}>
           <span className='screen-reader-text'>{language.stepCloseDialog}</span>
         </button>
 
@@ -117,4 +114,4 @@ const mapStateToProps = state => ({
  *
  * @since 1.0
  */
-export default connect(mapStateToProps, { toggleModal })(Step3)
+export default connect(mapStateToProps, null)(Step3)

@@ -13,6 +13,7 @@ import {
 } from '../actionTypes/pdf'
 /* Helpers */
 import { generateActivePdfList } from '../helpers/generateActivePdfList'
+import { RESET_ALL_STATE } from '../actionTypes/actionTypes'
 
 /**
  * @package     Gravity PDF Bulk Generator
@@ -200,6 +201,7 @@ export default function (state = initialState, action) {
      *
      * @since 1.0
      */
+    case RESET_ALL_STATE:
     case RESET_PDF_STATE:
       return {
         ...initialState

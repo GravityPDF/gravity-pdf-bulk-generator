@@ -3,6 +3,7 @@ import {
   PROCESS_CHECKBOX,
   GET_SELECTED_ENTRY_IDS_SUCCESS
 } from '../actionTypes/form'
+import { RESET_ALL_STATE } from '../actionTypes/actionTypes'
 
 /**
  * @package     Gravity PDF Bulk Generator
@@ -66,6 +67,11 @@ export default function (state = initialState, action) {
       return {
         ...state,
         selectedEntryIds: action.payload
+      }
+
+    case RESET_ALL_STATE:
+      return {
+        ...initialState
       }
   }
 

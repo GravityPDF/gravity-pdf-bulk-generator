@@ -11,15 +11,10 @@ import {
   GENERATE_SESSION_ID,
   GENERATE_SESSION_ID_SUCCESS,
   STORE_ABORT_CONTROLLER,
-  RESET_PDF_STATE
 } from '../actionTypes/pdf'
-import {
-  GENERATE_PDF_SUCCESS,
-  GENERATE_PDF_WARNING,
-  GENERATE_PDF_FAILED,
-  RESET_LOGS_STATE
-} from '../actionTypes/logs'
-import { RESET_TAGPICKER_STATE } from '../actionTypes/tagPicker'
+import { GENERATE_PDF_FAILED, GENERATE_PDF_SUCCESS, GENERATE_PDF_WARNING, } from '../actionTypes/logs'
+
+import { RESET_ALL_STATE } from '../actionTypes/actionTypes'
 /* APIs */
 import {
   apiRequestDownloadZipFile,
@@ -66,7 +61,7 @@ export function * generateSessionId (payload) {
   }
 
   try {
-    const response = yield retry(3, 3000, apiRequestSessionId, path)
+    const response = yield retry(3, 100, apiRequestSessionId, path)
     if (!response.ok) {
       throw response
     }
@@ -128,7 +123,7 @@ export function * requestGeneratePdf (pdf) {
   yield put({ type: STORE_ABORT_CONTROLLER, payload: abortController })
 
   try {
-    const response = yield retry(3, 3000, apiRequestGeneratePdf, data)
+    const response = yield retry(3, 1000, apiRequestGeneratePdf, data)
 
     if (!response.ok) {
       throw response
@@ -217,7 +212,7 @@ export function * validateDownloadZipUrl () {
  */
 export function * generateDownloadZipUrl (sessionId) {
   try {
-    const response = yield retry(3, 1000, apiRequestGeneratePdfZip, sessionId)
+    const response = yield retry(3, 500, apiRequestGeneratePdfZip, sessionId)
     const responseBody = yield response.json()
 
     if (!response.ok || !responseBody.downloadUrl) {
@@ -296,7 +291,7 @@ export function * watchGeneratePDF () {
     })
 
     /* Wait for a cancel event and then handle the cancel logic */
-    yield take(GENERATE_PDF_CANCEL)
+    yield take([GENERATE_PDF_CANCEL, RESET_ALL_STATE])
     yield generatePdfCancel()
     yield cancel(generator)
   }
@@ -321,14 +316,10 @@ export function * watchFatalError () {
  */
 export function * watchResetAllReducers () {
   while (true) {
-    const path = yield take('@@router/LOCATION_CHANGE')
-    const { payload } = path
+    const { payload } = yield take('@@router/LOCATION_CHANGE')
 
-    if (payload.location.pathname === '/' && payload.action === 'PUSH') {
-      yield put({ type: GENERATE_PDF_CANCEL })
-      yield put({ type: RESET_PDF_STATE })
-      yield put({ type: RESET_LOGS_STATE })
-      yield put({ type: RESET_TAGPICKER_STATE })
+    if (payload.location.pathname === '/' && payload.isFirstRendering === false) {
+      yield put({ type: RESET_ALL_STATE })
     }
   }
 }

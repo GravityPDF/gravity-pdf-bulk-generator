@@ -24,7 +24,7 @@ import { apiRequestAllEntryIds } from '../api/form'
  */
 export function * getSelectedEntryIds (payload) {
   try {
-    const response = yield retry(3, 500, apiRequestAllEntryIds, payload)
+    const response = yield retry(3, 100, apiRequestAllEntryIds, payload)
 
     if (!response.ok) {
       throw response

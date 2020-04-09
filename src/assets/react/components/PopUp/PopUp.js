@@ -4,8 +4,6 @@ import PropTypes from 'prop-types'
 import { Route } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { PoseGroup } from 'react-pose'
-/* Redux Actions */
-import { escapeCloseModal } from '../../actions/pdf'
 /* Components */
 import { cancelModal } from '../../helpers/cancelModal'
 import { Fade, SlideDown } from './Animations'
@@ -33,7 +31,6 @@ class PopUp extends React.Component {
    */
   static propTypes = {
     fatalError: PropTypes.bool.isRequired,
-    escapeCloseModal: PropTypes.func.isRequired,
     modal: PropTypes.bool.isRequired,
     history: PropTypes.object.isRequired
   }
@@ -50,18 +47,18 @@ class PopUp extends React.Component {
   /**
    * Listen if 'escape' key is pressed from the keyboard
    *
-   * @param event
+   * @param e
    *
    * @since 1.0
    */
   escapeKeyListener = e => {
     const { keyCode } = e
     const escapeKey = 27
-    const { escapeCloseModal, fatalError, history } = this.props
+    const { fatalError, history } = this.props
 
     /* 'escape' key is pressed */
     if (keyCode === escapeKey) {
-      cancelModal({ escapeCloseModal, fatalError, history })
+      cancelModal({ e, fatalError, history })
     }
   }
 
@@ -73,9 +70,11 @@ class PopUp extends React.Component {
    * @since 1.0
    */
   render () {
+    const { modal } = this.props
+
     return (
       <PoseGroup flipMove={false}>
-        {this.props.modal && [
+        {modal && [
           <Fade key='fade'>
             <Route
               key='overlay'
@@ -115,4 +114,4 @@ const mapStateToProps = state => ({
  *
  * @since 1.0
  */
-export default connect(mapStateToProps, { escapeCloseModal })(PopUp)
+export default connect(mapStateToProps, null)(PopUp)

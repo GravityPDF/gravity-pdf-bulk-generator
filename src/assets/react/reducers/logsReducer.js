@@ -5,6 +5,7 @@ import {
   GENERATE_PDF_FAILED,
   RESET_LOGS_STATE
 } from '../actionTypes/logs'
+import { RESET_ALL_STATE } from '../actionTypes/actionTypes'
 
 /**
  * @package     Gravity PDF Bulk Generator
@@ -93,6 +94,7 @@ export default function (state = initialState, action) {
      *
      * @since 1.0
      */
+    case RESET_ALL_STATE:
     case RESET_LOGS_STATE:
       return {
         ...initialState

@@ -2,8 +2,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-/* Redux Actions */
-import { toggleModal } from '../../actions/pdf'
 /* Components */
 import ProgressBar from '../ProgressBar/ProgressBar'
 import Step2Body from './Step2Body'
@@ -33,7 +31,6 @@ class Step2 extends React.Component {
    */
   static propTypes = {
     downloadPercentage: PropTypes.number.isRequired,
-    toggleModal: PropTypes.func.isRequired,
     fatalError: PropTypes.bool.isRequired,
     history: PropTypes.object.isRequired,
   }
@@ -79,7 +76,7 @@ class Step2 extends React.Component {
    * @since 1.0
    */
   render () {
-    const { downloadPercentage, fatalError, toggleModal, history } = this.props
+    const { downloadPercentage, fatalError, history } = this.props
 
     return (
       <div ref={node => this.container = node} tabIndex='-1'>
@@ -97,7 +94,7 @@ class Step2 extends React.Component {
         <footer>
           <button
             className='button cancel'
-            onClick={e => cancelModal({ e, toggleModal, fatalError, history })}>
+            onClick={e => cancelModal({ e, fatalError, history })}>
             {language.cancelLabel}
           </button>
         </footer>
@@ -125,4 +122,4 @@ const mapStateToProps = state => ({
  *
  * @since 1.0
  */
-export default connect(mapStateToProps, { toggleModal })(Step2)
+export default connect(mapStateToProps, null)(Step2)

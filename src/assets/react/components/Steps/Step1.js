@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 /* Redux Actions */
 import { updateDirectoryStructure } from '../../actions/tagPicker'
-import { generateSessionId, togglePdfStatus, toggleModal } from '../../actions/pdf'
+import { generateSessionId, togglePdfStatus } from '../../actions/pdf'
 /* Components */
 import Step1Body from './Step1Body'
 import ProgressBar from '../ProgressBar/ProgressBar'
@@ -39,7 +39,6 @@ class Step1 extends React.Component {
     updateDirectoryStructure: PropTypes.func.isRequired,
     generateSessionId: PropTypes.func.isRequired,
     togglePdfStatus: PropTypes.func.isRequired,
-    toggleModal: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
   }
 
@@ -158,7 +157,6 @@ class Step1 extends React.Component {
       pdfList,
       updateDirectoryStructure,
       togglePdfStatus,
-      toggleModal,
       history
     } = this.props
 
@@ -166,7 +164,7 @@ class Step1 extends React.Component {
       <div ref={node => this.container = node} tabIndex='-1'>
         <button
           className='gfpdf-close-button'
-          onClick={e => cancelModal({ e, toggleModal, history })}>
+          onClick={e => cancelModal({ e, history })}>
           <span className='screen-reader-text'>{language.stepCloseDialog}</span>
         </button>
 
@@ -216,6 +214,5 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps, {
   updateDirectoryStructure,
   generateSessionId,
-  togglePdfStatus,
-  toggleModal
+  togglePdfStatus
 })(Step1)
