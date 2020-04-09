@@ -3,14 +3,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 /* Redux Actions */
-import { toggleModal, resetPdfState } from '../../actions/pdf'
-import { resetTagPickerState } from '../../actions/tagPicker'
-import { resetLogsState } from '../../actions/logs'
+import { toggleModal } from '../../actions/pdf'
 /* Components */
 import ProgressBar from '../ProgressBar/ProgressBar'
 import Step3Body from './Step3Body'
 /* Helpers */
-import { cancelButton } from '../../helpers/cancelButton'
+import { cancelModal } from '../../helpers/cancelModal'
 import language from '../../helpers/language'
 
 /**
@@ -28,9 +26,6 @@ class Step3 extends React.Component {
   static propTypes = {
     downloadZipUrl: PropTypes.string.isRequired,
     toggleModal: PropTypes.func.isRequired,
-    resetTagPickerState: PropTypes.func.isRequired,
-    resetPdfState: PropTypes.func.isRequired,
-    resetLogsState: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired
   }
 
@@ -86,22 +81,13 @@ class Step3 extends React.Component {
    * @since 1.0
    */
   render () {
-    const {
-      downloadZipUrl,
-      toggleModal,
-      resetTagPickerState,
-      resetPdfState,
-      resetLogsState,
-      history
-    } = this.props
+    const { downloadZipUrl, toggleModal, history } = this.props
 
     return (
       <div ref={node => this.container = node} tabIndex='-1'>
         <button
           className='gfpdf-close-button'
-          onClick={e => cancelButton({
-            e, toggleModal, resetTagPickerState, resetPdfState, resetLogsState, history
-          })}>
+          onClick={e => cancelModal({ e, toggleModal, history })}>
           <span className='screen-reader-text'>{language.stepCloseDialog}</span>
         </button>
 
@@ -131,9 +117,4 @@ const mapStateToProps = state => ({
  *
  * @since 1.0
  */
-export default connect(mapStateToProps, {
-  toggleModal,
-  resetTagPickerState,
-  resetPdfState,
-  resetLogsState
-})(Step3)
+export default connect(mapStateToProps, { toggleModal })(Step3)

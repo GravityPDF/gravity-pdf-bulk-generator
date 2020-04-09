@@ -4,7 +4,6 @@ import {
   ESCAPE_CLOSE_MODAL,
   TOGGLE_PDF_STATUS,
   GENERATE_SESSION_ID,
-  GENERATE_PDF_CANCEL,
   RESET_PDF_STATE
 } from '../actionTypes/pdf'
 
@@ -90,19 +89,6 @@ export const generateSessionId = (path, concurrency) => {
     type: GENERATE_SESSION_ID,
     path,
     concurrency
-  }
-}
-
-/**
- * Switch generatePdfCancel state to true
- *
- * @returns {{type: string}}
- *
- * @since 1.0
- */
-export const generatePdfCancel = () => {
-  return {
-    type: GENERATE_PDF_CANCEL
   }
 }
 

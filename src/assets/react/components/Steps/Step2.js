@@ -3,13 +3,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 /* Redux Actions */
-import { generatePdfCancel, toggleModal } from '../../actions/pdf'
+import { toggleModal } from '../../actions/pdf'
 /* Components */
 import ProgressBar from '../ProgressBar/ProgressBar'
 import Step2Body from './Step2Body'
 import FatalError from '../FatalError/FatalError'
 /* Helpers */
-import { cancelButton } from '../../helpers/cancelButton'
+import { cancelModal } from '../../helpers/cancelModal'
 import language from '../../helpers/language'
 
 /**
@@ -33,9 +33,7 @@ class Step2 extends React.Component {
    */
   static propTypes = {
     downloadPercentage: PropTypes.number.isRequired,
-    downloadZipUrl: PropTypes.string.isRequired,
     toggleModal: PropTypes.func.isRequired,
-    generatePdfCancel: PropTypes.func.isRequired,
     fatalError: PropTypes.bool.isRequired,
     history: PropTypes.object.isRequired,
   }
@@ -81,13 +79,13 @@ class Step2 extends React.Component {
    * @since 1.0
    */
   render () {
-    const { downloadPercentage, fatalError, toggleModal, generatePdfCancel, history } = this.props
+    const { downloadPercentage, fatalError, toggleModal, history } = this.props
 
     return (
       <div ref={node => this.container = node} tabIndex='-1'>
         <ProgressBar step={2} />
 
-        { !fatalError && <Step2Body downloadPercentage={downloadPercentage} /> }
+        {!fatalError && <Step2Body downloadPercentage={downloadPercentage} />}
 
         {
           fatalError &&
@@ -99,9 +97,7 @@ class Step2 extends React.Component {
         <footer>
           <button
             className='button cancel'
-            onClick={e => cancelButton({
-              e, toggleModal, fatalError, generatePdfCancel, history
-            })}>
+            onClick={e => cancelModal({ e, toggleModal, fatalError, history })}>
             {language.cancelLabel}
           </button>
         </footer>
@@ -115,13 +111,12 @@ class Step2 extends React.Component {
  *
  * @param state
  *
- * @returns { downloadPercentage: number, downloadZipUrl: string, fatalError: boolean }
+ * @returns { downloadPercentage: int, fatalError: boolean }
  *
  * @since 1.0
  */
 const mapStateToProps = state => ({
   downloadPercentage: state.pdf.downloadPercentage,
-  downloadZipUrl: state.pdf.downloadZipUrl,
   fatalError: state.pdf.fatalError
 })
 
@@ -130,4 +125,4 @@ const mapStateToProps = state => ({
  *
  * @since 1.0
  */
-export default connect(mapStateToProps, { toggleModal, generatePdfCancel })(Step2)
+export default connect(mapStateToProps, { toggleModal })(Step2)

@@ -5,11 +5,11 @@ import {
   GENERATE_PDF_LIST_SUCCESS,
   GENERATE_DOWNLOAD_ZIP_URL,
   GENERATE_SESSION_ID_SUCCESS,
-  RESET_PDF_STATE,
   STORE_ABORT_CONTROLLER,
   TOGGLE_MODAL,
   TOGGLE_PDF_STATUS,
-  FATAL_ERROR
+  FATAL_ERROR,
+  RESET_PDF_STATE
 } from '../actionTypes/pdf'
 /* Helpers */
 import { generateActivePdfList } from '../helpers/generateActivePdfList'
