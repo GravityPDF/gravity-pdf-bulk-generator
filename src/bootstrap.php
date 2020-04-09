@@ -218,7 +218,7 @@ class Bootstrap extends Helper_Abstract_Addon {
 
 							/* Step 1 */
 							'stepActivePdfEmpty'         => esc_html__( 'Please select at least one PDF to generate for the entries.', 'gravity-pdf-bulk-generator' ),
-							'stepCloseDialog'            => esc_html__( 'Close dialog' ),
+							'stepCloseDialog'            => esc_html__( 'Close dialog', 'default' ),
 							'stepBuild'                  => esc_html__( 'Build', 'gravity-pdf-bulk-generator' ),
 
 							'stepSelectPdfs'             => esc_html__( 'Select PDFs', 'gravity-pdf-bulk-generator' ),
@@ -238,7 +238,7 @@ class Bootstrap extends Helper_Abstract_Addon {
 							'stepDownloadDescription'    => esc_html__( 'The zip file contains the PDFs for your selected entries. %1$sClick here if the download does not start automatically%2$s.', 'gravity-pdf-bulk-generator' ),
 
 							/* Cancel Button */
-							'cancelLabel'                => esc_html__( 'Cancel' ),
+							'cancelLabel'                => esc_html__( 'Cancel', 'default' ),
 							'cancelButtonConfirmation'   => esc_html__( 'Are you sure you want to cancel the download?', 'gravity-pdf-bulk-generator' ),
 
 							/* Fatal Error */
@@ -270,16 +270,16 @@ class Bootstrap extends Helper_Abstract_Addon {
 							'skippedMessageConditionalLogic' => esc_html__( 'Conditional Logic Check: Skipped %1$s (#%2$s) for Entry #%3$s', 'gravity-pdf-bulk-generator' ),
 
 							/* Tag Cloud */
-							'tagYear'                    => esc_html__( 'Year' ),
-							'tagMonth'                   => esc_html__( 'Month' ),
-							'tagDay'                     => esc_html__( 'Day' ),
-							'tagHour'                    => esc_html__( 'Hour' ),
-							'tagMinute'                  => esc_html__( 'Minute' ),
+							'tagYear'                    => esc_html__( 'Year', 'default' ),
+							'tagMonth'                   => esc_html__( 'Month', 'default' ),
+							'tagDay'                     => esc_html__( 'Day', 'default' ),
+							'tagHour'                    => esc_html__( 'Hour', 'default' ),
+							'tagMinute'                  => esc_html__( 'Minute', 'default' ),
 							'tagPaymentStatus'           => esc_html__( 'Payment Status', 'gravityforms' ),
 							'tagEntryId'                 => esc_html__( 'Entry ID', 'gravityforms' ),
-							'tagUserLogin'               => esc_html__( 'User Login Name' ),
-							'tagUserEmail'               => esc_html__( 'User Email' ),
-							'tagUserDisplayName'         => esc_html__( 'User Display Name' ),
+							'tagUserLogin'               => esc_html__( 'User Login Name', 'default' ),
+							'tagUserEmail'               => esc_html__( 'User Email', 'default' ),
+							'tagUserDisplayName'         => esc_html__( 'User Display Name', 'default' ),
 						],
 					]
 				);
