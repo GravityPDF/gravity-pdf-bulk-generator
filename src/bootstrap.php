@@ -211,14 +211,14 @@ class Bootstrap extends Helper_Abstract_Addon {
 
 						'language'   => [
 							/* ListToggle */
-							'label'                      => esc_html__( 'Label', 'gravity-pdf-bulk-generator' ),
+							'label'                      => esc_html__( 'Label', 'gravityforms' ),
 
 							/* Steps */
 							'stepTitle'                  => esc_html__( 'PDF Bulk Download', 'gravity-pdf-bulk-generator' ),
 
 							/* Step 1 */
 							'stepActivePdfEmpty'         => esc_html__( 'Please select at least one PDF to generate for the entries.', 'gravity-pdf-bulk-generator' ),
-							'stepCloseDialog'            => esc_html__( 'Close dialog', 'gravity-pdf-bulk-generator' ),
+							'stepCloseDialog'            => esc_html__( 'Close dialog' ),
 							'stepBuild'                  => esc_html__( 'Build', 'gravity-pdf-bulk-generator' ),
 
 							'stepSelectPdfs'             => esc_html__( 'Select PDFs', 'gravity-pdf-bulk-generator' ),
@@ -238,7 +238,7 @@ class Bootstrap extends Helper_Abstract_Addon {
 							'stepDownloadDescription'    => esc_html__( 'The zip file contains the PDFs for your selected entries. %1$sClick here if the download does not start automatically%2$s.', 'gravity-pdf-bulk-generator' ),
 
 							/* Cancel Button */
-							'cancelLabel'                => esc_html__( 'Cancel', 'gravity-pdf-bulk-generator' ),
+							'cancelLabel'                => esc_html__( 'Cancel' ),
 							'cancelButtonConfirmation'   => esc_html__( 'Are you sure you want to cancel the download?', 'gravity-pdf-bulk-generator' ),
 
 							/* Fatal Error */
@@ -250,9 +250,9 @@ class Bootstrap extends Helper_Abstract_Addon {
 							'fatalErrorImageAlt'         => esc_html__( 'Tech boffins at work.', 'gravity-pdf-bulk-generator' ),
 
 							/* Log Messages */
-							'successTitle'               => esc_html__( 'Success', 'gravity-pdf-bulk-generator' ),
-							'errorTitle'                 => esc_html__( 'Errors', 'gravity-pdf-bulk-generator' ),
-							'warningTitle'               => esc_html__( 'Warnings', 'gravity-pdf-bulk-generator' ),
+							'successTitle'               => esc_html__( 'Success', 'gravityforms' ),
+							'errorTitle'                 => esc_html__( 'Error', 'gravityforms' ),
+							'warningTitle'               => esc_html__( 'Warning', 'gravityforms' ),
 
 							/* translators: 1: PDF Name 2: PDF ID 3: Entry ID */
 							'successMessage'             => esc_html__( 'Generated %1$s (#%2$s) for Entry #%3$s', 'gravity-pdf-bulk-generator' ),
@@ -270,16 +270,16 @@ class Bootstrap extends Helper_Abstract_Addon {
 							'skippedMessageConditionalLogic' => esc_html__( 'Conditional Logic Check: Skipped %1$s (#%2$s) for Entry #%3$s', 'gravity-pdf-bulk-generator' ),
 
 							/* Tag Cloud */
-							'tagYear'                    => esc_html__( 'Year', 'gravity-pdf-bulk-generator' ),
-							'tagMonth'                   => esc_html__( 'Month', 'gravity-pdf-bulk-generator' ),
-							'tagDay'                     => esc_html__( 'Day', 'gravity-pdf-bulk-generator' ),
-							'tagHour'                    => esc_html__( 'Hour', 'gravity-pdf-bulk-generator' ),
-							'tagMinute'                  => esc_html__( 'Minute', 'gravity-pdf-bulk-generator' ),
-							'tagPaymentStatus'           => esc_html__( 'Payment Status', 'gravity-pdf-bulk-generator' ),
-							'tagEntryId'                 => esc_html__( 'Entry ID', 'gravity-pdf-bulk-generator' ),
-							'tagUserLogin'               => esc_html__( 'User Login', 'gravity-pdf-bulk-generator' ),
-							'tagUserEmail'               => esc_html__( 'User Email', 'gravity-pdf-bulk-generator' ),
-							'tagUserDisplayName'         => esc_html__( 'User Display Name', 'gravity-pdf-bulk-generator' ),
+							'tagYear'                    => esc_html__( 'Year' ),
+							'tagMonth'                   => esc_html__( 'Month' ),
+							'tagDay'                     => esc_html__( 'Day' ),
+							'tagHour'                    => esc_html__( 'Hour' ),
+							'tagMinute'                  => esc_html__( 'Minute' ),
+							'tagPaymentStatus'           => esc_html__( 'Payment Status', 'gravityforms' ),
+							'tagEntryId'                 => esc_html__( 'Entry ID', 'gravityforms' ),
+							'tagUserLogin'               => esc_html__( 'User Login Name' ),
+							'tagUserEmail'               => esc_html__( 'User Email' ),
+							'tagUserDisplayName'         => esc_html__( 'User Display Name' ),
 						],
 					]
 				);
