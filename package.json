@@ -45,7 +45,7 @@
     "webpack-merge": "^4.2.2"
   },
   "scripts": {
-    "lint:js": "eslint src/**/*.js",
+    "lint:js": "eslint assets/**/*.js",
     "watch": "cross-env NODE_ENV=development webpack --progress --colors --watch --mode development",
     "build": "cross-env NODE_ENV=production webpack --mode production"
   }

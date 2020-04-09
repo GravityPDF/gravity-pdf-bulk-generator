@@ -12,7 +12,7 @@ const FatalError = ({ pluginUrl, adminUrl }) => (
     <div id='gfpdf-fatal-error-desc'>{language.fatalErrorDescription}</div>
 
     <img
-      src={pluginUrl + 'src/assets/images/Fatal-Error-Capt-Paws-Artwork.png'}
+      src={pluginUrl + 'assets/images/Fatal-Error-Capt-Paws-Artwork.png'}
       alt={language.fatalErrorImageAlt} />
 
     <p dangerouslySetInnerHTML={{__html: sprintf(language.fatalErrorInformation, '<a href="'+adminUrl+'admin.php?page=gf_settings">', '<a href="https://gravitypdf.com/support/#contact-support">', '</a>')}}/>

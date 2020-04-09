@@ -8,7 +8,7 @@ const modeConfig = PROD ? production : development
 module.exports = webpackMerge(
   {
     entry: {
-      'bulk-generator': './src/assets/react/index.js',
+      'bulk-generator': './assets/react/index.js',
     },
     output: {
       path: __dirname + '/dist',
