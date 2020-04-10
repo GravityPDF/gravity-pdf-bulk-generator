@@ -15,4 +15,4 @@ import React from 'react'
  *
  * @since 1.0
  */
-export const Overlay = () => <div id='gfpdf-bulk-generator-overlay' />
+export const Overlay = () => <div data-test='component-Overlay' id='gfpdf-bulk-generator-overlay' />

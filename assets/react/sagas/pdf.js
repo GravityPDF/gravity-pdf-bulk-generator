@@ -1,5 +1,5 @@
 /* Dependencies */
-import { call, cancel, cancelled, delay, fork, put, retry, select, take, takeLatest } from 'redux-saga/effects'
+import { call, cancel, cancelled, delay, fork, put, retry, select, take } from 'redux-saga/effects'
 import { push } from 'connected-react-router'
 /* Redux Action Types */
 import { RESET_ALL_STATE } from '../actionTypes/actionTypes'
@@ -11,6 +11,7 @@ import {
   GENERATE_PDF_COUNTER,
   GENERATE_SESSION_ID,
   GENERATE_SESSION_ID_SUCCESS,
+  REMOVE_TOGGLE_ALL,
   STORE_ABORT_CONTROLLER,
 } from '../actionTypes/pdf'
 import { GENERATE_PDF_FAILED, GENERATE_PDF_SUCCESS, GENERATE_PDF_WARNING } from '../actionTypes/logs'
@@ -34,11 +35,14 @@ import { constructPdfData } from '../helpers/generateActivePdfList'
  */
 
 /* Selectors */
-export const getStateSelectedEntryIds = state => state.form.selectedEntryIds
+export const getStateSelectedEntryIds = state => state.form.selectedEntriesId
 export const getStatePdfList = state => state.pdf.pdfList
 export const getFatalErrorStatus = state => state.pdf.fatalError
 export const getStateAbortControllers = state => state.pdf.abortControllers
 export const getStateDownloadZipUrl = state => state.pdf.downloadZipUrl
+
+/* Initialize AbortController */
+export const abortController = new AbortController()
 
 /**
  * A watcher to trigger Step 1 in the Bulk Generator process
@@ -46,7 +50,18 @@ export const getStateDownloadZipUrl = state => state.pdf.downloadZipUrl
  * @since 1.0
  */
 export function * watchGenerateSessionId () {
-  yield takeLatest(GENERATE_SESSION_ID, generateSessionId)
+  while (true) {
+    const payload = yield take(GENERATE_SESSION_ID)
+
+    /* Proceed to Step2 and show modal */
+    yield put(push('/step/2'))
+
+    const selectedEntriesId = yield select(getStateSelectedEntryIds)
+
+    if (selectedEntriesId.length > 0) {
+      yield call(generateSessionId, payload)
+    }
+  }
 }
 
 /**
@@ -60,16 +75,9 @@ export function * watchGenerateSessionId () {
 export function * generateSessionId (payload) {
   const { path, concurrency } = payload
 
-  /* Show modal Step2 */
-  yield put(push('/step/2'))
-
-  /* If a fatal error is already thrown, exit early */
-  if (yield select(getFatalErrorStatus)) {
-    return
-  }
-
   try {
     const response = yield retry(3, 100, apiRequestSessionId, path)
+
     if (!response.ok) {
       throw response
     }
@@ -77,21 +85,17 @@ export function * generateSessionId (payload) {
     const responseBody = yield response.json()
 
     yield put({ type: GENERATE_SESSION_ID_SUCCESS, payload: responseBody.sessionId })
+    yield put({ type: REMOVE_TOGGLE_ALL })
 
-    const selectedEntryIds = yield select(getStateSelectedEntryIds)
+    const selectedEntriesId = yield select(getStateSelectedEntryIds)
     const pdfList = yield select(getStatePdfList)
-
-    /* Remove 'Toggle All' in the list before processing, if exists */
-    if (pdfList[0]['id'] === '0') {
-      pdfList.shift()
-    }
 
     yield put({
       type: GENERATE_PDF,
       payload: {
         sessionId: responseBody.sessionId,
         concurrency,
-        selectedEntryIds,
+        selectedEntriesId,
         pdfList
       }
     })
@@ -113,8 +117,8 @@ export function * watchGeneratePDF () {
   while (true) {
     /* Listen to redux action type GENERATE_PDF event */
     const { payload } = yield take(GENERATE_PDF)
-    const { sessionId, concurrency, selectedEntryIds, pdfList } = payload
-    const pdfs = constructPdfData(selectedEntryIds, pdfList, sessionId)
+    const { sessionId, concurrency, selectedEntriesId, pdfList } = payload
+    const pdfs = constructPdfData(selectedEntriesId, pdfList, sessionId)
 
     /* Yield fork worker saga bulkGeneratePdf */
     const generator = yield fork(bulkGeneratePdf, {
@@ -125,7 +129,7 @@ export function * watchGeneratePDF () {
 
     /* Wait for a cancel event and then handle the cancel logic */
     yield take([GENERATE_PDF_CANCEL, RESET_ALL_STATE])
-    yield generatePdfCancel()
+    yield call(generatePdfCancel)
     yield cancel(generator)
   }
 }
@@ -145,19 +149,20 @@ export function * watchGeneratePDF () {
  */
 export function * bulkGeneratePdf ({ pdfs, concurrency, sessionId }) {
   while (pdfs.length > 0) {
-    yield generatePdf({
-      pdfs: pdfs.splice(0, concurrency)
-    })
+    const processPdfs = pdfs.splice(0, concurrency)
+
+    yield generatePdf(processPdfs)
 
     yield generateDownloadZipUrl(sessionId)
   }
 
   /* Skip validation if fatal error generated */
-  if (! (yield select(getFatalErrorStatus))) {
+  const fatalError = yield select(getFatalErrorStatus)
+
+  if (!fatalError) {
     yield validateDownloadZipUrl()
   }
 }
-
 
 /**
  * Created forked processes that'll handle the individual PDF generation.
@@ -169,7 +174,7 @@ export function * bulkGeneratePdf ({ pdfs, concurrency, sessionId }) {
  *
  * @since 1.0
  */
-export function * generatePdf ({ pdfs }) {
+export function * generatePdf (pdfs) {
   for (let i = 0; i < pdfs.length; i++) {
     yield fork(requestGeneratePdf, pdfs[i])
   }
@@ -194,7 +199,6 @@ export function * requestGeneratePdf (pdf) {
    * Prepare the data for our API call. We store the AbortController in the
    * Redux state so we can easily cancel ALL running API calls on demand.
    */
-  const abortController = new AbortController()
   const data = {
     pdf,
     signal: abortController.signal
@@ -211,39 +215,41 @@ export function * requestGeneratePdf (pdf) {
 
     yield put({
       type: GENERATE_PDF_SUCCESS,
-      payload: sprintf( language.successMessage, pdf.pdfName, pdf.pdfId, pdf.entryId )
+      payload: sprintf(language.successMessage, pdf.pdfName, pdf.pdfId, pdf.entryId)
     })
   } catch (error) {
     switch (error.status) {
       case 400:
         yield put({
           type: GENERATE_PDF_WARNING,
-          payload: sprintf( language.skippedMessageInactivePdf, pdf.pdfName, pdf.pdfId, pdf.entryId )
+          payload: sprintf(language.skippedMessageInactivePdf, pdf.pdfName, pdf.pdfId, pdf.entryId)
         })
         break
 
       case 403:
         yield put({
           type: GENERATE_PDF_WARNING,
-          payload: sprintf( language.skippedMessageInvalidId, pdf.pdfName, pdf.pdfId, pdf.entryId )
+          payload: sprintf(language.skippedMessageInvalidId, pdf.pdfName, pdf.pdfId, pdf.entryId)
         })
         break
 
       case 412:
         yield put({
           type: GENERATE_PDF_WARNING,
-          payload: sprintf( language.skippedMessageConditionalLogic, pdf.pdfName, pdf.pdfId, pdf.entryId )
+          payload: sprintf(language.skippedMessageConditionalLogic, pdf.pdfName, pdf.pdfId, pdf.entryId)
         })
         break
 
       default:
         yield put({
           type: GENERATE_PDF_FAILED,
-          payload: sprintf( language.errorMessage, pdf.pdfName, pdf.pdfId, pdf.entryId )
+          payload: sprintf(language.errorMessage, pdf.pdfName, pdf.pdfId, pdf.entryId)
         })
     }
   } finally {
-    if (!(yield cancelled())) {
+    const cancelledState = yield cancelled()
+
+    if (!cancelledState) {
       yield put({ type: GENERATE_PDF_COUNTER, payload: yield select(getStateSelectedEntryIds) })
     }
   }
@@ -289,6 +295,7 @@ export function * validateDownloadZipUrl () {
     }
 
     const response = yield call(apiRequestDownloadZipFile, downloadZipUrl)
+
     if (!response.ok) {
       throw response
     }
@@ -316,7 +323,7 @@ export function * generatePdfCancel () {
 }
 
 /**
- * Watch for a Fatal Error event and calls the function to handle it
+ * Watch for a fatal error event and handle our fatal error and cancel logic
  *
  * @since 1.0
  */

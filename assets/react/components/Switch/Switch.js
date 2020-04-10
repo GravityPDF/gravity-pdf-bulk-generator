@@ -24,6 +24,7 @@ import Switch from 'react-switch'
  */
 const ToggleSwitch = ({ id, active, screenReaderLabel, onChange }) => (
   <Switch
+    data-test='component-ToggleSwitch'
     checked={active}
     onChange={() => onChange(id)}
     offColor='#AAA'

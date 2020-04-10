@@ -22,7 +22,7 @@ import language from '../../helpers/language'
  *
  * @since 1.0
  */
-class Step2 extends React.Component {
+export class Step2 extends React.Component {
 
   /**
    * PropTypes
@@ -36,7 +36,7 @@ class Step2 extends React.Component {
   }
 
   /**
-   * On mount, Add focus event to document and call function errorHandling()
+   * On mount, Add focus event to document
    *
    * @since 1.0
    */
@@ -79,7 +79,10 @@ class Step2 extends React.Component {
     const { downloadPercentage, fatalError, history } = this.props
 
     return (
-      <div ref={node => this.container = node} tabIndex='-1'>
+      <div
+        data-test='component-Step2'
+        ref={node => this.container = node}
+        tabIndex='-1'>
         <ProgressBar step={2} />
 
         {!fatalError && <Step2Body downloadPercentage={downloadPercentage} />}
@@ -117,4 +120,4 @@ const mapStateToProps = state => ({
   fatalError: state.pdf.fatalError
 })
 
-export default connect(mapStateToProps, null)(Step2)
+export default connect(mapStateToProps, {})(Step2)

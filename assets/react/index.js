@@ -5,7 +5,7 @@ import React from 'react'
 import { render } from 'react-dom'
 import { ConnectedRouter } from 'connected-react-router'
 import { Provider } from 'react-redux'
-/* Redux store */
+/* Redux Store */
 import configureStore, { history } from './store/configureStore'
 /* Components */
 import BulkGenerator from './BulkGenerator'
@@ -56,3 +56,4 @@ export default function loadBulkGenerator (container) {
     container
   )
 }
+

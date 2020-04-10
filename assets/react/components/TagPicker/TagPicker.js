@@ -115,8 +115,8 @@ class TagPicker extends React.Component {
   tagClicked = (tag, e) => {
     const { onSelectCallback, onDeselectCallback } = this.props
 
-    /* Check class if contain the text 'active' */
-    if (e.target.classList.contains('active')) {
+    /* Check class if it includes the text 'active' */
+    if ([...e.target.classList].includes('active')) {
       return onDeselectCallback(tag.id)
     }
 
@@ -135,7 +135,7 @@ class TagPicker extends React.Component {
     const { tags } = this.props
 
     return (
-      <div className='gfpdf-tags'>
+      <div data-test='component-TagPicker' className='gfpdf-tags'>
         {
           tags.map((tag, index) => {
             const isActive = selectedTags.indexOf(tag.id) !== -1 ? ' active' : ''

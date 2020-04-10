@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 /* Redux Actions */
-import { processCheckbox, getSelectedEntryIds } from './actions/form'
+import { proceedStep1, processCheckbox, getSelectedEntriesId } from './actions/form'
 import { generatePdfListSuccess } from './actions/pdf'
 /* Components */
 import PopUp from './components/PopUp/PopUp'
@@ -24,7 +24,7 @@ import language from './helpers/language'
  *
  * @since 1.0
  */
-class BulkGenerator extends React.Component {
+export class BulkGenerator extends React.Component {
 
   /**
    * PropTypes
@@ -34,9 +34,10 @@ class BulkGenerator extends React.Component {
   static propTypes = {
     downloadPercentage: PropTypes.number.isRequired,
     location: PropTypes.object.isRequired,
+    proceedStep1: PropTypes.func.isRequired,
     generatePdfListSuccess: PropTypes.func.isRequired,
     processCheckbox: PropTypes.func.isRequired,
-    getSelectedEntryIds: PropTypes.func.isRequired,
+    getSelectedEntriesId: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
     modal: PropTypes.bool.isRequired
   }
@@ -98,22 +99,23 @@ class BulkGenerator extends React.Component {
    * @since 1.0
    */
   setPdfListState = (pdfs) => {
-    const pdfsArray = Object.entries(pdfs)
     let list
 
     /* Check if there is more than 1 pdf template */
-    if (pdfsArray.length > 1) {
-      list = this.generatePdfList(pdfsArray)
+    if (pdfs.length > 1) {
+      list = this.generatePdfList(pdfs)
 
       /* Add 'Toggle All' in the list */
       list.unshift({ id: '0', name: language.toggleAll, templateSelected: '', active: false })
     } else {
       /* Set active true by default if there's only 1 pdf template */
-      list = this.generatePdfList(pdfsArray, true)
+      list = this.generatePdfList(pdfs, true)
     }
 
     /* Generate PDF list and assign it into its own reducer */
     this.props.generatePdfListSuccess(list)
+
+    return list
   }
 
   /**
@@ -132,9 +134,9 @@ class BulkGenerator extends React.Component {
     pdfs.map(item => {
       /* Push data into array list */
       list.push({
-        id: item[0],
-        name: item[1].name,
-        templateSelected: item[1].template,
+        id: item.id,
+        name: item.name,
+        templateSelected: item.template,
         active: active ? true : false
       })
     })
@@ -143,7 +145,7 @@ class BulkGenerator extends React.Component {
   }
 
   /**
-   * Set event listener for bulk apply buttons
+   * Set event listener for bulk apply buttons and call our redux action processCheckbox
    *
    * @since 1.0
    */
@@ -166,38 +168,31 @@ class BulkGenerator extends React.Component {
         /* Set global state and add 'Toggle All' option in the list */
         this.setGlobalState()
 
-        /* Redux action */
+        this.props.proceedStep1()
+
+        const popupSelectAllEntries = document.getElementById('all_entries').value
+
+        /* Check if popup 'select all entries' is selected */
+        if (popupSelectAllEntries === '1') {
+          return this.processAllEntriesId()
+        }
+
         this.props.processCheckbox(ids)
-        this.processEntryIds()
       })
     })
   }
 
   /**
-   * Process entry IDs request
+   * Call our redux action getSelectedEntriesId and process form all entries ID
    *
    * @since 1.0
    */
-  processEntryIds = () => {
-    const popupSelectAllEntries = document.getElementById('all_entries').value
-    /* Check if popup select all entries is selected */
-    if (popupSelectAllEntries === '1') {
-      this.checkPopupSelectAllEntries()
-    }
-  }
-
-  /**
-   * Process if Pop-up select all entries is selected
-   *
-   * @since 1.0
-   */
-  checkPopupSelectAllEntries = () => {
+  processAllEntriesId = () => {
     const { formId } = this.state
     /* Process search request filters through URL data*/
     const filterData = parseUrlForSearchParameters(window.location.search)
 
-    /* Redux action */
-    this.props.getSelectedEntryIds(formId, filterData)
+    this.props.getSelectedEntriesId(formId, filterData)
   }
 
   /**
@@ -229,7 +224,7 @@ class BulkGenerator extends React.Component {
     const { modal, history } = this.props
 
     return (
-      <PopUp modal={modal} history={history} />
+      <PopUp data-test='component-BulkGenerator' modal={modal} history={history} />
     )
   }
 }
@@ -255,7 +250,8 @@ const mapStateToProps = state => ({
  * @since 1.0
  */
 export default withRouter(connect(mapStateToProps, {
+  proceedStep1,
   processCheckbox,
-  getSelectedEntryIds,
+  getSelectedEntriesId,
   generatePdfListSuccess,
 })(BulkGenerator))

@@ -23,29 +23,31 @@ import language from '../../helpers/language'
  *
  * @since 1.0
  */
-const ListToggle = ({ items, onChange }) => (
-  <ol className='gfpdf-toggle-list'>
-    {
-      items.map((pdf, index) => {
-        return (
-          <li key={index}>
-            <label
-              className={pdf.id === '0' ? 'toggleAll': ''}
-              onClick={() => onChange(index)}>
-              {pdf.name} <span>{pdf.id !== '0' ? ('ID: ' + pdf.id) : ''}</span>
-            </label>
+const ListToggle = ({ items, onChange }) => {
+  return (
+    <ol data-test='component-ListToggle' className='gfpdf-toggle-list'>
+      {
+        items.map((pdf, index) => {
+          return (
+            <li key={index}>
+              <label
+                className={pdf.id === '0' ? 'toggleAll': ''}
+                onClick={() => onChange(index)}>
+                {pdf.name} <span>{pdf.id !== '0' ? ('ID: ' + pdf.id) : ''}</span>
+              </label>
 
-            <Switch
-              screenReaderLabel={language.label}
-              active={pdf.active}
-              onChange={onChange}
-              id={index} />
-          </li>
-        )
-      })
-    }
-  </ol>
-)
+              <Switch
+                screenReaderLabel={language.label}
+                active={pdf.active}
+                onChange={onChange}
+                id={index} />
+            </li>
+          )
+        })
+      }
+    </ol>
+  )
+}
 
 /**
  * PropTypes

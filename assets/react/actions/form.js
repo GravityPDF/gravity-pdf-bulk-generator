@@ -1,5 +1,5 @@
 /* Redux Action Types */
-import { PROCESS_CHECKBOX, GET_SELECTED_ENTRY_IDS } from '../actionTypes/form'
+import { PROCEED_STEP_1, PROCESS_CHECKBOX, GET_SELECTED_ENTRIES_ID } from '../actionTypes/form'
 
 /**
  * @package     Gravity PDF Bulk Generator
@@ -9,6 +9,19 @@ import { PROCESS_CHECKBOX, GET_SELECTED_ENTRY_IDS } from '../actionTypes/form'
  */
 
 /* Redux Actions - payloads of information that send data from application to store */
+
+/**
+ * Push to Step1 and show modal
+ *
+ * @returns {{ type: string }}
+ *
+ * @since 1.0
+ */
+export const proceedStep1 = () => {
+  return {
+    type: PROCEED_STEP_1
+  }
+}
 
 /**
  * Process form checkbox values
@@ -36,9 +49,9 @@ export const processCheckbox = ids => {
  *
  * @since 1.0
  */
-export const getSelectedEntryIds = (formId, filterData) => {
+export const getSelectedEntriesId = (formId, filterData) => {
   return {
-    type: GET_SELECTED_ENTRY_IDS,
+    type: GET_SELECTED_ENTRIES_ID,
     formId,
     filterData
   }

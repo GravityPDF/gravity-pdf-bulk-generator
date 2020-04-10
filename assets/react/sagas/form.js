@@ -2,7 +2,7 @@
 import { retry, takeLatest, put } from 'redux-saga/effects'
 import { push } from 'connected-react-router'
 /* Redux Action Types */
-import { GET_SELECTED_ENTRY_IDS, GET_SELECTED_ENTRY_IDS_SUCCESS, PROCESS_CHECKBOX } from '../actionTypes/form'
+import { PROCEED_STEP_1, GET_SELECTED_ENTRIES_ID, GET_SELECTED_ENTRIES_ID_SUCCESS } from '../actionTypes/form'
 import { TOGGLE_MODAL, FATAL_ERROR } from '../actionTypes/pdf'
 /* APIs */
 import { apiRequestAllEntryIds } from '../api/form'
@@ -15,12 +15,31 @@ import { apiRequestAllEntryIds } from '../api/form'
  */
 
 /**
- * Watch for the selected entry IDs event and calls the function to handle it
+ * Watch for our redux action proceedStep1 to be called and call our proceedStep1 generator
  *
  * @since 1.0
  */
-export function * watchGetSelectedEntryIds () {
-  yield takeLatest(GET_SELECTED_ENTRY_IDS, getSelectedEntryIds)
+export function * watchProceedStep1 () {
+  yield takeLatest(PROCEED_STEP_1, proceedStep1)
+}
+
+/**
+ * Proceed to Step1 and show modal
+ *
+ * @since 1.0
+ */
+export function * proceedStep1 () {
+  yield put(push('/step/1'))
+  yield put({ type: TOGGLE_MODAL })
+}
+
+/**
+ * Watch for our redux action getSelectedEntriesId to be called and call our getSelectedEntriesId generator
+ *
+ * @since 1.0
+ */
+export function * watchGetSelectedEntriesId () {
+  yield takeLatest(GET_SELECTED_ENTRIES_ID, getSelectedEntriesId)
 }
 
 /**
@@ -31,7 +50,7 @@ export function * watchGetSelectedEntryIds () {
  *
  * @since 1.0
  */
-export function * getSelectedEntryIds (payload) {
+export function * getSelectedEntriesId (payload) {
   try {
     const response = yield retry(3, 100, apiRequestAllEntryIds, payload)
 
@@ -41,29 +60,8 @@ export function * getSelectedEntryIds (payload) {
 
     const responseBody = yield response.json()
 
-    yield put({ type: GET_SELECTED_ENTRY_IDS_SUCCESS, payload: responseBody })
+    yield put({ type: GET_SELECTED_ENTRIES_ID_SUCCESS, payload: responseBody })
   } catch (error) {
     yield put({ type: FATAL_ERROR })
   }
-}
-
-/**
- * Watch for process checkbox event and calls the function to handle it
- *
- * @since 1.0
- */
-export function * watcherProcessCheckbox () {
-  yield takeLatest(PROCESS_CHECKBOX, processCheckbox)
-}
-
-/**
- * Handle the process checkbox logic
- *
- * @since 1.0
- */
-export function * processCheckbox () {
-  /* Show modal Step1 */
-  yield put(push('/step/1'))
-
-  yield put({ type: TOGGLE_MODAL })
 }

@@ -25,10 +25,10 @@ import List from './List'
  * @since 1.0
  */
 const InfoBox = ({ title, logs, toggle, state, className }) => (
-  <div className='log-wrapper'>
+  <div data-test='component-InfoBox' className='log-wrapper'>
     <div className={'log-container ' + state.toString()}>
       <h3 className={className} onClick={toggle}>
-        <span className='lines'>
+        <span data-test='component-Infobox-length-icon' className='lines'>
           {title} ({logs.length})
           <span className='expand'>
             {state ? '-' : '+'}

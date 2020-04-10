@@ -20,7 +20,7 @@ import PropTypes from 'prop-types'
  * @since 1.0
  */
 const List = ({ log, className }) => (
-  <div className={'log-entry ' + className}>
+  <div data-test='component-List' className={'log-entry ' + className}>
     {log}
   </div>
 )

@@ -28,7 +28,7 @@ const steps = [
  */
 const ProgressBar = ({ step }) => {
   return (
-    <ol className='gfpdf-progress-steps'>
+    <ol data-test='component-ProgressBar' className='gfpdf-progress-steps'>
       {steps.map((name, index) => (
         <li
           key={index}

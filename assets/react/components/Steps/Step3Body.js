@@ -24,14 +24,14 @@ import language from '../../helpers/language'
  * @since 1.0
  */
 const Step3Body = ({ downloadZipUrl }) => (
-  <section>
-    <div id='gfpdf-step-3' className='gfpdf-step'>
+  <section data-test='component-Step3Body' className='gfpdf-step'>
+    <div id='gfpdf-step-3'>
       <h2>{language.stepDownloadTitle}</h2>
 
       <p dangerouslySetInnerHTML={{__html: sprintf(language.stepDownloadDescription, '<a href="'+downloadZipUrl+'" download>', '</a>')}}/>
     </div>
 
-    <Logs />
+    <Logs data-test='component-Logs' />
   </section>
 )
 

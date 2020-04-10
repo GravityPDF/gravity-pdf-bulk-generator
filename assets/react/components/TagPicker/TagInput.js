@@ -22,6 +22,7 @@ import PropTypes from 'prop-types'
 const TagInput = ({ value, onChange }) => {
   return (
     <input
+      data-test='component-TagInput'
       type='text'
       name='gfpdf-directory-structure'
       value={value}

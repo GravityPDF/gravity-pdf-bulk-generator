@@ -5,6 +5,7 @@ import {
   GENERATE_PDF_LIST_SUCCESS,
   GENERATE_DOWNLOAD_ZIP_URL,
   GENERATE_SESSION_ID_SUCCESS,
+  REMOVE_TOGGLE_ALL,
   STORE_ABORT_CONTROLLER,
   TOGGLE_MODAL,
   TOGGLE_PDF_STATUS,
@@ -145,15 +146,33 @@ export default function (state = initialState, action) {
       }
 
     /**
+     * Process REMOVE_TOGGLE_ALL
+     *
+     * @since 1.0
+     */
+    case REMOVE_TOGGLE_ALL: {
+      /* Remove 'Toggle All' in the list before processing, if exists */
+      const pdfList = [...state.pdfList]
+
+      if (pdfList[0]['id'] === '0') {
+        pdfList.shift()
+      }
+      return {
+        ...state,
+        pdfList
+      }
+    }
+
+    /**
      * Process GENERATE_PDF_COUNTER
      *
      * @since 1.0
      */
     case GENERATE_PDF_COUNTER: {
       let generatePdfCounter = state.generatePdfCounter + 1
-      const selectedEntryIds = action.payload
+      const selectedEntriesId = action.payload
       const activePdfList = generateActivePdfList(state.pdfList)
-      const percentage = (100 * generatePdfCounter) / (activePdfList.length * selectedEntryIds.length)
+      const percentage = (100 * generatePdfCounter) / (activePdfList.length * selectedEntriesId.length)
 
       return {
         ...state,

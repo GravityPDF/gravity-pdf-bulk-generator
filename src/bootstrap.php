@@ -225,7 +225,7 @@ class Bootstrap extends Helper_Abstract_Addon {
 						'rest_url'   => rest_url( ApiNamespace::V1 ),
 						'nonce'      => wp_create_nonce( 'wp_rest' ),
 						'form_id'    => $form_id,
-						'pdfs'       => $pdfs,
+						'pdfs'       => array_values( $pdfs ),
 
 						'language'   => [
 							/* ListToggle */

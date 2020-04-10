@@ -1,7 +1,7 @@
 /* Dependencies */
-import { all } from 'redux-saga/effects'
-/* Sagas */
-import { watchGetSelectedEntryIds, watcherProcessCheckbox } from './form'
+import { all, call } from 'redux-saga/effects'
+/* Redux Sagas */
+import { watchProceedStep1, watchGetSelectedEntriesId } from './form'
 import { watchGenerateSessionId, watchGeneratePDF, watchFatalError, watchResetAllReducers } from './pdf'
 
 /**
@@ -18,11 +18,11 @@ import { watchGenerateSessionId, watchGeneratePDF, watchFatalError, watchResetAl
  */
 export default function * rootSaga () {
   yield all([
-    watchGetSelectedEntryIds(),
-    watcherProcessCheckbox(),
-    watchGenerateSessionId(),
-    watchGeneratePDF(),
-    watchFatalError(),
-    watchResetAllReducers()
+    call(watchProceedStep1),
+    call(watchGetSelectedEntriesId),
+    call(watchGenerateSessionId),
+    call(watchGeneratePDF),
+    call(watchFatalError),
+    call(watchResetAllReducers)
   ])
 }
