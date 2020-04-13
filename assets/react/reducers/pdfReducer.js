@@ -1,6 +1,6 @@
 /* Redux Action Types */
+import { RESET_ALL_STATE } from '../actionTypes/actionTypes'
 import {
-  ESCAPE_CLOSE_MODAL,
   GENERATE_PDF_COUNTER,
   GENERATE_PDF_LIST_SUCCESS,
   GENERATE_DOWNLOAD_ZIP_URL,
@@ -13,7 +13,6 @@ import {
 } from '../actionTypes/pdf'
 /* Helpers */
 import { generateActivePdfList } from '../helpers/generateActivePdfList'
-import { RESET_ALL_STATE } from '../actionTypes/actionTypes'
 
 /**
  * @package     Gravity PDF Bulk Generator
@@ -26,8 +25,8 @@ import { RESET_ALL_STATE } from '../actionTypes/actionTypes'
  * Setup the initial state of the "PDF" portion of our Redux store
  *
  * @type { sessionId: string, modal: boolean, pdfList: array,
- * generatePdfCounter: number, downloadPercentage: number, downloadZipUrl: string,
- * abortControllers: array, fatalError: object }
+ * generatePdfCounter: int, downloadPercentage: int, downloadZipUrl: string,
+ * abortControllers: array, fatalError: boolean }
  *
  * @since 1.0
  */
@@ -45,8 +44,8 @@ export const initialState = {
 /**
  * The action for "PDF" reducer which updates its state
  *
- * @param state
- * @param action
+ * @param state: object
+ * @param action: object
  *
  * @returns { initialState: * } whether updated or not
  *
@@ -92,17 +91,6 @@ export default function (state = initialState, action) {
       return {
         ...state,
         modal: !state.modal
-      }
-
-    /**
-     * Process ESCAPE_CLOSE_MODAL
-     *
-     * @since 1.0
-     */
-    case ESCAPE_CLOSE_MODAL:
-      return {
-        ...state,
-        modal: false
       }
 
     /**
@@ -197,7 +185,7 @@ export default function (state = initialState, action) {
       }
 
     /**
-     * Process RESET_PDF_STATE
+     * Process RESET_ALL_STATE & RESET_PDF_STATE
      *
      * @since 1.0
      */

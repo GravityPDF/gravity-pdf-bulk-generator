@@ -58,7 +58,7 @@ class Step2 extends React.Component {
    * container we will focus the container instead. In most cases this keeps the focus from
    * jumping outside our Template Container and allows for better keyboard navigation.
    *
-   * @param e
+   * @param e: object
    *
    * @since 1.0
    */
@@ -117,9 +117,4 @@ const mapStateToProps = state => ({
   fatalError: state.pdf.fatalError
 })
 
-/**
- * Connect and dispatch redux actions as props
- *
- * @since 1.0
- */
 export default connect(mapStateToProps, null)(Step2)

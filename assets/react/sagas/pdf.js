@@ -2,6 +2,7 @@
 import { call, cancel, cancelled, delay, fork, put, retry, select, take, takeLatest } from 'redux-saga/effects'
 import { push } from 'connected-react-router'
 /* Redux Action Types */
+import { RESET_ALL_STATE } from '../actionTypes/actionTypes'
 import {
   FATAL_ERROR,
   GENERATE_DOWNLOAD_ZIP_URL,
@@ -12,9 +13,7 @@ import {
   GENERATE_SESSION_ID_SUCCESS,
   STORE_ABORT_CONTROLLER,
 } from '../actionTypes/pdf'
-import { GENERATE_PDF_FAILED, GENERATE_PDF_SUCCESS, GENERATE_PDF_WARNING, } from '../actionTypes/logs'
-
-import { RESET_ALL_STATE } from '../actionTypes/actionTypes'
+import { GENERATE_PDF_FAILED, GENERATE_PDF_SUCCESS, GENERATE_PDF_WARNING } from '../actionTypes/logs'
 /* APIs */
 import {
   apiRequestDownloadZipFile,
@@ -207,23 +206,38 @@ export function * requestGeneratePdf (pdf) {
       throw response
     }
 
-    yield put({ type: GENERATE_PDF_SUCCESS, payload: sprintf( language.successMessage, pdf.pdfName, pdf.pdfId, pdf.entryId ) })
+    yield put({
+      type: GENERATE_PDF_SUCCESS,
+      payload: sprintf( language.successMessage, pdf.pdfName, pdf.pdfId, pdf.entryId )
+    })
   } catch (error) {
     switch (error.status) {
       case 400:
-        yield put({ type: GENERATE_PDF_WARNING, payload: sprintf( language.skippedMessageInactivePdf, pdf.pdfName, pdf.pdfId, pdf.entryId ) })
+        yield put({
+          type: GENERATE_PDF_WARNING,
+          payload: sprintf( language.skippedMessageInactivePdf, pdf.pdfName, pdf.pdfId, pdf.entryId )
+        })
         break
 
       case 403:
-        yield put({ type: GENERATE_PDF_WARNING, payload: sprintf( language.skippedMessageInvalidId, pdf.pdfName, pdf.pdfId, pdf.entryId ) })
+        yield put({
+          type: GENERATE_PDF_WARNING,
+          payload: sprintf( language.skippedMessageInvalidId, pdf.pdfName, pdf.pdfId, pdf.entryId )
+        })
         break
 
       case 412:
-        yield put({ type: GENERATE_PDF_WARNING, payload: sprintf( language.skippedMessageConditionalLogic, pdf.pdfName, pdf.pdfId, pdf.entryId ) })
+        yield put({
+          type: GENERATE_PDF_WARNING,
+          payload: sprintf( language.skippedMessageConditionalLogic, pdf.pdfName, pdf.pdfId, pdf.entryId )
+        })
         break
 
       default:
-        yield put({ type: GENERATE_PDF_FAILED, payload: sprintf( language.errorMessage, pdf.pdfName, pdf.pdfId, pdf.entryId ) })
+        yield put({
+          type: GENERATE_PDF_FAILED,
+          payload: sprintf( language.errorMessage, pdf.pdfName, pdf.pdfId, pdf.entryId )
+        })
     }
   } finally {
     if (!(yield cancelled())) {

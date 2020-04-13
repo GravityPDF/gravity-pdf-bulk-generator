@@ -1,12 +1,10 @@
 /* Dependencies */
 import React from 'react'
 import PropTypes from 'prop-types'
-
 /* Components */
 import ListToggle from '../ListToggle/ListToggle'
 import TagInput from '../TagPicker/TagInput'
 import TagPicker from '../TagPicker/TagPicker'
-
 /* Helpers */
 import language from '../../helpers/language'
 
@@ -28,7 +26,7 @@ import language from '../../helpers/language'
  * @param tagSelect
  * @param tagDeselect
  *
- * @returns {Step1Body: component}
+ * @returns { Step1Body: component }
  *
  * @since 1.0
  */

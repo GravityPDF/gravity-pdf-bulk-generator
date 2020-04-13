@@ -11,7 +11,7 @@ import posed from 'react-pose'
 /**
  * Fade
  *
- * @type {<PoseElementProps>}
+ * @type { <PoseElementProps> }
  *
  * @since 1.0
  */
@@ -28,7 +28,7 @@ export const Fade = posed.div({
 /**
  * SlideDown
  *
- * @type {<PoseElementProps>}
+ * @type { <PoseElementProps> }
  *
  * @since 1.0
  */

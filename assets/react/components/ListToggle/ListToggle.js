@@ -1,10 +1,8 @@
 /* Dependencies */
 import React from 'react'
 import PropTypes from 'prop-types'
-
 /* Components */
 import Switch from '../Switch/Switch'
-
 /* Helpers */
 import language from '../../helpers/language'
 
@@ -21,7 +19,7 @@ import language from '../../helpers/language'
  * @param items
  * @param onChange
  *
- * @returns {ListToggle: component}
+ * @returns { ListToggle: component }
  *
  * @since 1.0
  */

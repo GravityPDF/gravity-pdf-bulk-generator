@@ -4,7 +4,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 /* Components */
 import Logs from '../Logs/Logs'
-
 /* Helpers */
 import language from '../../helpers/language'
 

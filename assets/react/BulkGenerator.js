@@ -65,7 +65,7 @@ class BulkGenerator extends React.Component {
   /**
    * On update, call functions based on conditions
    *
-   * @param prevProps
+   * @param prevProps: object
    *
    * @since 1.0
    */
@@ -93,7 +93,7 @@ class BulkGenerator extends React.Component {
   /**
    * Process PDF list state and add 'Toggle All' option in the list
    *
-   * @param pdfs
+   * @param pdfs: object
    *
    * @since 1.0
    */
@@ -119,8 +119,8 @@ class BulkGenerator extends React.Component {
   /**
    * Generate PDF array list
    *
-   * @param pdfs
-   * @param active
+   * @param pdfs: array
+   * @param active: boolean
    *
    * @returns { list: array }
    *

@@ -8,10 +8,10 @@
 /**
  * Wrapper for the fetch() API which return a promise reject for some status codes
  *
- * @param string url
- * @param object init
+ * @param url: string
+ * @param init: object
  *
- * @returns {Promise<Response>}
+ * @returns { Promise<Response> }
  *
  * @since 1.0
  */

@@ -15,7 +15,7 @@ import PropTypes from 'prop-types'
  * @param log
  * @param title
  *
- * @returns {List: component}
+ * @returns { List: component }
  *
  * @since 1.0
  */

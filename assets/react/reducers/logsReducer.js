@@ -1,11 +1,11 @@
 /* Redux Action Types */
+import { RESET_ALL_STATE } from '../actionTypes/actionTypes'
 import {
   GENERATE_PDF_SUCCESS,
   GENERATE_PDF_WARNING,
   GENERATE_PDF_FAILED,
   RESET_LOGS_STATE
 } from '../actionTypes/logs'
-import { RESET_ALL_STATE } from '../actionTypes/actionTypes'
 
 /**
  * @package     Gravity PDF Bulk Generator
@@ -30,8 +30,8 @@ export const initialState = {
 /**
  * The action for "logs" reducer which updates its state
  *
- * @param state
- * @param action
+ * @param state: object
+ * @param action: object
  *
  * @returns { initialState: * } whether updated or not
  *
@@ -90,7 +90,7 @@ export default function (state = initialState, action) {
     }
 
     /**
-     * Process RESET_LOGS_STATE
+     * Process RESET_ALL_STATE & RESET_LOGS_STATE
      *
      * @since 1.0
      */

@@ -27,7 +27,7 @@ export function * watchGetSelectedEntryIds () {
  * Call our API and process the response based on requested filter data. If we don't get a valid response,
  * a fatal error will be triggered.
  *
- * @param payload
+ * @param payload: object
  *
  * @since 1.0
  */

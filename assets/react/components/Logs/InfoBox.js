@@ -19,18 +19,11 @@ import List from './List'
  * @param toggle
  * @param state
  *
- * @returns {InfoBox: component}
+ * @returns { InfoBox: component }
  *
  * @since 1.0
  */
-const InfoBox = (
-  {
-    title,
-    logs,
-    toggle,
-    state
-  }
-) => (
+const InfoBox = ({ title, logs, toggle, state }) => (
   <div className='log-wrapper'>
     <div className={'log-container ' + state.toString()}>
       <h3 className={title.toLowerCase()} onClick={toggle}>

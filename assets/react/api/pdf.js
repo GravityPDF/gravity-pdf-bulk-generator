@@ -11,14 +11,13 @@ import { api } from './api'
 /**
  * Fetch API request to obtain session ID (POST)
  *
- * @param path
- * @param concurrency
+ * @param path: string
  *
  * @returns Response
  *
  * @since 1.0
  */
-export const apiRequestSessionId = (path) => {
+export const apiRequestSessionId = path => {
   const url = `${GPDF_BULK_GENERATOR.rest_url}/generator/register`
 
   return api(url, {
@@ -34,8 +33,8 @@ export const apiRequestSessionId = (path) => {
 /**
  * Fetch API request to generate PDF (POST)
  *
- * @param listItem
- * @param signal
+ * @param pdf: object
+ * @param signal: object
  *
  * @returns Response
  *
@@ -58,7 +57,7 @@ export const apiRequestGeneratePdf = ({ pdf, signal }) => {
 /**
  * Fetch API request to generate PDF zip file (POST)
  *
- * @param string sessionId
+ * @param sessionId: string
  *
  * @returns Response
  *
@@ -79,7 +78,7 @@ export const apiRequestGeneratePdfZip = sessionId => {
 /**
  * Fetch API request to check if zip file url works fine
  *
- * @param url
+ * @param url: string
  *
  * @returns Response
  *

@@ -76,12 +76,12 @@ class Step1 extends React.Component {
    * container we will focus the container instead. In most cases this keeps the focus from
    * jumping outside our Template Container and allows for better keyboard navigation.
    *
-   * @param event
+   * @param e: object
    *
    * @since 1.0
    */
-  handleFocus = event => {
-    if (!this.container.contains(event.target)) {
+  handleFocus = e => {
+    if (!this.container.contains(e.target)) {
       this.container.focus()
     }
   }
@@ -89,12 +89,12 @@ class Step1 extends React.Component {
   /**
    * Request to build the bulk PDF download. Generate session ID and process to Step2
    *
-   * @param event
+   * @param e: object
    *
    * @since 1.0
    */
-  build = event => {
-    event.preventDefault()
+  build = e => {
+    e.preventDefault()
 
     const { concurrency } = this.state
     const { directoryStructure, pdfList } = this.props
@@ -120,7 +120,7 @@ class Step1 extends React.Component {
   /**
    * Update tag directory structure, adding '/' between tags
    *
-   * @param tag
+   * @param tag: string
    *
    * @since 1.0
    */
@@ -133,7 +133,7 @@ class Step1 extends React.Component {
   /**
    * Update tag directory structure, removing a tag and '/' at the end of it
    *
-   * @param tag
+   * @param tag: string
    *
    * @since 1.0
    */

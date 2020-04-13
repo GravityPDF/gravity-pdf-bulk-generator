@@ -36,7 +36,7 @@ class TagPicker extends React.Component {
   /**
    * Initialize component state
    *
-   * @param props
+   * @param props: object
    *
    * @since 1.0
    */
@@ -51,7 +51,7 @@ class TagPicker extends React.Component {
   /**
    * On update, set new state for selectedTags
    *
-   * @param prevProps
+   * @param prevProps: object
    *
    * @since 1.0
    */
@@ -66,13 +66,13 @@ class TagPicker extends React.Component {
   /**
    * Get selected active tags and store it into an array
    *
-   * @param value
+   * @param value: string
    *
-   * @returns {selectedTags: array}
+   * @returns { selectedTags: array }
    *
    * @since 1.0
    */
-  getActiveTags = (value) => {
+  getActiveTags = value => {
     const selectedTags = []
     const { tags } = this.props
 
@@ -89,15 +89,15 @@ class TagPicker extends React.Component {
   /**
    * Perform escape regex string operation (removing special characters)
    *
-   * @param string
+   * @param value: string
    *
-   * @returns {result: string}
+   * @returns { result: string }
    *
    * @since 1.0
    */
-  escapeRegexString = (string) => {
+  escapeRegexString = value => {
     /* See https://stackoverflow.com/a/6969486/1614565 */
-    const result = string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    const result = value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 
     return result
   }
@@ -105,10 +105,10 @@ class TagPicker extends React.Component {
   /**
    * Common tags event click listener
    *
-   * @param tag
-   * @param e
+   * @param tag: object
+   * @param e: object
    *
-   * @returns {onDeselectCallback: function, onSelectCallback: function}
+   * @returns { onDeselectCallback: function, onSelectCallback: function }
    *
    * @since 1.0
    */
@@ -126,7 +126,7 @@ class TagPicker extends React.Component {
   /**
    * Display TagPicker UI
    *
-   * @returns {TagPicker: component}
+   * @returns { TagPicker: component }
    *
    * @since 1.0
    */

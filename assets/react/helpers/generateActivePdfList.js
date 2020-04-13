@@ -11,11 +11,11 @@
  *
  * @param pdfList: array
  *
- * @returns {list: array}
+ * @returns { list: array }
  *
  * @since 1.0
  */
-export const generateActivePdfList = (pdfList) => {
+export const generateActivePdfList = pdfList => {
   const list = []
 
   pdfList.map(item => {
@@ -35,7 +35,8 @@ export const generateActivePdfList = (pdfList) => {
  * @param entryIds: array
  * @param pdfList: array
  * @param sessionId: string
- * @returns {[]}
+ *
+ * @returns { pdfs: array }
  *
  * @since 1.0
  */
