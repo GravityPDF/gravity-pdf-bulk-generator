@@ -103,10 +103,10 @@ class BulkGenerator extends React.Component {
 
     /* Check if there is more than 1 pdf template */
     if (pdfsArray.length > 1) {
-      list = this.generatePdfList(pdfsArray, true)
+      list = this.generatePdfList(pdfsArray)
 
       /* Add 'Toggle All' in the list */
-      list.unshift({ id: '0', name: language.toggleAll, templateSelected: '', active: true })
+      list.unshift({ id: '0', name: language.toggleAll, templateSelected: '', active: false })
     } else {
       /* Set active true by default if there's only 1 pdf template */
       list = this.generatePdfList(pdfsArray, true)
