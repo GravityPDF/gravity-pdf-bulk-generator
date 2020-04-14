@@ -211,78 +211,78 @@ class Bootstrap extends Helper_Abstract_Addon {
 
 						'language'   => [
 							/* ListToggle */
-							'label'                      => esc_html__( 'Label', 'gravityforms' ),
-							'toggleAll'                  => esc_html__( 'Toggle All', 'gravity-pdf-bulk-generator' ),
+							'label'                      => __( 'Label', 'gravityforms' ),
+							'toggleAll'                  => __( 'Toggle All', 'gravity-pdf-bulk-generator' ),
 
 							/* Steps */
-							'stepTitle'                  => esc_html__( 'PDF Bulk Download', 'gravity-pdf-bulk-generator' ),
+							'stepTitle'                  => __( 'PDF Bulk Download', 'gravity-pdf-bulk-generator' ),
 
 							/* Step 1 */
-							'stepActivePdfEmpty'         => esc_html__( 'Please select at least one PDF to generate for the entries.', 'gravity-pdf-bulk-generator' ),
-							'stepCloseDialog'            => esc_html__( 'Close dialog', 'default' ),
-							'stepBuild'                  => esc_html__( 'Build', 'gravity-pdf-bulk-generator' ),
-							'stepConfigure'              => esc_html__( 'Configure', 'default' ),
-							'stepDownload'               => esc_html__( 'Download', 'gravity-pdf-bulk-generator' ),
+							'stepActivePdfEmpty'         => __( 'Please select at least one PDF to generate for the entries.', 'gravity-pdf-bulk-generator' ),
+							'stepCloseDialog'            => __( 'Close dialog', 'default' ),
+							'stepBuild'                  => __( 'Build', 'gravity-pdf-bulk-generator' ),
+							'stepConfigure'              => __( 'Configure', 'default' ),
+							'stepDownload'               => __( 'Download', 'gravity-pdf-bulk-generator' ),
 
-							'stepSelectPdfs'             => esc_html__( 'Select PDFs', 'gravity-pdf-bulk-generator' ),
-							'stepSelectPdfsDesc'         => esc_html__( 'Specify the PDFs you would like to generate for the selected entries.', 'gravity-pdf-bulk-generator' ),
-							'stepDirectoryStructure'     => esc_html__( 'Directory Structure', 'gravity-pdf-bulk-generator' ),
-							'stepDirectoryStructureDesc' => esc_html__( 'Specify the directory structure to use for the PDFs of the selected entries. Form merge tags are supported.', 'gravity-pdf-bulk-generator' ),
-							'stepCommonTagsLabel'        => esc_html__( 'Common tags:', 'gravity-pdf-bulk-generator' ),
+							'stepSelectPdfs'             => __( 'Select PDFs', 'gravity-pdf-bulk-generator' ),
+							'stepSelectPdfsDesc'         => __( 'Specify the PDFs you would like to generate for the selected entries.', 'gravity-pdf-bulk-generator' ),
+							'stepDirectoryStructure'     => __( 'Directory Structure', 'gravity-pdf-bulk-generator' ),
+							'stepDirectoryStructureDesc' => __( 'Specify the directory structure to use for the PDFs of the selected entries. Form merge tags are supported.', 'gravity-pdf-bulk-generator' ),
+							'stepCommonTagsLabel'        => __( 'Common tags:', 'gravity-pdf-bulk-generator' ),
 
 							/* Step 2 */
-							'stepBuildingPdfs'           => esc_html__( 'Building your PDFs', 'gravity-pdf-bulk-generator' ),
-							'stepDoNotNavigateAway'      => esc_html__( '(Please do not navigate away from this page)', 'gravity-pdf-bulk-generator' ),
+							'stepBuildingPdfs'           => __( 'Building your PDFs', 'gravity-pdf-bulk-generator' ),
+							'stepDoNotNavigateAway'      => __( '(Please do not navigate away from this page)', 'gravity-pdf-bulk-generator' ),
 
 							/* Step 3 */
-							'stepDownloadTitle'          => esc_html__( 'Your PDFs are ready and the download will begin shortly.', 'gravity-pdf-bulk-generator' ),
+							'stepDownloadTitle'          => __( 'Your PDFs are ready and the download will begin shortly.', 'gravity-pdf-bulk-generator' ),
 
 							/* translators: 1: Open Anchor Tag 2: Close Anchor Tag */
-							'stepDownloadDescription'    => esc_html__( 'The zip file contains the PDFs for your selected entries. %1$sClick here if the download does not start automatically%2$s.', 'gravity-pdf-bulk-generator' ),
+							'stepDownloadDescription'    => __( 'The zip file contains the PDFs for your selected entries. %1$sClick here if the download does not start automatically%2$s.', 'gravity-pdf-bulk-generator' ),
 
 							/* Cancel Button */
-							'cancelLabel'                => esc_html__( 'Cancel', 'default' ),
-							'cancelButtonConfirmation'   => esc_html__( 'Are you sure you want to cancel the download?', 'gravity-pdf-bulk-generator' ),
+							'cancelLabel'                => __( 'Cancel', 'default' ),
+							'cancelButtonConfirmation'   => __( 'Are you sure you want to cancel the download?', 'gravity-pdf-bulk-generator' ),
 
 							/* Fatal Error */
-							'fatalErrorTitle'            => esc_html__( 'Oops...', 'gravity-pdf-bulk-generator' ),
-							'fatalErrorDescription'      => esc_html__( 'An error occurred which prevented the Bulk Generator from completing!', 'gravity-pdf-bulk-generator' ),
+							'fatalErrorTitle'            => __( 'Oops...', 'gravity-pdf-bulk-generator' ),
+							'fatalErrorDescription'      => __( 'An error occurred which prevented the Bulk Generator from completing!', 'gravity-pdf-bulk-generator' ),
 
 							/* translators: 1/2: Open Anchor Tag 3: Close Anchor Tag */
-							'fatalErrorInformation'      => esc_html__( 'Reload the page and try again. If the issue persists, %1$senable Logging%3$s, re-run the generator and then %2$sfill out a support ticket%3$s. One of our tech boffins will be happy to assist.', 'gravity-pdf-bulk-generator' ),
-							'fatalErrorImageAlt'         => esc_html__( 'Tech boffins at work.', 'gravity-pdf-bulk-generator' ),
+							'fatalErrorInformation'      => __( 'Reload the page and try again. If the issue persists, %1$senable Logging%3$s, re-run the generator and then %2$sfill out a support ticket%3$s. One of our tech boffins will be happy to assist.', 'gravity-pdf-bulk-generator' ),
+							'fatalErrorImageAlt'         => __( 'Tech boffins at work.', 'gravity-pdf-bulk-generator' ),
 
 							/* Log Messages */
-							'successTitle'               => esc_html__( 'Success', 'gravityforms' ),
-							'errorTitle'                 => esc_html__( 'Error', 'gravityforms' ),
-							'warningTitle'               => esc_html__( 'Warning', 'gravityforms' ),
+							'successTitle'               => __( 'Success', 'gravityforms' ),
+							'errorTitle'                 => __( 'Error', 'gravityforms' ),
+							'warningTitle'               => __( 'Warning', 'gravityforms' ),
 
 							/* translators: 1: PDF Name 2: PDF ID 3: Entry ID */
-							'successMessage'             => esc_html__( 'Generated %1$s (#%2$s) for Entry #%3$s', 'gravity-pdf-bulk-generator' ),
+							'successMessage'             => __( 'Generated %1$s (#%2$s) for Entry #%3$s', 'gravity-pdf-bulk-generator' ),
 
 							/* translators: 1: PDF Name 2: PDF ID 3: Entry ID */
-							'errorMessage'               => esc_html__( 'Failed generating %1$s (#%2$s) for Entry #%3$s', 'gravity-pdf-bulk-generator' ),
+							'errorMessage'               => __( 'Failed generating %1$s (#%2$s) for Entry #%3$s', 'gravity-pdf-bulk-generator' ),
 
 							/* translators: 1: PDF Name 2: PDF ID 3: Entry ID */
-							'skippedMessageInvalidId'    => esc_html__( 'Invalid PDF ID: Skipped %1$s (#%2$s) for Entry #%3$s', 'gravity-pdf-bulk-generator' ),
+							'skippedMessageInvalidId'    => __( 'Invalid PDF ID: Skipped %1$s (#%2$s) for Entry #%3$s', 'gravity-pdf-bulk-generator' ),
 
 							/* translators: 1: PDF Name 2: PDF ID 3: Entry ID */
-							'skippedMessageInactivePdf'  => esc_html__( 'Inactive PDF: Skipped %1$s (#%2$s) for Entry #%3$s', 'gravity-pdf-bulk-generator' ),
+							'skippedMessageInactivePdf'  => __( 'Inactive PDF: Skipped %1$s (#%2$s) for Entry #%3$s', 'gravity-pdf-bulk-generator' ),
 
 							/* translators: 1: PDF Name 2: PDF ID 3: Entry ID */
-							'skippedMessageConditionalLogic' => esc_html__( 'Conditional Logic Check: Skipped %1$s (#%2$s) for Entry #%3$s', 'gravity-pdf-bulk-generator' ),
+							'skippedMessageConditionalLogic' => __( 'Conditional Logic Check: Skipped %1$s (#%2$s) for Entry #%3$s', 'gravity-pdf-bulk-generator' ),
 
 							/* Tag Cloud */
-							'tagYear'                    => esc_html__( 'Year', 'default' ),
-							'tagMonth'                   => esc_html__( 'Month', 'default' ),
-							'tagDay'                     => esc_html__( 'Day', 'default' ),
-							'tagHour'                    => esc_html__( 'Hour', 'default' ),
-							'tagMinute'                  => esc_html__( 'Minute', 'default' ),
-							'tagPaymentStatus'           => esc_html__( 'Payment Status', 'gravityforms' ),
-							'tagEntryId'                 => esc_html__( 'Entry ID', 'gravityforms' ),
-							'tagUserLogin'               => esc_html__( 'User Login Name', 'default' ),
-							'tagUserEmail'               => esc_html__( 'User Email', 'default' ),
-							'tagUserDisplayName'         => esc_html__( 'User Display Name', 'default' ),
+							'tagYear'                    => __( 'Year', 'default' ),
+							'tagMonth'                   => __( 'Month', 'default' ),
+							'tagDay'                     => __( 'Day', 'default' ),
+							'tagHour'                    => __( 'Hour', 'default' ),
+							'tagMinute'                  => __( 'Minute', 'default' ),
+							'tagPaymentStatus'           => __( 'Payment Status', 'gravityforms' ),
+							'tagEntryId'                 => __( 'Entry ID', 'gravityforms' ),
+							'tagUserLogin'               => __( 'User Login Name', 'default' ),
+							'tagUserEmail'               => __( 'User Email', 'default' ),
+							'tagUserDisplayName'         => __( 'User Display Name', 'default' ),
 						],
 					]
 				);
