@@ -1,6 +1,7 @@
 /* Dependencies */
 import React from 'react'
 import PropTypes from 'prop-types'
+import language from '../../helpers/language'
 
 /**
  * @package     Gravity PDF Bulk Generator
@@ -11,9 +12,9 @@ import PropTypes from 'prop-types'
 
 /* Array of constants */
 const steps = [
-  'Configure',
-  'Build',
-  'Download'
+  language.stepConfigure,
+  language.stepBuild,
+  language.stepDownload
 ]
 
 /**

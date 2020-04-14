@@ -221,6 +221,8 @@ class Bootstrap extends Helper_Abstract_Addon {
 							'stepActivePdfEmpty'         => esc_html__( 'Please select at least one PDF to generate for the entries.', 'gravity-pdf-bulk-generator' ),
 							'stepCloseDialog'            => esc_html__( 'Close dialog', 'default' ),
 							'stepBuild'                  => esc_html__( 'Build', 'gravity-pdf-bulk-generator' ),
+							'stepConfigure'              => esc_html__( 'Configure', 'default' ),
+							'stepDownload'               => esc_html__( 'Download', 'gravity-pdf-bulk-generator' ),
 
 							'stepSelectPdfs'             => esc_html__( 'Select PDFs', 'gravity-pdf-bulk-generator' ),
 							'stepSelectPdfsDesc'         => esc_html__( 'Specify the PDFs you would like to generate for the selected entries.', 'gravity-pdf-bulk-generator' ),
