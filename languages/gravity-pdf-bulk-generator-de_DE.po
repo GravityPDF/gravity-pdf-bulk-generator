@@ -1,0 +1,152 @@
+# Copyright (C) 2020 Gravity PDF Bulk Generator
+# This file is distributed under the same license as the Gravity PDF Bulk Generator package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Gravity PDF Bulk Generator\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;"
+"_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;"
+"esc_html_e;esc_html_x:1,2c\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 2.3\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+
+#: ../src/bootstrap.php:180
+msgid "Download PDF"
+msgstr "PDF herunterladen"
+
+#: ../src/bootstrap.php:215
+msgid "Toggle All"
+msgstr "Alle umschalten"
+
+#: ../src/bootstrap.php:218
+msgid "PDF Bulk Download"
+msgstr "PDF-Gruppe herunterladen"
+
+#: ../src/bootstrap.php:221
+msgid "Please select at least one PDF to generate for the entries."
+msgstr ""
+"Bitte wählen Sie mindestens eine PDF, die für die Eingaben erzeugt werden "
+"soll."
+
+#: ../src/bootstrap.php:223
+msgid "Build"
+msgstr "Erstellen"
+
+#: ../src/bootstrap.php:225
+msgid "Download"
+msgstr "Herunterladen"
+
+#: ../src/bootstrap.php:227
+msgid "Select PDFs"
+msgstr "PDFs auswählen"
+
+#: ../src/bootstrap.php:228
+msgid "Specify the PDFs you would like to generate for the selected entries."
+msgstr ""
+"Spezifizieren Sie die PDFs, die Sie für die gewählten Eingaben erzeugen "
+"wollen."
+
+#: ../src/bootstrap.php:229
+msgid "Directory Structure"
+msgstr "Verzeichnisstruktur"
+
+#: ../src/bootstrap.php:230
+msgid ""
+"Specify the directory structure to use for the PDFs of the selected entries. "
+"Form merge tags are supported."
+msgstr ""
+"Spezifizieren Sie die Verzeichnisstruktur, die für die PDFs der ausgewählten "
+"Eingaben benutzt werden soll. Tags für Formularzusammenführung werden "
+"unterstützt."
+
+#: ../src/bootstrap.php:231
+msgid "Common tags:"
+msgstr "Häufige Tags:"
+
+#: ../src/bootstrap.php:234
+msgid "Building your PDFs"
+msgstr "Erstellung Ihrer PDFs"
+
+#: ../src/bootstrap.php:235
+msgid "(Please do not navigate away from this page)"
+msgstr "(Bitte verlassen Sie diese Seite nicht)"
+
+#: ../src/bootstrap.php:238
+msgid "Your PDFs are ready and the download will begin shortly."
+msgstr "Ihre PDFs sind fertig und das Herunterladen startet in Kürze."
+
+#. translators: 1: Open Anchor Tag 2: Close Anchor Tag
+#: ../src/bootstrap.php:241
+msgid ""
+"The zip file contains the PDFs for your selected entries. %1$sClick here if "
+"the download does not start automatically%2$s."
+msgstr ""
+"Die zip-Datei enthält die PDFs für Ihre ausgewählten Eingaben. %1$sKlicken "
+"Sie hier, falls das Herunterladen nicht automatisch startet%2$s."
+
+#: ../src/bootstrap.php:245
+msgid "Are you sure you want to cancel the download?"
+msgstr "Wollen Sie das Herunterladen wirklich abbrechen?"
+
+#: ../src/bootstrap.php:248
+msgid "Oops..."
+msgstr "Hoppla..."
+
+#: ../src/bootstrap.php:249
+msgid "An error occurred which prevented the Bulk Generator from completing!"
+msgstr ""
+"Ein Fehler ist aufgetreten, der den Gruppen-Generator von der Fertigstellung "
+"abgehalten hat!"
+
+#. translators: 1/2: Open Anchor Tag 3: Close Anchor Tag
+#: ../src/bootstrap.php:252
+msgid ""
+"Reload the page and try again. If the issue persists, %1$senable Logging"
+"%3$s, re-run the generator and then %2$sfill out a support ticket%3$s. One "
+"of our tech boffins will be happy to assist."
+msgstr ""
+"Laden Sie die Seite erneut und versuchen Sie es nochmal. Falls das Problem "
+"anhält, %1$saktivieren Sie Logging%3$s, führen den Generator erneut aus und "
+"dann %2$sfüllen Sie ein Support-Ticket%3$s aus. Einer unserer Technikprofis "
+"wird sich gerne darum kümmern."
+
+#: ../src/bootstrap.php:253
+msgid "Tech boffins at work."
+msgstr "Technikprofis arbeiten daran."
+
+#. translators: 1: PDF Name 2: PDF ID 3: Entry ID
+#: ../src/bootstrap.php:261
+msgid "Generated %1$s (#%2$s) for Entry #%3$s"
+msgstr "%1$s (#%2$s) erzeugt für Eingabe #%3$s"
+
+#. translators: 1: PDF Name 2: PDF ID 3: Entry ID
+#: ../src/bootstrap.php:264
+msgid "Failed generating %1$s (#%2$s) for Entry #%3$s"
+msgstr "Erzeugung von %1$s (#%2$s) fehlgeschlagen für Eingabey #%3$s"
+
+#. translators: 1: PDF Name 2: PDF ID 3: Entry ID
+#: ../src/bootstrap.php:267
+msgid "Invalid PDF ID: Skipped %1$s (#%2$s) for Entry #%3$s"
+msgstr "Ungültige PDF-ID: Auslassung von %1$s (#%2$s) für Eingabe #%3$s"
+
+#. translators: 1: PDF Name 2: PDF ID 3: Entry ID
+#: ../src/bootstrap.php:270
+msgid "Inactive PDF: Skipped %1$s (#%2$s) for Entry #%3$s"
+msgstr "Nicht aktive PDF: Auslassung von %1$s (#%2$s) für Eingabe #%3$s"
+
+#. translators: 1: PDF Name 2: PDF ID 3: Entry ID
+#: ../src/bootstrap.php:273
+msgid "Conditional Logic Check: Skipped %1$s (#%2$s) for Entry #%3$s"
+msgstr ""
+"Überprüfung bedingter Logik: Auslassung von %1$s (#%2$s) für Eingabe #%3$s"

@@ -1,0 +1,148 @@
+# Copyright (C) 2020 Gravity PDF Bulk Generator
+# This file is distributed under the same license as the Gravity PDF Bulk Generator package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Gravity PDF Bulk Generator\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;"
+"_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;"
+"esc_html_e;esc_html_x:1,2c\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 2.3\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+
+#: ../src/bootstrap.php:180
+msgid "Download PDF"
+msgstr "Téléchargez le PDF"
+
+#: ../src/bootstrap.php:215
+msgid "Toggle All"
+msgstr "Tout basculer"
+
+#: ../src/bootstrap.php:218
+msgid "PDF Bulk Download"
+msgstr "Téléchargement en bloc de PDF"
+
+#: ../src/bootstrap.php:221
+msgid "Please select at least one PDF to generate for the entries."
+msgstr "Veuillez sélectionner au moins un PDF à générer pour les entrées."
+
+#: ../src/bootstrap.php:223
+msgid "Build"
+msgstr "Générez"
+
+#: ../src/bootstrap.php:225
+msgid "Download"
+msgstr "Télécharger"
+
+#: ../src/bootstrap.php:227
+msgid "Select PDFs"
+msgstr "Sélectionnez les PDF"
+
+#: ../src/bootstrap.php:228
+msgid "Specify the PDFs you would like to generate for the selected entries."
+msgstr ""
+"Spécifiez les PDF que vous souhaitez générer pour les entrées sélectionnées."
+
+#: ../src/bootstrap.php:229
+msgid "Directory Structure"
+msgstr "Structure du répertoire"
+
+#: ../src/bootstrap.php:230
+msgid ""
+"Specify the directory structure to use for the PDFs of the selected entries. "
+"Form merge tags are supported."
+msgstr ""
+"Spécifiez la structure de répertoire à utiliser pour les PDF des entrées "
+"sélectionnées. Les balises de fusion de formulaire sont prises en charge."
+
+#: ../src/bootstrap.php:231
+msgid "Common tags:"
+msgstr "Balises communes :"
+
+#: ../src/bootstrap.php:234
+msgid "Building your PDFs"
+msgstr "Générez vos PDF"
+
+#: ../src/bootstrap.php:235
+msgid "(Please do not navigate away from this page)"
+msgstr "(Veuillez ne pas quitter cette page)"
+
+#: ../src/bootstrap.php:238
+msgid "Your PDFs are ready and the download will begin shortly."
+msgstr "Vos PDF sont prêts et le téléchargement va bientôt commencer."
+
+#. translators: 1: Open Anchor Tag 2: Close Anchor Tag
+#: ../src/bootstrap.php:241
+msgid ""
+"The zip file contains the PDFs for your selected entries. %1$sClick here if "
+"the download does not start automatically%2$s."
+msgstr ""
+"Le fichier zip contient les PDF pour vos entrées sélectionnées. %1$sCliquez "
+"ici si le téléchargement ne démarre pas automatiquement%2$s."
+
+#: ../src/bootstrap.php:245
+msgid "Are you sure you want to cancel the download?"
+msgstr "Etes-vous sur de vouloir annuler le téléchargement ?"
+
+#: ../src/bootstrap.php:248
+msgid "Oops..."
+msgstr "Oups..."
+
+#: ../src/bootstrap.php:249
+msgid "An error occurred which prevented the Bulk Generator from completing!"
+msgstr ""
+"Une erreur s'est produite qui a entraîné l'échec du générateur en bloc !"
+
+#. translators: 1/2: Open Anchor Tag 3: Close Anchor Tag
+#: ../src/bootstrap.php:252
+msgid ""
+"Reload the page and try again. If the issue persists, %1$senable Logging"
+"%3$s, re-run the generator and then %2$sfill out a support ticket%3$s. One "
+"of our tech boffins will be happy to assist."
+msgstr ""
+"Rechargez la page et réessayez. Si le problème persiste, %1$activez la "
+"journalisation%3$s, réexécutez le générateur et puis %2$sremplissez un "
+"ticket d'assistance%3$s. L'un de nos techniciens se fera un plaisir de vous "
+"aider."
+
+#: ../src/bootstrap.php:253
+msgid "Tech boffins at work."
+msgstr "Techniciens au travail."
+
+#. translators: 1: PDF Name 2: PDF ID 3: Entry ID
+#: ../src/bootstrap.php:261
+msgid "Generated %1$s (#%2$s) for Entry #%3$s"
+msgstr "Généré %1$s (#%2$s) pour l'entrée #%3$s"
+
+#. translators: 1: PDF Name 2: PDF ID 3: Entry ID
+#: ../src/bootstrap.php:264
+msgid "Failed generating %1$s (#%2$s) for Entry #%3$s"
+msgstr "Échec de la génération %1$s (#%2$s) pour l'entrée #%3$s"
+
+#. translators: 1: PDF Name 2: PDF ID 3: Entry ID
+#: ../src/bootstrap.php:267
+msgid "Invalid PDF ID: Skipped %1$s (#%2$s) for Entry #%3$s"
+msgstr "ID de PDF incorrecte : Ignoré %1$s (#%2$s) pour l'entrée #%3$s"
+
+#. translators: 1: PDF Name 2: PDF ID 3: Entry ID
+#: ../src/bootstrap.php:270
+msgid "Inactive PDF: Skipped %1$s (#%2$s) for Entry #%3$s"
+msgstr "PDF inactif : Ignoré %1$s (#%2$s) pour l'entrée #%3$s"
+
+#. translators: 1: PDF Name 2: PDF ID 3: Entry ID
+#: ../src/bootstrap.php:273
+msgid "Conditional Logic Check: Skipped %1$s (#%2$s) for Entry #%3$s"
+msgstr ""
+"Vérification de la logique conditionnelle : Ignoré %1$s (#%2$s) pour "
+"l'entrée #%3$s"
