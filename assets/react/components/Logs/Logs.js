@@ -92,7 +92,8 @@ class Logs extends React.Component {
                 title={language.successTitle}
                 state={success}
                 toggle={this.toggleSuccess}
-                logs={generatePdfSuccess} />
+                logs={generatePdfSuccess}
+                className='success' />
           )
         }
 
@@ -103,7 +104,8 @@ class Logs extends React.Component {
                 title={language.errorTitle}
                 state={errors}
                 toggle={this.toggleErrors}
-                logs={generatePdfFailed} />
+                logs={generatePdfFailed}
+                className='errors' />
           )
         }
 
@@ -114,7 +116,8 @@ class Logs extends React.Component {
                 title={language.warningTitle}
                 state={warnings}
                 toggle={this.toggleWarnings}
-                logs={generatePdfWarning} />
+                logs={generatePdfWarning}
+                className='warnings' />
           )
         }
       </section>

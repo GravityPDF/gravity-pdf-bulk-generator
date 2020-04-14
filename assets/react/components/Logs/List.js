@@ -13,14 +13,14 @@ import PropTypes from 'prop-types'
  * Display Logs List UI
  *
  * @param log
- * @param title
+ * @param className
  *
  * @returns { List: component }
  *
  * @since 1.0
  */
-const List = ({ log, title }) => (
-  <div className={'log-entry ' + title.toLowerCase()}>
+const List = ({ log, className }) => (
+  <div className={'log-entry ' + className}>
     {log}
   </div>
 )
@@ -32,7 +32,7 @@ const List = ({ log, title }) => (
  */
 List.propTypes = {
   log: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
+  className: PropTypes.string
 }
 
 export default List

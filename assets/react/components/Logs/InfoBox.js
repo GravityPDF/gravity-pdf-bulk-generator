@@ -18,15 +18,16 @@ import List from './List'
  * @param logs
  * @param toggle
  * @param state
+ * @param className
  *
  * @returns { InfoBox: component }
  *
  * @since 1.0
  */
-const InfoBox = ({ title, logs, toggle, state }) => (
+const InfoBox = ({ title, logs, toggle, state, className }) => (
   <div className='log-wrapper'>
     <div className={'log-container ' + state.toString()}>
-      <h3 className={title.toLowerCase()} onClick={toggle}>
+      <h3 className={className} onClick={toggle}>
         <span className='lines'>
           {title} ({logs.length})
           <span className='expand'>
@@ -40,7 +41,7 @@ const InfoBox = ({ title, logs, toggle, state }) => (
           logs.map((log, index) => (
             <List
               log={log}
-              title={title}
+              className={className}
               key={index} />
           ))
         }
@@ -58,7 +59,8 @@ InfoBox.propTypes = {
   title: PropTypes.string.isRequired,
   logs: PropTypes.array.isRequired,
   toggle: PropTypes.func.isRequired,
-  state: PropTypes.bool.isRequired
+  state: PropTypes.bool.isRequired,
+  className: PropTypes.string.isRequired
 }
 
 export default InfoBox
