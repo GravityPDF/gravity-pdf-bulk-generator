@@ -145,6 +145,25 @@ class Bootstrap extends Helper_Abstract_Addon {
 	}
 
 	/**
+	 * Get the current form ID
+	 *
+	 * @return int
+	 *
+	 * @internal On the default Form -> Entries page there is no ID in the URL, so we have to get it the same way GF does
+	 * @since 1.0
+	 */
+	protected function get_entry_list_form_id() {
+		/* Get form and PDF info */
+		$form_id = (int) rgget( 'id' );
+		if ( $form_id === 0 ) {
+			$forms   = \GFFormsModel::get_forms( null, 'title' );
+			$form_id = isset( ( $forms[0] )->id ) ? (int) ( $forms[0] )->id : 0;
+		}
+
+		return $form_id;
+	}
+
+	/**
 	 * Register the required assets to work
 	 *
 	 * @Internal Loaded on the Gravity Forms Entry List page in the WP Admin area by default
@@ -152,9 +171,7 @@ class Bootstrap extends Helper_Abstract_Addon {
 	 * @since    1.0
 	 */
 	public function setup_bulk_generator() {
-
-		/* Get form and PDF info */
-		$form_id = (int) rgget( 'id' );
+		$form_id = $this->get_entry_list_form_id();
 		$pdfs    = \GPDFAPI::get_form_pdfs( $form_id );
 
 		if ( is_wp_error( $pdfs ) ) {
