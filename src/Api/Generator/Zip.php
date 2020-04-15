@@ -145,8 +145,10 @@ class Zip implements ApiEndpointRegistration {
 				throw new FilesystemError();
 			}
 
+			$zip_stream = fopen( $tmp_zip_path, 'rb' );
 			$this->filesystem->set_prefix( $session_id );
-			$this->filesystem->put( $this->filesystem->get_zip_path(), file_get_contents( $tmp_zip_path ) );
+			$this->filesystem->putStream( $this->filesystem->get_zip_path(), $zip_stream );
+			fclose( $zip_stream );
 
 			return [
 				'downloadUrl' => $this->generate_signed_download_url( $session_id ),
