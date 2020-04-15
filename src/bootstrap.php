@@ -157,7 +157,7 @@ class Bootstrap extends Helper_Abstract_Addon {
 		$form_id = (int) rgget( 'id' );
 		if ( $form_id === 0 ) {
 			$forms   = \GFFormsModel::get_forms( null, 'title' );
-			$form_id = isset( ( $forms[0] )->id ) ? (int) ( $forms[0] )->id : 0;
+			$form_id = isset( $forms[0]->id ) ? (int) $forms[0]->id : 0;
 		}
 
 		return $form_id;
