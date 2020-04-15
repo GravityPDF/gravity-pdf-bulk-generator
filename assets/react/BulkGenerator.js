@@ -206,11 +206,25 @@ class BulkGenerator extends React.Component {
    * @since 1.0
    */
   deselectCheckboxes = () => {
-    const selectAllBox = document.querySelectorAll('input[id="cb-select-all-1"]:checked')
-    const checkboxes = document.querySelectorAll('input[name="entry[]"]:checked')
-    const items = [...selectAllBox, ...checkboxes]
+    /* Default checkboxes */
+    const checkBoxes = [
+      ...document.querySelectorAll('input[id="cb-select-all-1"]'),
+      ...document.querySelectorAll('input[id="cb-select-all-2"]'),
+      ...document.querySelectorAll('input[name="entry[]"]')
+    ]
 
-    items.map(item => {
+    /* Checked checkboxes */
+    const checkedCheckBoxes = [
+      ...document.querySelectorAll('input[id="cb-select-all-1"]:checked'),
+      ...document.querySelectorAll('input[id="cb-select-all-2"]:checked'),
+      ...document.querySelectorAll('input[name="entry[]"]:checked')
+    ]
+
+    if (checkBoxes.length === checkedCheckBoxes.length) {
+      return document.querySelectorAll('input[id="cb-select-all-1"]')[0].click()
+    }
+
+    checkedCheckBoxes.map(item => {
       if (item.type === 'checkbox') {
         item.checked = false
       }
