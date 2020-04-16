@@ -209,6 +209,7 @@ class BulkGenerator extends React.Component {
     const selectAllCheckbox = document.getElementById('cb-select-all-1')
     if (selectAllCheckbox.checked) {
       selectAllCheckbox.click()
+      document.getElementById('all_entries').value = false
       return
     }
 
