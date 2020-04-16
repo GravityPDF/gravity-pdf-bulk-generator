@@ -173,7 +173,7 @@ class Create implements ApiEndpointRegistration {
 			}
 
 			fclose( $pdf_stream );
-			unlink( $pdf->get_path() );
+			@unlink( $pdf->get_path() );
 		} catch ( FilesystemError $e ) {
 			return new \WP_Error( 'filesystem_error', '', [ 'status' => 500 ] );
 		} catch ( ConfigNotLoaded $e ) {
