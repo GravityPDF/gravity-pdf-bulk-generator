@@ -152,7 +152,10 @@ export function * bulkGeneratePdf ({ pdfs, concurrency, sessionId }) {
     yield generateDownloadZipUrl(sessionId)
   }
 
-  yield validateDownloadZipUrl()
+  /* Skip validation if fatal error generated */
+  if (! (yield select(getFatalErrorStatus))) {
+    yield validateDownloadZipUrl()
+  }
 }
 
 
