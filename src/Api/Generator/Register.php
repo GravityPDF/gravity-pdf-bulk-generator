@@ -123,10 +123,11 @@ class Register implements ApiEndpointRegistration {
 							]
 						)
 						 ->save();
-		} catch ( BulkPdfGenerator $e ) {
+		} catch ( \Exception $e ) {
 			$this->logger->error( 'Could not create session config file', [ 'session' => $request->get_param( 'sessionId' ) ] );
 			return new \WP_Error( 'error_creating_config', '', [ 'status' => 500 ] );
 		}
+
 		return [
 			'sessionId' => $session_id,
 		];
