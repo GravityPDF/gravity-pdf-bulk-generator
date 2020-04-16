@@ -108,7 +108,8 @@ class Zip implements ApiEndpointRegistration {
 			$this->logger->notice( 'Begin PDF to Zip process', [ 'session' => $session_id ] );
 
 			/* Create/load our Zip file */
-			$tmp_zip_path = \GPDFAPI::get_data_class()->template_tmp_location . $session_id;
+			$this->filesystem->set_prefix( $session_id );
+			$tmp_zip_path = $this->filesystem->get_base_prefix() . $this->filesystem->get_prefix() . $this->filesystem->get_zip_path();
 			$zip          = new Filesystem(
 				new ZipArchiveAdapter( $tmp_zip_path )
 			);
@@ -132,7 +133,7 @@ class Zip implements ApiEndpointRegistration {
 
 				/* If the zip doesn't already contain the file, include it in the archive */
 				if ( ! $zip->has( $zip_file_path ) ) {
-					$zip->write( $zip_file_path, $this->filesystem->read( $info['path'] ) );
+					$zip->writeStream( $zip_file_path, $this->filesystem->readStream( $info['path'] ) );
 					$this->logger->notice( 'Saved PDF in zip', [ 'file' => $zip_file_path ] );
 				}
 			}
@@ -145,10 +146,13 @@ class Zip implements ApiEndpointRegistration {
 				throw new FilesystemError();
 			}
 
-			$zip_stream = fopen( $tmp_zip_path, 'rb' );
+			/* If the Filesystem isn't using the Local adapter, we'll place the zip on the local disk in it */
 			$this->filesystem->set_prefix( $session_id );
-			$this->filesystem->putStream( $this->filesystem->get_zip_path(), $zip_stream );
-			fclose( $zip_stream );
+			if ( ! $this->filesystem->has( $this->filesystem->get_zip_path() ) ) {
+				$zip_stream = fopen( $tmp_zip_path, 'rb' );
+				$this->filesystem->putStream( $this->filesystem->get_zip_path(), $zip_stream );
+				fclose( $zip_stream );
+			}
 
 			return [
 				'downloadUrl' => $this->generate_signed_download_url( $session_id ),
@@ -159,10 +163,6 @@ class Zip implements ApiEndpointRegistration {
 			return new \WP_Error( 'no_pdfs_to_zip', '', [ 'status' => 400 ] );
 		} catch ( \Exception $e ) {
 			return new \WP_Error( $e->getCode(), $e->getMessage(), [ 'status' => 500 ] );
-		} finally {
-			if ( is_file( $tmp_zip_path ) ) {
-				unlink( $tmp_zip_path );
-			}
 		}
 	}
 
