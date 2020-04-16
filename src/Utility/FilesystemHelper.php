@@ -53,12 +53,21 @@ class FilesystemHelper {
 	protected $path_prefix = '';
 
 	/**
+	 * @var string
+	 *
+	 * @since 1.0
+	 */
+	protected $base_prefix = '';
+
+	/**
 	 * FilesystemHelper constructor.
 	 *
 	 * @param Filesystem $filesystem
+	 * @param string $base_prefix
 	 */
-	public function __construct( Filesystem $filesystem ) {
-		$this->filesystem = $filesystem;
+	public function __construct( Filesystem $filesystem, $base_prefix = '' ) {
+		$this->filesystem  = $filesystem;
+		$this->base_prefix = $base_prefix;
 	}
 
 	/**
@@ -181,6 +190,17 @@ class FilesystemHelper {
 	 */
 	public function get_prefix() {
 		return $this->path_prefix;
+	}
+
+	/**
+	 * Get the base path prefix
+	 *
+	 * @return string
+	 *
+	 * @since 1.0
+	 */
+	public function get_base_prefix() {
+		return $this->base_prefix;
 	}
 
 	/**

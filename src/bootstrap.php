@@ -121,7 +121,8 @@ class Bootstrap extends Helper_Abstract_Addon {
 						'dir'  => [ 'public' => $folder_perms ],
 					]
 				)
-			)
+			),
+			$path
 		);
 	}
 

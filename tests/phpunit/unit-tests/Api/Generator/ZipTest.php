@@ -50,12 +50,14 @@ class ZipTest extends DefaultApiTests {
 
 		$this->authenticate();
 		$this->setup_endpoint_class();
+
+		@mkdir( sys_get_temp_dir() . '/' . self::SESSION_ID );
 	}
 
 	protected function setup_endpoint_class( $adapter = null, $config_adapter = null ) {
 
 		/* Setup Test Folder Structure */
-		$this->filesystem = new FilesystemHelper( new Filesystem( $adapter === null ? new EnhancedMemoryAdapter() : $adapter, [ 'disable_asserts' => true ] ) );
+		$this->filesystem = new FilesystemHelper( new Filesystem( $adapter === null ? new EnhancedMemoryAdapter() : $adapter, [ 'disable_asserts' => true ] ), sys_get_temp_dir() . '/' );
 
 		$this->filesystem->createDir( self::SESSION_ID );
 		$this->filesystem->write( self::SESSION_ID . '/tmp/2019/Zadani.pdf', 'content1' );
