@@ -3,7 +3,7 @@
 /**
  * Plugin Name:     Gravity PDF Bulk Generator
  * Plugin URI:      https://gravitypdf.com/shop/bulk-generator-add-on/
- * Description:     Bulk export Gravity PDF documents from your Gravity Forms entries.
+ * Description:     Bulk export Gravity PDF documents for your Gravity Forms entries.
  * Author:          Gravity PDF
  * Author URI:      https://gravitypdf.com
  * Text Domain:     gravity-pdf-bulk-generator
