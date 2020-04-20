@@ -1,6 +1,8 @@
 Gravity PDF Bulk Generator
 ==========================
 
+![Bulk Generator Icon](https://resources.gravitypdf.com/uploads/2020/04/bulk-generator-cover-artwork.png)
+
 [![Build Status](https://travis-ci.org/GravityPDF/gravity-pdf-bulk-generator.svg?branch=development)](https://travis-ci.org/GravityPDF/gravity-pdf-bulk-generator) [![codecov](https://codecov.io/gh/GravityPDF/gravity-pdf-bulk-generator/branch/development/graph/badge.svg)](https://codecov.io/gh/GravityPDF/gravity-pdf-bulk-generator)
 
 Gravity PDF Bulk Generator is a commercial plugin [available from GravityPDF.com](https://gravitypdf.com/shop/bulk-generator-add-on/). The plugin is hosted here on a public GitHub repository in order to better facilitate community contributions from developers and users. If you have a suggestion, a bug report, or a patch for an issue, feel free to submit it here.
