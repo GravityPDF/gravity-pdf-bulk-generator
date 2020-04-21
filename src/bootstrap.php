@@ -245,7 +245,8 @@ class Bootstrap extends Helper_Abstract_Addon {
 							'stepSelectPdfs'             => __( 'Select PDFs', 'gravity-pdf-bulk-generator' ),
 							'stepSelectPdfsDesc'         => __( 'Specify the PDFs you would like to generate for the selected entries.', 'gravity-pdf-bulk-generator' ),
 							'stepDirectoryStructure'     => __( 'Directory Structure', 'gravity-pdf-bulk-generator' ),
-							'stepDirectoryStructureDesc' => __( 'Specify the directory structure to use for the PDFs of the selected entries. Form merge tags are supported.', 'gravity-pdf-bulk-generator' ),
+							/* translators: 1: Open Anchor Tag 2: Close Anchor Tag */
+							'stepDirectoryStructureDesc' => __( 'Specify the directory structure to use for the PDFs of the selected entries. %1$sForm merge tags are supported%2$s.', 'gravity-pdf-bulk-generator' ),
 							'stepCommonTagsLabel'        => __( 'Common tags:', 'gravity-pdf-bulk-generator' ),
 
 							/* Step 2 */

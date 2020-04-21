@@ -21,69 +21,70 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 
-#: ../src/bootstrap.php:180
+#: ../src/bootstrap.php:198
 msgid "Download PDF"
 msgstr "Download PDF"
 
-#: ../src/bootstrap.php:215
+#: ../src/bootstrap.php:233
 msgid "Toggle All"
 msgstr "Alles wisselen"
 
-#: ../src/bootstrap.php:218
+#: ../src/bootstrap.php:236
 msgid "PDF Bulk Download"
 msgstr "PDF Bulk Download"
 
-#: ../src/bootstrap.php:221
+#: ../src/bootstrap.php:239
 msgid "Please select at least one PDF to generate for the entries."
 msgstr "Selecteer ten minste één PDF om voor de vermeldingen te genereren."
 
-#: ../src/bootstrap.php:223
+#: ../src/bootstrap.php:241
 msgid "Build"
 msgstr "Bouwen"
 
-#: ../src/bootstrap.php:225
+#: ../src/bootstrap.php:243
 msgid "Download"
 msgstr "Downloaden"
 
-#: ../src/bootstrap.php:227
+#: ../src/bootstrap.php:245
 msgid "Select PDFs"
 msgstr "Selecteer PDF's"
 
-#: ../src/bootstrap.php:228
+#: ../src/bootstrap.php:246
 msgid "Specify the PDFs you would like to generate for the selected entries."
 msgstr ""
 "Geef de pdf's op die je wilt genereren voor de geselecteerde vermeldingen."
 
-#: ../src/bootstrap.php:229
+#: ../src/bootstrap.php:247
 msgid "Directory Structure"
 msgstr "Directorystructuur"
 
-#: ../src/bootstrap.php:230
+#. translators: 1: Open Anchor Tag 2: Close Anchor Tag
+#: ../src/bootstrap.php:249
 msgid ""
 "Specify the directory structure to use for the PDFs of the selected entries. "
-"Form merge tags are supported."
+"%1$sForm merge tags are supported%2$s."
 msgstr ""
 "Geef de directory structuur op die moet worden gebruikt voor de PDF's van de "
-"geselecteerde items. Formulier samenvoegingscodes worden ondersteund."
+"geselecteerde items. %1$sFormulier samenvoegingscodes worden ondersteund%2$s."
 
-#: ../src/bootstrap.php:231
+#: ../src/bootstrap.php:250
 msgid "Common tags:"
 msgstr "Veelgebruikte labels:"
 
-#: ../src/bootstrap.php:234
+#: ../src/bootstrap.php:253
 msgid "Building your PDFs"
 msgstr "Je pdf's bouwen"
 
-#: ../src/bootstrap.php:235
+#: ../src/bootstrap.php:254
 msgid "(Please do not navigate away from this page)"
 msgstr "(Ga niet weg van deze pagina)"
 
-#: ../src/bootstrap.php:238
+#: ../src/bootstrap.php:257
 msgid "Your PDFs are ready and the download will begin shortly."
 msgstr "Je pdf's zijn klaar en het downloaden begint binnenkort."
 
 #. translators: 1: Open Anchor Tag 2: Close Anchor Tag
-#: ../src/bootstrap.php:241
+#: ../src/bootstrap.php:260
 msgid ""
 "The zip file contains the PDFs for your selected entries. %1$sClick here if "
 "the download does not start automatically%2$s."
@@ -91,21 +92,21 @@ msgstr ""
 "Het zip-bestand bevat de pdf's voor je geselecteerde vermeldingen. %1$sKlik "
 "hier als het downloaden niet automatisch begint%2$s."
 
-#: ../src/bootstrap.php:245
+#: ../src/bootstrap.php:264
 msgid "Are you sure you want to cancel the download?"
 msgstr "Weet u zeker dat je het downloaden wilt annuleren?"
 
-#: ../src/bootstrap.php:248
+#: ../src/bootstrap.php:267
 msgid "Oops..."
 msgstr "Oeps..."
 
-#: ../src/bootstrap.php:249
+#: ../src/bootstrap.php:268
 msgid "An error occurred which prevented the Bulk Generator from completing!"
 msgstr ""
 "Er is een fout opgetreden waardoor de Bulkgenerator het niet kon voltooien!"
 
 #. translators: 1/2: Open Anchor Tag 3: Close Anchor Tag
-#: ../src/bootstrap.php:252
+#: ../src/bootstrap.php:271
 msgid ""
 "Reload the page and try again. If the issue persists, %1$senable Logging"
 "%3$s, re-run the generator and then %2$sfill out a support ticket%3$s. One "
@@ -116,32 +117,32 @@ msgstr ""
 "%2$svul een ondersteuningsticket in%3$s. Een van onze techneuten helpt je "
 "graag verder."
 
-#: ../src/bootstrap.php:253
+#: ../src/bootstrap.php:272
 msgid "Tech boffins at work."
 msgstr "Techneuten aan het werk."
 
 #. translators: 1: PDF Name 2: PDF ID 3: Entry ID
-#: ../src/bootstrap.php:261
+#: ../src/bootstrap.php:280
 msgid "Generated %1$s (#%2$s) for Entry #%3$s"
 msgstr "Genereerde %1$s (#%2$s) voor vermelding #%3$s"
 
 #. translators: 1: PDF Name 2: PDF ID 3: Entry ID
-#: ../src/bootstrap.php:264
+#: ../src/bootstrap.php:283
 msgid "Failed generating %1$s (#%2$s) for Entry #%3$s"
 msgstr "Kan %1$s (#%2$s) voor vermelding #%3$s niet genereren"
 
 #. translators: 1: PDF Name 2: PDF ID 3: Entry ID
-#: ../src/bootstrap.php:267
+#: ../src/bootstrap.php:286
 msgid "Invalid PDF ID: Skipped %1$s (#%2$s) for Entry #%3$s"
 msgstr "Ongeldige PDF-ID: %1$s (#%2$s) overgeslagen voor vermelding #%3$s"
 
 #. translators: 1: PDF Name 2: PDF ID 3: Entry ID
-#: ../src/bootstrap.php:270
+#: ../src/bootstrap.php:289
 msgid "Inactive PDF: Skipped %1$s (#%2$s) for Entry #%3$s"
 msgstr "Inactieve PDF: %1$s (#%2$s) overgeslagen voor vermelding #%3$s"
 
 #. translators: 1: PDF Name 2: PDF ID 3: Entry ID
-#: ../src/bootstrap.php:273
+#: ../src/bootstrap.php:292
 msgid "Conditional Logic Check: Skipped %1$s (#%2$s) for Entry #%3$s"
 msgstr ""
 "Voorwaardelijke logisch controle: %1$s (#%2$s) overgeslagen voor vermelding #"
