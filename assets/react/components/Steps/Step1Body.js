@@ -1,12 +1,15 @@
 /* Dependencies */
 import React from 'react'
 import PropTypes from 'prop-types'
+import { sprintf } from 'sprintf-js'
+
 /* Components */
 import ListToggle from '../ListToggle/ListToggle'
 import TagInput from '../TagPicker/TagInput'
 import TagPicker from '../TagPicker/TagPicker'
 /* Helpers */
 import language from '../../helpers/language'
+
 
 /**
  * @package     Gravity PDF Bulk Generator
@@ -58,7 +61,7 @@ const Step1Body = (
     <div className='gfpdf-settings-group'>
       <h3>{language.stepDirectoryStructure}</h3>
 
-      <p>{language.stepDirectoryStructureDesc}</p>
+      <p dangerouslySetInnerHTML={{__html: sprintf(language.stepDirectoryStructureDesc, '<a href="https://docs.gravityforms.com/category/user-guides/merge-tags-getting-started/">', '</a>')}}/>
 
       <TagInput
         value={directoryStructure}
