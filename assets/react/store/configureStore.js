@@ -20,7 +20,7 @@ export const history = createMemoryHistory()
 
 /* Initialize Saga Middleware */
 const sagaMiddleware = createSagaMiddleware()
-const middlewares = [routerMiddleware(history), sagaMiddleware]
+export const middlewares = [routerMiddleware(history), sagaMiddleware]
 const middlewareEnhancer = applyMiddleware(...middlewares)
 const enhancers = [middlewareEnhancer]
 /* Initialize Redux dev tools */

@@ -15,10 +15,12 @@ import React from 'react'
  *
  * @since 1.0
  */
-const LoadingDots = () => (
-  <span className='gfpdf-loading-dots'>
-    <span>.</span><span>.</span><span>.</span>
-  </span>
-)
+const LoadingDots = () => {
+  return (
+    <span data-test='component-LoadingDots' className='gfpdf-loading-dots'>
+      <span>.</span><span>.</span><span>.</span>
+    </span>
+  )
+}
 
 export default LoadingDots

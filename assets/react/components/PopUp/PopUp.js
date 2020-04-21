@@ -22,7 +22,7 @@ import Steps from '../Steps/Steps'
  *
  * @since 1.0
  */
-class PopUp extends React.Component {
+export class PopUp extends React.Component {
 
   /**
    * PropTypes
@@ -52,12 +52,11 @@ class PopUp extends React.Component {
    * @since 1.0
    */
   escapeKeyListener = e => {
-    const { keyCode } = e
     const escapeKey = 27
     const { fatalError, history } = this.props
 
     /* 'escape' key is pressed */
-    if (keyCode === escapeKey) {
+    if (e.keyCode === escapeKey) {
       cancelModal({ e, fatalError, history })
     }
   }
@@ -72,7 +71,7 @@ class PopUp extends React.Component {
   render () {
 
     return (
-      <PoseGroup flipMove={false}>
+      <PoseGroup data-test='component-PopUp' flipMove={false}>
         {this.props.modal && [
           <Fade key='fade'>
             <Route
@@ -108,4 +107,4 @@ const mapStateToProps = state => ({
   fatalError: state.pdf.fatalError
 })
 
-export default connect(mapStateToProps, null)(PopUp)
+export default connect(mapStateToProps, {})(PopUp)

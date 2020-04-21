@@ -19,7 +19,7 @@ import language from '../../helpers/language'
  *
  * @since 1.0
  */
-class Logs extends React.Component {
+export class Logs extends React.Component {
 
   /**
    * PropTypes
@@ -84,11 +84,12 @@ class Logs extends React.Component {
     const { generatePdfSuccess, generatePdfFailed, generatePdfWarning } = this.props
 
     return (
-      <section className='logs'>
+      <section data-test='component-Logs' className='logs'>
         {
           /* Display success logs */
           generatePdfSuccess.length > 0 && (
               <InfoBox
+                data-test='component-success-InfoBox'
                 title={language.successTitle}
                 state={success}
                 toggle={this.toggleSuccess}
@@ -101,6 +102,7 @@ class Logs extends React.Component {
           /* Display errors/failed logs */
           generatePdfFailed.length > 0 && (
               <InfoBox
+                data-test='component-failed-InfoBox'
                 title={language.errorTitle}
                 state={errors}
                 toggle={this.toggleErrors}
@@ -113,6 +115,7 @@ class Logs extends React.Component {
           /* Display warning logs */
           generatePdfWarning.length > 0 && (
               <InfoBox
+                data-test='component-warning-InfoBox'
                 title={language.warningTitle}
                 state={warnings}
                 toggle={this.toggleWarnings}

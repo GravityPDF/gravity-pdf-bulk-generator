@@ -23,7 +23,10 @@ import language from '../../helpers/language'
  * @since 1.0
  */
 const FatalError = ({ pluginUrl, adminUrl }) => (
-  <section id='gfpdf-fatal-error' className='gfpdf-step'>
+  <section
+    data-test='component-FatalError'
+    id='gfpdf-fatal-error'
+    className='gfpdf-step'>
     <div id='gfpdf-fatal-error-title'>{language.fatalErrorTitle}</div>
     <div id='gfpdf-fatal-error-desc'>{language.fatalErrorDescription}</div>
 

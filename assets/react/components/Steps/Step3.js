@@ -14,7 +14,7 @@ import language from '../../helpers/language'
  *
  * @since 1.0
  */
-class Step3 extends React.Component {
+export class Step3 extends React.Component {
 
   /**
    * PropTypes
@@ -81,7 +81,10 @@ class Step3 extends React.Component {
     const { downloadZipUrl, history } = this.props
 
     return (
-      <div ref={node => this.container = node} tabIndex='-1'>
+      <div
+        data-test='component-Step3'
+        ref={node => this.container = node}
+        tabIndex='-1'>
         <button
           className='gfpdf-close-button'
           onClick={e => cancelModal({ e, history })}>

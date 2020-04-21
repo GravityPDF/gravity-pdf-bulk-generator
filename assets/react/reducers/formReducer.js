@@ -1,6 +1,6 @@
 /* Redux Action Types */
 import { RESET_ALL_STATE } from '../actionTypes/actionTypes'
-import { PROCESS_CHECKBOX, GET_SELECTED_ENTRY_IDS_SUCCESS } from '../actionTypes/form'
+import { PROCESS_CHECKBOX, GET_SELECTED_ENTRIES_ID_SUCCESS } from '../actionTypes/form'
 
 /**
  * @package     Gravity PDF Bulk Generator
@@ -12,12 +12,12 @@ import { PROCESS_CHECKBOX, GET_SELECTED_ENTRY_IDS_SUCCESS } from '../actionTypes
 /**
  * Setup the initial state of the "form" portion of our Redux store
  *
- * @type { selectedEntryIds: array }
+ * @type { selectedEntriesId: array }
  *
  * @since 1.0
  */
 export const initialState = {
-  selectedEntryIds: []
+  selectedEntriesId: []
 }
 
 /**
@@ -51,19 +51,19 @@ export default function (state = initialState, action) {
 
       return {
         ...state,
-        selectedEntryIds: entryIds
+        selectedEntriesId: entryIds
       }
     }
 
     /**
-     * Process GET_SELECTED_ENTRY_IDS_SUCCESS
+     * Process GET_SELECTED_ENTRIES_ID_SUCCESS
      *
      * @since 1.0
      */
-    case GET_SELECTED_ENTRY_IDS_SUCCESS:
+    case GET_SELECTED_ENTRIES_ID_SUCCESS:
       return {
         ...state,
-        selectedEntryIds: action.payload
+        selectedEntriesId: action.payload
       }
 
     /**

@@ -41,7 +41,10 @@ const Step1Body = (
     tagDeselect
   }
 ) => (
-  <section id='gfpdf-step1' className='gfpdf-step'>
+  <section
+    data-test='component-Step1Body'
+    id='gfpdf-step1'
+    className='gfpdf-step'>
     <div className='gfpdf-settings-group'>
       <h3>{language.stepSelectPdfs}</h3>
 

@@ -25,7 +25,7 @@ import language from '../../helpers/language'
  * @since 1.0
  */
 const Step2Body = ({ downloadPercentage }) => (
-  <section className='gfpdf-step'>
+  <section data-test='component-Step2Body' className='gfpdf-step'>
     <div id='gfpdf-step-2'>
       <CircularProgressbar
         value={downloadPercentage}
@@ -35,7 +35,7 @@ const Step2Body = ({ downloadPercentage }) => (
       <em>{language.stepDoNotNavigateAway}</em>
     </div>
 
-    <Logs />
+    <Logs data-test='component-Logs' />
   </section>
 )
 

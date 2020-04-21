@@ -1,5 +1,5 @@
 /* Dependencies */
-import React, { Fragment } from 'react'
+import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 /* Components */
 import Step1 from './Step1'
@@ -31,7 +31,7 @@ class Steps extends React.Component {
    */
   render () {
     return (
-      <Fragment>
+      <div data-test='component-Steps'>
         <header>
           <h2>{language.stepTitle}</h2>
         </header>
@@ -41,7 +41,7 @@ class Steps extends React.Component {
           <Route path='/step/2' component={Step2} />
           <Route path='/step/3' component={Step3} />
         </Switch>
-      </Fragment>
+      </div>
     )
   }
 }

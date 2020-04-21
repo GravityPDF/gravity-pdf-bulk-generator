@@ -3,6 +3,7 @@ language: php
 sudo: false
 
 cache:
+  yarn: true
   directories:
     - $HOME/.composer/cache
 
@@ -25,11 +26,12 @@ matrix:
     - php: 5.6
       env: LINT=1
     - php: 7.4
+      env: JEST_COVERAGE_TEST=1
+    - php: 7.4
       env: WP_VERSION=latest WP_MULTISITE=1 PHPUNIT_COVERAGE_TEST=1
 
 before_script:
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
-  - composer install --prefer-source --optimize-autoloader --no-scripts
   - |
     if [[ "$PHPUNIT_COVERAGE_TEST" == "0" ]]; then
       if [ -f ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini ]; then
@@ -39,8 +41,17 @@ before_script:
       fi
     fi
   - |
+    if [[ "$LINT" == "1" || ! -z "$WP_VERSION" ]] ; then
+      composer install --prefer-source --optimize-autoloader --no-scripts
+    fi
+  - |
     if [[ ! -z "$WP_VERSION" ]] ; then
       bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
+    fi
+  - |
+    if [[ "$JEST_COVERAGE_TEST" == "1" || "$LINT" == "1" ]] ; then
+      nvm install 12 && nvm use 12
+      yarn
     fi
   - |
     if [[ "$LINT" == "1" ]] ; then
@@ -58,12 +69,17 @@ script:
       vendor/bin/phpunit --coverage-clover=coverage/php-coverage1.xml
     fi
   - |
+    if [[ "$JEST_COVERAGE_TEST" == "1" ]] ; then
+      yarn test:js-unit:coverage
+    fi
+  - |
     if [[ "$LINT" == "1" ]] ; then
       phpcs
+      yarn lint:js
     fi
 
 after_success:
   - |
-    if [[ "$PHPUNIT_COVERAGE_TEST" == "1" ]] ; then
+    if [[ "$PHPUNIT_COVERAGE_TEST" == "1" || "$JEST_COVERAGE_TEST" == "1" ]] ; then
       bash <(curl -s https://codecov.io/bash);
     fi
