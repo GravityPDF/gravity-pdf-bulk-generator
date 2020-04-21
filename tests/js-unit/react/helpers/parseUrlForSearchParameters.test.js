@@ -1,7 +1,6 @@
 import { parseUrlForSearchParameters } from '../../../../assets/react/helpers/parseUrlForSearchParameters'
 
 describe('/react/helpers/ - parseUrlForSearchParameters.js', () => {
-
   let url
 
   test('should parse URL filter data into an object', () => {

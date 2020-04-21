@@ -21,7 +21,6 @@ import language from '../../helpers/language'
  * @since 1.0
  */
 class Steps extends React.Component {
-
   /**
    * Display Steps UI
    *

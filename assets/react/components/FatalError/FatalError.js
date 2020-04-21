@@ -26,15 +26,17 @@ const FatalError = ({ pluginUrl, adminUrl }) => (
   <section
     data-test='component-FatalError'
     id='gfpdf-fatal-error'
-    className='gfpdf-step'>
+    className='gfpdf-step'
+  >
     <div id='gfpdf-fatal-error-title'>{language.fatalErrorTitle}</div>
     <div id='gfpdf-fatal-error-desc'>{language.fatalErrorDescription}</div>
 
     <img
       src={pluginUrl + 'assets/images/Fatal-Error-Capt-Paws-Artwork.png'}
-      alt={language.fatalErrorImageAlt} />
+      alt={language.fatalErrorImageAlt}
+    />
 
-    <p dangerouslySetInnerHTML={{__html: sprintf(language.fatalErrorInformation, '<a href="'+adminUrl+'admin.php?page=gf_settings">', '<a href="https://gravitypdf.com/support/#contact-support">', '</a>')}}/>
+    <p dangerouslySetInnerHTML={{ __html: sprintf(language.fatalErrorInformation, '<a href="' + adminUrl + 'admin.php?page=gf_settings">', '<a href="https://gravitypdf.com/support/#contact-support">', '</a>') }} />
   </section>
 )
 

@@ -4,7 +4,6 @@ import { findByTestAttr } from '../../testUtils'
 import ListToggle from '../../../../../assets/react/components/ListToggle/ListToggle'
 
 describe('/react/components/ListToggle/ - ListToggle.js', () => {
-
   let wrapper
   let component
   const pdfList = [
@@ -15,7 +14,6 @@ describe('/react/components/ListToggle/ - ListToggle.js', () => {
   const togglePdfStatusMock = jest.fn()
 
   describe('Renders main component - ', () => {
-
     beforeEach(() => {
       wrapper = shallow(<ListToggle items={pdfList} onChange={togglePdfStatusMock} />)
       component = findByTestAttr(wrapper, 'component-ListToggle')

@@ -15,7 +15,6 @@ import PropTypes from 'prop-types'
  * @since 1.0
  */
 class TagPicker extends React.Component {
-
   /**
    * PropTypes
    *
@@ -56,11 +55,7 @@ class TagPicker extends React.Component {
    * @since 1.0
    */
   componentDidUpdate (prevProps) {
-    const { inputValue } = this.props
-
-    if (prevProps.inputValue !== inputValue) {
-      this.setState({ selectedTags: this.getActiveTags(inputValue) })
-    }
+    this.updateSelectedTags(prevProps.inputValue)
   }
 
   /**
@@ -100,6 +95,21 @@ class TagPicker extends React.Component {
     const result = value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 
     return result
+  }
+
+  /**
+   * Update selectedTags state
+   *
+   * @param prevInputValue: string
+   *
+   * @since 1.0
+   */
+  updateSelectedTags = prevInputValue => {
+    const { inputValue } = this.props
+
+    if (prevInputValue !== inputValue) {
+      this.setState({ selectedTags: this.getActiveTags(inputValue) })
+    }
   }
 
   /**
@@ -147,7 +157,8 @@ class TagPicker extends React.Component {
                 type='button'
                 className={classes}
                 onClick={(e) =>
-                  this.tagClicked(tags[index], e)}>
+                  this.tagClicked(tags[index], e)}
+              >
                 {tag.label}
               </button>
             )

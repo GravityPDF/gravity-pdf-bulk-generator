@@ -27,7 +27,8 @@ const TagInput = ({ value, onChange }) => {
       name='gfpdf-directory-structure'
       value={value}
       className='large-text code'
-      onChange={(e) => onChange(e.target.value)} />
+      onChange={(e) => onChange(e.target.value)}
+    />
   )
 }
 
@@ -38,7 +39,7 @@ const TagInput = ({ value, onChange }) => {
  */
 TagInput.propTypes = {
   value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired
 }
 
 export default TagInput

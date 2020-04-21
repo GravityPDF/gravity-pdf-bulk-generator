@@ -14,13 +14,11 @@ import { RESET_ALL_STATE } from '../../../../assets/react/actionTypes/actionType
 import reducer, { initialState } from '../../../../assets/react/reducers/pdfReducer'
 
 describe('/react/reducers/ - pdfReducer.js', () => {
-
   let data
   let state
   let newState
 
   describe('Redux Reducers (pdf) - ', () => {
-
     test('STORE_ABORT_CONTROLLER', () => {
       data = {}
       state = reducer(initialState, { type: STORE_ABORT_CONTROLLER, payload: data })

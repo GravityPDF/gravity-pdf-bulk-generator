@@ -10,7 +10,6 @@ import TagPicker from '../TagPicker/TagPicker'
 /* Helpers */
 import language from '../../helpers/language'
 
-
 /**
  * @package     Gravity PDF Bulk Generator
  * @copyright   Copyright (c) 2020, Blue Liquid Designs
@@ -47,7 +46,8 @@ const Step1Body = (
   <section
     data-test='component-Step1Body'
     id='gfpdf-step1'
-    className='gfpdf-step'>
+    className='gfpdf-step'
+  >
     <div className='gfpdf-settings-group'>
       <h3>{language.stepSelectPdfs}</h3>
 
@@ -55,17 +55,19 @@ const Step1Body = (
 
       <ListToggle
         items={pdfList}
-        onChange={togglePdfStatus} />
+        onChange={togglePdfStatus}
+      />
     </div>
 
     <div className='gfpdf-settings-group'>
       <h3>{language.stepDirectoryStructure}</h3>
 
-      <p dangerouslySetInnerHTML={{__html: sprintf(language.stepDirectoryStructureDesc, '<a href="https://docs.gravityforms.com/category/user-guides/merge-tags-getting-started/">', '</a>')}}/>
+      <p dangerouslySetInnerHTML={{ __html: sprintf(language.stepDirectoryStructureDesc, '<a href="https://docs.gravityforms.com/category/user-guides/merge-tags-getting-started/">', '</a>') }} />
 
       <TagInput
         value={directoryStructure}
-        onChange={updateDirectoryStructure} />
+        onChange={updateDirectoryStructure}
+      />
 
       <p>{language.stepCommonTagsLabel}</p>
 
@@ -73,7 +75,8 @@ const Step1Body = (
         tags={tags}
         onSelectCallback={tagSelect}
         onDeselectCallback={tagDeselect}
-        inputValue={directoryStructure} />
+        inputValue={directoryStructure}
+      />
     </div>
   </section>
 )

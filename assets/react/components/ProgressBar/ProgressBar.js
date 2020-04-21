@@ -32,7 +32,8 @@ const ProgressBar = ({ step }) => {
       {steps.map((name, index) => (
         <li
           key={index}
-          className={(step - 1) === index ? 'active' : ''}>
+          className={(step - 1) === index ? 'active' : ''}
+        >
           {name}
         </li>
       ))}

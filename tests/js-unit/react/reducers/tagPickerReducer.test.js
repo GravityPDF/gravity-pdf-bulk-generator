@@ -3,12 +3,10 @@ import { RESET_ALL_STATE } from '../../../../assets/react/actionTypes/actionType
 import reducer, { initialState } from '../../../../assets/react/reducers/tagPickerReducer'
 
 describe('/react/reducers/ - tagPickerReducer.js', () => {
-
   let data
   let state
 
   describe('Redux Reducers (tagPicker) - ', () => {
-
     test('UPDATE_DIRECTORY_STRUCTURE', () => {
       data = '/{date_created:format:Y}/{date_created:format:m}/{date_created:format:i}/'
       state = reducer(initialState, { type: UPDATE_DIRECTORY_STRUCTURE, payload: data })

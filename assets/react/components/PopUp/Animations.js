@@ -22,7 +22,7 @@ export const Fade = posed.div({
       duration: 150
     }
   },
-  exit: {opacity: 0}
+  exit: { opacity: 0 }
 })
 
 /**
@@ -37,14 +37,14 @@ export const SlideDown = posed.div({
     y: 0,
     transition: {
       duration: 750,
-      ease: [0.215, 0.61, 0.355, 1],
+      ease: [0.215, 0.61, 0.355, 1]
     }
   },
   exit: {
     y: '-100%',
     transition: {
       duration: 350,
-      ease: [0.215, 0.61, 0.355, 1],
+      ease: [0.215, 0.61, 0.355, 1]
     }
   }
 })

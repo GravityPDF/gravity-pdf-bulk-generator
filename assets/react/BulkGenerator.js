@@ -25,15 +25,12 @@ import language from './helpers/language'
  * @since 1.0
  */
 export class BulkGenerator extends React.Component {
-
   /**
    * PropTypes
    *
    * @since 1.0
    */
   static propTypes = {
-    downloadPercentage: PropTypes.number.isRequired,
-    location: PropTypes.object.isRequired,
     proceedStep1: PropTypes.func.isRequired,
     generatePdfListSuccess: PropTypes.func.isRequired,
     processCheckbox: PropTypes.func.isRequired,
@@ -84,9 +81,9 @@ export class BulkGenerator extends React.Component {
    */
   setGlobalState = () => {
     /* Global variable to get Form Data */
-    const { form_id, pdfs } = GPDF_BULK_GENERATOR
+    const { formId, pdfs } = GPDF_BULK_GENERATOR
 
-    this.setState({ formId: form_id })
+    this.setState({ formId: formId })
 
     this.setPdfListState(pdfs)
   }
@@ -137,7 +134,7 @@ export class BulkGenerator extends React.Component {
         id: item.id,
         name: item.name,
         templateSelected: item.template,
-        active: active ? true : false
+        active: !!active
       })
     })
 
@@ -189,7 +186,7 @@ export class BulkGenerator extends React.Component {
    */
   processAllEntriesId = () => {
     const { formId } = this.state
-    /* Process search request filters through URL data*/
+    /* Process search request filters through URL data */
     const filterData = parseUrlForSearchParameters(window.location.search)
 
     this.props.getSelectedEntriesId(formId, filterData)
@@ -234,13 +231,12 @@ export class BulkGenerator extends React.Component {
  *
  * @param state
  *
- * @returns { modal: boolean, downloadPercentage: number, downloadZipUrl: string }
+ * @returns { modal: boolean, downloadZipUrl: string }
  *
  * @since 1.0
  */
 const mapStateToProps = state => ({
   modal: state.pdf.modal,
-  downloadPercentage: state.pdf.downloadPercentage,
   downloadZipUrl: state.pdf.downloadZipUrl
 })
 
@@ -253,5 +249,5 @@ export default withRouter(connect(mapStateToProps, {
   proceedStep1,
   processCheckbox,
   getSelectedEntriesId,
-  generatePdfListSuccess,
+  generatePdfListSuccess
 })(BulkGenerator))

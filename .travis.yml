@@ -70,7 +70,7 @@ script:
     fi
   - |
     if [[ "$JEST_COVERAGE_TEST" == "1" ]] ; then
-      yarn test:js-unit:coverage
+      yarn test:js:coverage
     fi
   - |
     if [[ "$LINT" == "1" ]] ; then

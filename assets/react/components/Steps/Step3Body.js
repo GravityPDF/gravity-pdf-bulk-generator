@@ -28,7 +28,7 @@ const Step3Body = ({ downloadZipUrl }) => (
     <div id='gfpdf-step-3'>
       <h2>{language.stepDownloadTitle}</h2>
 
-      <p dangerouslySetInnerHTML={{__html: sprintf(language.stepDownloadDescription, '<a href="'+downloadZipUrl+'" download>', '</a>')}}/>
+      <p dangerouslySetInnerHTML={{ __html: sprintf(language.stepDownloadDescription, '<a href="' + downloadZipUrl + '" download>', '</a>') }} />
     </div>
 
     <Logs data-test='component-Logs' />

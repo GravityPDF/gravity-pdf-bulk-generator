@@ -4,7 +4,6 @@ import { findByTestAttr } from '../../testUtils'
 import ToggleSwitch from '../../../../../assets/react/components/Switch/Switch'
 
 describe('/react/components/Switch/ - Switch.js', () => {
-
   let wrapper
   let component
   const id = 1
@@ -14,7 +13,6 @@ describe('/react/components/Switch/ - Switch.js', () => {
   const onChangeMock = jest.fn()
 
   describe('Renders main component - ', () => {
-
     beforeEach(() => {
       wrapper = shallow(
         <ToggleSwitch id={id} active={active} screenReaderLabel={screenReaderLabel} onChange={onChangeMock} />

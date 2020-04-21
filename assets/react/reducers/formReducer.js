@@ -31,9 +31,7 @@ export const initialState = {
  * @since 1.0
  */
 export default function (state = initialState, action) {
-
   switch (action.type) {
-
     /**
      * Process PROCESS_CHECKBOX
      *
@@ -41,7 +39,7 @@ export default function (state = initialState, action) {
      */
     case PROCESS_CHECKBOX: {
       const ids = action.payload
-      let entryIds = []
+      const entryIds = []
 
       ids.forEach(id => {
         if (id.type === 'checkbox' && id.checked) {

@@ -15,7 +15,6 @@ import language from '../../helpers/language'
  * @since 1.0
  */
 export class Step3 extends React.Component {
-
   /**
    * PropTypes
    *
@@ -83,11 +82,13 @@ export class Step3 extends React.Component {
     return (
       <div
         data-test='component-Step3'
-        ref={node => this.container = node}
-        tabIndex='-1'>
+        ref={node => (this.container = node)}
+        tabIndex='-1'
+      >
         <button
           className='gfpdf-close-button'
-          onClick={e => cancelModal({ e, history })}>
+          onClick={e => cancelModal({ e, history })}
+        >
           <span className='screen-reader-text'>{language.stepCloseDialog}</span>
         </button>
 

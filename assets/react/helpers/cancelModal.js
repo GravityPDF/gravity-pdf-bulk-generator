@@ -22,7 +22,7 @@ export const cancelModal = ({ e, fatalError, history }) => {
 
   /* Check current path */
   if (history.location.pathname === '/step/2' && !fatalError) {
-    if (!confirm(language.cancelButtonConfirmation)) {
+    if (!window.confirm(language.cancelButtonConfirmation)) {
       return
     }
   }

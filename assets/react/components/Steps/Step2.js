@@ -23,7 +23,6 @@ import language from '../../helpers/language'
  * @since 1.0
  */
 export class Step2 extends React.Component {
-
   /**
    * PropTypes
    *
@@ -32,7 +31,7 @@ export class Step2 extends React.Component {
   static propTypes = {
     downloadPercentage: PropTypes.number.isRequired,
     fatalError: PropTypes.bool.isRequired,
-    history: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired
   }
 
   /**
@@ -81,23 +80,26 @@ export class Step2 extends React.Component {
     return (
       <div
         data-test='component-Step2'
-        ref={node => this.container = node}
-        tabIndex='-1'>
+        ref={node => (this.container = node)}
+        tabIndex='-1'
+      >
         <ProgressBar step={2} />
 
         {!fatalError && <Step2Body downloadPercentage={downloadPercentage} />}
 
         {
           fatalError &&
-          <FatalError
-            pluginUrl={GPDF_BULK_GENERATOR.plugin_url}
-            adminUrl={GPDF_BULK_GENERATOR.admin_url} />
+            <FatalError
+              pluginUrl={GPDF_BULK_GENERATOR.pluginUrl}
+              adminUrl={GPDF_BULK_GENERATOR.adminUrl}
+            />
         }
 
         <footer>
           <button
             className='button cancel'
-            onClick={e => cancelModal({ e, fatalError, history })}>
+            onClick={e => cancelModal({ e, fatalError, history })}
+          >
             {language.cancelLabel}
           </button>
         </footer>

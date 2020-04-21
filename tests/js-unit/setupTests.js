@@ -28,7 +28,7 @@ window.GPDF_BULK_GENERATOR = {
     /* Step 1 */
     stepActivePdfEmpty: 'Please select at least one PDF to generate for the entries.'
   },
-  plugin_url: 'https://gravitypdf.com',
-  admin_url: 'https://gravitypdf.com',
-  form_id: '5'
+  pluginUrl: 'https://gravitypdf.com',
+  adminUrl: 'https://gravitypdf.com',
+  formId: '5'
 }

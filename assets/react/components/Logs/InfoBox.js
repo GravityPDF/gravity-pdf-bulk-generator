@@ -42,7 +42,8 @@ const InfoBox = ({ title, logs, toggle, state, className }) => (
             <List
               log={log}
               className={className}
-              key={index} />
+              key={index}
+            />
           ))
         }
       </div>

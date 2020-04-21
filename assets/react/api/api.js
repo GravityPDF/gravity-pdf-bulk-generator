@@ -16,7 +16,7 @@
  * @since 1.0
  */
 export const api = async (url, init) => {
-  const response = await fetch(url, init)
+  const response = await window.fetch(url, init)
 
   /* Promise reject for status code 408 and 500 */
   if (response.status === 408 || response.status >= 500) {

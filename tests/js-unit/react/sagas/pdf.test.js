@@ -44,7 +44,6 @@ import {
 } from '../../../../assets/react/actionTypes/logs'
 
 describe('/react/sagas/ - pdf.js', () => {
-
   let payload
   let response
   let responseBody
@@ -60,9 +59,7 @@ describe('/react/sagas/ - pdf.js', () => {
   let downloadZipUrl
 
   describe('Redux Sagas (pdf) - ', () => {
-
     describe('Selectors - should check our selectors', () => {
-
       test('getStateSelectedEntryIds', () => {
         const state = { form: { selectedEntriesId: ['74', '75'] } }
 
@@ -102,7 +99,6 @@ describe('/react/sagas/ - pdf.js', () => {
     })
 
     describe('Watcher Saga - watchGenerateSessionId()', () => {
-
       test('should check the watcher to loads up the worker saga functions', () => {
         selectedEntriesId = ['73', '74']
         const gen = watchGenerateSessionId()
@@ -128,7 +124,6 @@ describe('/react/sagas/ - pdf.js', () => {
     })
 
     describe('Worker Saga - generateSessionId()', () => {
-
       test('should check that saga calls the API apiRequestSessionId', () => {
         response = { ok: true, json: jest.fn() }
         responseBody = { sessionId: '336ac9' }
@@ -170,7 +165,6 @@ describe('/react/sagas/ - pdf.js', () => {
     })
 
     describe('Watcher Saga - watchGeneratePDF()', () => {
-
       test('should check the watcher to loads up the worker saga functions', () => {
         payload = {
           sessionId: '42f6c',
@@ -195,7 +189,6 @@ describe('/react/sagas/ - pdf.js', () => {
     })
 
     describe('Worker Saga - bulkGeneratePdf()', () => {
-
       test('should check the handling for Step 2/3/4 of the Bulk Generator process logic', () => {
         pdfs = [{ entryId: '71', pdfId: '5e12a', pdfName: 'templateA', sessionId: '42f6c' }]
         concurrency = 5
@@ -227,7 +220,6 @@ describe('/react/sagas/ - pdf.js', () => {
     })
 
     describe('Worker Saga - generatePdf()', () => {
-
       test('should fork process that handle the individual PDF generation', () => {
         pdfs = [{ entryId: '71', pdfId: '5e12a', pdfName: 'templateA', sessionId: '42f6c' }]
         const gen = generatePdf(pdfs)
@@ -239,7 +231,6 @@ describe('/react/sagas/ - pdf.js', () => {
     })
 
     describe('Worker Ssaga - requestGeneratePdf()', () => {
-
       test('should check that saga calls the API apiRequestGeneratePdf', () => {
         pdf = { entryId: '71', pdfId: '5e12a', pdfName: 'templateA', sessionId: '42f6c' }
         data = { pdf, signal: abortController.signal }
@@ -331,7 +322,6 @@ describe('/react/sagas/ - pdf.js', () => {
     })
 
     describe('Workder Saga - generateDownloadZipUrl()', () => {
-
       test('should check that saga calls the API apiRequestGeneratePdfZip', () => {
         sessionId = 'e801d'
         response = { ok: true, json: jest.fn() }
@@ -372,7 +362,6 @@ describe('/react/sagas/ - pdf.js', () => {
     })
 
     describe('Worker Saga - validateDownloadZipUrl()', () => {
-
       test('should check that saga calls the API apiRequestDownloadZipFile', () => {
         downloadZipUrl = 'https://gravitypdf.com'
         response = { ok: true }
@@ -406,7 +395,6 @@ describe('/react/sagas/ - pdf.js', () => {
     })
 
     describe('Worker Saga - generatePdfCancel()', () => {
-
       test('should abort all the stored \'AbortController\'s', () => {
         const abort = jest.fn()
         const abortControllers = [{ abortController: jest.fn(), abort }]
@@ -419,7 +407,6 @@ describe('/react/sagas/ - pdf.js', () => {
     })
 
     describe('Watcher Saga - watchFatalError()', () => {
-
       test('should Watch for a fatal error event and handle our fatal error and cancel logic', () => {
         const gen = watchFatalError()
 
@@ -430,7 +417,6 @@ describe('/react/sagas/ - pdf.js', () => {
     })
 
     describe('Watcher Saga - watchResetAllReducers()', () => {
-
       test('should watch for router \'/\' location changed, trigger cancel event and reset 3 of our reducers state', () => {
         payload = { location: { pathname: '/' }, isFirstRendering: false }
         const gen = watchResetAllReducers()

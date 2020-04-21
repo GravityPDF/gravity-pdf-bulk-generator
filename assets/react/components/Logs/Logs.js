@@ -20,7 +20,6 @@ import language from '../../helpers/language'
  * @since 1.0
  */
 export class Logs extends React.Component {
-
   /**
    * PropTypes
    *
@@ -79,7 +78,7 @@ export class Logs extends React.Component {
    *
    * @since 1.0
    */
-  render() {
+  render () {
     const { success, errors, warnings } = this.state
     const { generatePdfSuccess, generatePdfFailed, generatePdfWarning } = this.props
 
@@ -88,39 +87,42 @@ export class Logs extends React.Component {
         {
           /* Display success logs */
           generatePdfSuccess.length > 0 && (
-              <InfoBox
-                data-test='component-success-InfoBox'
-                title={language.successTitle}
-                state={success}
-                toggle={this.toggleSuccess}
-                logs={generatePdfSuccess}
-                className='success' />
+            <InfoBox
+              data-test='component-success-InfoBox'
+              title={language.successTitle}
+              state={success}
+              toggle={this.toggleSuccess}
+              logs={generatePdfSuccess}
+              className='success'
+            />
           )
         }
 
         {
           /* Display errors/failed logs */
           generatePdfFailed.length > 0 && (
-              <InfoBox
-                data-test='component-failed-InfoBox'
-                title={language.errorTitle}
-                state={errors}
-                toggle={this.toggleErrors}
-                logs={generatePdfFailed}
-                className='errors' />
+            <InfoBox
+              data-test='component-failed-InfoBox'
+              title={language.errorTitle}
+              state={errors}
+              toggle={this.toggleErrors}
+              logs={generatePdfFailed}
+              className='errors'
+            />
           )
         }
 
         {
           /* Display warning logs */
           generatePdfWarning.length > 0 && (
-              <InfoBox
-                data-test='component-warning-InfoBox'
-                title={language.warningTitle}
-                state={warnings}
-                toggle={this.toggleWarnings}
-                logs={generatePdfWarning}
-                className='warnings' />
+            <InfoBox
+              data-test='component-warning-InfoBox'
+              title={language.warningTitle}
+              state={warnings}
+              toggle={this.toggleWarnings}
+              logs={generatePdfWarning}
+              className='warnings'
+            />
           )
         }
       </section>

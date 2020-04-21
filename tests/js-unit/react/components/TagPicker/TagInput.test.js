@@ -4,7 +4,6 @@ import { findByTestAttr } from '../../testUtils'
 import TagInput from '../../../../../assets/react/components/TagPicker/TagInput'
 
 describe('/react/components/TagPicker/ - TagInput.js', () => {
-
   let wrapper
   let component
   let e
@@ -13,7 +12,6 @@ describe('/react/components/TagPicker/ - TagInput.js', () => {
   const onChangeMock = jest.fn()
 
   describe('Renders main component - ', () => {
-
     beforeEach(() => {
       wrapper = shallow(<TagInput value={value} onChange={onChangeMock} />)
       component = findByTestAttr(wrapper, 'component-TagInput')

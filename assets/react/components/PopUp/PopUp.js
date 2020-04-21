@@ -23,7 +23,6 @@ import Steps from '../Steps/Steps'
  * @since 1.0
  */
 export class PopUp extends React.Component {
-
   /**
    * PropTypes
    *
@@ -68,7 +67,7 @@ export class PopUp extends React.Component {
       return
     }
 
-    switch(e.key) {
+    switch (e.key) {
       case 'Escape':
         cancelModal({ e, fatalError, history })
         break
@@ -90,7 +89,6 @@ export class PopUp extends React.Component {
    * @since 1.0
    */
   render () {
-
     return (
       <PoseGroup data-test='component-PopUp' flipMove={false}>
         {this.props.modal && [
@@ -98,16 +96,19 @@ export class PopUp extends React.Component {
             <Route
               key='overlay'
               path='/step'
-              component={Overlay} />
+              component={Overlay}
+            />
           </Fade>,
 
           <SlideDown
             key='slidedown'
-            id='gfpdf-bulk-generator-popup'>
+            id='gfpdf-bulk-generator-popup'
+          >
             <Route
               key='steps'
               path='/step/:stepId'
-              component={Steps} />
+              component={Steps}
+            />
           </SlideDown>
         ]}
       </PoseGroup>

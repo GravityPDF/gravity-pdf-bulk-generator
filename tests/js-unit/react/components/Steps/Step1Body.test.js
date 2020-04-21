@@ -4,7 +4,6 @@ import { findByTestAttr } from '../../testUtils'
 import Step1Body from '../../../../../assets/react/components/Steps/Step1Body'
 
 describe('/react/components/Steps/ - Step1Body.js', () => {
-
   let wrapper
   let component
   const pdfList = [{ id: '5e12a', name: 'templateA', templateSelected: 'blank-slate', active: false }]
@@ -17,7 +16,6 @@ describe('/react/components/Steps/ - Step1Body.js', () => {
   const tagDeselectMock = jest.fn()
 
   describe('Renders main component - ', () => {
-
     beforeEach(() => {
       wrapper = shallow(
         <Step1Body
@@ -27,7 +25,8 @@ describe('/react/components/Steps/ - Step1Body.js', () => {
           updateDirectoryStructure={updateDirectoryStructureMock}
           tags={tags}
           tagSelect={tagSelectMock}
-          tagDeselect={tagDeselectMock} />
+          tagDeselect={tagDeselectMock}
+        />
       )
       component = findByTestAttr(wrapper, 'component-Step1Body')
     })

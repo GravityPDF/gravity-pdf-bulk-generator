@@ -1,7 +1,6 @@
 import { cancelModal } from '../../../../assets/react/helpers/cancelModal'
 
 describe('/react/helpers/ - cancelModal.js', () => {
-
   let history
   const e = { preventDefault () {} }
   const fatalError = false

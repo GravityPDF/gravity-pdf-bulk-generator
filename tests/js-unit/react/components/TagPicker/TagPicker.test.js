@@ -4,12 +4,12 @@ import { findByTestAttr } from '../../testUtils'
 import TagPicker from '../../../../../assets/react/components/TagPicker/TagPicker'
 
 describe('/react/components/TagPicker/ - TagPicker.js', () => {
-
   let wrapper
   let component
   let e
   let inst
   let escapeRegexStringMock
+  let getActiveTags
   let tagClicked
   const tags = [{ id: '{entry_id}', label: 'Entry ID' }]
   const inputValue = '/{entry_id}/'
@@ -18,9 +18,8 @@ describe('/react/components/TagPicker/ - TagPicker.js', () => {
   const onDeselectCallbackMock = jest.fn()
 
   describe('Lifecycle methods - ', () => {
-
     let prevProps
-    let getActiveTagsMock
+    let updateSelectedTags
 
     beforeEach(() => {
       wrapper = shallow(
@@ -28,31 +27,30 @@ describe('/react/components/TagPicker/ - TagPicker.js', () => {
           tags={tags}
           onSelectCallback={onSelectCallbackMock}
           onDeselectCallback={onDeselectCallbackMock}
-          inputValue={inputValue} />
+          inputValue={inputValue}
+        />
       )
       inst = wrapper.instance()
     })
 
     test('componentDidUpdate() - On update, set new state for selectedTags', () => {
       prevProps = { inputValue: '/{date_created:format:Y}/{date_created:format:m}/' }
-      getActiveTagsMock = jest.spyOn(inst, 'getActiveTags')
-      escapeRegexStringMock = jest.spyOn(inst, 'escapeRegexString')
+      updateSelectedTags = jest.spyOn(inst, 'updateSelectedTags')
       inst.componentDidUpdate(prevProps)
 
-      expect(getActiveTagsMock).toHaveBeenCalledTimes(1)
-      expect(escapeRegexStringMock).toHaveBeenCalledTimes(1)
+      expect(updateSelectedTags).toHaveBeenCalledTimes(1)
     })
   })
 
   describe('Component methods - ', () => {
-
     beforeEach(() => {
       wrapper = shallow(
         <TagPicker
           tags={tags}
           onSelectCallback={onSelectCallbackMock}
           onDeselectCallback={onDeselectCallbackMock}
-          inputValue={inputValue} />
+          inputValue={inputValue}
+        />
       )
       inst = wrapper.instance()
     })
@@ -62,6 +60,23 @@ describe('/react/components/TagPicker/ - TagPicker.js', () => {
       inst.getActiveTags(inputValue)
 
       expect(escapeRegexStringMock).toHaveBeenCalledTimes(1)
+    })
+
+    test('updateSelectedTags() - Update selectedTags state (condition: true)', () => {
+      const prevInputValue = '/{date_created:format:Y}/{date_created:format:m}/'
+      getActiveTags = jest.spyOn(inst, 'getActiveTags')
+      inst.updateSelectedTags(prevInputValue)
+
+      expect(getActiveTags).toHaveBeenCalledTimes(1)
+      expect(wrapper.state('selectedTags')).toEqual(['{entry_id}'])
+    })
+
+    test('updateSelectedTags() - Update selectedTags state (condition: false)', () => {
+      const prevInputValue = '/{entry_id}/'
+      getActiveTags = jest.spyOn(inst, 'getActiveTags')
+      inst.updateSelectedTags(prevInputValue)
+
+      expect(getActiveTags).toHaveBeenCalledTimes(0)
     })
 
     test('tagClicked() - Common tags event click listener for active', () => {
@@ -80,14 +95,14 @@ describe('/react/components/TagPicker/ - TagPicker.js', () => {
   })
 
   describe('Renders main component - ', () => {
-
     beforeEach(() => {
       wrapper = shallow(
         <TagPicker
           tags={tags}
           onSelectCallback={onSelectCallbackMock}
           onDeselectCallback={onDeselectCallbackMock}
-          inputValue={inputValue} />
+          inputValue={inputValue}
+        />
       )
       component = findByTestAttr(wrapper, 'component-TagPicker')
     })

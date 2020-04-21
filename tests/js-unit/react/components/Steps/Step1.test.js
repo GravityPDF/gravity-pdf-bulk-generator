@@ -4,7 +4,6 @@ import { findByTestAttr } from '../../testUtils'
 import { Step1 } from '../../../../../assets/react/components/Steps/Step1'
 
 describe('/react/components/Steps/ - Step1.js', () => {
-
   let wrapper
   let component
   let e
@@ -19,8 +18,7 @@ describe('/react/components/Steps/ - Step1.js', () => {
   const historyMock = { location: { pathname: '/step/1' }, push: jest.fn() }
 
   describe('Lifecycle methods - ', () => {
-
-    let map = {}
+    const map = {}
     let addEventListenerMock
     let removeEventListenerMock
     let handleFocus
@@ -35,7 +33,8 @@ describe('/react/components/Steps/ - Step1.js', () => {
           updateDirectoryStructure={updateDirectoryStructureMock}
           generateSessionId={generateSessionIdMock}
           togglePdfStatus={togglePdfStatusMock}
-          history={historyMock} />
+          history={historyMock}
+        />
       )
       addEventListenerMock = document.addEventListener = jest.fn((event, cb) => map[event] = cb)
       removeEventListenerMock = document.removeEventListener = jest.fn((event, cb) => map[event] = cb)
@@ -65,7 +64,6 @@ describe('/react/components/Steps/ - Step1.js', () => {
   })
 
   describe('Component methods - ', () => {
-
     beforeEach(() => {
       wrapper = shallow(
         <Step1
@@ -75,7 +73,8 @@ describe('/react/components/Steps/ - Step1.js', () => {
           updateDirectoryStructure={updateDirectoryStructureMock}
           generateSessionId={generateSessionIdMock}
           togglePdfStatus={togglePdfStatusMock}
-          history={historyMock} />
+          history={historyMock}
+        />
       )
       inst = wrapper.instance()
     })
@@ -90,14 +89,14 @@ describe('/react/components/Steps/ - Step1.js', () => {
     })
 
     test('handleEnter() - Handle \'enter\' key press from the keyboard', () => {
-      e = { key: 'Enter'}
-      const build = jest.spyOn(inst, 'build').mockImplementation(() => {})
+      e = { key: 'Enter' }
+      const handleBuild = jest.spyOn(inst, 'handleBuild').mockImplementation(() => {})
       inst.handleEnter(e)
 
-      expect(build).toHaveBeenCalledTimes(1)
+      expect(handleBuild).toHaveBeenCalledTimes(1)
     })
 
-    test('build() - Request to build the bulk PDF download (active pdf)', () => {
+    test('handleBuild() - Request to build the bulk PDF download (active pdf)', () => {
       pdfList = [
         { id: '5e12a', name: 'templateA', templateSelected: 'blank-slate', active: true },
         { id: '5e2e1', name: 'templateB', templateSelected: 'rubix', active: true }
@@ -110,17 +109,18 @@ describe('/react/components/Steps/ - Step1.js', () => {
           updateDirectoryStructure={updateDirectoryStructureMock}
           generateSessionId={generateSessionIdMock}
           togglePdfStatus={togglePdfStatusMock}
-          history={historyMock} />
+          history={historyMock}
+        />
       )
       inst = wrapper.instance()
       e = { preventDefault () {} }
-      inst.build(e)
+      inst.handleBuild(e)
 
       /* If there's an active PDF selected */
       expect(generateSessionIdMock).toHaveBeenCalledTimes(1)
     })
 
-    test('build() - Request to build the bulk PDF download (no active pdf)', () => {
+    test('handleBuild() - Request to build the bulk PDF download (no active pdf)', () => {
       pdfList = [
         { id: '5e12a', name: 'templateA', templateSelected: 'blank-slate', active: false },
         { id: '5e2e1', name: 'templateB', templateSelected: 'rubix', active: false }
@@ -133,12 +133,13 @@ describe('/react/components/Steps/ - Step1.js', () => {
           updateDirectoryStructure={updateDirectoryStructureMock}
           generateSessionId={generateSessionIdMock}
           togglePdfStatus={togglePdfStatusMock}
-          history={historyMock} />
+          history={historyMock}
+        />
       )
       jest.spyOn(window, 'alert').mockImplementation(() => {})
       inst = wrapper.instance()
       e = { preventDefault () {} }
-      inst.build(e)
+      inst.handleBuild(e)
 
       /* if active PDF not selected */
       expect(generateSessionIdMock).toHaveBeenCalledTimes(0)
@@ -159,7 +160,6 @@ describe('/react/components/Steps/ - Step1.js', () => {
   })
 
   describe('Renders main component - ', () => {
-
     beforeEach(() => {
       wrapper = shallow(
         <Step1
@@ -169,7 +169,8 @@ describe('/react/components/Steps/ - Step1.js', () => {
           updateDirectoryStructure={updateDirectoryStructureMock}
           generateSessionId={generateSessionIdMock}
           togglePdfStatus={togglePdfStatusMock}
-          history={historyMock} />
+          history={historyMock}
+        />
       )
       component = findByTestAttr(wrapper, 'component-Step1')
     })
@@ -189,7 +190,8 @@ describe('/react/components/Steps/ - Step1.js', () => {
           updateDirectoryStructure={updateDirectoryStructureMock}
           generateSessionId={generateSessionIdMock}
           togglePdfStatus={togglePdfStatusMock}
-          history={historyMock} />
+          history={historyMock}
+        />
       )
 
       expect(wrapper.instance().container).toBeTruthy()

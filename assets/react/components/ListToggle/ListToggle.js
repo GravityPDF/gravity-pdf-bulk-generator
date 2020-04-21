@@ -31,8 +31,9 @@ const ListToggle = ({ items, onChange }) => {
           return (
             <li key={index}>
               <label
-                className={pdf.id === '0' ? 'toggleAll': ''}
-                onClick={() => onChange(index)}>
+                className={pdf.id === '0' ? 'toggleAll' : ''}
+                onClick={() => onChange(index)}
+              >
                 {pdf.name} <span>{pdf.id !== '0' ? ('ID: ' + pdf.id) : ''}</span>
               </label>
 
@@ -40,7 +41,8 @@ const ListToggle = ({ items, onChange }) => {
                 screenReaderLabel={language.label}
                 active={pdf.active}
                 onChange={onChange}
-                id={index} />
+                id={index}
+              />
             </li>
           )
         })
@@ -59,10 +61,10 @@ ListToggle.propTypes = {
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
-      active: PropTypes.bool.isRequired,
+      active: PropTypes.bool.isRequired
     })
   ).isRequired,
-  onChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired
 }
 
 export default ListToggle
