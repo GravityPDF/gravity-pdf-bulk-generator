@@ -8,6 +8,13 @@ User's with a valid, active license key can receive support for this plugin by f
 
 == Changelog ==
 
+= Version 1.0.0-beta3 =
+* Refine the plugin description
+* Set an accessible colour scheme for the logs
+* Add plugin icon to Readme.md file
+* Add a link to the Gravity Forms merge tag documentation in the Directory Structure setting
+* Fix Enter key bug when modal is open
+
 = Version 1.0.0-beta2 =
 
 * Bump minimum Gravity PDF version to 5.2
