@@ -41,23 +41,44 @@ export class PopUp extends React.Component {
    * @since 1.0
    */
   componentDidMount () {
-    document.addEventListener('keydown', this.escapeKeyListener)
+    document.addEventListener('keydown', this.keyListener)
   }
 
   /**
-   * Listen if 'escape' key is pressed from the keyboard
-   *
-   * @param e
+   * Cleanup our document event listeners
    *
    * @since 1.0
    */
-  escapeKeyListener = e => {
-    const escapeKey = 27
-    const { fatalError, history } = this.props
+  componentWillUnmount () {
+    document.removeEventListener('keydown', this.keyListener)
+  }
 
-    /* 'escape' key is pressed */
-    if (e.keyCode === escapeKey) {
-      cancelModal({ e, fatalError, history })
+  /**
+   * Handle key presses from the keyboard
+   *
+   * @param e: object
+   *
+   * @since 1.0
+   */
+  keyListener = e => {
+    const { modal, fatalError, history } = this.props
+
+    /* Don't handle keys if the modal is currently closed */
+    if (!modal) {
+      return
+    }
+
+    switch(e.key) {
+      case 'Escape':
+        cancelModal({ e, fatalError, history })
+        break
+
+      case 'Enter':
+        /* Skip this if on Step 1 (handled there) */
+        if (history.location.pathname !== '/step/1') {
+          e.preventDefault()
+        }
+        break
     }
   }
 

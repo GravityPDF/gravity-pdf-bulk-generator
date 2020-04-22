@@ -24,6 +24,7 @@ describe('/react/components/Steps/ - Step1.js', () => {
     let addEventListenerMock
     let removeEventListenerMock
     let handleFocus
+    let handleEnter
 
     beforeEach(() => {
       wrapper = shallow(
@@ -38,26 +39,28 @@ describe('/react/components/Steps/ - Step1.js', () => {
       )
       addEventListenerMock = document.addEventListener = jest.fn((event, cb) => map[event] = cb)
       removeEventListenerMock = document.removeEventListener = jest.fn((event, cb) => map[event] = cb)
+      jest.spyOn(window, 'alert').mockImplementation(() => {})
       inst = wrapper.instance()
       handleFocus = jest.spyOn(inst, 'handleFocus').mockImplementation(() => {})
+      handleEnter = jest.spyOn(inst, 'handleEnter')
     })
 
     test('componentDidMount() - On mount, Add focus event to document', () => {
+      e = { key: 'Enter', preventDefault () {} }
       inst.componentDidMount()
-      /* Simulate keyboard pressKey */
+      /* Simulate keyboard press */
       map.focus()
+      map.keypress(e)
 
-      expect(addEventListenerMock).toHaveBeenCalledTimes(1)
+      expect(addEventListenerMock).toHaveBeenCalledTimes(2)
       expect(handleFocus).toHaveBeenCalledTimes(1)
+      expect(handleEnter).toHaveBeenCalledTimes(1)
     })
 
     test('componentWillUnmount() - Cleanup our document event listeners', () => {
       inst.componentWillUnmount()
-      /* Simulate keyboard pressKey */
-      map.focus()
 
-      expect(removeEventListenerMock).toHaveBeenCalledTimes(1)
-      expect(handleFocus).toHaveBeenCalledTimes(1)
+      expect(removeEventListenerMock).toHaveBeenCalledTimes(2)
     })
   })
 
@@ -79,11 +82,19 @@ describe('/react/components/Steps/ - Step1.js', () => {
 
     test('handleFocus() - This keeps the focus from jumping outside our container (contition: true)', () => {
       const container = { contains: jest.fn(), focus: jest.fn() }
-      const e = { target: {} }
+      e = { target: {} }
       inst.container = container
       inst.handleFocus(e)
 
       expect(container.focus).toHaveBeenCalledTimes(1)
+    })
+
+    test('handleEnter() - Handle \'enter\' key press from the keyboard', () => {
+      e = { key: 'Enter'}
+      const build = jest.spyOn(inst, 'build').mockImplementation(() => {})
+      inst.handleEnter(e)
+
+      expect(build).toHaveBeenCalledTimes(1)
     })
 
     test('build() - Request to build the bulk PDF download (active pdf)', () => {

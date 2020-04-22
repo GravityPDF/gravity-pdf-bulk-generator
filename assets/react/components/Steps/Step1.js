@@ -60,6 +60,7 @@ export class Step1 extends React.Component {
    */
   componentDidMount () {
     document.addEventListener('focus', this.handleFocus, true)
+    document.addEventListener('keypress', this.handleEnter)
   }
 
   /**
@@ -69,6 +70,7 @@ export class Step1 extends React.Component {
    */
   componentWillUnmount () {
     document.removeEventListener('focus', this.handleFocus, true)
+    document.removeEventListener('keypress', this.handleEnter)
   }
 
   /**
@@ -83,6 +85,19 @@ export class Step1 extends React.Component {
   handleFocus = e => {
     if (!this.container.contains(e.target)) {
       this.container.focus()
+    }
+  }
+
+  /**
+   * Handle 'enter' key press from the keyboard
+   *
+   * @param e
+   *
+   * @since 1.0
+   */
+  handleEnter = e => {
+    if (e.key === 'Enter') {
+      this.build(e)
     }
   }
 
