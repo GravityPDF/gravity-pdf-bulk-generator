@@ -8,6 +8,10 @@ User's with a valid, active license key can receive support for this plugin by f
 
 == Changelog ==
 
+= Version 1.0.1, 23 April 2020 =
+
+* Fix Update Nag
+
 = Version 1.0.0, 22 April 2020 =
 
 * Initial Release
