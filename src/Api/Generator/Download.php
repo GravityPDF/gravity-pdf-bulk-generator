@@ -132,7 +132,9 @@ class Download implements ApiEndpointRegistration {
 			$stream = $this->filesystem->readStream( $this->filesystem->get_zip_path() );
 			while ( ! feof( $stream ) ) {
 				echo fread( $stream, 2048 );
-				ob_flush();
+				if ( ob_get_level() ) {
+					ob_flush();
+				}
 				flush();
 			}
 
