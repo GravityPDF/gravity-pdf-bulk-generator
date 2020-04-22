@@ -8,24 +8,6 @@ User's with a valid, active license key can receive support for this plugin by f
 
 == Changelog ==
 
-= Version 1.0.0-beta3 =
-* Refine the plugin description
-* Set an accessible colour scheme for the logs
-* Add plugin icon to Readme.md file
-* Add a link to the Gravity Forms merge tag documentation in the Directory Structure setting
-* Fix Enter key bug when modal is open
-
-= Version 1.0.0-beta2 =
-
-* Bump minimum Gravity PDF version to 5.2
-* Force composer into thinking PHP5.6 is being run (more consistent builds)
-* Reduce memory consumption when zipping PDFs
-* Fix deselect entries bugs when closing Bulk Generator window
-* Add bulk action to default Entry List screen
-* Prevent PHP Warning when deleting PDF file
-* Catch all exceptions when using register API
-* Only run URL validation when fatal error not thrown
-
-= Version 1.0.0-beta1 =
+= Version 1.0.0, 22 April 2020 =
 
 * Initial Release
