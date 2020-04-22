@@ -37,6 +37,7 @@ FILES=(
 "${PACKAGE_DIR}/.eslintrc"
 "${PACKAGE_DIR}/webpack.config.js"
 "${PACKAGE_DIR}/webpack-configs"
+"${PACKAGE_DIR}/jest.config.js"
 )
 
 for i in "${FILES[@]}"
