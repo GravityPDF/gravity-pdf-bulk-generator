@@ -59,6 +59,7 @@ class GPDF_Bulk_Generator_Checks {
 
 		/* Test the minimum version requirements are met */
 		$this->check_gravitypdf_version();
+		$this->check_zip_support();
 
 		/* Check if any errors were thrown, enqueue them and exit early */
 		if ( count( $this->notices ) > 0 ) {
@@ -93,6 +94,21 @@ class GPDF_Bulk_Generator_Checks {
 
 		/* translators: %s is the current plugin version number */
 		$this->notices[] = sprintf( esc_html__( 'Gravity PDF Version %s or higher is required to use this add-on. Please install/upgrade Gravity PDF to the latest version.', 'gravity-pdf-bulk-generator' ), $this->required_gravitypdf_version );
+	}
+
+	/**
+	 * Verify PHP has Zip support
+	 *
+	 * @return bool
+	 *
+	 * @since 1.0.2
+	 */
+	public function check_zip_support() {
+		if ( class_exists( '\ZipArchive' ) ) {
+			return true;
+		}
+
+		$this->notices[] = esc_html__( 'The Zip PHP Extension could not be detected. Contact your web hosting provider to fix.', 'gravity-pdf-bulk-generator' );
 	}
 
 	/**
