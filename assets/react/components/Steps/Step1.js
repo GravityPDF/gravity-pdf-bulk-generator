@@ -140,7 +140,11 @@ export class Step1 extends React.Component {
    * @since 1.0
    */
   tagSelect = tag => {
-    const { directoryStructure } = this.props
+    let { directoryStructure } = this.props
+
+    if(directoryStructure[directoryStructure.length - 1] !== '/') {
+      directoryStructure = directoryStructure + '/'
+    }
 
     this.props.updateDirectoryStructure(directoryStructure + tag + '/')
   }
