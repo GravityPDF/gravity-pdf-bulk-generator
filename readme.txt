@@ -8,6 +8,11 @@ User's with a valid, active license key can receive support for this plugin by f
 
 == Changelog ==
 
+= Version 1.0.2, 28 April 2020 =
+
+* Bug: Resolve duplicate Common Tag getting added to Directory Structure
+* Bug: Fix incorrect Directory Structure when not using Common Tags
+
 = Version 1.0.1, 23 April 2020 =
 
 * Fix Update Nag
