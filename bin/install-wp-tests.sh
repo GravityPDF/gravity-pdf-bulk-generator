@@ -18,7 +18,7 @@ WP_CORE_DIR=${WP_CORE_DIR-$TMPDIR/wordpress/}
 
 download() {
     if [ `which curl` ]; then
-        curl -s "$1" > "$2"
+        curl -sL "$1" > "$2"
     elif [ `which wget` ]; then
         wget -nv -O "$2" "$1"
     fi
@@ -97,7 +97,7 @@ install_wp() {
 install_depencency() {
 	#Gravity Forms
 	if [ ! -f "$TMPDIR/gravityforms.tar.gz" ]; then
-    download https://codeload.github.com/GravityPDF/gravityforms/tar.gz/master "$TMPDIR/gravityforms.tar.gz"
+    download https://$GITHUB_TOKEN@codeload.github.com/GravityPDF/gravityforms/tar.gz/master "$TMPDIR/gravityforms.tar.gz"
     mkdir -p "$TMPDIR/gravityforms"
     tar --strip-components=1 -zxmf "$TMPDIR/gravityforms.tar.gz" -C "$TMPDIR/gravityforms"
   fi
