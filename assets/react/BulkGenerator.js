@@ -153,14 +153,14 @@ export class BulkGenerator extends React.Component {
       document.querySelector('#doaction2')
     ].forEach(e => {
       e.addEventListener('click', e => {
-        e.preventDefault()
-
         const ids = document.querySelectorAll('input[name="entry[]"]:checked')
 
         /* Check for both selectors dropdown value */
         if (ids.length === 0 || e.target.previousElementSibling.value !== 'download_pdf') {
           return false
         }
+
+        e.preventDefault()
 
         /* Set global state and add 'Toggle All' option in the list */
         this.setGlobalState()
