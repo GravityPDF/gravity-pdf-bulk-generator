@@ -9,7 +9,6 @@ import { generateSessionId, togglePdfStatus } from '../../actions/pdf'
 import Step1Body from './Step1Body'
 import ProgressBar from '../ProgressBar/ProgressBar'
 /* Helpers */
-import { stripForwardSlashes } from '../../helpers/stripForwardSlashes'
 import { cancelModal } from '../../helpers/cancelModal'
 import language from '../../helpers/language'
 
@@ -124,11 +123,8 @@ export class Step1 extends React.Component {
     if (activePdfList.length === 0) {
       alert(language.stepActivePdfEmpty)
     } else {
-      /* Strip out forward slashes before passing to path */
-      const path = stripForwardSlashes(directoryStructure)
-
       /* Kick off the Bulk Generator Process */
-      this.props.generateSessionId(path, concurrency)
+      this.props.generateSessionId(directoryStructure, concurrency)
     }
   }
 

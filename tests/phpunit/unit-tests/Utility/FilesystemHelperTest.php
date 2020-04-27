@@ -108,6 +108,15 @@ class FilesystemHelperTest extends \WP_UnitTestCase {
 		$this->assertSame( 'tmp/Sample/2020/' . $user->user_login . '/Paid/', $this->class->get_tmp_pdf_path( $raw_path, $entry ) );
 	}
 
+	public function test_get_tmp_pdf_path_validation() {
+		$entry = $this->create_entry();
+
+		$this->assertSame( 'tmp/01_02_2020/', $this->class->get_tmp_pdf_path( '/{date_created:format:d/m/Y}/', $entry ) );
+		$this->assertSame( 'tmp/', $this->class->get_tmp_pdf_path( '/{d/ate_cr\eated:format:Y}/', $entry ) );
+		$this->assertSame( 'tmp/Sample/', $this->class->get_tmp_pdf_path( '/{Label/Here:1}', $entry ) );
+		$this->assertSame( 'tmp/places/', $this->class->get_tmp_pdf_path( '/{d/ate_cr\eated:format:Y}/.././places//', $entry ) );
+	}
+
 	public function test_prefixes() {
 		$this->class->set_prefix( '123456' );
 		$this->assertSame( '123456/', $this->class->get_prefix() );

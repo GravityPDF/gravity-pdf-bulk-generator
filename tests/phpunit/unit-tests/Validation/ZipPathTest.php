@@ -50,6 +50,10 @@ class ZipPathTest extends \WP_UnitTestCase {
 			14 => [ false, '/soemthing\here\and\something/there/..' ],
 			15 => [ false, '\\' ],
 			16 => [ false, '..' ],
+			17 => [ true, '/some-{stuff/here:20}/' ],
+			18 => [ true, '/some-{\stuffhere/:20}/' ],
+			19 => [ true, '/some/thing/{date_created:format:m/d/Y}/' ],
+			20 => [ false, '/so\me/thing/{date_created:format:m/d/Y}/' ],
 		];
 	}
 }

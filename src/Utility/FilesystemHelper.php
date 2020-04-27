@@ -166,17 +166,25 @@ class FilesystemHelper {
 	 * @since 1.0
 	 */
 	public function process_user_tags_in_path( $user_path, $entry ) {
-		$misc  = \GPDFAPI::get_misc_class();
-		$gform = \GPDFAPI::get_form_class();
-		$form  = $gform->get_form( $entry['form_id'] );
+		$misc      = \GPDFAPI::get_misc_class();
+		$gform     = \GPDFAPI::get_form_class();
+		$form      = $gform->get_form( $entry['form_id'] );
+		$mergetags = [];
 
-		$user_path = array_filter( explode( '/', $user_path ) );
-		foreach ( $user_path as &$segment ) {
-			$segment = trim( $gform->process_tags( $segment, $form, $entry ) );
-			$segment = $misc->strip_invalid_characters( $segment );
+		if ( preg_match_all( '/({.+?})/', $user_path, $mergetags ) ) {
+			foreach ( $mergetags[0] as $tag ) {
+				$segment = $gform->process_tags( $tag, $form, $entry );
+				$segment = preg_replace( '({.+?})', '', $segment );
+				$segment = $misc->strip_invalid_characters( $segment );
+				if ( $tag !== $segment ) {
+					$user_path = str_replace( $tag, $segment, $user_path );
+				}
+			}
 		}
 
-		$user_path = implode( '/', array_filter( $user_path ) );
+		/* Strip out any bad paths the merge tags might have been converted into */
+		$user_path = str_replace( [ '/./', '/../', '//' ], '/', $user_path );
+		$user_path = $user_path[0] === '/' ? substr( $user_path, 1 ) : $user_path;
 
 		return ! empty( $user_path ) ? trailingslashit( $user_path ) : '';
 	}

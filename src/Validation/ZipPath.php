@@ -46,6 +46,9 @@ class ZipPath {
 	public function __invoke( $zip_path ) {
 		$this->logger->notice( 'Begin validation of zip path', [ 'path' => $zip_path ] );
 
+		/* Convert all mergetags to placeholder values before doing validation */
+		$zip_path = preg_replace( '/({.+?})/', '%', $zip_path );
+
 		/* Check for backslashes and fail */
 		if ( strpos( $zip_path, '\\' ) !== false ) {
 			$this->logger->warning( 'Validation: Path contained backslashes', [ 'path' => $zip_path ] );
