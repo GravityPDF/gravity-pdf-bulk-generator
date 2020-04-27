@@ -12,6 +12,7 @@ User's with a valid, active license key can receive support for this plugin by f
 
 * Bug: Resolve duplicate Common Tag getting added to Directory Structure
 * Bug: Fix incorrect Directory Structure when not using Common Tags
+* Bug: Fix issue using other Bulk Action options besides 'Download PDF'
 
 = Version 1.0.1, 23 April 2020 =
 
