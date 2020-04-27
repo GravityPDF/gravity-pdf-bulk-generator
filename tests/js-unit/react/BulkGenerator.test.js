@@ -4,7 +4,6 @@ import { findByTestAttr } from './testUtils'
 import { BulkGenerator } from '../../../assets/react/BulkGenerator'
 
 describe('/react/ - BulkGenerator.js', () => {
-
   let wrapper
   let component
   let e
@@ -20,7 +19,6 @@ describe('/react/ - BulkGenerator.js', () => {
   const historyMock = { push: jest.fn() }
 
   describe('Lifecycle methods - ', () => {
-
     let prevProps
     let deselectCheckboxes
     let setEventListener
@@ -35,7 +33,8 @@ describe('/react/ - BulkGenerator.js', () => {
           processCheckbox={processCheckboxMock}
           getSelectedEntriesId={getSelectedEntriesIdMock}
           history={historyMock}
-          modal={modal} />
+          modal={modal}
+        />
       )
       inst = wrapper.instance()
     })
@@ -66,7 +65,6 @@ describe('/react/ - BulkGenerator.js', () => {
   })
 
   describe('Component methods - ', () => {
-
     let setGlobalState
     let processAllEntriesId
     let setPdfListState
@@ -84,7 +82,8 @@ describe('/react/ - BulkGenerator.js', () => {
           processCheckbox={processCheckboxMock}
           getSelectedEntriesId={getSelectedEntriesIdMock}
           history={historyMock}
-          modal={modal} />
+          modal={modal}
+        />
       )
       inst = wrapper.instance()
     })
@@ -246,7 +245,6 @@ describe('/react/ - BulkGenerator.js', () => {
   })
 
   describe('Renders main component - ', () => {
-
     beforeEach(() => {
       wrapper = shallow(
         <BulkGenerator
@@ -257,7 +255,8 @@ describe('/react/ - BulkGenerator.js', () => {
           processCheckbox={processCheckboxMock}
           getSelectedEntriesId={getSelectedEntriesIdMock}
           history={historyMock}
-          modal={modal} />
+          modal={modal}
+        />
       )
       component = findByTestAttr(wrapper, 'component-BulkGenerator')
     })

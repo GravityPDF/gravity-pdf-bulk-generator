@@ -7,7 +7,6 @@ import Step2 from '../../../../../assets/react/components/Steps/Step2'
 import Step3 from '../../../../../assets/react/components/Steps/Step3'
 
 describe('/react/components/Steps/ - Steps.js', () => {
-
   let wrapper
   let component
 
@@ -15,7 +14,6 @@ describe('/react/components/Steps/ - Steps.js', () => {
   component = findByTestAttr(wrapper, 'component-Steps')
 
   describe('Renders main component - ', () => {
-
     test('renders <Steps /> component', () => {
       expect(component.length).toBe(1)
       expect(component.find('header').length).toBe(1)

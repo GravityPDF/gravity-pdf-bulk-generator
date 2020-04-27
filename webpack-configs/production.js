@@ -1,6 +1,6 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
 
 module.exports = {
   mode: 'production',
@@ -8,19 +8,18 @@ module.exports = {
   plugins: [
     new MiniCssExtractPlugin({
       filename: '[name].min.css',
-      chunkFilename: '[id].css',
+      chunkFilename: '[id].css'
     }),
-    new UglifyJSPlugin({
+    new TerserPlugin({
+      extractComments: false,
       parallel: true,
-      sourceMap: true,
-      uglifyOptions: {
-        output: {
-          comments: false
-        }
+      terserOptions: {
+        ecma: 6
       }
     })
   ],
   optimization: {
+    minimize: true,
     minimizer: [
       new OptimizeCssAssetsPlugin({})
     ]

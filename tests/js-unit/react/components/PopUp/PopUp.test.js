@@ -4,20 +4,18 @@ import { findByTestAttr } from '../../testUtils'
 import { PopUp } from '../../../../../assets/react/components/PopUp/PopUp'
 
 describe('/react/components/PopUp/ - PopUp.js', () => {
-
   let wrapper
   let component
   let e
-  let map = {}
+  const map = {}
   let keyListener
-  let fatalError = false
+  const fatalError = false
   let modal = true
   let inst
   // Mocked functions
   const historyMock = { push: jest.fn(), location: { pathname: '' } }
 
   describe('Lifecycle methods - ', () => {
-
     let addEventListenerMock
     let removeEventListenerMock
 
@@ -47,7 +45,6 @@ describe('/react/components/PopUp/ - PopUp.js', () => {
   })
 
   describe('Component methods - ', () => {
-
     beforeEach(() => {
       wrapper = shallow(<PopUp fatalError={fatalError} modal={modal} history={historyMock} />)
       inst = wrapper.instance()
@@ -93,7 +90,6 @@ describe('/react/components/PopUp/ - PopUp.js', () => {
   })
 
   describe('Renders main component - ', () => {
-
     beforeEach(() => {
       wrapper = shallow(<PopUp fatalError={fatalError} modal={modal} history={historyMock} />)
       component = findByTestAttr(wrapper, 'component-PopUp')

@@ -29,7 +29,8 @@ const Step2Body = ({ downloadPercentage }) => (
     <div id='gfpdf-step-2'>
       <CircularProgressbar
         value={downloadPercentage}
-        text={`${downloadPercentage}%`} />
+        text={`${downloadPercentage}%`}
+      />
 
       <h2>{language.stepBuildingPdfs}<LoadingDots /></h2>
       <em>{language.stepDoNotNavigateAway}</em>

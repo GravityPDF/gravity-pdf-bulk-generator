@@ -2,12 +2,10 @@ import { UPDATE_DIRECTORY_STRUCTURE } from '../../../../assets/react/actionTypes
 import { updateDirectoryStructure } from '../../../../assets/react/actions/tagPicker'
 
 describe('/react/actions/ - tagPicker.js', () => {
-
   let data
   let results
 
   describe('Redux Actions (tagPicker) - ', () => {
-
     test('updateDirectoryStructure - check if it returns the correct action', () => {
       data = '/path/'
       results = updateDirectoryStructure(data)

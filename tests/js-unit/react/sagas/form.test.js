@@ -15,15 +15,12 @@ import { apiRequestAllEntryIds } from '../../../../assets/react/api/form'
 import { FATAL_ERROR, TOGGLE_MODAL } from '../../../../assets/react/actionTypes/pdf'
 
 describe('/react/sagas/ - form.js', () => {
-
   let payload
   let response
   let responseBody
 
   describe('Redux Sagas (form) - ', () => {
-
     describe('Watcher Saga - watchProceedStep1()', () => {
-
       test('should check the watcher to loads up the worker saga functions', () => {
         const gen = watchProceedStep1()
 
@@ -33,7 +30,6 @@ describe('/react/sagas/ - form.js', () => {
     })
 
     describe('Worker Saga - proceedStep1()', () => {
-
       test('should check that saga calls push and TOGGLE_MODAL', () => {
         const gen = proceedStep1()
 
@@ -44,7 +40,6 @@ describe('/react/sagas/ - form.js', () => {
     })
 
     describe('Watcher Saga - watchGetSelectedEntryIds()', () => {
-
       test('should check the watcher to loads up the worker saga functions', () => {
         const gen = watchGetSelectedEntriesId()
 
@@ -54,7 +49,6 @@ describe('/react/sagas/ - form.js', () => {
     })
 
     describe('Worker Saga - getSelectedEntryIds()', () => {
-
       payload = { formId: '5', filterData: {} }
 
       test('should check that saga calls the API apiRequestAllEntryIds', () => {

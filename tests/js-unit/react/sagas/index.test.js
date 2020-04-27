@@ -9,9 +9,7 @@ import {
 import rootSaga from '../../../../assets/react/sagas'
 
 describe('/react/sagas/ - index.js', () => {
-
   describe('Redux Sagas (rootSaga) - ', () => {
-
     test('should check generator function that watch all the watcher sagas and run them in parallel', () => {
       const gen = rootSaga()
 

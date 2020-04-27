@@ -19,7 +19,7 @@ import { api } from './api'
  * @since 1.0
  */
 export const apiRequestAllEntryIds = ({ formId, filterData }) => {
-  const url = `${GPDF_BULK_GENERATOR.rest_url}/search/${formId}/entries`
+  const url = `${GPDF_BULK_GENERATOR.restUrl}/search/${formId}/entries`
 
   return api(url, {
     method: 'POST',

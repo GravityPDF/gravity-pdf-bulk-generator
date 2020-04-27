@@ -4,12 +4,10 @@ import { findByTestAttr } from '../../testUtils'
 import ProgressBar from '../../../../../assets/react/components/ProgressBar/ProgressBar'
 
 describe('/react/components/ProgressBar/ - ProgressBar.js', () => {
-
   let wrapper
   let component
 
   describe('Renders main component - ', () => {
-
     test('renders <ProgressBar /> component', () => {
       wrapper = shallow(<ProgressBar step={2} />)
       component = findByTestAttr(wrapper, 'component-ProgressBar')

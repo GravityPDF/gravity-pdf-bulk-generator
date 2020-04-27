@@ -4,7 +4,6 @@ import { findByTestAttr } from '../../testUtils'
 import { Step3 } from '../../../../../assets/react/components/Steps/Step3'
 
 describe('/react/components/Steps/ - Step3.js', () => {
-
   let wrapper
   let component
   let inst
@@ -13,7 +12,6 @@ describe('/react/components/Steps/ - Step3.js', () => {
   const historyMock = { location: { pathname: '/step/3' }, push: jest.fn() }
 
   describe('Lifecycle methods - ', () => {
-
     let map = {}
     let addEventListenerMock
     let removeEventListenerMock
@@ -51,7 +49,6 @@ describe('/react/components/Steps/ - Step3.js', () => {
   })
 
   describe('Component methods - ', () => {
-
     beforeEach(() => {
       wrapper = shallow(<Step3 downloadZipUrl={downloadZipUrl} history={historyMock} />)
       inst = wrapper.instance()
@@ -75,7 +72,6 @@ describe('/react/components/Steps/ - Step3.js', () => {
   })
 
   describe('Renders main component - ', () => {
-
     beforeEach(() => {
       wrapper = shallow(<Step3 downloadZipUrl={downloadZipUrl} history={historyMock} />)
       component = findByTestAttr(wrapper, 'component-Step3')

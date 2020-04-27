@@ -4,13 +4,11 @@ import { findByTestAttr } from '../../testUtils'
 import Step2Body from '../../../../../assets/react/components/Steps/Step2Body'
 
 describe('/react/components/Steps/ - Step2Body.js', () => {
-
   let wrapper
   let component
   const downloadPercentage = 20
 
   describe('Renders main component - ', () => {
-
     beforeEach(() => {
       wrapper = shallow(<Step2Body downloadPercentage={downloadPercentage} />)
       component = findByTestAttr(wrapper, 'component-Step2Body')

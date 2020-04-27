@@ -1,7 +1,6 @@
 import { generateActivePdfList, constructPdfData } from '../../../../assets/react/helpers/generateActivePdfList'
 
 describe('/react/helpers/ - generateActivePdfList.js', () => {
-
   test('should return only an array of active PDF list from the original PDF list', () => {
     const pdfList = [
       { id: '5e12a', name: 'templateA', templateSelected: 'blank-slate', active: true },

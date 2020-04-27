@@ -53,9 +53,7 @@ export const initialState = {
  * @since 1.0
  */
 export default function (state = initialState, action) {
-
   switch (action.type) {
-
     /**
      * Process STORE_ABORT_CONTROLLER
      *
@@ -104,27 +102,27 @@ export default function (state = initialState, action) {
 
       /* If toggle all pdf switch is clicked */
       if (action.payload === 0) {
-        if (list[0]['active'] === false && generateActivePdfList(list).length > 0) {
+        if (list[0].active === false && generateActivePdfList(list).length > 0) {
           for (let x = 0; x < list.length; x++) {
-            list[x]['active'] = true
+            list[x].active = true
           }
         } else {
           for (let x = 0; x < list.length; x++) {
-            list[x]['active'] = !list[x]['active']
+            list[x].active = !list[x].active
           }
         }
       }
 
       /* If individual toggle pdf switch is clicked */
       if (action.payload !== 0) {
-        list[action.payload]['active'] = !list[action.payload]['active']
+        list[action.payload].active = !list[action.payload].active
 
         if (generateActivePdfList(list).length <= list.length) {
-          list[0]['active'] = false
+          list[0].active = false
         }
 
         if (generateActivePdfList(list).length === list.length - 1) {
-          list[0]['active'] = true
+          list[0].active = true
         }
       }
 
@@ -154,7 +152,7 @@ export default function (state = initialState, action) {
       /* Remove 'Toggle All' in the list before processing, if exists */
       const pdfList = [...state.pdfList]
 
-      if (pdfList[0]['id'] === '0') {
+      if (pdfList[0].id === '0') {
         pdfList.shift()
       }
       return {
@@ -169,7 +167,7 @@ export default function (state = initialState, action) {
      * @since 1.0
      */
     case GENERATE_PDF_COUNTER: {
-      let generatePdfCounter = state.generatePdfCounter + 1
+      const generatePdfCounter = state.generatePdfCounter + 1
       const selectedEntriesId = action.payload
       const activePdfList = generateActivePdfList(state.pdfList)
       const percentage = (100 * generatePdfCounter) / (activePdfList.length * selectedEntriesId.length)

@@ -4,13 +4,11 @@ import { findByTestAttr } from '../../testUtils'
 import Step3Body from '../../../../../assets/react/components/Steps/Step3Body'
 
 describe('/react/components/Steps/ - Step3Body.js', () => {
-
   let wrapper
   let component
   const downloadZipUrl = 'https://gravitypdf.com'
 
   describe('Renders main component - ', () => {
-
     beforeEach(() => {
       wrapper = shallow(<Step3Body downloadZipUrl={downloadZipUrl} />)
       component = findByTestAttr(wrapper, 'component-Step3Body')

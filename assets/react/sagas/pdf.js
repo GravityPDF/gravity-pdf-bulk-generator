@@ -12,7 +12,7 @@ import {
   GENERATE_SESSION_ID,
   GENERATE_SESSION_ID_SUCCESS,
   REMOVE_TOGGLE_ALL,
-  STORE_ABORT_CONTROLLER,
+  STORE_ABORT_CONTROLLER
 } from '../actionTypes/pdf'
 import { GENERATE_PDF_FAILED, GENERATE_PDF_SUCCESS, GENERATE_PDF_WARNING } from '../actionTypes/logs'
 /* APIs */
@@ -42,7 +42,7 @@ export const getStateAbortControllers = state => state.pdf.abortControllers
 export const getStateDownloadZipUrl = state => state.pdf.downloadZipUrl
 
 /* Initialize AbortController */
-export const abortController = new AbortController()
+export const abortController = new window.AbortController()
 
 /**
  * A watcher to trigger Step 1 in the Bulk Generator process
@@ -291,7 +291,7 @@ export function * validateDownloadZipUrl () {
 
   try {
     if (downloadZipUrl.length === 0) {
-      throw {}
+      throw new Error()
     }
 
     const response = yield call(apiRequestDownloadZipFile, downloadZipUrl)

@@ -6,12 +6,10 @@ import {
 import { generatePdfListSuccess, togglePdfStatus, generateSessionId } from '../../../../assets/react/actions/pdf'
 
 describe('/react/actions/ - pdf.js', () => {
-
   let data
   let results
 
   describe('Redux Actions (pdf) - ', () => {
-
     test('generatePdfListSuccess - check if it returns the correct action', () => {
       data = [
         { id: '5e12aa36690bd', name: 'First PDF template', templateSelected: 'blank-slate', active: true },

@@ -10,11 +10,9 @@ import {
 } from '../../../../assets/react/actions/form'
 
 describe('/react/actions/ - form.js', () => {
-
   let results
 
   describe('Redux Actions (form) - ', () => {
-
     test('proceedStep1 - check if it returns the correct action', () => {
       results = proceedStep1()
 

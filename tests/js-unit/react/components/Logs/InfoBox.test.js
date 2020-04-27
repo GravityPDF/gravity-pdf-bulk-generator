@@ -4,7 +4,6 @@ import { findByTestAttr } from '../../testUtils'
 import InfoBox from '../../../../../assets/react/components/Logs/InfoBox'
 
 describe('/react/components/Logs/ - InfoBox.js', () => {
-
   let wrapper
   let component
   let state = false
@@ -18,7 +17,6 @@ describe('/react/components/Logs/ - InfoBox.js', () => {
   const toggleMock = jest.fn()
 
   describe('Renders main component - ', () => {
-
     beforeEach(() => {
       wrapper = shallow(
         <InfoBox
@@ -26,7 +24,8 @@ describe('/react/components/Logs/ - InfoBox.js', () => {
           logs={logs}
           toggle={toggleMock}
           state={state}
-          className={className} />
+          className={className}
+        />
       )
     })
 
@@ -50,7 +49,8 @@ describe('/react/components/Logs/ - InfoBox.js', () => {
           logs={logs}
           toggle={toggleMock}
           state={state}
-          className={className} />
+          className={className}
+        />
       )
       component = findByTestAttr(wrapper, 'component-Infobox-length-icon')
 

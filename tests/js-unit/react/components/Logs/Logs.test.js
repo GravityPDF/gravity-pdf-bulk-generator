@@ -4,7 +4,6 @@ import { findByTestAttr } from '../../testUtils'
 import { Logs } from '../../../../../assets/react/components/Logs/Logs'
 
 describe('/react/components/Logs/ - Logs.js', () => {
-
   let wrapper
   let component
   let inst
@@ -13,13 +12,13 @@ describe('/react/components/Logs/ - Logs.js', () => {
   let generatePdfWarning = [{}]
 
   describe('Component methods - ', () => {
-
     beforeEach(() => {
       wrapper = shallow(
         <Logs
           generatePdfSuccess={generatePdfSuccess}
           generatePdfFailed={generatePdfFailed}
-          generatePdfWarning={generatePdfWarning} />
+          generatePdfWarning={generatePdfWarning}
+        />
       )
       inst = wrapper.instance()
     })
@@ -50,13 +49,13 @@ describe('/react/components/Logs/ - Logs.js', () => {
   })
 
   describe('Renders main component - ', () => {
-
     beforeEach(() => {
       wrapper = shallow(
         <Logs
           generatePdfSuccess={generatePdfSuccess}
           generatePdfFailed={generatePdfFailed}
-          generatePdfWarning={generatePdfWarning} />
+          generatePdfWarning={generatePdfWarning}
+        />
       )
     })
 
@@ -72,7 +71,8 @@ describe('/react/components/Logs/ - Logs.js', () => {
         <Logs
           generatePdfSuccess={generatePdfSuccess}
           generatePdfFailed={generatePdfFailed}
-          generatePdfWarning={generatePdfWarning} />
+          generatePdfWarning={generatePdfWarning}
+        />
       )
       component = findByTestAttr(wrapper, 'component-success-InfoBox')
 
@@ -85,7 +85,8 @@ describe('/react/components/Logs/ - Logs.js', () => {
         <Logs
           generatePdfSuccess={generatePdfSuccess}
           generatePdfFailed={generatePdfFailed}
-          generatePdfWarning={generatePdfWarning} />
+          generatePdfWarning={generatePdfWarning}
+        />
       )
       component = findByTestAttr(wrapper, 'component-failed-InfoBox')
 
@@ -98,7 +99,8 @@ describe('/react/components/Logs/ - Logs.js', () => {
         <Logs
           generatePdfSuccess={generatePdfSuccess}
           generatePdfFailed={generatePdfFailed}
-          generatePdfWarning={generatePdfWarning} />
+          generatePdfWarning={generatePdfWarning}
+        />
       )
       component = findByTestAttr(wrapper, 'component-warning-InfoBox')
 

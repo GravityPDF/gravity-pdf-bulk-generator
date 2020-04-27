@@ -29,7 +29,7 @@ export const initialState = {
     { id: '{entry_id}', label: language.tagEntryId },
     { id: '{created_by:user_login}', label: language.tagUserLogin },
     { id: '{created_by:user_email}', label: language.tagUserEmail },
-    { id: '{created_by:display_name}', label: language.tagUserDisplayName },
+    { id: '{created_by:display_name}', label: language.tagUserDisplayName }
   ],
   directoryStructure: '/{date_created:format:Y}/{date_created:format:m}/'
 }
@@ -45,9 +45,7 @@ export const initialState = {
  * @since 1.0
  */
 export default function (state = initialState, action) {
-
   switch (action.type) {
-
     /**
      * Process UPDATE_DIRECTORY_STRUCTURE
      *

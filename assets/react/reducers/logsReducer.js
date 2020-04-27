@@ -38,9 +38,7 @@ export const initialState = {
  * @since 1.0
  */
 export default function (state = initialState, action) {
-
   switch (action.type) {
-
     /**
      * Process GENERATE_PDF_SUCCESS
      *

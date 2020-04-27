@@ -5,7 +5,6 @@ import { Step2 } from '../../../../../assets/react/components/Steps/Step2'
 import FatalError from '../../../../../assets/react/components/FatalError/FatalError'
 
 describe('/react/components/Steps/ - Step2.js', () => {
-
   let wrapper
   let component
   let inst
@@ -15,7 +14,6 @@ describe('/react/components/Steps/ - Step2.js', () => {
   const historyMock = { location: { pathname: '/step/2' }, push: jest.fn() }
 
   describe('Lifecycle methods - ', () => {
-
     let map = {}
     let addEventListenerMock
     let removeEventListenerMock
@@ -52,7 +50,6 @@ describe('/react/components/Steps/ - Step2.js', () => {
   })
 
   describe('Component methods - ', () => {
-
     beforeEach(() => {
       wrapper = shallow(
         <Step2 downloadPercentage={downloadPercentage} fatalError={fatalError} history={historyMock} />
@@ -71,7 +68,6 @@ describe('/react/components/Steps/ - Step2.js', () => {
   })
 
   describe('Renders main component - ', () => {
-
     beforeEach(() => {
       wrapper = shallow(
         <Step2 downloadPercentage={downloadPercentage} fatalError={fatalError} history={historyMock} />

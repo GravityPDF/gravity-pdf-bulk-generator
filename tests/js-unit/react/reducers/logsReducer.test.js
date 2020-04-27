@@ -8,13 +8,11 @@ import { RESET_ALL_STATE } from '../../../../assets/react/actionTypes/actionType
 import reducer, { initialState } from '../../../../assets/react/reducers/logsReducer'
 
 describe('/react/reducers/ - logsReducer.js', () => {
-
   let data
   let state
   let newState
 
   describe('Redux Reducers (logs) - ', () => {
-
     test('GENERATE_PDF_SUCCESS', () => {
       data = 'Generated First PDF template (#5e12a) for Entry #72'
       state = reducer(initialState, { type: GENERATE_PDF_SUCCESS, payload: data })

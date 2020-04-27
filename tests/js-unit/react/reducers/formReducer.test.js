@@ -6,12 +6,10 @@ import { RESET_ALL_STATE } from '../../../../assets/react/actionTypes/actionType
 import reducer, { initialState } from '../../../../assets/react/reducers/formReducer'
 
 describe('/react/reducers/ - formReducer.js', () => {
-
   let data
   let state
 
   describe('Redux Reducers (form) - ', () => {
-
     test('PROCESS_CHECKBOX', () => {
       data = [
         { checked: true, type: 'checkbox', value: '73' },

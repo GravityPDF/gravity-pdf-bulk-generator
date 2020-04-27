@@ -18,7 +18,7 @@ import { api } from './api'
  * @since 1.0
  */
 export const apiRequestSessionId = path => {
-  const url = `${GPDF_BULK_GENERATOR.rest_url}/generator/register`
+  const url = `${GPDF_BULK_GENERATOR.restUrl}/generator/register`
 
   return api(url, {
     method: 'POST',
@@ -26,7 +26,7 @@ export const apiRequestSessionId = path => {
       'Content-Type': 'application/json',
       'X-WP-Nonce': GPDF_BULK_GENERATOR.nonce
     },
-    body: JSON.stringify({ 'path': path })
+    body: JSON.stringify({ path: path })
   })
 }
 
@@ -41,7 +41,7 @@ export const apiRequestSessionId = path => {
  * @since 1.0
  */
 export const apiRequestGeneratePdf = ({ pdf, signal }) => {
-  const url = `${GPDF_BULK_GENERATOR.rest_url}/generator/create`
+  const url = `${GPDF_BULK_GENERATOR.restUrl}/generator/create`
 
   return api(url, {
     method: 'POST',
@@ -64,7 +64,7 @@ export const apiRequestGeneratePdf = ({ pdf, signal }) => {
  * @since 1.0
  */
 export const apiRequestGeneratePdfZip = sessionId => {
-  const url = `${GPDF_BULK_GENERATOR.rest_url}/generator/zip/${sessionId}`
+  const url = `${GPDF_BULK_GENERATOR.restUrl}/generator/zip/${sessionId}`
 
   return api(url, {
     method: 'POST',

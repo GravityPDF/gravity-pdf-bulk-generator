@@ -25,7 +25,6 @@ import language from '../../helpers/language'
  * @since 1.0
  */
 export class Step1 extends React.Component {
-
   /**
    * PropTypes
    *
@@ -38,7 +37,7 @@ export class Step1 extends React.Component {
     updateDirectoryStructure: PropTypes.func.isRequired,
     generateSessionId: PropTypes.func.isRequired,
     togglePdfStatus: PropTypes.func.isRequired,
-    history: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired
   }
 
   /**
@@ -96,7 +95,7 @@ export class Step1 extends React.Component {
    */
   handleEnter = e => {
     if (e.key === 'Enter') {
-      this.build(e)
+      this.handleBuild(e)
     }
   }
 
@@ -107,7 +106,7 @@ export class Step1 extends React.Component {
    *
    * @since 1.0
    */
-  build = e => {
+  handleBuild = e => {
     e.preventDefault()
 
     const { concurrency } = this.state
@@ -121,7 +120,7 @@ export class Step1 extends React.Component {
 
     /* Check if there's an active PDF selected */
     if (activePdfList.length === 0) {
-      alert(language.stepActivePdfEmpty)
+      window.alert(language.stepActivePdfEmpty)
     } else {
       /* Kick off the Bulk Generator Process */
       this.props.generateSessionId(directoryStructure, concurrency)
@@ -138,7 +137,7 @@ export class Step1 extends React.Component {
   tagSelect = tag => {
     let { directoryStructure } = this.props
 
-    if(directoryStructure[directoryStructure.length - 1] !== '/') {
+    if (directoryStructure[directoryStructure.length - 1] !== '/') {
       directoryStructure = directoryStructure + '/'
     }
 
@@ -178,11 +177,13 @@ export class Step1 extends React.Component {
     return (
       <div
         data-test='component-Step1'
-        ref={node => this.container = node}
-        tabIndex='-1'>
+        ref={node => (this.container = node)}
+        tabIndex='-1'
+      >
         <button
           className='gfpdf-close-button'
-          onClick={e => cancelModal({ e, history })}>
+          onClick={e => cancelModal({ e, history })}
+        >
           <span className='screen-reader-text'>{language.stepCloseDialog}</span>
         </button>
 
@@ -195,12 +196,14 @@ export class Step1 extends React.Component {
           updateDirectoryStructure={updateDirectoryStructure}
           tags={tags}
           tagSelect={this.tagSelect}
-          tagDeselect={this.tagDeselect} />
+          tagDeselect={this.tagDeselect}
+        />
 
         <footer>
           <button
             className='button-primary build'
-            onClick={this.build}>
+            onClick={this.handleBuild}
+          >
             {language.stepBuild}
           </button>
         </footer>
