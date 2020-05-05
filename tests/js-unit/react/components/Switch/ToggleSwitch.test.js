@@ -1,7 +1,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import { findByTestAttr } from '../../testUtils'
-import ToggleSwitch from '../../../../../assets/react/components/Switch/Switch'
+import ToggleSwitch from '../../../../../assets/react/components/Switch/ToggleSwitch'
 
 describe('/react/components/Switch/ - Switch.js', () => {
   let wrapper

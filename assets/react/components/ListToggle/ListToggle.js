@@ -2,7 +2,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 /* Components */
-import Switch from '../Switch/Switch'
+import ToggleSwitch from '../Switch/ToggleSwitch'
 /* Helpers */
 import language from '../../helpers/language'
 
@@ -37,7 +37,7 @@ const ListToggle = ({ items, onChange }) => {
                 {pdf.name} <span>{pdf.id !== '0' ? ('ID: ' + pdf.id) : ''}</span>
               </label>
 
-              <Switch
+              <ToggleSwitch
                 screenReaderLabel={language.label}
                 active={pdf.active}
                 onChange={onChange}
