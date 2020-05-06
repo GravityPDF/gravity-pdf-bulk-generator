@@ -1,0 +1,9 @@
+// ListContainer Component
+.log-entries {
+  max-width: 60vh;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 90%;
+  overflow-x: hidden !important;
+
+  @import 'list';
+}

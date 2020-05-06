@@ -1,0 +1,8 @@
+@import 'List/list-container';
+
+// Logs Component
+.logs {
+  margin-bottom: 15px;
+
+  @import 'info-box';
+}
