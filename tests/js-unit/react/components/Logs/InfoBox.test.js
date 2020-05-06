@@ -37,7 +37,7 @@ describe('/react/components/Logs/ - InfoBox.js', () => {
     })
 
     test('renders toggle box option and list length', () => {
-      component = findByTestAttr(wrapper, 'component-Infobox-length-icon')
+      component = findByTestAttr(wrapper, 'component-InfoBox-length-icon')
 
       expect(component.text()).toContain('Success (2)')
       expect(component.text()).toContain('+')
@@ -52,16 +52,16 @@ describe('/react/components/Logs/ - InfoBox.js', () => {
           className={className}
         />
       )
-      component = findByTestAttr(wrapper, 'component-Infobox-length-icon')
+      component = findByTestAttr(wrapper, 'component-InfoBox-length-icon')
 
       expect(component.text()).toContain('Success (2)')
       expect(component.text()).toContain('-')
     })
 
-    test('renders <List /> component', () => {
+    test('renders <ListContainer /> component', () => {
       component = findByTestAttr(wrapper, 'component-InfoBox')
 
-      expect(component.find('List').length).toBe(2)
+      expect(component.find('ListContainer').length).toBe(1)
     })
   })
 })

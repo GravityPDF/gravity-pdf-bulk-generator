@@ -2,7 +2,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 /* Components */
-import List from './List'
+import ListContainer from './List/ListContainer'
 
 /**
  * @package     Gravity PDF Bulk Generator
@@ -28,7 +28,7 @@ const InfoBox = ({ title, logs, toggle, state, className }) => (
   <div data-test='component-InfoBox' className='log-wrapper'>
     <div className={'log-container ' + state.toString()}>
       <h3 className={className} onClick={toggle}>
-        <span data-test='component-Infobox-length-icon' className='lines'>
+        <span data-test='component-InfoBox-length-icon' className='lines'>
           {title} ({logs.length})
           <span className='expand'>
             {state ? '-' : '+'}
@@ -36,17 +36,7 @@ const InfoBox = ({ title, logs, toggle, state, className }) => (
         </span>
       </h3>
 
-      <div className='log-entries'>
-        {
-          logs.map((log, index) => (
-            <List
-              log={log}
-              className={className}
-              key={index}
-            />
-          ))
-        }
-      </div>
+      <ListContainer logs={logs} className={className} />
     </div>
   </div>
 )

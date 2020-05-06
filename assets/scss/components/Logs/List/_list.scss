@@ -1,0 +1,18 @@
+@import '../../../config';
+
+// List Component
+.log-entry {
+  padding: 2px 10px;
+
+  &.success {
+    color: scale-color($success-text-color, $lightness: -10%);
+  }
+
+  &.errors {
+    color: scale-color($error-text-color, $lightness: -10%);
+  }
+
+  &.warnings {
+    color: scale-color($warning-text-color, $lightness: -10%);
+  }
+}
