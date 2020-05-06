@@ -100,7 +100,7 @@ describe('/react/components/PopUp/ - PopUp.js', () => {
     })
 
     test('Show pop-up if modal is true', () => {
-      expect(component.find('ForwardRef').length).toBe(2)
+      expect(component.find('ForwardRef').length).toBe(1)
       expect(component.find('Route').length).toBe(2)
     })
 

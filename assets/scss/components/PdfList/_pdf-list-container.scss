@@ -1,0 +1,10 @@
+@import '../../config';
+
+// PdfListContainer Component
+.gfpdf-pdf-list-container {
+	margin: 0;
+	max-height: 38vh;
+	overflow: auto;
+
+	@import './pdf-list';
+}

@@ -9,23 +9,6 @@ import posed from 'react-pose'
  */
 
 /**
- * Fade
- *
- * @type { <PoseElementProps> }
- *
- * @since 1.0
- */
-export const Fade = posed.div({
-  enter: {
-    opacity: 1,
-    transition: {
-      duration: 150
-    }
-  },
-  exit: { opacity: 0 }
-})
-
-/**
  * SlideDown
  *
  * @type { <PoseElementProps> }

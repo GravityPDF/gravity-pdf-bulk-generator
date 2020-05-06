@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import { PoseGroup } from 'react-pose'
 /* Components */
 import { cancelModal } from '../../helpers/cancelModal'
-import { Fade, SlideDown } from './Animations'
+import { SlideDown } from './Animations'
 import { Overlay } from './Overlay'
 import Steps from '../Steps/Steps'
 
@@ -92,16 +92,14 @@ export class PopUp extends React.Component {
     return (
       <PoseGroup data-test='component-PopUp' flipMove={false}>
         {this.props.modal && [
-          <Fade key='fade'>
-            <Route
-              key='overlay'
-              path='/step'
-              component={Overlay}
-            />
-          </Fade>,
+          <Route
+            key='overlay'
+            path='/step'
+            component={Overlay}
+          />,
 
           <SlideDown
-            key='slidedown'
+            key='slideDown'
             id='gfpdf-bulk-generator-popup'
           >
             <Route

@@ -23,8 +23,8 @@ const sagaMiddleware = createSagaMiddleware()
 export const middlewares = [routerMiddleware(history), sagaMiddleware]
 const middlewareEnhancer = applyMiddleware(...middlewares)
 const enhancers = [middlewareEnhancer]
-/* Initialize Redux dev tools */
-const composedEnhancers = composeWithDevTools(...enhancers)
+/* Initialize redux dev tools in development mode */
+const composedEnhancers = process.env.NODE_ENV === 'development' ? composeWithDevTools(...enhancers) : middlewareEnhancer
 
 /**
  * Holds the whole redux state tree of the application

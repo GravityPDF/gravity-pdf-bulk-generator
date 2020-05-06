@@ -6,8 +6,8 @@ import { connect } from 'react-redux'
 import { updateDirectoryStructure } from '../../actions/tagPicker'
 import { generateSessionId, togglePdfStatus } from '../../actions/pdf'
 /* Components */
-import Step1Body from './Step1Body'
 import ProgressBar from '../ProgressBar/ProgressBar'
+import Step1Body from './Step1Body'
 /* Helpers */
 import { cancelModal } from '../../helpers/cancelModal'
 import language from '../../helpers/language'

@@ -228,6 +228,9 @@ class Bootstrap extends Helper_Abstract_Addon {
 						'pdfs'       => array_values( $pdfs ),
 
 						'language'   => [
+							/* Loading */
+							'loadingSuspense'            => __( 'Loading...', 'gravityforms' ),
+
 							/* ListToggle */
 							'label'                      => __( 'Label', 'gravityforms' ),
 							'toggleAll'                  => __( 'Toggle All', 'gravity-pdf-bulk-generator' ),

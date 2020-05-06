@@ -1,14 +1,16 @@
 /* Dependencies */
-import React from 'react'
+import React, { lazy, Suspense } from 'react'
 import PropTypes from 'prop-types'
 import { sprintf } from 'sprintf-js'
-
 /* Components */
-import ListToggle from '../ListToggle/ListToggle'
+import LoadingSuspense from '../Loading/LoadingSuspense'
 import TagInput from '../TagPicker/TagInput'
 import TagPicker from '../TagPicker/TagPicker'
 /* Helpers */
 import language from '../../helpers/language'
+
+/* Lazy Load Components */
+const PdfListContainer = lazy(() => import('../PdfList/PdfListContainer'))
 
 /**
  * @package     Gravity PDF Bulk Generator
@@ -53,10 +55,12 @@ const Step1Body = (
 
       <p>{language.stepSelectPdfsDesc}</p>
 
-      <ListToggle
-        items={pdfList}
-        onChange={togglePdfStatus}
-      />
+      <Suspense fallback={<LoadingSuspense />}>
+        <PdfListContainer
+          items={pdfList}
+          onChange={togglePdfStatus}
+        />
+      </Suspense>
     </div>
 
     <div className='gfpdf-settings-group'>
