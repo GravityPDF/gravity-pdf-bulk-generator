@@ -9,7 +9,7 @@ import List from './List'
  * @package     Gravity PDF Bulk Generator
  * @copyright   Copyright (c) 2020, Blue Liquid Designs
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       1.0
+ * @since       1.1
  */
 
 /**
@@ -20,7 +20,7 @@ import List from './List'
  *
  * @returns { ListContainer: component }
  *
- * @since 1.0
+ * @since 1.1
  */
 const ListContainer = ({ logs, className }) => (
   <Container
@@ -38,7 +38,7 @@ const ListContainer = ({ logs, className }) => (
 /**
  * PropTypes
  *
- * @since 1.0
+ * @since 1.1
  */
 ListContainer.propTypes = {
   logs: PropTypes.arrayOf(PropTypes.string).isRequired,

@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
  * @package     Gravity PDF Bulk Generator
  * @copyright   Copyright (c) 2020, Blue Liquid Designs
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       1.0
+ * @since       1.1
  */
 
 /**
@@ -18,7 +18,7 @@ import PropTypes from 'prop-types'
  *
  * @returns { List: component }
  *
- * @since 1.0
+ * @since 1.1
  */
 const List = ({ data, index, style }) => (
   <div data-test='component-List' className={'log-entry ' + data.className} style={style}>
