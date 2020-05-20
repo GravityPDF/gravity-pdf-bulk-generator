@@ -34,18 +34,16 @@ export const apiRequestSessionId = path => {
  * Fetch API request to generate PDF (POST)
  *
  * @param pdf: object
- * @param signal: object
  *
  * @returns Response
  *
  * @since 1.0
  */
-export const apiRequestGeneratePdf = ({ pdf, signal }) => {
+export const apiRequestGeneratePdf = pdf => {
   const url = `${GPDF_BULK_GENERATOR.restUrl}/generator/create`
 
   return api(url, {
     method: 'POST',
-    signal,
     headers: {
       'Content-Type': 'application/json',
       'X-WP-Nonce': GPDF_BULK_GENERATOR.nonce

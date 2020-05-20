@@ -14,21 +14,16 @@ import {
   getStateSelectedEntryIds,
   getStatePdfList,
   getFatalErrorStatus,
-  getStateAbortControllers,
-  getStateDownloadZipUrl,
-  abortController,
-  generatePdfCancel
+  getStateDownloadZipUrl
 } from '../../../../assets/react/sagas/pdf'
 import {
   FATAL_ERROR,
   GENERATE_DOWNLOAD_ZIP_URL,
   GENERATE_PDF,
-  GENERATE_PDF_CANCEL,
   GENERATE_PDF_COUNTER,
   GENERATE_SESSION_ID,
   GENERATE_SESSION_ID_SUCCESS,
-  REMOVE_TOGGLE_ALL,
-  STORE_ABORT_CONTROLLER
+  REMOVE_TOGGLE_ALL
 } from '../../../../assets/react/actionTypes/pdf'
 import {
   apiRequestDownloadZipFile,
@@ -36,7 +31,7 @@ import {
   apiRequestGeneratePdfZip,
   apiRequestSessionId
 } from '../../../../assets/react/api/pdf'
-import { RESET_ALL_STATE } from '../../../../assets/react/actionTypes/actionTypes'
+import { CANCEL_REQUESTS, RESET_ALL_STATE } from '../../../../assets/react/actionTypes/actionTypes'
 import {
   GENERATE_PDF_FAILED,
   GENERATE_PDF_SUCCESS,
@@ -54,7 +49,6 @@ describe('/react/sagas/ - pdf.js', () => {
   let pdf
   let concurrency
   let sessionId
-  let data
   let error
   let downloadZipUrl
 
@@ -85,12 +79,6 @@ describe('/react/sagas/ - pdf.js', () => {
         expect(getFatalErrorStatus(state)).toBe(state.pdf.fatalError)
       })
 
-      test('getStateAbortControllers', () => {
-        const state = { pdf: { abortControllers: [{}, {}] } }
-
-        expect(getStateAbortControllers(state)).toBe(state.pdf.abortControllers)
-      })
-
       test('getStateDownloadZipUrl', () => {
         const state = { pdf: { downloadZipUrl: 'https://gravitypdf.com' } }
 
@@ -99,19 +87,20 @@ describe('/react/sagas/ - pdf.js', () => {
     })
 
     describe('Watcher Saga - watchGenerateSessionId()', () => {
-      test('should check the watcher to loads up the worker saga functions', () => {
+      test('should check this watcher to load generateSessionId saga', () => {
         selectedEntriesId = ['73', '74']
         const gen = watchGenerateSessionId()
 
         expect(gen.next().value).toEqual(take(GENERATE_SESSION_ID))
         expect(gen.next().value).toEqual(put(push('/step/2')))
         expect(gen.next().value).toEqual(select(getStateSelectedEntryIds))
-        expect(gen.next(selectedEntriesId).value).toEqual(call(generateSessionId, undefined))
-        expect(gen.next().value).toEqual(take(GENERATE_SESSION_ID))
+        expect(gen.next(selectedEntriesId).value).toEqual(fork(generateSessionId, undefined))
+        expect(gen.next().value).toEqual(take(RESET_ALL_STATE))
+        expect(gen.next().value).toEqual(cancel())
         expect(gen.next().done).toBeFalsy()
       })
 
-      test('should not call generateSessionId if it doesn\'t met the condition', () => {
+      test('should not load generateSessionId if it doesn\'t met the condition', () => {
         selectedEntriesId = []
         const gen = watchGenerateSessionId()
 
@@ -181,8 +170,7 @@ describe('/react/sagas/ - pdf.js', () => {
           concurrency: payload.concurrency,
           sessionId: payload.sessionId
         }))
-        expect(gen.next().value).toEqual(take([GENERATE_PDF_CANCEL, RESET_ALL_STATE]))
-        expect(gen.next().value).toEqual(call(generatePdfCancel))
+        expect(gen.next().value).toEqual(take([CANCEL_REQUESTS, RESET_ALL_STATE]))
         expect(gen.next().value).toEqual(cancel())
         expect(gen.next().done).toBeFalsy()
       })
@@ -233,12 +221,10 @@ describe('/react/sagas/ - pdf.js', () => {
     describe('Worker Ssaga - requestGeneratePdf()', () => {
       test('should check that saga calls the API apiRequestGeneratePdf', () => {
         pdf = { entryId: '71', pdfId: '5e12a', pdfName: 'templateA', sessionId: '42f6c' }
-        data = { pdf, signal: abortController.signal }
         response = { ok: true }
         const gen = requestGeneratePdf(pdf)
 
-        expect(gen.next().value).toEqual(put({ type: STORE_ABORT_CONTROLLER, payload: abortController }))
-        expect(gen.next().value).toEqual(retry(3, 1000, apiRequestGeneratePdf, data))
+        expect(gen.next().value).toEqual(retry(3, 1000, apiRequestGeneratePdf, pdf))
         expect(gen.next(response).value).toEqual(put({ type: GENERATE_PDF_SUCCESS, payload: '' }))
         expect(gen.next().value).toEqual(cancelled())
         expect(gen.next().value).toEqual(select(getStateSelectedEntryIds))
@@ -248,12 +234,10 @@ describe('/react/sagas/ - pdf.js', () => {
 
       test('should check that saga handles correctly the failure of the API call', () => {
         pdf = { entryId: '71', pdfId: '5e12a', pdfName: 'templateA', sessionId: '42f6c' }
-        data = { pdf, signal: abortController.signal }
         response = { ok: false }
         const gen = requestGeneratePdf(pdf)
 
-        expect(gen.next().value).toEqual(put({ type: STORE_ABORT_CONTROLLER, payload: abortController }))
-        expect(gen.next().value).toEqual(retry(3, 1000, apiRequestGeneratePdf, data))
+        expect(gen.next().value).toEqual(retry(3, 1000, apiRequestGeneratePdf, pdf))
         expect(gen.next(response).value).toEqual(put({ type: GENERATE_PDF_FAILED, payload: '' }))
         expect(gen.next().value).toEqual(cancelled())
         expect(gen.next().value).toEqual(select(getStateSelectedEntryIds))
@@ -267,8 +251,7 @@ describe('/react/sagas/ - pdf.js', () => {
         error = { status: 400 }
         const gen = requestGeneratePdf(pdf)
 
-        expect(gen.next().value).toEqual(put({ type: STORE_ABORT_CONTROLLER, payload: abortController }))
-        expect(gen.next().value).toEqual(retry(3, 1000, apiRequestGeneratePdf, data))
+        expect(gen.next().value).toEqual(retry(3, 1000, apiRequestGeneratePdf, pdf))
         expect(gen.throw(error).value).toEqual(put({ type: GENERATE_PDF_WARNING, payload: '' }))
         expect(gen.next().value).toEqual(cancelled())
         expect(gen.next().value).toEqual(select(getStateSelectedEntryIds))
@@ -282,8 +265,7 @@ describe('/react/sagas/ - pdf.js', () => {
         error = { status: 403 }
         const gen = requestGeneratePdf(pdf)
 
-        expect(gen.next().value).toEqual(put({ type: STORE_ABORT_CONTROLLER, payload: abortController }))
-        expect(gen.next().value).toEqual(retry(3, 1000, apiRequestGeneratePdf, data))
+        expect(gen.next().value).toEqual(retry(3, 1000, apiRequestGeneratePdf, pdf))
         expect(gen.throw(error).value).toEqual(put({ type: 'GENERATE_PDF_WARNING', payload: '' }))
         expect(gen.next().value).toEqual(cancelled())
         expect(gen.next().value).toEqual(select(getStateSelectedEntryIds))
@@ -297,8 +279,7 @@ describe('/react/sagas/ - pdf.js', () => {
         error = { status: 412 }
         const gen = requestGeneratePdf(pdf)
 
-        expect(gen.next().value).toEqual(put({ type: STORE_ABORT_CONTROLLER, payload: abortController }))
-        expect(gen.next().value).toEqual(retry(3, 1000, apiRequestGeneratePdf, data))
+        expect(gen.next().value).toEqual(retry(3, 1000, apiRequestGeneratePdf, pdf))
         expect(gen.throw(error).value).toEqual(put({ type: 'GENERATE_PDF_WARNING', payload: '' }))
         expect(gen.next().value).toEqual(cancelled())
         expect(gen.next().value).toEqual(select(getStateSelectedEntryIds))
@@ -308,13 +289,11 @@ describe('/react/sagas/ - pdf.js', () => {
 
       test('should check that saga handles correctly the finally block (cancelled)', () => {
         pdf = { entryId: '71', pdfId: '5e12a', pdfName: 'templateA', sessionId: '42f6c' }
-        data = { pdf, signal: abortController.signal }
         response = { ok: true }
         const cancelledState = true
         const gen = requestGeneratePdf(pdf)
 
-        expect(gen.next().value).toEqual(put({ type: STORE_ABORT_CONTROLLER, payload: abortController }))
-        expect(gen.next().value).toEqual(retry(3, 1000, apiRequestGeneratePdf, data))
+        expect(gen.next().value).toEqual(retry(3, 1000, apiRequestGeneratePdf, pdf))
         expect(gen.next(response).value).toEqual(put({ type: GENERATE_PDF_SUCCESS, payload: '' }))
         expect(gen.next().value).toEqual(cancelled())
         expect(gen.next(cancelledState).done).toBeTruthy()
@@ -394,24 +373,12 @@ describe('/react/sagas/ - pdf.js', () => {
       })
     })
 
-    describe('Worker Saga - generatePdfCancel()', () => {
-      test('should abort all the stored \'AbortController\'s', () => {
-        const abort = jest.fn()
-        const abortControllers = [{ abortController: jest.fn(), abort }]
-        const gen = generatePdfCancel()
-
-        expect(gen.next().value).toEqual(select(getStateAbortControllers))
-        expect(gen.next(abortControllers).done).toBeTruthy()
-        expect(abort).toHaveBeenCalledTimes(1)
-      })
-    })
-
     describe('Watcher Saga - watchFatalError()', () => {
       test('should Watch for a fatal error event and handle our fatal error and cancel logic', () => {
         const gen = watchFatalError()
 
         expect(gen.next().value).toEqual(take(FATAL_ERROR))
-        expect(gen.next().value).toEqual(put({ type: GENERATE_PDF_CANCEL }))
+        expect(gen.next().value).toEqual(put({ type: CANCEL_REQUESTS }))
         expect(gen.next().done).toBeFalsy()
       })
     })

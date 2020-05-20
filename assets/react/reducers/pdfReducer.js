@@ -6,7 +6,6 @@ import {
   GENERATE_DOWNLOAD_ZIP_URL,
   GENERATE_SESSION_ID_SUCCESS,
   REMOVE_TOGGLE_ALL,
-  STORE_ABORT_CONTROLLER,
   TOGGLE_MODAL,
   TOGGLE_PDF_STATUS,
   FATAL_ERROR,
@@ -27,7 +26,7 @@ import { generateActivePdfList } from '../helpers/generateActivePdfList'
  *
  * @type { sessionId: string, modal: boolean, pdfList: array,
  * generatePdfCounter: int, downloadPercentage: int, downloadZipUrl: string,
- * abortControllers: array, fatalError: boolean }
+ * fatalError: boolean }
  *
  * @since 1.0
  */
@@ -38,7 +37,6 @@ export const initialState = {
   generatePdfCounter: 0,
   downloadPercentage: 0,
   downloadZipUrl: '',
-  abortControllers: [],
   fatalError: false
 }
 
@@ -54,22 +52,6 @@ export const initialState = {
  */
 export default function (state = initialState, action) {
   switch (action.type) {
-    /**
-     * Process STORE_ABORT_CONTROLLER
-     *
-     * @since 1.0
-     */
-    case STORE_ABORT_CONTROLLER: {
-      const list = [...state.abortControllers]
-
-      list.push(action.payload)
-
-      return {
-        ...state,
-        abortControllers: list
-      }
-    }
-
     /**
      * Process GENERATE_PDF_LIST_SUCCESS
      *
