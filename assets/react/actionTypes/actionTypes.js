@@ -6,4 +6,5 @@
  */
 
 /* Our Redux Action Type Constants */
+export const CANCEL_REQUESTS = 'CANCEL_REQUESTS'
 export const RESET_ALL_STATE = 'RESET_ALL_STATE'

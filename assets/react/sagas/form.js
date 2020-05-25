@@ -1,9 +1,10 @@
 /* Dependencies */
-import { retry, takeLatest, put } from 'redux-saga/effects'
+import { cancel, fork, retry, take, takeLatest, put } from 'redux-saga/effects'
 import { push } from 'connected-react-router'
 /* Redux Action Types */
 import { PROCEED_STEP_1, GET_SELECTED_ENTRIES_ID, GET_SELECTED_ENTRIES_ID_SUCCESS } from '../actionTypes/form'
 import { TOGGLE_MODAL, FATAL_ERROR } from '../actionTypes/pdf'
+import { RESET_ALL_STATE } from '../actionTypes/actionTypes'
 /* APIs */
 import { apiRequestAllEntryIds } from '../api/form'
 
@@ -34,12 +35,21 @@ export function * proceedStep1 () {
 }
 
 /**
- * Watch for our redux action getSelectedEntriesId to be called and call our getSelectedEntriesId generator
+ * Watch for our redux action getSelectedEntriesId to be called and call our getSelectedEntriesId generator.
+ *
+ * This includes handling of task cancellation.
  *
  * @since 1.0
  */
 export function * watchGetSelectedEntriesId () {
-  yield takeLatest(GET_SELECTED_ENTRIES_ID, getSelectedEntriesId)
+  while (true) {
+    const payload = yield take(GET_SELECTED_ENTRIES_ID)
+
+    const task = yield fork(getSelectedEntriesId, payload)
+
+    yield take(RESET_ALL_STATE)
+    yield cancel(task)
+  }
 }
 
 /**

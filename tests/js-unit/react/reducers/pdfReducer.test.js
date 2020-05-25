@@ -1,5 +1,4 @@
 import {
-  STORE_ABORT_CONTROLLER,
   GENERATE_PDF_LIST_SUCCESS,
   TOGGLE_MODAL,
   TOGGLE_PDF_STATUS,
@@ -19,15 +18,6 @@ describe('/react/reducers/ - pdfReducer.js', () => {
   let newState
 
   describe('Redux Reducers (pdf) - ', () => {
-    test('STORE_ABORT_CONTROLLER', () => {
-      data = {}
-      state = reducer(initialState, { type: STORE_ABORT_CONTROLLER, payload: data })
-      newState = reducer(state, { type: STORE_ABORT_CONTROLLER, payload: data })
-
-      expect(state.abortControllers.length).toBe(1)
-      expect(newState.abortControllers.length).toBe(2)
-    })
-
     test('GENERATE_PDF_LIST_SUCCESS', () => {
       data = [
         { id: '5e12a', name: 'templateA', templateSelected: 'blank-slate', active: false },

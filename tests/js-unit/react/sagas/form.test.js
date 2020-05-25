@@ -1,4 +1,4 @@
-import { put, retry, takeLatest } from 'redux-saga/effects'
+import { cancel, fork, put, retry, take, takeLatest } from 'redux-saga/effects'
 import { push } from 'connected-react-router'
 import {
   watchProceedStep1,
@@ -13,6 +13,7 @@ import {
 } from '../../../../assets/react/actionTypes/form'
 import { apiRequestAllEntryIds } from '../../../../assets/react/api/form'
 import { FATAL_ERROR, TOGGLE_MODAL } from '../../../../assets/react/actionTypes/pdf'
+import { RESET_ALL_STATE } from '../../../../assets/react/actionTypes/actionTypes'
 
 describe('/react/sagas/ - form.js', () => {
   let payload
@@ -40,11 +41,18 @@ describe('/react/sagas/ - form.js', () => {
     })
 
     describe('Watcher Saga - watchGetSelectedEntryIds()', () => {
-      test('should check the watcher to loads up the worker saga functions', () => {
+      test('should check this watcher to load getSelectedEntriesId saga', () => {
+        payload = {
+          formId: '5',
+          filterData: {}
+        }
         const gen = watchGetSelectedEntriesId()
 
-        expect(gen.next().value).toEqual(takeLatest(GET_SELECTED_ENTRIES_ID, getSelectedEntriesId))
-        expect(gen.next().done).toBeTruthy()
+        expect(gen.next().value).toEqual(take(GET_SELECTED_ENTRIES_ID))
+        expect(gen.next(payload).value).toEqual(fork(getSelectedEntriesId, payload))
+        expect(gen.next().value).toEqual(take(RESET_ALL_STATE))
+        expect(gen.next().value).toEqual(cancel())
+        expect(gen.next().done).toBeFalsy()
       })
     })
 

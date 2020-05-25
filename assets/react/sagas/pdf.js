@@ -2,17 +2,15 @@
 import { call, cancel, cancelled, delay, fork, put, retry, select, take } from 'redux-saga/effects'
 import { push } from 'connected-react-router'
 /* Redux Action Types */
-import { RESET_ALL_STATE } from '../actionTypes/actionTypes'
+import { CANCEL_REQUESTS, RESET_ALL_STATE } from '../actionTypes/actionTypes'
 import {
   FATAL_ERROR,
   GENERATE_DOWNLOAD_ZIP_URL,
   GENERATE_PDF,
-  GENERATE_PDF_CANCEL,
   GENERATE_PDF_COUNTER,
   GENERATE_SESSION_ID,
   GENERATE_SESSION_ID_SUCCESS,
-  REMOVE_TOGGLE_ALL,
-  STORE_ABORT_CONTROLLER
+  REMOVE_TOGGLE_ALL
 } from '../actionTypes/pdf'
 import { GENERATE_PDF_FAILED, GENERATE_PDF_SUCCESS, GENERATE_PDF_WARNING } from '../actionTypes/logs'
 /* APIs */
@@ -38,14 +36,10 @@ import { constructPdfData } from '../helpers/generateActivePdfList'
 export const getStateSelectedEntryIds = state => state.form.selectedEntriesId
 export const getStatePdfList = state => state.pdf.pdfList
 export const getFatalErrorStatus = state => state.pdf.fatalError
-export const getStateAbortControllers = state => state.pdf.abortControllers
 export const getStateDownloadZipUrl = state => state.pdf.downloadZipUrl
 
-/* Initialize AbortController */
-export const abortController = new window.AbortController()
-
 /**
- * A watcher to trigger Step 1 in the Bulk Generator process
+ * A watcher to trigger Step 1 in the Bulk Generator process and also handles cancellation.
  *
  * @since 1.0
  */
@@ -59,7 +53,10 @@ export function * watchGenerateSessionId () {
     const selectedEntriesId = yield select(getStateSelectedEntryIds)
 
     if (selectedEntriesId.length > 0) {
-      yield call(generateSessionId, payload)
+      const task = yield fork(generateSessionId, payload)
+
+      yield take(RESET_ALL_STATE)
+      yield cancel(task)
     }
   }
 }
@@ -121,16 +118,15 @@ export function * watchGeneratePDF () {
     const pdfs = constructPdfData(selectedEntriesId, pdfList, sessionId)
 
     /* Yield fork worker saga bulkGeneratePdf */
-    const generator = yield fork(bulkGeneratePdf, {
+    const task = yield fork(bulkGeneratePdf, {
       pdfs,
       concurrency,
       sessionId
     })
 
-    /* Wait for a cancel event and then handle the cancel logic */
-    yield take([GENERATE_PDF_CANCEL, RESET_ALL_STATE])
-    yield call(generatePdfCancel)
-    yield cancel(generator)
+    // /* Wait for a cancel event and then handle the cancel logic */
+    yield take([CANCEL_REQUESTS, RESET_ALL_STATE])
+    yield cancel(task)
   }
 }
 
@@ -195,19 +191,8 @@ export function * generatePdf (pdfs) {
  * @since 1.0
  */
 export function * requestGeneratePdf (pdf) {
-  /*
-   * Prepare the data for our API call. We store the AbortController in the
-   * Redux state so we can easily cancel ALL running API calls on demand.
-   */
-  const data = {
-    pdf,
-    signal: abortController.signal
-  }
-
-  yield put({ type: STORE_ABORT_CONTROLLER, payload: abortController })
-
   try {
-    const response = yield retry(3, 1000, apiRequestGeneratePdf, data)
+    const response = yield retry(3, 1000, apiRequestGeneratePdf, pdf)
 
     if (!response.ok) {
       throw response
@@ -308,21 +293,6 @@ export function * validateDownloadZipUrl () {
 }
 
 /**
- * If a cancel event is triggered we'll abort all the stored 'AbortController's
- *
- * @since 1.0
- */
-export function * generatePdfCancel () {
-  /* Redux state for abortControllers */
-  const abortControllers = yield select(getStateAbortControllers)
-
-  /* AbortController API call for requestGeneratePdf before it has completed */
-  abortControllers.map(abortController => {
-    abortController.abort()
-  })
-}
-
-/**
  * Watch for a fatal error event and handle our fatal error and cancel logic
  *
  * @since 1.0
@@ -330,7 +300,7 @@ export function * generatePdfCancel () {
 export function * watchFatalError () {
   while (true) {
     yield take(FATAL_ERROR)
-    yield put({ type: GENERATE_PDF_CANCEL })
+    yield put({ type: CANCEL_REQUESTS })
   }
 }
 
