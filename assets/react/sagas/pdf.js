@@ -124,7 +124,7 @@ export function * watchGeneratePDF () {
       sessionId
     })
 
-    // /* Wait for a cancel event and then handle the cancel logic */
+    /* Wait for a cancel event and then handle the cancel logic */
     yield take([CANCEL_REQUESTS, RESET_ALL_STATE])
     yield cancel(task)
   }
