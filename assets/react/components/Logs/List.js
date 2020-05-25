@@ -10,7 +10,7 @@ import PropTypes from 'prop-types'
  */
 
 /**
- * Display Logs List UI
+ * Display List UI
  *
  * @param data
  * @param index

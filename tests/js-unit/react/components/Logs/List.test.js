@@ -1,7 +1,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import { findByTestAttr } from '../../../testUtils'
-import List from '../../../../../../assets/react/components/Logs/List/List'
+import { findByTestAttr } from '../../testUtils'
+import List from '../../../../../assets/react/components/Logs/List'
 
 describe('/react/components/Logs/ - List.js', () => {
   let wrapper

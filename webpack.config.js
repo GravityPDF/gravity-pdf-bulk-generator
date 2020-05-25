@@ -11,8 +11,10 @@ module.exports = webpackMerge(
       'bulk-generator': './assets/react/index.js'
     },
     output: {
-      path: __dirname + '/dist',
-      filename: '[name].min.js'
+      path: __dirname + '/dist/',
+      filename: '[name].min.js',
+      chunkFilename: 'chunk-[name].[contenthash].js',
+      publicPath: __dirname + '/dist/'
     },
     module: {
       rules: [

@@ -1,7 +1,7 @@
 import React from 'react'
 import { mount } from 'enzyme'
-import { findByTestAttr } from '../../../testUtils'
-import ListContainer from '../../../../../../assets/react/components/Logs/List/ListContainer'
+import { findByTestAttr } from '../../testUtils'
+import ListContainer from '../../../../../assets/react/components/Logs/ListContainer'
 
 describe('/react/components/Logs/ - ListContainer.js', () => {
   let wrapper

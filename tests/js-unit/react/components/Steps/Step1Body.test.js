@@ -37,8 +37,10 @@ describe('/react/components/Steps/ - Step1Body.js', () => {
       expect(component.find('p').length).toBe(3)
     })
 
-    test('renders <ListToggle /> component', () => {
-      expect(component.find('ListToggle').length).toBe(1)
+    test('renders lazy load <PdfListContainer /> component', () => {
+      expect(component.find('Suspense').length).toBe(1)
+      expect(component.find('lazy').length).toBe(1)
+      expect(Object.keys(component.find('lazy').props()).length).toBe(2)
     })
 
     test('renders <TagInput /> component', () => {

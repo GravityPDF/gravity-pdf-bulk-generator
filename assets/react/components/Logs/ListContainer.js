@@ -13,7 +13,7 @@ import List from './List'
  */
 
 /**
- * Display Logs ListContainer UI
+ * Display ListContainer UI
  *
  * @param log
  * @param className

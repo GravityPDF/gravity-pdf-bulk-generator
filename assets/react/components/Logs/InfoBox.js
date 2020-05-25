@@ -2,7 +2,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 /* Components */
-import ListContainer from './List/ListContainer'
+import ListContainer from './ListContainer'
 
 /**
  * @package     Gravity PDF Bulk Generator
@@ -12,7 +12,7 @@ import ListContainer from './List/ListContainer'
  */
 
 /**
- * Display Logs InfoBox UI
+ * Display InfoBox UI
  *
  * @param title
  * @param logs

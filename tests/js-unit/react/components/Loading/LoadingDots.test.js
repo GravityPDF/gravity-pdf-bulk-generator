@@ -1,9 +1,9 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import { findByTestAttr } from '../../testUtils'
-import LoadingDots from '../../../../../assets/react/components/LoadingDots/LoadingDots'
+import LoadingDots from '../../../../../assets/react/components/Loading/LoadingDots'
 
-describe('/react/components/LoadingDots/ - LoadingDots.js', () => {
+describe('/react/components/Loading/ - LoadingDots.js', () => {
   let wrapper
   let component
 
