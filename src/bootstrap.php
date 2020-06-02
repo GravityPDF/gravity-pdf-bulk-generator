@@ -209,7 +209,7 @@ class Bootstrap extends Helper_Abstract_Addon {
 				$version = defined( 'WP_DEBUG' ) && WP_DEBUG === true ? time() : GFPDF_PDF_BULK_GENERATOR_VERSION;
 
 				wp_enqueue_script(
-					'gfpdf_bulk_generator',
+					'gfpdf_js_bulk_generator',
 					plugin_dir_url( GFPDF_PDF_BULK_GENERATOR_FILE ) . 'dist/bulk-generator.min.js',
 					[],
 					$version,
@@ -217,7 +217,7 @@ class Bootstrap extends Helper_Abstract_Addon {
 				);
 
 				wp_localize_script(
-					'gfpdf_bulk_generator',
+					'gfpdf_js_bulk_generator',
 					'GPDF_BULK_GENERATOR',
 					[
 						'pluginUrl' => plugin_dir_url( GFPDF_PDF_BULK_GENERATOR_FILE ),
@@ -310,7 +310,7 @@ class Bootstrap extends Helper_Abstract_Addon {
 				);
 
 				wp_enqueue_style(
-					'gfpdf_bulk_generator',
+					'gfpdf_css_bulk_generator',
 					plugin_dir_url( GFPDF_PDF_BULK_GENERATOR_FILE ) . 'dist/bulk-generator.min.css',
 					[],
 					$version
