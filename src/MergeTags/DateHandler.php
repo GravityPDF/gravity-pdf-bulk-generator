@@ -30,7 +30,7 @@ abstract class DateHandler {
 	 * @since 1.0
 	 */
 	public function init() {
-		add_filter( 'gform_replace_merge_tags', [ $this, 'process' ], 10, 3 );
+		add_filter( 'gform_replace_merge_tags', [ $this, 'process' ], 10, 5 );
 	}
 
 	/**
@@ -44,7 +44,7 @@ abstract class DateHandler {
 	 *
 	 * @since 1.0
 	 */
-	public function process( $text, $form = [], $entry = [] ) {
+	public function process( $text, $form = [], $entry = [], $url_encode = false, $esc_html = false ) {
 
 		preg_match_all( sprintf( MergeTags::REGEX, $this->name ), $text, $matches, PREG_SET_ORDER );
 
@@ -61,6 +61,7 @@ abstract class DateHandler {
 			$property = $match[1];
 
 			$formatted_date = $this->format_date( $date_created, $property );
+			$formatted_date = \GFCommon::format_variable_value( $formatted_date, $url_encode, $esc_html, '', false );
 
 			$text = str_replace( $full_tag, $formatted_date, $text );
 		}
@@ -112,6 +113,11 @@ abstract class DateHandler {
 	 * @since 1.0
 	 */
 	public function get_formatted_date( $date_string = '', $args = [] ) {
+
+		/* skip if empty */
+		if ( empty( $date_string ) ) {
+			return '';
+		}
 
 		$default_atts = [
 			'raw'       => false,
