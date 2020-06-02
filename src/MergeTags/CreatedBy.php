@@ -62,13 +62,17 @@ class CreatedBy {
 					$value = implode( ', ', $entry_creator->roles );
 					break;
 
+				/* prevent password hash leakage */
+				case 'user_pass':
+					$value = '';
+				break;
+
 				default:
 					$value = $entry_creator->get( $property );
 					break;
 			}
 
-			$value = $url_encode ? urlencode( $value ) : $value;
-			$value = $esc_html ? esc_html( $value ) : $value;
+			$value = \GFCommon::format_variable_value( $value, $url_encode, $esc_html, '', false );
 
 			$text = str_replace( $full_tag, $value, $text );
 		}

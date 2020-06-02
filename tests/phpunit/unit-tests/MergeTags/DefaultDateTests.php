@@ -75,6 +75,15 @@ abstract class DefaultDateTests extends \WP_UnitTestCase {
 		$this->assertEquals( GFCommon::format_date( $date, true, 'mdy', true ), $this->r( "{{$this->mergetag}:human:time:format:mdy}" ) );
 		$this->assertEquals( date_i18n( 'm/d/Y', $entry_local_time, true ), $this->r( "{{$this->mergetag}:format:m/d/Y}" ) );
 		$this->assertEquals( date_i18n( 'm/d/Y\ \w\i\t\h\ \t\i\m\e\ h:i:s', $entry_local_time, true ), $this->r( "{{$this->mergetag}:format:m/d/Y\ \w\i\\t\h\ \\t\i\m\\e\ h\:i\:s}" ) );
+
+		/* Test empty value */
+		$this->entry['date_created'] = '';
+		$this->entry['date_updated'] = '';
+		$this->entry['payment_date'] = '';
+
+		$this->assertEquals( '', $this->r("{{$this->mergetag}}" ) );
+		$this->assertEquals( '', $this->r("{{$this->mergetag}:timestamp}" ) );
+		$this->assertEquals( '', $this->r("{{$this->mergetag}:diff}" ) );
 	}
 
 	protected function r( $tag ) {
