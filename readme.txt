@@ -8,6 +8,11 @@ User's with a valid, active license key can receive support for this plugin by f
 
 == Changelog ==
 
+= Version 1.1.1, 4 June 2020 =
+* Bug: ensure plugin functions as expected when Gravity Forms No Conflict mode is enabled
+* Security: return empty value when {created_by:user_pass} mergetag is used
+* Security: run {date_created}, {date_updated}, and {payment_date} mergetag through GFCommon::format_variable_value() which handles URL encoding and HTML escaping (if required)
+
 = Version 1.1.0, 26 May 2020 =
 * Housekeeping: Add performance improvements to log messages when handling 1000s PDFs
 * Housekeeping: Add code splitting and reduce JavaScript bundle size
