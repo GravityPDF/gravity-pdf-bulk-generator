@@ -122,6 +122,11 @@ class Download implements ApiEndpointRegistration {
 				return new \WP_Error( 'zip_not_found', '', [ 'status' => 404 ] );
 			}
 
+			/* Close any active buffers before outputting */
+			while ( apply_filters( 'gfpdf_bulk_generator_close_active_buffers', true ) && ob_get_level() ) {
+				ob_end_clean();
+			}
+
 			/* Send zip file to browser */
 			if ( ! headers_sent() ) {
 				header( 'Content-Type: application/zip' );
@@ -132,9 +137,6 @@ class Download implements ApiEndpointRegistration {
 			$stream = $this->filesystem->readStream( $this->filesystem->get_zip_path() );
 			while ( ! feof( $stream ) ) {
 				echo fread( $stream, 2048 );
-				if ( ob_get_level() ) {
-					ob_flush();
-				}
 				flush();
 			}
 
