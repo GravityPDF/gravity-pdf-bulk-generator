@@ -114,6 +114,7 @@ class DownloadTest extends DefaultApiTests {
 		$request = new \WP_REST_Request( 'GET', $this->rest_route );
 		$request->set_query_params( [ 'sessionId' => self::SESSION_ID ] );
 
+		add_filter( 'gfpdf_bulk_generator_close_active_buffers', '__return_false' );
 		ob_start();
 		$this->endpoint->response( $request );
 		$this->assertStringStartsWith( 'content1', ob_get_clean() );
