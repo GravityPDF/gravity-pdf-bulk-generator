@@ -122,6 +122,9 @@ class Entries implements ApiEndpointRegistration {
 			/* Mimics an Entry List request */
 			$_GET = $request->get_params();
 
+			/* Fix encoding issue with < and > characters */
+			$_GET['operator'] = isset( $_GET['operator'] ) ? str_replace( [ '%3E', '%3C' ], [ '>', '<' ], $_GET['operator'] ) : '';
+
 			$this->logger->notice(
 				'Begin Entry Search',
 				[
