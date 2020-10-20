@@ -65,7 +65,7 @@ class CreatedBy {
 				/* prevent password hash leakage */
 				case 'user_pass':
 					$value = '';
-				break;
+					break;
 
 				default:
 					$value = $entry_creator->get( $property );

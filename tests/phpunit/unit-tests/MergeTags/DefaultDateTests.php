@@ -81,9 +81,9 @@ abstract class DefaultDateTests extends \WP_UnitTestCase {
 		$this->entry['date_updated'] = '';
 		$this->entry['payment_date'] = '';
 
-		$this->assertEquals( '', $this->r("{{$this->mergetag}}" ) );
-		$this->assertEquals( '', $this->r("{{$this->mergetag}:timestamp}" ) );
-		$this->assertEquals( '', $this->r("{{$this->mergetag}:diff}" ) );
+		$this->assertEquals( '', $this->r( "{{$this->mergetag}}" ) );
+		$this->assertEquals( '', $this->r( "{{$this->mergetag}:timestamp}" ) );
+		$this->assertEquals( '', $this->r( "{{$this->mergetag}:diff}" ) );
 	}
 
 	protected function r( $tag ) {

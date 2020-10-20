@@ -223,11 +223,11 @@ class Bootstrap extends Helper_Abstract_Addon {
 						'pluginUrl' => plugin_dir_url( GFPDF_PDF_BULK_GENERATOR_FILE ),
 						'adminUrl'  => admin_url(),
 						'restUrl'   => rest_url( ApiNamespace::V1 ),
-						'nonce'      => wp_create_nonce( 'wp_rest' ),
+						'nonce'     => wp_create_nonce( 'wp_rest' ),
 						'formId'    => $form_id,
-						'pdfs'       => array_values( $pdfs ),
+						'pdfs'      => array_values( $pdfs ),
 
-						'language'   => [
+						'language'  => [
 							/* Loading */
 							'loadingSuspense'            => __( 'Loading...', 'gravityforms' ),
 
