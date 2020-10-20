@@ -1,20 +1,22 @@
-@import 'components/Buttons/buttons';
-@import 'components/PdfList/pdf-list-container';
-@import 'components/Loading/loading-dots';
-@import 'components/Loading/loading-suspense';
-@import 'components/Logs/logs';
 @import 'components/PopUp/pop-up';
-@import 'components/ProgressBar/progress-bar';
-@import 'components/Steps/steps';
-@import 'components/TagPicker/tag-picker';
-@import 'components/Errors/errors';
 
-// Header
-header {
-	margin-bottom: 20px;
+#gfpdf-bulk-generator-popup {
+	header {
+		margin-bottom: 20px;
 
-	h2 {
-		font-size: 25px;
-		margin: 0 0 30px;
+		h2 {
+			font-size: 25px;
+			margin: 0 0 30px;
+		}
 	}
+
+	@import 'components/Buttons/buttons';
+	@import 'components/PdfList/pdf-list-container';
+	@import 'components/Loading/loading-dots';
+	@import 'components/Loading/loading-suspense';
+	@import 'components/Logs/logs';
+	@import 'components/ProgressBar/progress-bar';
+	@import 'components/Steps/steps';
+	@import 'components/TagPicker/tag-picker';
+	@import 'components/Errors/errors';
 }
