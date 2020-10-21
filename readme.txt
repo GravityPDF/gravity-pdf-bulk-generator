@@ -8,6 +8,11 @@ User's with a valid, active license key can receive support for this plugin by f
 
 == Changelog ==
 
+= Version 1.1.2, 22 October 2020 =
+* Bug: Close all active buffers before streaming zip download to client
+* Bug: Fix entry filtering with the less than (>) or greater than (<) operators
+* Bug: Scope the CSS so it only applies to the Bulk Generator UI
+
 = Version 1.1.1, 4 June 2020 =
 * Bug: ensure plugin functions as expected when Gravity Forms No Conflict mode is enabled
 * Security: return empty value when {created_by:user_pass} mergetag is used

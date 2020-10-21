@@ -8,7 +8,7 @@
  * Author URI:      https://gravitypdf.com
  * Text Domain:     gravity-pdf-bulk-generator
  * Domain Path:     /languages
- * Version:         1.1.1
+ * Version:         1.1.2
  */
 
 /**
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 define( 'GFPDF_PDF_BULK_GENERATOR_FILE', __FILE__ );
-define( 'GFPDF_PDF_BULK_GENERATOR_VERSION', '1.1.1' );
+define( 'GFPDF_PDF_BULK_GENERATOR_VERSION', '1.1.2' );
 
 /**
  * Class GPDF_Bulk_Generator_Checks
